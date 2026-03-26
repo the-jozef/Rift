@@ -5,10 +5,204 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"   
+        xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow"
+        Height="450"
+        Width="800"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+    <Border CornerRadius="8"
+            Background="{DynamicResource RiftBackground}"
+            BorderBrush="{DynamicResource MaterialDesignDivider}"
+            BorderThickness="1"
+            Padding="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="53" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Border Grid.Row="0"
+                    Background="{DynamicResource RiftCardBackground}"
+                    CornerRadius="7.5,7.5,0,0"
+                    ClipToBounds="True">
+
+                <Grid Height="53">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+
+                        <RowDefinition Height="*" />
+
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                Grid.Column="0"
+                                Orientation="Horizontal">
+
+                        <Image  Style="{StaticResource Rift_Logo}" />
+
+                        <TextBlock Style="{StaticResource Rift_Title}" />
+                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <TextBlock Text="View"
+                                           VerticalAlignment="Center" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <ScrollViewer MaxHeight="200"
+                                          VerticalScrollBarVisibility="Auto">
+
+                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                    <Button Content="Library"
+                                            Style="{StaticResource Rift_PopupItem}" />
+                                    <Button Content="Games"
+                                            Style="{StaticResource Rift_PopupItem}" />
+                                    <Button Content="Store"
+                                            Style="{StaticResource Rift_PopupItem}" />
+                                </StackPanel>
+                            </ScrollViewer>
+                        </materialDesign:PopupBox>
+                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <TextBlock Text="Games"
+                                           VerticalAlignment="Center" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <ScrollViewer MaxHeight="200"
+                                          VerticalScrollBarVisibility="Auto">
+                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                    <Button Content="Game Library"
+                                            Style="{StaticResource Rift_PopupItem}" />
+                                </StackPanel>
+                            </ScrollViewer>
+                        </materialDesign:PopupBox>
+                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <TextBlock Text="Help"
+                                           VerticalAlignment="Center" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <ScrollViewer MaxHeight="200"
+                                          VerticalScrollBarVisibility="Auto">
+                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                    <Button Content="Support"
+                                            Style="{StaticResource Rift_PopupItem}" />
+                                    <Button Content="About RIFT"
+                                            Style="{StaticResource Rift_PopupItem}" />
+                                </StackPanel>
+                            </ScrollViewer>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                    <Grid Grid.Column="0"
+                          Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="46" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1"
+                                    Grid.Row="1"
+                                    Orientation="Horizontal"
+                                    Grid.RowSpan="2">
+
+                            <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox2}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="STORE" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ScrollViewer MaxHeight="200"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                        <Button Content="Support"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                        <Button Content="About RIFT"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                            <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox2}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="LIBRARY"
+                                               VerticalAlignment="Center" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ScrollViewer MaxHeight="200"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                        <Button Content="Support"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                        <Button Content="About RIFT"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                            <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox2}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="COMMUNITY"
+                                               VerticalAlignment="Center" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ScrollViewer MaxHeight="200"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                        <Button Content="Support"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                        <Button Content="About RIFT"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                            <!-- Repair nickname for game name or guest name-->
+                            <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox2}">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="NICKNAME"
+                                               VerticalAlignment="Center" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <ScrollViewer MaxHeight="200"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                        <Button Content="Support"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                        <Button Content="About RIFT"
+                                                Style="{StaticResource Rift_PopupItem}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </StackPanel>
+                    </Grid>
+
+                    
+                    
+                    
+                    
+                        <StackPanel Grid.Column="1"
+                                    Grid.Row="0"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top">
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    Margin="0,0,0,0">
+                            <materialIcons:MaterialIcon
+                                Kind="Megaphone">
+                                
+                            </materialIcons:MaterialIcon>
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    Margin="0,0,0,0">
+                                
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                    Margin="0,0,0,0">
+                                
+                            </Button>
+                        </StackPanel>
+                        
+                        
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
 </Window>
+       
