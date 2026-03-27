@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="Rift_App.Controls.RiftMainwindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:local="clr-namespace:Rift_App.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="397"
+             d:DesignWidth="798">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <materialDesign:Card UniformCornerRadius="0"
+                             Grid.Row="0"
+                             Background="#17293A"
+                             materialDesign:ElevationAssist.Elevation="Dp12">
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left">
+
+                <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                    <materialDesign:PopupBox.ToggleContent>
+                        <TextBlock Text="View"
+                                   VerticalAlignment="Center" />
+                    </materialDesign:PopupBox.ToggleContent>
+                    <ScrollViewer MaxHeight="200"
+                                  VerticalScrollBarVisibility="Auto">
+
+                        <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                            <Button Content="Library"
+                                    Style="{StaticResource Rift_PopupItem}" />
+                            <Button Content="Games"
+                                    Style="{StaticResource Rift_PopupItem}" />
+                            <Button Content="Store"
+                                    Style="{StaticResource Rift_PopupItem}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </materialDesign:PopupBox>
+                <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                    <materialDesign:PopupBox.ToggleContent>
+                        <TextBlock Text="View"
+                                   VerticalAlignment="Center" />
+                    </materialDesign:PopupBox.ToggleContent>
+
+                    <ScrollViewer MaxHeight="200"
+                                  VerticalScrollBarVisibility="Auto">
+
+                        <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                            <Button Content="Library"
+                                    Style="{StaticResource Rift_PopupItem}" />
+                            <Button Content="Games"
+                                    Style="{StaticResource Rift_PopupItem}" />
+                            <Button Content="Store"
+                                    Style="{StaticResource Rift_PopupItem}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </materialDesign:PopupBox>
+
+                <!-- ===== SEARCH BAR ===== -->
+
+                <Border CornerRadius="2,0,0,2"
+                        Width="100"
+                        BorderThickness="0.3"
+                        Margin="5,0,0,0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background"
+                                    Value="#33756A6A" />
+                            <Setter Property="BorderBrush"
+                                    Value="#33FFFFFF" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsKeyboardFocusWithin, 
+                             RelativeSource={RelativeSource Self}}"
+                                             Value="True">
+                                    <Setter Property="BorderBrush"
+                                            Value="#FF2196F3" />
+                                    <Setter Property="Background"
+                                            Value="#55444444" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <Grid>
+                        <!-- Placeholder -->
+                        <TextBlock Text="Search the store"
+                                   Foreground="#80FFFFFF"
+                                   VerticalAlignment="Center"
+                                   Margin="6,0,0,0"
+                                   IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility"
+                                            Value="Visible" />
+                                    <Style.Triggers>
+                                        <!-- Zmizne keď sa píše -->
+                                        <DataTrigger Binding="{Binding Text, ElementName=SearchBox}"
+                                                     Value="">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                        <!-- Zmizne pri fokuse -->
+                                        <DataTrigger Binding="{Binding IsFocused, ElementName=SearchBox}"
+                                                     Value="True">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- TextBox -->
+                        <TextBox x:Name="SearchBox"
+                                 Foreground="White"
+                                 CaretBrush="White"
+                                 VerticalContentAlignment="Center"
+                                 Padding="6,0,0,0">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox"
+                                       BasedOn="{StaticResource {x:Type TextBox}}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="TextBox">
+                                                <ScrollViewer x:Name="PART_ContentHost"
+                                                              Background="Transparent" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+
+                    </Grid>
+                </Border>
+                
+                <Button >
+                     <materialIcons:MaterialIcon Kind="Magnify"
+                                            >
+
+                </materialIcons:MaterialIcon>
+                </Button>
+
+
+
+               
+
+
+
+
+
+
+
+
+
+
+            </StackPanel>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>
