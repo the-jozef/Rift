@@ -20,7 +20,8 @@ namespace Rift_App
         public MainWindow()
         {
             InitializeComponent();
-           
+            DataContext = new WindowStateViewModel();
+
         }
     }
 }

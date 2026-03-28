@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
@@ -11,12 +12,21 @@
         Title="MainWindow"
         Height="450"
         Width="800"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        AllowsTransparency="True"
+        AllowsTransparency="False"
         Background="Transparent"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-   
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     >
+
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome ResizeBorderThickness="8"
+                            CaptionHeight="40"
+                            CornerRadius="8"
+                            GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
+
     <Border CornerRadius="8"
             Background="{DynamicResource RiftBackground}"
             BorderBrush="{DynamicResource MaterialDesignDivider}"
@@ -24,20 +34,11 @@
             ClipToBounds="True">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="53" />
+                <RowDefinition Height="90" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
-
             <local:RiftTitleBar Grid.Row="0" />
             <local:RiftMainwindow Grid.Row="1" />
-
-
-
-
         </Grid>
     </Border>
 </Window>
-
-
-

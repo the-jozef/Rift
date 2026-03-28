@@ -11,156 +11,106 @@
              d:DesignWidth="798">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="45" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
         <materialDesign:Card UniformCornerRadius="0"
-                             Grid.Row="0"
                              Background="#17293A"
                              materialDesign:ElevationAssist.Elevation="Dp12">
+            <Grid>
+                <!-- ĽAVÁ STRANA - Browse, Categories -->
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="170,0,0,0">
+                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                        <materialDesign:PopupBox.ToggleContent>
+                            <TextBlock Text="Browse"
+                                       VerticalAlignment="Center" />
+                        </materialDesign:PopupBox.ToggleContent>
+                        <ScrollViewer MaxHeight="200"
+                                      VerticalScrollBarVisibility="Auto">
+                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                <Button Content="Library"
+                                        Style="{StaticResource Rift_PopupItem}" />
+                                <Button Content="Games"
+                                        Style="{StaticResource Rift_PopupItem}" />
+                                <Button Content="Store"
+                                        Style="{StaticResource Rift_PopupItem}" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:PopupBox>
+                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                        <materialDesign:PopupBox.ToggleContent>
+                            <TextBlock Text="Categories"
+                                       VerticalAlignment="Center" />
+                        </materialDesign:PopupBox.ToggleContent>
+                        <ScrollViewer MaxHeight="200"
+                                      VerticalScrollBarVisibility="Auto">
+                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                                <Button Content="Library"
+                                        Style="{StaticResource Rift_PopupItem}" />
+                                <Button Content="Games"
+                                        Style="{StaticResource Rift_PopupItem}" />
+                                <Button Content="Store"
+                                        Style="{StaticResource Rift_PopupItem}" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:PopupBox>
+                </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left">
-
-                <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
-                    <materialDesign:PopupBox.ToggleContent>
-                        <TextBlock Text="View"
-                                   VerticalAlignment="Center" />
-                    </materialDesign:PopupBox.ToggleContent>
-                    <ScrollViewer MaxHeight="200"
-                                  VerticalScrollBarVisibility="Auto">
-
-                        <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                            <Button Content="Library"
-                                    Style="{StaticResource Rift_PopupItem}" />
-                            <Button Content="Games"
-                                    Style="{StaticResource Rift_PopupItem}" />
-                            <Button Content="Store"
-                                    Style="{StaticResource Rift_PopupItem}" />
-                        </StackPanel>
-                    </ScrollViewer>
-                </materialDesign:PopupBox>
-                <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
-                    <materialDesign:PopupBox.ToggleContent>
-                        <TextBlock Text="View"
-                                   VerticalAlignment="Center" />
-                    </materialDesign:PopupBox.ToggleContent>
-
-                    <ScrollViewer MaxHeight="200"
-                                  VerticalScrollBarVisibility="Auto">
-
-                        <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                            <Button Content="Library"
-                                    Style="{StaticResource Rift_PopupItem}" />
-                            <Button Content="Games"
-                                    Style="{StaticResource Rift_PopupItem}" />
-                            <Button Content="Store"
-                                    Style="{StaticResource Rift_PopupItem}" />
-                        </StackPanel>
-                    </ScrollViewer>
-                </materialDesign:PopupBox>
-
-                <!-- ===== SEARCH BAR ===== -->
-
-                <Border CornerRadius="2,0,0,2"
-                        Width="100"
-                        BorderThickness="0.3"
-                        Margin="5,0,0,0">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Setter Property="Background"
-                                    Value="#33756A6A" />
-                            <Setter Property="BorderBrush"
-                                    Value="#33FFFFFF" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsKeyboardFocusWithin, 
-                             RelativeSource={RelativeSource Self}}"
-                                             Value="True">
-                                    <Setter Property="BorderBrush"
-                                            Value="#FF2196F3" />
-                                    <Setter Property="Background"
-                                            Value="#55444444" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-
+                <!-- SEARCH - pevná poloha, nikdy sa nepohne -->
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Width="312"
+                            Margin="0,0,110,0">
                     <Grid>
-                        <!-- Placeholder -->
-                        <TextBlock Text="Search the store"
-                                   Foreground="#80FFFFFF"
-                                   VerticalAlignment="Center"
-                                   Margin="6,0,0,0"
-                                   IsHitTestVisible="False">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility"
-                                            Value="Visible" />
-                                    <Style.Triggers>
-                                        <!-- Zmizne keď sa píše -->
-                                        <DataTrigger Binding="{Binding Text, ElementName=SearchBox}"
-                                                     Value="">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
-                                        </DataTrigger>
-                                        <!-- Zmizne pri fokuse -->
-                                        <DataTrigger Binding="{Binding IsFocused, ElementName=SearchBox}"
-                                                     Value="True">
-                                            <Setter Property="Visibility"
-                                                    Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-
-                        <!-- TextBox -->
                         <TextBox x:Name="SearchBox"
-                                 Foreground="White"
-                                 CaretBrush="White"
-                                 VerticalContentAlignment="Center"
-                                 Padding="6,0,0,0">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox"
-                                       BasedOn="{StaticResource {x:Type TextBox}}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="TextBox">
-                                                <ScrollViewer x:Name="PART_ContentHost"
-                                                              Background="Transparent" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-
+                                 Style="{StaticResource RiftSearchBar}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:TextFieldAssist.TextFieldCornerRadius="2,0,0,2" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="147,5,1,5">
+                            <Button Visibility="{Binding Text, ElementName=SearchBox, Converter={StaticResource StringToVisibilityConverter}}"
+                                    Style="{StaticResource Rift_CLear_Button}"
+                                    Command="{Binding ClearCommand}" />
+                        </StackPanel>
                     </Grid>
-                </Border>
-                
-                <Button >
-                     <materialIcons:MaterialIcon Kind="Magnify"
-                                            >
-
-                </materialIcons:MaterialIcon>
-                </Button>
-
-
-
-               
-
-
-
-
-
-
-
-
-
-
-            </StackPanel>
+                    <Button Height="21.999"
+                            Width="21.999"
+                            materialDesign:ButtonAssist.CornerRadius="0">
+                        <materialDesign:PackIcon Kind="Magnify"
+                                                 Height="15"
+                                                 Width="15"
+                                                 Foreground="White"
+                                                 Margin="-12.8,0,0,0" />
+                    </Button>
+                    <Button Style="{x:Null}"
+                            Margin="10,0,0,0"
+                            Background="Transparent"
+                            BorderBrush="Transparent">
+                        <StackPanel Orientation="Horizontal">
+                            <materialIcons:MaterialIcon Kind="Star"
+                                                        Width="11"
+                                                        Height="11"
+                                                        Foreground="White" />
+                            <TextBlock Text="Wishlist"
+                                       Margin="5,1.5,0,0"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontSize="10"
+                                       FontFamily="Arial" />
+                            <TextBlock Text="25"
+                                       Margin="3,1.5,0,0"
+                                       Foreground="White"
+                                       FontSize="7"
+                                       Width="Auto"
+                                       Height="8" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </materialDesign:Card>
     </Grid>
 </UserControl>

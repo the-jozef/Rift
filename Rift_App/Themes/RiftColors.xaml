@@ -8,6 +8,6 @@
     <SolidColorBrush x:Key="RiftForeground"
                      Color="#FFBDB8B8" />
     <SolidColorBrush x:Key="RiftAccent"
-                     Color="Snow" />
+                     Color="Snow" /> 
 
 </ResourceDictionary>
