@@ -7,7 +7,7 @@ namespace Rift_App.Converters
 {
     public class StringToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) 
         {
             if (value is string text && !string.IsNullOrWhiteSpace(text))
             {
