@@ -47,24 +47,39 @@
 
                     <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
                         <materialDesign:PopupBox.ToggleContent>
-                            <TextBlock Text="View"
-                                       VerticalAlignment="Center" />
+                            <TextBlock Text="Library">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock"
+                                           BasedOn="{StaticResource Rift_Textblock}">
+                                        <Setter Property="Foreground"
+                                                Value="Wheat" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver, 
+                                     RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                                         Value="True">
+                                                <Setter Property="Foreground"
+                                                        Value="White" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </materialDesign:PopupBox.ToggleContent>
+
                         <ScrollViewer MaxHeight="200"
                                       VerticalScrollBarVisibility="Auto">
                             <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                <Button Content="Library"
-                                        Style="{StaticResource Rift_PopupItem}" />
-                                <Button Content="Games"
-                                        Style="{StaticResource Rift_PopupItem}" />
-                                <Button Content="Store"
+                                <Button Content="Game Library"
                                         Style="{StaticResource Rift_PopupItem}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
-                    
-                    
-                    
+
+
+
+
+
+
                     <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock Text="Games"

@@ -99,6 +99,7 @@
                             <Setter TargetName="Title"
                                     Property="Foreground"
                                     Value="White" />
+                            
                         </Trigger>
                     </ControlTemplate.Triggers>
 
@@ -106,11 +107,162 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <!-- PopupBox View/Games/Help -->
-    <Style x:Key="Rift_PopupBox"
-           TargetType="materialDesign:PopupBox">
 
+
+    
+    
+    <!-- tu -->
+    <Style x:Key="Rift_PopupBox"
+           TargetType="materialDesign:PopupBox"
+           BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="materialDesign:RippleAssist.IsDisabled"
+                Value="True" />
+        <Setter Property="Foreground"
+                Value="Transparent" />
+        <Style.Resources>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                    </Trigger>
+                    <Trigger Property="IsChecked"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="Rift_Textblock"
+           TargetType="TextBlock">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="Foreground"
+                Value="{StaticResource RiftForeground}" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
+        <Setter Property="Margin"
+                Value="10,6" />
+    </Style>
+
+    <Style x:Key="Rift_Test"
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
+        <Setter Property="Height"
+                Value="20" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Margin"
+                Value="12,0,0,0" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <TextBlock x:Name="Text"
+                               Text="{TemplateBinding Content}"
+                               Foreground="Wheat"
+                               Style="{StaticResource Rift_Textblock}" />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="Text"
+                                    Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 2. Wrapper – toto je kľúč (hover zachytí Border, nie interný ToggleButton) -->
+    <Style x:Key="Rift_ViewHoverWrapper"
+           TargetType="Border">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="8,4" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+               
+                <Setter Property="Background"
+                        Value="{x:Null}" />
+
+                <Setter Property="ContextMenu"
+                        Value="{x:Null}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 3. Rift_PopupBox – agresívne vynucuje transparentné pozadie -->
+    <Style x:Key="Rift_PopupBox1"
+           TargetType="materialDesign:PopupBox">
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="HorizontalAlignment"
@@ -121,36 +273,36 @@
                 Value="BottomAndAlignLeftEdges" />
         <Setter Property="StaysOpen"
                 Value="False" />
-        <Setter Property="Foreground"
-                Value="{StaticResource RiftForeground}" />
-        <Setter Property="FontSize"
-                Value="12" />
-        <Setter Property="FontFamily"
-                Value="Arial" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
 
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
 
-                            <Setter Property="Foreground"
-                                    Value="White" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="materialDesign:RippleAssist.IsDisabled"
+                Value="True" />
+
+        <!-- Vynucuje transparentné pozadie aj pri hover -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
-    
-    
-    
-    
+    <!-- Tvoje ostatné štýly (nechaj ako sú) -->
     <Style x:Key="Rift_PopupStackPanel"
            TargetType="StackPanel">
-        
         <Setter Property="Width"
                 Value="100" />
         <Setter Property="HorizontalAlignment"
@@ -159,8 +311,7 @@
 
     <Style x:Key="Rift_PopupItem"
            TargetType="Button"
-           BasedOn="{StaticResource  MaterialDesignFlatButton}">
-
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Padding"
                 Value="8,4" />
         <Setter Property="HorizontalAlignment"
@@ -171,11 +322,7 @@
                 Value="11" />
         <Setter Property="FontFamily"
                 Value="Regular" />
-        
     </Style>
-
-
-
 
 
 
