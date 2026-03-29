@@ -21,8 +21,8 @@
      >
 
     <WindowChrome.WindowChrome>
-        <shell:WindowChrome ResizeBorderThickness="8"
-                            CaptionHeight="40"
+        <shell:WindowChrome ResizeBorderThickness="7"
+                            CaptionHeight="2"
                             CornerRadius="8"
                             GlassFrameThickness="0" />
     </WindowChrome.WindowChrome>

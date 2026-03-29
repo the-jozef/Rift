@@ -2,18 +2,28 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
+    <!-- TitleBar -->
     
+    <!-- Stackpanel TitleBar -->
+    <Style x:Key="Rift_TitleBar"
+           TargetType="StackPanel">
+        
+        <Setter Property="Orientation"
+                Value="Horizontal" /> 
+    </Style>
+
+    <!-- Logo -->
     <Style x:Key="Rift_Logo"
            TargetType="Image">
-        
+
+        <Setter Property="Source"
+                Value="/Icons/Rift_logo.png" />
         <Setter Property="Width"
                 Value="20" />
         <Setter Property="Height"
                 Value="20" />
-        <Setter Property="Source"
-                Value="/Icons/Rift_logo.png" />
         <Setter Property="Margin"
-                Value="5,-2,0,0" />
+                Value="0,-10,0,-10" />
         <Setter Property="Stretch"
                 Value="UniformToFill" />
         <Setter Property="RenderOptions.BitmapScalingMode"
@@ -29,9 +39,11 @@
         </Setter>
     </Style>
     
+    <!-- Title -->
     <Style x:Key="Rift_Title"
            TargetType="TextBlock"
            BasedOn="{StaticResource MaterialDesignHeadline6TextBlock }">
+        
         <Setter Property="Text"
                 Value="RIFT" />
         <Setter Property="VerticalAlignment"
@@ -39,36 +51,106 @@
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="5,0,0,0" />
-        <Setter Property="FontSize"
-                Value="10" />
+                Value="6,1,0,0" />
         <Setter Property="Foreground"
                 Value="{StaticResource RiftForeground}" />
+        <Setter Property="FontSize"
+                Value="12" />
         <Setter Property="FontFamily"
-                Value="Regular" />
+                Value="Arial" />
     </Style>
+
+    <!-- StackPanel logo/name -->
+    <Style x:Key="Rift_LogoHeader"
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
+
+        <Setter Property="Height"
+                Value="20" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Margin"
+                Value="12,0,0,0" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Padding"
+                Value="0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <StackPanel Orientation="Horizontal"
+                                Background="Transparent">
+                        <Image x:Name="Logo"
+                               Style="{StaticResource Rift_Logo}"
+                               Opacity="1" />
+                        <TextBlock x:Name="Title"
+                                   Style="{StaticResource Rift_Title}" />
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="Logo"
+                                    Property="Opacity"
+                                    Value="0.8"/>
+                            <Setter TargetName="Title"
+                                    Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- PopupBox View/Games/Help -->
     <Style x:Key="Rift_PopupBox"
            TargetType="materialDesign:PopupBox">
-        <Setter Property="PlacementMode"
-                Value="BottomAndAlignLeftEdges" />
-        <Setter Property="StaysOpen"
-                Value="False" />
+
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="7,0,0,0" />
-        <Setter Property="FontSize"
-                Value="10" />
+                Value="18,1,0,0" />
+        <Setter Property="PlacementMode"
+                Value="BottomAndAlignLeftEdges" />
+        <Setter Property="StaysOpen"
+                Value="False" />
         <Setter Property="Foreground"
                 Value="{StaticResource RiftForeground}" />
+        <Setter Property="FontSize"
+                Value="12" />
         <Setter Property="FontFamily"
-                Value="Regular" />
+                Value="Arial" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
+    
+    
+    
+    
     <Style x:Key="Rift_PopupStackPanel"
            TargetType="StackPanel">
+        
         <Setter Property="Width"
                 Value="100" />
         <Setter Property="HorizontalAlignment"
@@ -78,18 +160,44 @@
     <Style x:Key="Rift_PopupItem"
            TargetType="Button"
            BasedOn="{StaticResource  MaterialDesignFlatButton}">
+
         <Setter Property="Padding"
                 Value="8,4" />
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
-        <Setter Property="FontSize"
-                Value="11" />
         <Setter Property="Foreground"
                 Value="{StaticResource RiftForeground}" />
+        <Setter Property="FontSize"
+                Value="11" />
         <Setter Property="FontFamily"
                 Value="Regular" />
+        
     </Style>
-        <!-- tu od store -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- tu od store -->
     <Style x:Key="Rift_PopupBox2"
            TargetType="materialDesign:PopupBox">
         <Setter Property="PlacementMode"
