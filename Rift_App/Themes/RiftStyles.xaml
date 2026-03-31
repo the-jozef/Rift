@@ -51,7 +51,7 @@
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="6,1,0,0" />
+                Value="6,0.5,0,0" />
         <Setter Property="Foreground"
                 Value="{StaticResource RiftForeground}" />
         <Setter Property="FontSize"
@@ -60,7 +60,7 @@
                 Value="Arial" />
     </Style>
 
-    <!-- StackPanel logo/name -->
+    <!-- StackPanel logo/name        To popupbox next time-->
     <Style x:Key="Rift_LogoHeader"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
@@ -70,7 +70,7 @@
         <Setter Property="Width"
                 Value="Auto" />
         <Setter Property="Margin"
-                Value="12,0,0,0" />
+                Value="11,0,0,0" />
         <Setter Property="Background"
                 Value="Transparent" />
         <Setter Property="Cursor"
@@ -108,19 +108,20 @@
         </Setter>
     </Style>
 
-
-    
-    
-    <!-- tu -->
+    <!-- Popupbox View/Games/Help -->
     <Style x:Key="Rift_PopupBox"
            TargetType="materialDesign:PopupBox"
            BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
+
+        <Setter Property="Padding"
+                Value="0" />
         <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
                 Value="Transparent" />
         <Setter Property="materialDesign:RippleAssist.IsDisabled"
                 Value="True" />
-        <Setter Property="Foreground"
-                Value="Transparent" />
+        
         <Style.Resources>
             <Style TargetType="ToggleButton">
                 <Setter Property="Background"
@@ -143,227 +144,202 @@
         </Style.Resources>
     </Style>
 
-    <Style x:Key="Rift_Textblock"
+    <!-- TextBlock in PopupBox -->
+    <Style x:Key="Rift_PopupTextblock"
            TargetType="TextBlock">
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
-        <Setter Property="Foreground"
-                Value="{StaticResource RiftForeground}" />
         <Setter Property="FontSize"
                 Value="12" />
         <Setter Property="FontFamily"
                 Value="Arial" />
-        <Setter Property="Margin"
-                Value="10,6" />
     </Style>
-
-    <Style x:Key="Rift_Test"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Height"
-                Value="20" />
+    
+    <!-- ScrollViewer for PopupBox -->
+    <Style x:Key="Rift_ScrollViewer"
+           TargetType="ScrollViewer">
+        
+        <Setter Property="VerticalScrollBarVisibility"
+                Value="Disabled" />
+        <Setter Property="Background"
+                Value="#3D4450" />
+    </Style>
+    
+    <!-- StackPanel for PopupBox -->
+    <Style x:Key="Rift_PopupStackPanel"
+           TargetType="StackPanel">
+        
         <Setter Property="Width"
                 Value="Auto" />
-        <Setter Property="Margin"
-                Value="12,0,0,0" />
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Cursor"
-                Value="Hand" />
-        <Setter Property="Padding"
-                Value="0" />
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+    </Style>
+    
+    <!-- Popupbox items -->
+    <Style x:Key="Rift_PopupItems"
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
+        
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="FontSize"
+                Value="11" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <TextBlock x:Name="Text"
-                               Text="{TemplateBinding Content}"
-                               Foreground="Wheat"
-                               Style="{StaticResource Rift_Textblock}" />
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter TargetName="Text"
-                                    Property="Foreground"
-                                    Value="White" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Left"
+                                          VerticalAlignment="Center" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- 2. Wrapper – toto je kľúč (hover zachytí Border, nie interný ToggleButton) -->
-    <Style x:Key="Rift_ViewHoverWrapper"
-           TargetType="Border">
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Padding"
-                Value="8,4" />
-        <Setter Property="Cursor"
-                Value="Hand" />
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver"
                      Value="True">
-               
-                <Setter Property="Background"
-                        Value="{x:Null}" />
-
-                <Setter Property="ContextMenu"
-                        Value="{x:Null}" />
+                <Setter Property="Foreground"
+                        Value="#2E2E2E" />
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="White"
+                                         Opacity="0.7" />
+                    </Setter.Value>
+                </Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <!-- 3. Rift_PopupBox – agresívne vynucuje transparentné pozadie -->
-    <Style x:Key="Rift_PopupBox1"
-           TargetType="materialDesign:PopupBox">
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
-        <Setter Property="Margin"
-                Value="18,1,0,0" />
-        <Setter Property="PlacementMode"
-                Value="BottomAndAlignLeftEdges" />
-        <Setter Property="StaysOpen"
-                Value="False" />
+    <!-- PopupBox Store/Library/Nickname          fix blikania -->
+    <Style x:Key="Rift_PopupBox_options"
+           TargetType="materialDesign:PopupBox"
+           BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
 
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
-        <Setter Property="BorderThickness"
-                Value="0" />
         <Setter Property="Padding"
                 Value="0" />
-        <Setter Property="Cursor"
-                Value="Hand" />
-
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="Transparent" />
         <Setter Property="materialDesign:RippleAssist.IsDisabled"
                 Value="True" />
-
-        <!-- Vynucuje transparentné pozadie aj pri hover -->
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
+        <Setter Property="PopupMode"
+                Value="MouseOverEager" />
+        <Setter Property="StaysOpen"
+                Value="True" />
+        <Setter Property="PopupVerticalOffset"
+                Value="-5" />
+        <Setter Property="PopupAnimation"
+                Value="None" />
+        <Style.Resources>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Padding"
+                        Value="0,0,30,8" />
                 <Setter Property="Background"
                         Value="Transparent" />
                 <Setter Property="BorderBrush"
                         Value="Transparent" />
-            </Trigger>
-        </Style.Triggers>
+                <Style.Triggers>
+                    <Trigger Property="IsChecked"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
     </Style>
 
-    <!-- Tvoje ostatné štýly (nechaj ako sú) -->
-    <Style x:Key="Rift_PopupStackPanel"
-           TargetType="StackPanel">
-        <Setter Property="Width"
-                Value="100" />
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-    </Style>
-
-    <Style x:Key="Rift_PopupItem"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Padding"
-                Value="8,4" />
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="Foreground"
-                Value="{StaticResource RiftForeground}" />
-        <Setter Property="FontSize"
-                Value="11" />
-        <Setter Property="FontFamily"
-                Value="Regular" />
-    </Style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- tu od store -->
-    <Style x:Key="Rift_PopupBox2"
-           TargetType="materialDesign:PopupBox">
-        <Setter Property="PlacementMode"
-                Value="BottomAndAlignLeftEdges" />
-        <Setter Property="StaysOpen"
-                Value="False" />
-        <Setter Property="VerticalAlignment"
-                Value="Bottom" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
+    <!-- Textblock for options -->
+    <Style x:Key="Rift_PopupTextblock_options"
+           TargetType="TextBlock">
         <Setter Property="Margin"
-                Value="10,0,0,5" />
+                Value="0,0,0,2" />
+        <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                    Value="Left" />
         <Setter Property="FontSize"
-                Value="17" />
-        <Setter Property="Foreground"
-                Value="{StaticResource RiftAccent}" />
+                    Value="18" />
         <Setter Property="FontFamily"
-                Value="Arial" />
+                    Value="Arial" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
     </Style>
+
+
+    
+    
+
+    <!-- Page2   -->
+<!-- Test -->
+    <Style x:Key="Rift_test"
+           TargetType="materialDesign:PopupBox"
+           BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
+
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Background"
+                Value="Green" />
+
+        <Setter Property="materialDesign:RippleAssist.IsDisabled"
+                Value="True" />
+
+        <Style.Resources>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Background"
+                        Value="Red" />
+                <Setter Property="BorderBrush"
+                        Value="Red" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Red" />
+                    </Trigger>
+                    <Trigger Property="IsChecked"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Red" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+    </Style>
+
+
+
+
+
+
+
+
+
+
+
+
+    <Style x:Key="Rift_StackPanel_right_up"
+           TargetType="StackPanel">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="HorizontalAlignment"
+                Value="Right" />
+        <Setter Property="Margin"
+                Value="0,0,0,5" />
+    </Style>
+
 
     <Style x:Key="Rift_Button"
            TargetType="Button"
@@ -379,7 +355,7 @@
     <Style x:Key="Rift_Icons"
            TargetType="materialIcons:MaterialIcon">
         <Setter Property="Foreground"
-                Value="#FF818181" />
+                Value="#838A92" />
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
@@ -403,17 +379,7 @@
                 Value="10" />
     </Style>
 
-    <Style x:Key="Rift_StackPanel_right_up"
-           TargetType="StackPanel">
-        <Setter Property="Orientation"
-                Value="Horizontal" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="HorizontalAlignment"
-                Value="Right" /> 
-        <Setter Property="VerticalAlignment"
-                Value="Top" />
-    </Style>
+    
 
     <Style x:Key="Rift_Button2"
            TargetType="Button"
@@ -437,13 +403,20 @@
         <Setter Property="Width"
                 Value="25" />
         <Setter Property="Background"
-                Value="#FF31353A" />
+                Value="#262C36" />
         <Setter Property="Margin"
                 Value="5,0,0,0" />
 
     </Style>
 
     <!-- Steam-like Search Bar -->
+    
+    
+    
+    
+    
+    
+    
     <Style x:Key="RiftSearchBar"
            TargetType="TextBox"
            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">

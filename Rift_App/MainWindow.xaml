@@ -10,8 +10,8 @@
         xmlns:local="clr-namespace:Rift_App.Controls"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450"
-        Width="800"
+        Height="635"
+        Width="1080"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -34,7 +34,7 @@
             ClipToBounds="True">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="90" />
+                <RowDefinition Height="70" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <local:RiftTitleBar Grid.Row="0" />

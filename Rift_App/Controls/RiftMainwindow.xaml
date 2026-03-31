@@ -32,11 +32,11 @@
                                       VerticalScrollBarVisibility="Auto">
                             <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
                                 <Button Content="Library"
-                                        Style="{StaticResource Rift_PopupItem}" />
+                                        Style="{StaticResource Rift_PopupItems}" />
                                 <Button Content="Games"
-                                        Style="{StaticResource Rift_PopupItem}" />
+                                        Style="{StaticResource Rift_PopupItems}" />
                                 <Button Content="Store"
-                                        Style="{StaticResource Rift_PopupItem}" />
+                                        Style="{StaticResource Rift_PopupItems}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
@@ -49,11 +49,11 @@
                                       VerticalScrollBarVisibility="Auto">
                             <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
                                 <Button Content="Library"
-                                        Style="{StaticResource Rift_PopupItem}" />
+                                        Style="{StaticResource Rift_PopupItems}" />
                                 <Button Content="Games"
-                                        Style="{StaticResource Rift_PopupItem}" />
+                                        Style="{StaticResource Rift_PopupItems}" />
                                 <Button Content="Store"
-                                        Style="{StaticResource Rift_PopupItem}" />
+                                        Style="{StaticResource Rift_PopupItems}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
