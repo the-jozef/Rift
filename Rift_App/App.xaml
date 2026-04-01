@@ -14,7 +14,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
                 <ResourceDictionary Source="Themes/RiftColors.xaml" />
                 <ResourceDictionary Source="Themes/RiftStyles.xaml" />
-                
+                <ResourceDictionary Source="Login_Register/Login_Layout.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
                 <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         </ResourceDictionary>

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Icons\Rift_logo.png" />
+    <None Remove="Icons\Steam_login_picture.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,9 @@
 
   <ItemGroup>
     <Resource Include="Icons\Rift_logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\Steam_login_picture.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
