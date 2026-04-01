@@ -317,7 +317,7 @@
         </Style.Resources>
     </Style>
 
-
+<!-- Icons -->
 
 
 
@@ -352,20 +352,114 @@
                 Value="#FF31353A" />
 
     </Style>
-    <Style x:Key="Rift_Icons"
-           TargetType="materialIcons:MaterialIcon">
-        <Setter Property="Foreground"
-                Value="#838A92" />
-        <Setter Property="HorizontalAlignment"
-                Value="Center" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-     <Setter Property="Width"
-                Value="12" />
+
+    
+    
+    
+
+
+    <!-- Button for Minimalize/Maximalize Window State -->
+    <Style x:Key="Rift_StateWindow_Button"
+           TargetType="Button">
         <Setter Property="Height"
-                Value="12" />
+                Value="Auto" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="#FF818181" />
+        <Setter Property="Margin"
+                Value="5,0,0,0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="Red" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="DarkRed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-    <Style x:Key="Rift_Icons2"
+    
+    <!-- Close button -->
+    <Style x:Key="Rift_CLoseButton"
+           TargetType="Button">
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="#FF818181" />
+        <Setter Property="Margin"
+                Value="5,0,0,0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="Red" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="DarkRed" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                        
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- WIndow State Icons -->
+    <Style x:Key="Rift_WindowState_Icons"
            TargetType="materialIcons:MaterialIcon">
         <Setter Property="Foreground"
                 Value="#FF818181" />
@@ -379,21 +473,21 @@
                 Value="10" />
     </Style>
 
-    
 
-    <Style x:Key="Rift_Button2"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Height"
-                Value="Auto" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Margin"
-                Value="5,0,0,0" />
 
-    </Style>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <Style x:Key="Rift_Button3"
            TargetType="Button"
@@ -489,6 +583,8 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
+    
+    
     <Style x:Key="Rift_CLear_Button"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignIconButton}">

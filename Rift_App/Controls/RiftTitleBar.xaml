@@ -149,70 +149,6 @@
                                 Orientation="Horizontal"
                                 Grid.RowSpan="2">
 
-                        
-                        
-
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="30,0,0,0">
-
-                            <materialDesign:PopupBox.ToggleContent>
-                                <!-- ← NOVÝ BINDING HIT-AREA (spája STORE s popupom) -->
-                                <Grid>
-                                    <TextBlock Text="STORE">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock"
-                                                   BasedOn="{StaticResource Rift_PopupTextblock_options}">
-                                                <Setter Property="Foreground"
-                                                        Value="#C4C7CC" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsMouseOver,
-                                           RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                                 Value="True">
-                                                        <Setter Property="Foreground"
-                                                                Value="White" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-
-                                    <!-- Veľký neviditeľný extender (90 px dole – úplne zakrýva medzeru) -->
-                                    <Rectangle Height="90"
-                                               VerticalAlignment="Bottom"
-                                               Fill="Transparent"
-                                               IsHitTestVisible="True" />
-                                </Grid>
-                            </materialDesign:PopupBox.ToggleContent>
-
-                            <!-- Tvoj pôvodný obsah popupu (nechaj presne taký ako si ho mal) -->
-                            <Border Background="#3D4450"
-                                    SnapsToDevicePixels="True"
-                                    UseLayoutRounding="True">
-                                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                                    <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                        <Button Content="Featured"
-                                                Style="{StaticResource Rift_PopupItems}" />
-                                        <Button Content="Wishlist"
-                                                Style="{StaticResource Rift_PopupItems}" />
-                                    </StackPanel>
-                                </ScrollViewer>
-                            </Border>
-                        </materialDesign:PopupBox>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
                                                  Margin="30,0,0,0">
                             <materialDesign:PopupBox.ToggleContent>
@@ -235,8 +171,7 @@
                                     </TextBlock.Style>
                                 </TextBlock>
                             </materialDesign:PopupBox.ToggleContent>
-                            <Border Background="#3D4450"
-                                   
+                            <Border Background="#3D4450"                                  
                                     SnapsToDevicePixels="True"
                                     UseLayoutRounding="True">
                                 <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
@@ -244,8 +179,7 @@
                                         <Button Content="Featured"
                                                 Style="{StaticResource Rift_PopupItems}" />
                                         <Button Content="Wishlist"
-                                                Style="{StaticResource Rift_PopupItems}" />
-                                     
+                                                Style="{StaticResource Rift_PopupItems}" />                                     
                                     </StackPanel>
                                 </ScrollViewer>
                             </Border>
@@ -331,71 +265,109 @@
                        
                         <materialDesign:PopupBox Style="{StaticResource Rift_test}" 
                                                  Margin="20,0.5,0,0"
-                                                 Width="43">        <!-- neni -->
+                                                 Width="43">       
                             <materialDesign:PopupBox.ToggleContent >
-                                <materialIcons:MaterialIcon Style="{StaticResource Rift_Icons}"
+                                <materialIcons:MaterialIcon 
                                                             Kind="Bell">
                                 </materialIcons:MaterialIcon>
                             </materialDesign:PopupBox.ToggleContent>
-                            <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">      <!-- neni -->
-                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">  <!-- neni -->
+                            <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
+                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
                                     <Button Content="Profile"
-                                            Style="{StaticResource Rift_PopupItems}" />  <!-- neni -->
+                                            Style="{StaticResource Rift_PopupItems}" /> 
                                     <Button Content="Library"
                                             Style="{StaticResource Rift_PopupItems}" />
                                 </StackPanel>
                             </ScrollViewer>
                         </materialDesign:PopupBox>
-                       
-
-
 
 
 
 
 
                         
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                                 Height="14"
-                                                 Width="51">
+                        
+
+
+
+
+                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
+                                                 Margin="20,0,0,0">
                             <materialDesign:PopupBox.ToggleContent>
-                                <TextBlock Text="Nickname" />
+                                <TextBlock Text="NICKNAME">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock"
+                                               BasedOn="{StaticResource Rift_PopupTextblock_options}">
+                                            <Setter Property="Foreground"
+                                                    Value="#C4C7CC" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMouseOver, 
+                            RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                                                             Value="True">
+                                                    <Setter Property="Foreground"
+                                                            Value="White" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </materialDesign:PopupBox.ToggleContent>
                             <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
                                 <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                    <Button Content="Game Library"
+                                    <Button Content="Profile"
+                                            Style="{StaticResource Rift_PopupItems}" />
+                                    <Button Content="Library"
                                             Style="{StaticResource Rift_PopupItems}" />
                                 </StackPanel>
                             </ScrollViewer>
                         </materialDesign:PopupBox>
 
-                        <Button Style="{StaticResource Rift_Button2}"
+
+
+
+
+
+
+
+
+
+
+
+
+                        <Button Style="{StaticResource Rift_StateWindow_Button}"
                                 Height="25"
                                 Width="42"
                                 Command="{Binding MinimizeWindowCommand}">
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Icons2}"
+                            
+                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
                                                         Kind="Minimize">
                             </materialIcons:MaterialIcon>
                         </Button>
-                        <Button Style="{StaticResource Rift_Button2}"
+                        
+                        <Button Style="{StaticResource Rift_StateWindow_Button}"
                                 Height="25"
                                 Width="42"
                                 Command="{Binding MaximizeWindowCommand}">
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Icons2}"
-                                                        Kind="WindowMaximize">
+                            
+                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
+                                                        Kind="WindowMaximize"
+                                                        Foreground="{Binding Foreground, 
+                                    RelativeSource={RelativeSource AncestorType=Button}}">
                             </materialIcons:MaterialIcon>
                         </Button>
 
-                        <Button Style="{StaticResource Rift_Button2}"
+                        <Button Style="{StaticResource Rift_CLoseButton}"
+                                Margin="0,-10,0,0"
                                 Height="25"
                                 Width="42"
                                 materialDesign:ButtonAssist.CornerRadius="0,7.8,0,0"
                                 Command="{Binding CloseWindowCommand}">
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Icons2}"
-                                                        Kind="Close">
+                            
+                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
+                                                        Kind="Close"
+                                                        Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}">
                             </materialIcons:MaterialIcon>
                         </Button>
-
                     </StackPanel>
                 </Grid>
             </Grid>
