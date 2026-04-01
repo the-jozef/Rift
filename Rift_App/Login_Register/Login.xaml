@@ -7,8 +7,8 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.Login_Register"
              mc:Ignorable="d"
-             Height="534"
-             Width="793">
+             Height="517"
+             Width="771">
     <Grid>
         <Border Grid.Row="0"
                 Background="#1C1E22"

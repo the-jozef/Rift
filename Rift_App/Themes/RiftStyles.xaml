@@ -121,7 +121,11 @@
                 Value="Transparent" />
         <Setter Property="materialDesign:RippleAssist.IsDisabled"
                 Value="True" />
-        
+        <Setter Property="PopupVerticalOffset"
+                Value="-9" />
+        <Setter Property="PopupHorizontalOffset"
+                Value="2" />
+
         <Style.Resources>
             <Style TargetType="ToggleButton">
                 <Setter Property="Background"
@@ -220,11 +224,11 @@
         </Style.Triggers>
     </Style>
 
-    <!-- PopupBox Store/Library/Nickname          fix blikania -->
+    <!-- PopupBox Store/Library/Nickname  flashes-->
     <Style x:Key="Rift_PopupBox_options"
            TargetType="materialDesign:PopupBox"
            BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
-
+        
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Background"
@@ -237,10 +241,12 @@
                 Value="MouseOverEager" />
         <Setter Property="StaysOpen"
                 Value="True" />
-        <Setter Property="PopupVerticalOffset"
-                Value="-5" />
         <Setter Property="PopupAnimation"
                 Value="None" />
+        <Setter Property="PopupVerticalOffset"
+                Value="-5" />
+        <Setter Property="PopupHorizontalOffset"
+                Value="4" />
         <Style.Resources>
             <Style TargetType="ToggleButton">
                 <Setter Property="Padding"
@@ -277,105 +283,194 @@
                 Value="SemiBold" />
     </Style>
 
-
+    <!-- StackPanel for Account/Notifications -->
+    <Style x:Key="Rift_StackPanel_Action"
+           TargetType="StackPanel">
+        <Setter Property="Margin"
+                Value="0,6,0,7" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="HorizontalAlignment"
+                Value="Right" />
+    </Style>
     
-    
-
-    <!-- Page2   -->
-<!-- Test -->
-    <Style x:Key="Rift_test"
+    <!-- Popup for Notifications -->
+    <Style x:Key="Rift_Notifications_PopupBox"
            TargetType="materialDesign:PopupBox"
            BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
-
+        <Setter Property="Margin"
+                Value="20,0,12,0" />
+        <Setter Property="Width"
+                Value="47" />
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Background"
-                Value="Green" />
-
+                Value="#23262E" />
         <Setter Property="materialDesign:RippleAssist.IsDisabled"
                 Value="True" />
-
+        <Setter Property="PopupAnimation"
+                Value="None" />
+        <Setter Property="StaysOpen"
+                Value="False" />
+        <Setter Property="PopupMode"
+                Value="MouseOverEager" />
+        <Setter Property="PopupVerticalOffset"
+                Value="7" />
+        <Setter Property="PopupHorizontalOffset"
+                Value="-35" />
         <Style.Resources>
             <Style TargetType="ToggleButton">
                 <Setter Property="Background"
-                        Value="Red" />
+                        Value="Transparent" />
                 <Setter Property="BorderBrush"
-                        Value="Red" />
+                        Value="Transparent" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver"
                              Value="True">
                         <Setter Property="Background"
-                                Value="Red" />
+                                Value="#2A2F38" />
+                        
                     </Trigger>
                     <Trigger Property="IsChecked"
                              Value="True">
                         <Setter Property="Background"
-                                Value="Red" />
+                                Value="#2A2F38" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Style.Resources>
     </Style>
+    
+    <!-- Popupbox items for Notifications -->
+    <Style x:Key="Rift_Notification_Item"
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
 
-<!-- Icons -->
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Height"
+                Value="25" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="Foreground"
+                Value="#2E2E2E" />
+        <Setter Property="FontSize"
+                Value="12.5" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="White"
+                                 Opacity="0.7" />
+            </Setter.Value>
+        </Setter>
+    </Style>
 
+    <!-- Popup for Account PopupBox_Account-->
+    <Style x:Key="Rift_PopupBox_Account"
+           TargetType="materialDesign:PopupBox"
+           BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
 
+        <Setter Property="Margin"
+                Value="0,0,45,0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="materialDesign:RippleAssist.IsDisabled"
+                Value="True" />
+        <Setter Property="PlacementMode"
+                Value="BottomAndAlignLeftEdges" />
+        <Setter Property="StaysOpen"
+                Value="False" />
+        <Setter Property="PopupAnimation"
+                Value="Slide" />
+        <Setter Property="PopupVerticalOffset"
+                Value="3" />
+        <Setter Property="PopupHorizontalOffset"
+                Value="1" />
+    </Style>
 
+    <!-- Border for Account_PopupBox-->
+    <Style x:Key="Rift_Border_Account"
+           TargetType="Border">
+        <Setter Property="Padding"
+                Value="12,6" />
+        <Setter Property="MinWidth"
+                Value="80" />
+        <Setter Property="Background"
+                Value="#23262E" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush  Color="#2A4A5D"
+                                          Opacity="0.7" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
+    <!-- Textblock for Account -->
+    <Style x:Key="Rift_PopupTextblock_Account"
+           TargetType="TextBlock">
 
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="TextAlignment"
+                Value="Center" />
+        <Setter Property="Foreground"
+                Value="#46B0FF" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontFamily"
+                Value="Segoe UI" />
+    </Style>
 
-
-
-
-
-    <Style x:Key="Rift_StackPanel_right_up"
+    <!-- StackPanel for Minimalize/Maximalize $ close  -->
+    <Style x:Key="Rift_StackPanel_WindowButtons"
            TargetType="StackPanel">
-        <Setter Property="Orientation"
-                Value="Horizontal" />
+        
+        <Setter Property="Margin"
+                Value="0,0,0,5" />
         <Setter Property="Width"
                 Value="Auto" />
         <Setter Property="HorizontalAlignment"
                 Value="Right" />
-        <Setter Property="Margin"
-                Value="0,0,0,5" />
+        <Setter Property="Orientation"
+                Value="Horizontal" />
     </Style>
-
-
-    <Style x:Key="Rift_Button"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Height"
-                Value="Auto" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Background"
-                Value="#FF31353A" />
-
-    </Style>
-
-    
-    
-    
-
 
     <!-- Button for Minimalize/Maximalize Window State -->
     <Style x:Key="Rift_StateWindow_Button"
            TargetType="Button">
-        <Setter Property="Height"
-                Value="Auto" />
+
+        <Setter Property="Margin"
+                Value="0,-5,0,0" />
         <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Background"
-                Value="Transparent" />
+                Value="32" />
+        <Setter Property="Height"
+                Value="30" />
         <Setter Property="Foreground"
                 Value="#FF818181" />
-        <Setter Property="Margin"
-                Value="5,0,0,0" />
-        <Setter Property="Cursor"
-                Value="Hand" />
+        <Setter Property="Background"
+                Value="Transparent" />
         <Setter Property="BorderThickness"
                 Value="0" />
-
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -390,14 +485,26 @@
                         <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter TargetName="border"
-                                    Property="Background"
-                                    Value="Red" />
+                                Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="White"
+                                                     Opacity="0.2" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground"
+                                    Value="White" />
                         </Trigger>
                         <Trigger Property="IsPressed"
                                  Value="True">
                             <Setter TargetName="border"
-                                    Property="Background"
-                                    Value="DarkRed" />
+                                Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="White"
+                                                     Opacity="0.2" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground"
+                                    Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -407,28 +514,31 @@
     
     <!-- Close button -->
     <Style x:Key="Rift_CLoseButton"
-           TargetType="Button">
-        <Setter Property="Height"
-                Value="Auto" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Foreground"
-                Value="#FF818181" />
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
+
         <Setter Property="Margin"
                 Value="5,0,0,0" />
-        <Setter Property="Cursor"
-                Value="Hand" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="Foreground"
+                Value="#FF818181" />
+        <Setter Property="Background"
+                Value="Transparent" />  
         <Setter Property="BorderThickness"
                 Value="0" />
-
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border"
                             Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{Binding Path=(materialDesign:ButtonAssist.CornerRadius), 
+                            RelativeSource={RelativeSource TemplatedParent}}">
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
                                           TextElement.Foreground="{TemplateBinding Foreground}" />
@@ -437,9 +547,9 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">
-                            <Setter TargetName="border"
+                            <Setter 
                                     Property="Background"
-                                    Value="Red" />
+                                    Value="#E22A27" />
                             <Setter Property="Foreground"
                                     Value="White" />
                         </Trigger>
@@ -458,37 +568,34 @@
         </Setter>
     </Style>
 
-    <!-- WIndow State Icons -->
+    <!-- Window State Icons -->
     <Style x:Key="Rift_WindowState_Icons"
            TargetType="materialIcons:MaterialIcon">
-        <Setter Property="Foreground"
-                Value="#FF818181" />
+
+        <Setter Property="Width"
+                Value="13" />
+        <Setter Property="Height"
+                Value="13" />
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
-        <Setter Property="Width"
-                Value="10" />
-        <Setter Property="Height"
-                Value="10" />
+        <Setter Property="Foreground"
+                Value="#FF818181" />
     </Style>
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+<!-- Fix from here-->
     <Style x:Key="Rift_Button3"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
@@ -503,14 +610,7 @@
 
     </Style>
 
-    <!-- Steam-like Search Bar -->
-    
-    
-    
-    
-    
-    
-    
+    <!-- Steam-like Search Bar --> 
     <Style x:Key="RiftSearchBar"
            TargetType="TextBox"
            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
@@ -620,22 +720,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 
 </ResourceDictionary>
