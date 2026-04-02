@@ -10,23 +10,29 @@
         xmlns:local="clr-namespace:Rift_App.Login_Register"
         mc:Ignorable="d"
         Title="Authencation"
-        Height="635"
-        Width="1080"
-        ResizeMode="CanResize"
+        Height="438"
+        Width="705"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="False"
         Background="Transparent"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}" >
-    <Grid>
-        <Border CornerRadius="8"
-                Background="{DynamicResource RiftBackground}"
-                BorderBrush="{DynamicResource MaterialDesignDivider}"
-                BorderThickness="1"
-                ClipToBounds="True">
-            <Grid>
-                <local:Login />
-            </Grid>
-        </Border>
-    </Grid>
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome ResizeBorderThickness="7"
+                            CaptionHeight="2"
+                            CornerRadius="8"
+                            GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
+
+    <Border CornerRadius="8"
+            BorderBrush="{DynamicResource MaterialDesignDivider}"
+            BorderThickness="1.5"
+            ClipToBounds="True">
+        <Grid>
+            <local:Login HorizontalAlignment="Stretch"/>
+        </Grid>
+    </Border>
+
 </Window>

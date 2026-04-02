@@ -27,8 +27,7 @@
                             GlassFrameThickness="0" />
     </WindowChrome.WindowChrome>
 
-    <Border CornerRadius="8"
-           
+    <Border CornerRadius="8"  
             BorderBrush="{DynamicResource MaterialDesignDivider}"
             BorderThickness="1.5"
             ClipToBounds="True">
