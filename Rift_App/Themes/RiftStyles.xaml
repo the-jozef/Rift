@@ -737,6 +737,113 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    
+<!-- LOGIN-->
+
+    <!-- Logo -->
+    <Style x:Key="Rift_Logo_login"
+           TargetType="Image">
+
+        <Setter Property="Source"
+                Value="/Icons/Rift_logo.png" />
+        <Setter Property="Width"
+                Value="500" />
+        <Setter Property="Height"
+                Value="500" />
+        <Setter Property="Margin"
+                Value="0,-10,0,-10" />
+        <Setter Property="Stretch"
+                Value="UniformToFill" />
+        <Setter Property="RenderOptions.BitmapScalingMode"
+                Value="HighQuality" />
+        <Setter Property="materialDesign:ElevationAssist.Elevation"
+                Value="Dp4" />
+        <Setter Property="Clip">
+            <Setter.Value>
+                <EllipseGeometry Center="50,50"
+                                 RadiusX="50"
+                                 RadiusY="50" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Title -->
+    <Style x:Key="Rift_Title_login"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
+
+        <Setter Property="Text"
+                Value="RIFT" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="Margin"
+                Value="6,0.5,0,0" />
+        <Setter Property="Foreground"
+                Value="{StaticResource RiftForeground}" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
+    </Style>
+
+    <!-- StackPanel logo/name        To popupbox next time-->
+    <Style x:Key="Rift_LogoHeader_login"
+           TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatButton}">
+
+        <Setter Property="Height"
+                Value="20" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="Margin"
+                Value="11,0,0,0" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Padding"
+                Value="0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <StackPanel Orientation="Horizontal"
+                                Background="Transparent">
+                        <Image x:Name="Logo"
+                               Style="{StaticResource Rift_Logo_login}"
+                               Opacity="1" />
+                        <TextBlock x:Name="Title"
+                                   Style="{StaticResource Rift_Title_login}" />
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="Logo"
+                                    Property="Opacity"
+                                    Value="0.8" />
+                            <Setter TargetName="Title"
+                                    Property="Foreground"
+                                    Value="White" />
+
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+
+
+
+
 
 
 </ResourceDictionary>
