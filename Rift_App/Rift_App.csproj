@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="44\" />
     <Folder Include="Service\" />
   </ItemGroup>
 

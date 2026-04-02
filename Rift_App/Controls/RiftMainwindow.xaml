@@ -9,13 +9,14 @@
              mc:Ignorable="d"
              d:DesignHeight="397"
              d:DesignWidth="798">
-    <Grid>
+
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <materialDesign:Card UniformCornerRadius="0"
-                             Background="#17293A"
+                             Background="#132333"
                              materialDesign:ElevationAssist.Elevation="Dp12">
             <Grid>
                 <!-- ĽAVÁ STRANA - Browse, Categories -->

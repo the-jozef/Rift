@@ -412,7 +412,7 @@
                 <Setter Property="Background">
                     <Setter.Value>
                         <SolidColorBrush  Color="#2A4A5D"
-                                          Opacity="0.7" />
+                                          Opacity="0.6" />
                     </Setter.Value>
                 </Setter>
             </Trigger>
@@ -437,6 +437,23 @@
                 Value="12" />
         <Setter Property="FontFamily"
                 Value="Segoe UI" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+    </Style>
+    
+    <!-- Icon for ChevronDown after Account-->
+    <Style x:Key="Rift_ChevronDown_Icon"
+           TargetType="materialIcons:MaterialIcon">
+        <Setter Property="Kind"
+                Value="ChevronDown" />
+        <Setter Property="Width"
+                Value="7" />
+        <Setter Property="Height"
+                Value="7" />
+        <Setter Property="Margin"
+                Value="5,5,0,0" />
+        <Setter Property="Foreground"
+                Value="#46B0FF" />
     </Style>
 
     <!-- StackPanel for Minimalize/Maximalize $ close  -->

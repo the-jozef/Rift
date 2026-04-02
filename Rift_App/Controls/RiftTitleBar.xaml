@@ -292,8 +292,12 @@
                         <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_Account}">
                             <materialDesign:PopupBox.ToggleContent>
                                 <Border Style="{StaticResource Rift_Border_Account}">
-                                    <TextBlock Text="Nickname"
-                                               Style="{StaticResource Rift_PopupTextblock_Account}" />
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="Guest_test"
+                                                   Style="{StaticResource Rift_PopupTextblock_Account}" />
+                                        <materialIcons:MaterialIcon Style="{StaticResource Rift_ChevronDown_Icon}"/>
+                                    </StackPanel>
                                 </Border>
                             </materialDesign:PopupBox.ToggleContent>
                             <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">

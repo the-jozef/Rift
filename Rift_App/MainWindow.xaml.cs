@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Rift_App.Login_Register;
+using Rift_App.Testing;
 
 namespace Rift_App
 {
@@ -26,6 +27,7 @@ namespace Rift_App
             Authencation authencation = new Authencation();
             authencation.Show();
             this.Close();*/
+            
         }
     }
 }

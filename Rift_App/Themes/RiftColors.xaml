@@ -8,11 +8,11 @@
                      Color="#FF3B3B3B" />
     <SolidColorBrush x:Key="MaterialDesignPaper"
                      Color="#FF1B2838" />
-    <SolidColorBrush x:Key="MaterialDesignCardBackground"
-                     Color="#FF171D25" />
 
 
 
+    <SolidColorBrush x:Key="RiftStoreBackground"
+                     Color="#1A2636" />
     <SolidColorBrush x:Key="RiftBackground"
                      Color="#1B2838" />
     <SolidColorBrush x:Key="RiftCardBackground"
