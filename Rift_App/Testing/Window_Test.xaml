@@ -10,130 +10,13 @@
         Title="Window_Test"
         Height="450"
         Width="800">
-    
-    
-    <Grid>
- 
-        
-        <Ellipse x:Name="GlowEllipse"
-                 Width="340"
-                 Height="280"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,50,0,0"
-                 Opacity="0.90"
-                 RenderTransformOrigin="0.5,0.5">
-            <Ellipse.Fill>
+    <Border CornerRadius="8"
+            BorderBrush="{DynamicResource MaterialDesignDivider}"
+            BorderThickness="1.5"
+            ClipToBounds="True">
+        <Grid>
+            <local:UserControl_testing HorizontalAlignment="Stretch"/>
 
-                <RadialGradientBrush GradientOrigin="0.45,0.40"
-                                     Center="0.45,0.40"
-                                     RadiusX="0.6"
-                                     RadiusY="0.6">
-                    <GradientStop Color="#FF8ADCF8"
-                                  Offset="0.00" />
-                    <GradientStop Color="#FF38A8DC"
-                                  Offset="0.25" />
-                    <GradientStop Color="#FF1060A0"
-                                  Offset="0.55" />
-                    <GradientStop Color="#FF062240"
-                                  Offset="0.80" />
-                    <GradientStop Color="#00000000"
-                                  Offset="1.00" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-
-            <Ellipse.RenderTransform>
-                <ScaleTransform x:Name="GlowScaleX"
-                                ScaleX="1"
-                                ScaleY="1" />
-            </Ellipse.RenderTransform>
-
-            <Ellipse.Effect>
-                <BlurEffect Radius="28" />
-            </Ellipse.Effect>
-        </Ellipse>
-
-        <Ellipse Width="80"
-                 Height="60"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,130,0,0"
-                 IsHitTestVisible="False">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#DDFFFFFF"
-                                  Offset="0.0" />
-                    <GradientStop Color="#4488CCFF"
-                                  Offset="0.5" />
-                    <GradientStop Color="#00000000"
-                                  Offset="1.0" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-            <Ellipse.Effect>
-                <BlurEffect Radius="8" />
-            </Ellipse.Effect>
-        </Ellipse>
-        <Canvas>
-            <Ellipse Canvas.Left="224"
-                     Canvas.Top="112"
-                     Width="5"
-                     Height="5"
-                     Fill="#CCFFFFFF"
-                     Opacity="0.9">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="242"
-                     Canvas.Top="100"
-                     Width="4"
-                     Height="4"
-                     Fill="#BBFFFFFF"
-                     Opacity="0.8">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="260"
-                     Canvas.Top="96"
-                     Width="5"
-                     Height="5"
-                     Fill="#CCEEFFFF"
-                     Opacity="0.85">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="278"
-                     Canvas.Top="105"
-                     Width="3"
-                     Height="3"
-                     Fill="#BBFFFFFF"
-                     Opacity="0.7">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="1.5" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="298"
-                     Canvas.Top="118"
-                     Width="4"
-                     Height="4"
-                     Fill="#AAEEFFFF"
-                     Opacity="0.75">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="315"
-                     Canvas.Top="130"
-                     Width="3"
-                     Height="3"
-                     Fill="#99EEFFFF"
-                     Opacity="0.6">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="1.5" />
-                </Ellipse.Effect>
-            </Ellipse>
-        </Canvas>
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

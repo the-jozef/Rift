@@ -700,8 +700,8 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
-    
-    
+
+
     <Style x:Key="Rift_CLear_Button"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignIconButton}">
@@ -718,7 +718,7 @@
                                              Height="15"
                                              Foreground="#4B4F55"
                                              HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"/>
+                                             VerticalAlignment="Center" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">
@@ -737,18 +737,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
-<!-- LOGIN-->
-
-   
-
-
-
-
-
-
-
-
-
 </ResourceDictionary>
