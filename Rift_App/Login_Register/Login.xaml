@@ -14,18 +14,29 @@
                     RepeatBehavior="Forever"
                     AutoReverse="True">
 
-            <DoubleAnimation Storyboard.TargetName="MyScale"
+            <DoubleAnimation Storyboard.TargetName="Elipse1"
                              Storyboard.TargetProperty="ScaleX"
-                             From="0.2"
-                             To="1"
+                             From="0.99"
+                             To="0.9"
                              Duration="0:0:0:1" />
 
-            <DoubleAnimation Storyboard.TargetName="MyScale"
+            <DoubleAnimation Storyboard.TargetName="Elipse1"
                              Storyboard.TargetProperty="ScaleY"
-                             From="0.2"
-                             To="0.3"
+                             From="0.93"
+                             To="0.88"
                              Duration="0:0:0:1" />
 
+            <DoubleAnimation Storyboard.TargetName="Elipse2"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+
+            <DoubleAnimation Storyboard.TargetName="Elipse2"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
         </Storyboard>
     </UserControl.Resources>
 
@@ -125,7 +136,7 @@
                 </Grid>
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="360" />
                         <RowDefinition Height="Auto" />
 
@@ -176,16 +187,12 @@
 
                         </Button>
                     </StackPanel>
-                    
-                    
-                    
-                    
+
+
+
+
                     <Canvas Grid.Row="1">
-                        <Ellipse Canvas.Left="30"
-                                 Canvas.Top="20"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+
                         <Ellipse Canvas.Left="100"
                                  Canvas.Top="70"
                                  Width="1.5"
@@ -201,11 +208,7 @@
                                  Width="1"
                                  Height="1"
                                  Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="330"
-                                 Canvas.Top="15"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+
                         <Ellipse Canvas.Left="325"
                                  Canvas.Top="90"
                                  Width="1.5"
@@ -221,28 +224,16 @@
                                  Width="1.5"
                                  Height="1.5"
                                  Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="155"
-                                 Canvas.Top="130"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+
                         <Ellipse Canvas.Left="30"
                                  Canvas.Top="200"
                                  Width="1"
                                  Height="1"
                                  Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="280"
-                                 Canvas.Top="150"
-                                 Width="1.5"
-                                 Height="1.5"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="20"
-                                 Canvas.Top="310"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="105"
-                                 Canvas.Top="335"
+
+
+                        <Ellipse Canvas.Left="66"
+                                 Canvas.Top="285"
                                  Width="1"
                                  Height="1"
                                  Fill="#53AFFC" />
@@ -251,13 +242,13 @@
                                  Width="1.5"
                                  Height="1.5"
                                  Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="300"
+                        <Ellipse Canvas.Left="325"
                                  Canvas.Top="220"
                                  Width="2"
                                  Height="2"
                                  Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="320"
-                                 Canvas.Top="320"
+                        <Ellipse Canvas.Left="318"
+                                 Canvas.Top="283"
                                  Width="2"
                                  Height="2"
                                  Fill="#53AFFC" />
@@ -266,20 +257,16 @@
                                  Width="2"
                                  Height="2"
                                  Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="200"
-                                 Canvas.Top="190"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
                     </Canvas>
                     <Canvas Grid.Row="1">
 
-                        <Ellipse Width="450"
-                                 Height="380"
-                                 HorizontalAlignment="Center"
+                        <Ellipse Width="360"
+                                 Height="320"
+                                 HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
-                                 Opacity="0.10"
-                                 RenderTransformOrigin="0.5,0.5">
+                                 Opacity="0.15"
+                                 RenderTransformOrigin="0.5,0.5"
+                                 Canvas.Left="43">
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -291,15 +278,20 @@
                             </Ellipse.Stroke>
                             <Ellipse.StrokeThickness>1</Ellipse.StrokeThickness>
                             <Ellipse.RenderTransform>
-                                <ScaleTransform x:Name="Ring3ScaleX"
+                                <ScaleTransform x:Name="Elipse1"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
-                        <Ellipse Width="380"
-                                 Height="324"
+
+                        <Ellipse Width="310"
+                                 Height="260"
                                  Opacity="0.15"
-                                 RenderTransformOrigin="0.5,0.5">
+                                 RenderTransformOrigin="0.5,0.5"
+                                 Canvas.Left="77"
+                                 Canvas.Top="31"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top">
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -311,7 +303,7 @@
                             </Ellipse.Stroke>
                             <Ellipse.StrokeThickness>1</Ellipse.StrokeThickness>
                             <Ellipse.RenderTransform>
-                                <ScaleTransform x:Name="Ring2ScaleX"
+                                <ScaleTransform x:Name="Elipse2"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
@@ -320,10 +312,12 @@
                         <Ellipse x:Name="Ring1"
                                  Width="290"
                                  Height="240"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
                                  Opacity="0.22"
-                                 RenderTransformOrigin="0.5,0.5">
+                                 RenderTransformOrigin="0.5,0.5"
+                                 Canvas.Left="71"
+                                 Canvas.Top="60">
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -335,10 +329,75 @@
                             </Ellipse.Stroke>
                             <Ellipse.StrokeThickness>1.5</Ellipse.StrokeThickness>
                             <Ellipse.RenderTransform>
-                                <ScaleTransform x:Name="MyScale"
+                                <ScaleTransform x:Name="MyScale2"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
+                        </Ellipse>
+
+                        <Ellipse Width="250"
+                                 Height="190"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 Opacity="0.22"
+                                 RenderTransformOrigin="0.5,0.5"
+                                 Canvas.Left="91"
+                                 Canvas.Top="87">
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="1,1">
+                                    <GradientStop Color="#FF4AB8E8"
+                                                  Offset="0" />
+                                    <GradientStop Color="#FF1A6A9A"
+                                                  Offset="1" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                            <Ellipse.StrokeThickness>1.5</Ellipse.StrokeThickness>
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="k"
+                                                ScaleX="1"
+                                                ScaleY="1" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+
+
+                        <Ellipse x:Name="GlowEllipse"
+                                 Width="173"
+                                 Height="151"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 Opacity="0.5"
+                                 RenderTransformOrigin="0.5,0.5"
+                                 Canvas.Left="130"
+                                 Canvas.Top="114">
+                            <Ellipse.Fill>
+
+                                <RadialGradientBrush GradientOrigin="0.45,0.40"
+                                                     Center="0.45,0.40"
+                                                     RadiusX="0.6"
+                                                     RadiusY="0.6">
+                                    <GradientStop Color="#FF8ADCF8"
+                                                  Offset="0.00" />
+                                    <GradientStop Color="#FF38A8DC"
+                                                  Offset="0.084" />
+                                    <GradientStop Color="#FF1060A0"
+                                                  Offset="0.432" />
+                                    <GradientStop Color="#FF062240"
+                                                  Offset="0.69" />
+                                    <GradientStop Color="#00000000"
+                                                  Offset="1.00" />
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="GlowScaleX"
+                                                ScaleX="1"
+                                                ScaleY="1" />
+                            </Ellipse.RenderTransform>
+
+                            <Ellipse.Effect>
+                                <BlurEffect Radius="28" />
+                            </Ellipse.Effect>
                         </Ellipse>
                     </Canvas>
 
