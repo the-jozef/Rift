@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="44\**" />
+    <EmbeddedResource Remove="44\**" />
+    <None Remove="44\**" />
+    <Page Remove="44\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Icons\Rift_logo.png" />
   </ItemGroup>
 
@@ -28,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="44\" />
     <Folder Include="Service\" />
   </ItemGroup>
 
