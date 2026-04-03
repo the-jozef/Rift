@@ -14,61 +14,51 @@
         <Storyboard x:Key="PulseAnimation"
                     RepeatBehavior="Forever"
                     AutoReverse="True">
-
             <DoubleAnimation Storyboard.TargetName="Elipse1"
                              Storyboard.TargetProperty="ScaleX"
                              From="0.99"
                              To="0.9"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse1"
                              Storyboard.TargetProperty="ScaleY"
                              From="0.93"
                              To="0.88"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse2"
                              Storyboard.TargetProperty="ScaleX"
                              From="0.99"
                              To="0.9"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse2"
                              Storyboard.TargetProperty="ScaleY"
                              From="0.99"
                              To="0.9"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse3"
                              Storyboard.TargetProperty="ScaleX"
                              From="0.98"
                              To="1.05"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse3"
                              Storyboard.TargetProperty="ScaleY"
                              From="1"
                              To="1.02"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse4"
                              Storyboard.TargetProperty="ScaleX"
                              From="0.9"
                              To="1"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse4"
                              Storyboard.TargetProperty="ScaleY"
                              From="0.9"
                              To="1.1"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse5"
                              Storyboard.TargetProperty="ScaleX"
                              From="1"
                              To="1.1"
                              Duration="0:0:0:1" />
-
             <DoubleAnimation Storyboard.TargetName="Elipse5"
                              Storyboard.TargetProperty="ScaleY"
                              From="1"
@@ -100,6 +90,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
+                <!-- LAVY STLPEC -->
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -107,125 +99,163 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
+                    <!-- Logo + Nazov -->
                     <StackPanel Grid.Row="0"
                                 Grid.Column="0"
                                 Style="{StaticResource Rift_LoginTitle_stackpanel}">
-
                         <Image Style="{StaticResource Rift_Logo_login}" />
-
                         <TextBlock Style="{StaticResource Rift_Title_login}" />
                     </StackPanel>
 
+                    <!-- Formular -->
                     <Grid Grid.Row="1">
                         <StackPanel Style="{StaticResource Rift_Layout_Stackpanel}">
 
                             <TextBlock Style="{StaticResource Rift_SignIn_Title}" />
 
-                            <TextBox Style="{StaticResource Rift_SignIn_AccountName}" />
-
+                            <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
+                                     x:Name="UsernameBox" />
 
                             <TextBlock Style="{StaticResource Rift_Password_Title}" />
 
+                            <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}"
+                                         x:Name="PasswordBox"
+                                         PasswordChanged="PasswordBox_PasswordChanged" />
 
-                            <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}" />
+                            <!-- Chybova sprava -->
+                            <TextBlock x:Name="ErrorText"
+                                       Foreground="#FF4444"
+                                       FontSize="11"
+                                       Margin="0,4,0,0"
+                                       Visibility="Collapsed" />
 
-                            <Button Style="{StaticResource Rift_SignIn_Button}" />
+                            <!-- Povodne Sign In tlacidlo -->
+                            <Button Style="{StaticResource Rift_SignIn_Button}"
+                                    Command="{Binding SignInCommand}" />
+
+                            <!-- Steam tlacidlo -->
+                            <Button Height="42"
+                                    Width="230"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding SteamLoginCommand}"
+                                    BorderThickness="0"
+                                    Margin="0,10,0,0">
+                                <Button.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                                         EndPoint="1,0">
+                                        <GradientStop Color="#FF1B2838"
+                                                      Offset="0" />
+                                        <GradientStop Color="#FF2A475E"
+                                                      Offset="1" />
+                                    </LinearGradientBrush>
+                                </Button.Background>
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    <materialIcons:MaterialIcon Kind="Steam"
+                                                                Width="20"
+                                                                Height="20"
+                                                                Foreground="White"
+                                                                Margin="0,0,8,0" />
+                                    <TextBlock Text="Prihlasit cez Steam"
+                                               Foreground="White"
+                                               FontSize="13"
+                                               VerticalAlignment="Center" />
+                                    
+                                </StackPanel>
+                            </Button>
+                            <Button Height="30"
+                                    Width="230"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,6,0,0"
+                                    Background="#32353C"
+                                    Foreground="#AAAAAA"
+                                    BorderThickness="0"
+                                    FontSize="11"
+                                    Content="Odhlasit sa (test)"
+                                    Command="{Binding LogoutCommand}" />
                         </StackPanel>
                     </Grid>
                 </Grid>
 
+                <!-- PRAVY STLPEC — nezmeneny -->
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="355" />
                         <RowDefinition Height="Auto" />
-
                     </Grid.RowDefinitions>
 
+                    <!-- Close button -->
                     <StackPanel Grid.Row="0"
                                 Margin="318,0,0,0"
                                 Width="33"
                                 HorizontalAlignment="Left">
-
                         <Button Style="{StaticResource Rift_CLoseButton}"
                                 Margin="0,0,0,0"
                                 Height="30"
                                 Width="33"
                                 materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
                                 Command="{Binding CloseWindowCommand}">
-
                             <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
                                                         Kind="Close"
                                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
                         </Button>
                     </StackPanel>
 
-                    <StackPanel     Grid.Row="2"
-                                    Style="{StaticResource Rift_CreateAccount_Stackpanel}">
-
+                    <!-- Create Account -->
+                    <StackPanel Grid.Row="2"
+                                Style="{StaticResource Rift_CreateAccount_Stackpanel}">
                         <TextBlock Style="{StaticResource Rift_CreateAccount_TextBlock}" />
                         <Button Style="{StaticResource Rift_CreateAccount_Button}"
-                                Command="{Binding Register_TestCommand}"/>
+                                Command="{Binding Register_TestCommand}" />
                     </StackPanel>
 
+                    <!-- Hviezdy -->
                     <Canvas Grid.Row="1">
-
                         <Ellipse Canvas.Left="100"
                                  Canvas.Top="70"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="200"
                                  Canvas.Top="22"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="220"
                                  Canvas.Top="80"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="325"
                                  Canvas.Top="90"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="290"
                                  Canvas.Top="50"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="60"
                                  Canvas.Top="140"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="30"
                                  Canvas.Top="200"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="66"
                                  Canvas.Top="285"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="120"
                                  Canvas.Top="250"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="325"
                                  Canvas.Top="220"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="318"
                                  Canvas.Top="283"
                                  Style="{StaticResource Rift_Stars}" />
-
                         <Ellipse Canvas.Left="220"
                                  Canvas.Top="280"
                                  Style="{StaticResource Rift_Stars}" />
                     </Canvas>
 
+                    <!-- Elipsy — nezmenene -->
                     <Canvas Grid.Row="1">
-
                         <Ellipse Width="360"
                                  Height="320"
                                  Opacity="0.15"
                                  Canvas.Left="43">
-
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -235,7 +265,6 @@
                                                   Offset="1" />
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
-
                             <Ellipse.RenderTransform>
                                 <ScaleTransform x:Name="Elipse1"
                                                 ScaleX="1"
@@ -248,7 +277,6 @@
                                  Opacity="0.15"
                                  Canvas.Left="77"
                                  Canvas.Top="31">
-
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -257,9 +285,7 @@
                                     <GradientStop Color="#FF0D4870"
                                                   Offset="1" />
                                 </LinearGradientBrush>
-
                             </Ellipse.Stroke>
-
                             <Ellipse.RenderTransform>
                                 <ScaleTransform x:Name="Elipse2"
                                                 ScaleX="1"
@@ -272,7 +298,6 @@
                                  Opacity="0.22"
                                  Canvas.Left="71"
                                  Canvas.Top="60">
-
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -282,7 +307,6 @@
                                                   Offset="1" />
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
-
                             <Ellipse.RenderTransform>
                                 <ScaleTransform x:Name="Elipse3"
                                                 ScaleX="1"
@@ -295,7 +319,6 @@
                                  Opacity="0.22"
                                  Canvas.Left="91"
                                  Canvas.Top="87">
-
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -305,7 +328,6 @@
                                                   Offset="1" />
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
-
                             <Ellipse.RenderTransform>
                                 <ScaleTransform x:Name="Elipse4"
                                                 ScaleX="1"
@@ -313,13 +335,11 @@
                             </Ellipse.RenderTransform>
                         </Ellipse>
 
-
                         <Ellipse Width="173"
                                  Height="151"
                                  Opacity="0.5"
                                  Canvas.Left="130"
                                  Canvas.Top="114">
-
                             <Ellipse.Fill>
                                 <RadialGradientBrush GradientOrigin="0.45,0.40"
                                                      Center="0.45,0.40"
@@ -337,18 +357,17 @@
                                                   Offset="1.00" />
                                 </RadialGradientBrush>
                             </Ellipse.Fill>
-
                             <Ellipse.RenderTransform>
                                 <ScaleTransform x:Name="Elipse5"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
-
                             <Ellipse.Effect>
                                 <BlurEffect Radius="28" />
                             </Ellipse.Effect>
                         </Ellipse>
                     </Canvas>
+
                 </Grid>
             </Grid>
         </Border>

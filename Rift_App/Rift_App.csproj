@@ -10,21 +10,34 @@
 
   <ItemGroup>
     <Compile Remove="44\**" />
+    <Compile Remove="Service\**" />
     <EmbeddedResource Remove="44\**" />
+    <EmbeddedResource Remove="Service\**" />
     <None Remove="44\**" />
+    <None Remove="Service\**" />
     <Page Remove="44\**" />
+    <Page Remove="Service\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="Icons\Rift_logo.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Material.Icons.WPF" Version="3.0.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.3.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
   </ItemGroup>
@@ -33,16 +46,6 @@
     <Resource Include="Icons\Rift_logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
