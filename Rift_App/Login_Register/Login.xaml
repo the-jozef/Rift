@@ -164,7 +164,8 @@
                                     Style="{StaticResource Rift_CreateAccount_Stackpanel}">
 
                         <TextBlock Style="{StaticResource Rift_CreateAccount_TextBlock}" />
-                        <Button Style="{StaticResource Rift_CreateAccount_Button}" />
+                        <Button Style="{StaticResource Rift_CreateAccount_Button}"
+                                Command="{Binding Register_TestCommand}"/>
                     </StackPanel>
 
                     <Canvas Grid.Row="1">

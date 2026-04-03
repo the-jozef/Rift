@@ -22,9 +22,11 @@ namespace Rift_App
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();     
             DataContext = new WindowStateViewModel();
-            
+    
+
+            /*
             Authencation authencation = new Authencation();
             authencation.Show();
             this.Close();

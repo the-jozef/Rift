@@ -15,11 +15,10 @@
                 <ResourceDictionary Source="Themes/RiftColors.xaml" />
                 <ResourceDictionary Source="Themes/RiftStyles.xaml" />
                 <ResourceDictionary Source="Login_Register/Login_layout.xaml" />
-
-
-
             </ResourceDictionary.MergedDictionaries>
                 <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+                <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

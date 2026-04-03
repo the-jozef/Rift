@@ -1,15 +1,17 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Rift_App.Login_Register;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Rift_App.ViewModels
 {
     public partial class WindowStateViewModel : ObservableObject
     {
+        
         [RelayCommand]
         private static void MaximizeWindow()
         {
@@ -35,6 +37,24 @@ namespace Rift_App.ViewModels
         {             
             App.Current.MainWindow.Close();
      
+        }
+
+
+
+        //test
+        [RelayCommand]
+        public static void Login_Test()
+
+        {
+
+            Authencation authencation = new Authencation();
+
+            authencation.Show();
+
+            App.Current.MainWindow.Close();
+
+
+
         }
     }
 }

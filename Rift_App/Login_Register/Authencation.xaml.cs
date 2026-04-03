@@ -24,6 +24,7 @@ namespace Rift_App.Login_Register
         {
             InitializeComponent();
             DataContext = new WindowStateViewModel();
+            DataContext = new ViewModels.Testing();
         }
     }
 }
