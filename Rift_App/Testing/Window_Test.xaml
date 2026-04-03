@@ -10,13 +10,428 @@
         Title="Window_Test"
         Height="450"
         Width="800">
-    <Border CornerRadius="8"
-            BorderBrush="{DynamicResource MaterialDesignDivider}"
-            BorderThickness="1.5"
-            ClipToBounds="True">
-        <Grid>
-            <local:UserControl_testing HorizontalAlignment="Stretch"/>
+    <Window.Resources>
+        <!-- Nav button štýl -->
+        <Style x:Key="NavButtonStyle"
+               TargetType="ToggleButton">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="#C6D4DF" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Height"
+                    Value="44" />
+            <Setter Property="Padding"
+                    Value="14,0" />
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+                                <ContentPresenter VerticalAlignment="Center" />
+                                <Path x:Name="Arrow"
+                                      Data="M 0 0 L 5 5 L 10 0"
+                                      Stroke="#C6D4DF"
+                                      StrokeThickness="1.5"
+                                      Width="10"
+                                      Height="6"
+                                      Stretch="Fill"
+                                      VerticalAlignment="Center"
+                                      Margin="5,1,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#2A4259" />
+                                <Setter Property="Foreground"
+                                        Value="#FFFFFF" />
+                            </Trigger>
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#2A4259" />
+                                <Setter Property="Foreground"
+                                        Value="#66C0F4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <!-- Dropdown link štýl -->
+        <Style x:Key="DropLinkStyle"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="#C7D5E0" />
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Padding"
+                    Value="0,4" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Foreground"
+                            Value="#66C0F4" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Dropdown menu item -->
+        <Style x:Key="MenuItemStyle"
+               TargetType="Border">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Padding"
+                    Value="20,10" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#3D6B8C" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Banner štýl -->
+        <Style x:Key="BannerStyle"
+               TargetType="Border">
+            <Setter Property="Background"
+                    Value="#1B2838" />
+            <Setter Property="BorderBrush"
+                    Value="#3D6B8C" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Height"
+                    Value="80" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="BorderBrush"
+                            Value="#66C0F4" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44" />
+            <!-- TopBar -->
+            <RowDefinition Height="Auto" />
+            <!-- Dropdown -->
+            <RowDefinition Height="*" />
+            <!-- Obsah stránky -->
+        </Grid.RowDefinitions>
+
+        <!-- ===== TOP NAV BAR ===== -->
+        <Border Grid.Row="0"
+                Background="#171A21"
+                BorderBrush="#000000"
+                BorderThickness="0,0,0,1">
+            <DockPanel>
+                <!-- Nav tlačidlá -->
+                <StackPanel Orientation="Horizontal"
+                            DockPanel.Dock="Left">
+
+                    <ToggleButton x:Name="BrowseBtn"
+                                  Style="{StaticResource NavButtonStyle}"
+                       
+                               
+                                  Tag="BrowseDropdown">Browse ▾</ToggleButton>
+
+                    <ToggleButton x:Name="RecsBtn"
+                                  Style="{StaticResource NavButtonStyle}"
+                             
+                           
+                                  Tag="RecsDropdown">Recommendations ▾</ToggleButton>
+
+                    <ToggleButton x:Name="CatBtn"
+                                  Style="{StaticResource NavButtonStyle}"
+                                 
+                                  Tag="CatDropdown">Categories ▾</ToggleButton>
+
+                    <ToggleButton x:Name="HwBtn"
+                                  Style="{StaticResource NavButtonStyle}"
+                           
+                                  Tag="HwDropdown">Hardware ▾</ToggleButton>
+                </StackPanel>
+
+                <!-- Wishlist vpravo -->
+                <StackPanel Orientation="Horizontal"
+                            DockPanel.Dock="Right"
+                            VerticalAlignment="Center"
+                            Margin="12,0">
+                    <TextBlock Text="★ Wishlist "
+                               Foreground="#C6D4DF"
+                               FontSize="13" />
+                    <TextBlock Text="26"
+                               Foreground="#66C0F4"
+                               FontSize="13" />
+                </StackPanel>
+
+                <!-- Search box -->
+                <Border DockPanel.Dock="Right"
+                        Background="#316282"
+                        BorderBrush="#4B8BB0"
+                        BorderThickness="1"
+                        Height="28"
+                        VerticalAlignment="Center"
+                        Margin="8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="180"
+                                 Background="Transparent"
+                                 Foreground="#C6D4DF"
+                                 BorderThickness="0"
+                                 VerticalAlignment="Center"
+                                 Text="Search the store"
+                                 Padding="8,0" />
+                        <Button Content="🔍"
+                                Background="#1A9FFF"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Width="30"
+                                FontSize="13" />
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+
+        <!-- ===== DROPDOWN PANEL ===== -->
+        <Grid Grid.Row="1">
+
+            <!-- BROWSE DROPDOWN -->
+            <Border x:Name="BrowseDropdown"
+                    Visibility="Collapsed"
+                    Background="#2A3F56"
+                    BorderBrush="#4B8BB0"
+                    BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Ľavý zoznam -->
+                    <Border Grid.Column="0"
+                            BorderBrush="#3D6B8C"
+                            BorderThickness="0,0,1,0">
+                        <StackPanel>
+                            <Border Style="{StaticResource MenuItemStyle}">
+                                <TextBlock Text="Store Home"
+                                           Foreground="#C7D5E0"
+                                           FontWeight="Bold"
+                                           FontSize="13" />
+                            </Border>
+                            <Border Style="{StaticResource MenuItemStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="New Releases"
+                                               Foreground="#C7D5E0"
+                                               FontWeight="Bold"
+                                               FontSize="13" />
+                                    <TextBlock Text="Explore new content on Steam"
+                                               Foreground="#8F98A0"
+                                               FontSize="11"
+                                               Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource MenuItemStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Upcoming Releases"
+                                               Foreground="#C7D5E0"
+                                               FontWeight="Bold"
+                                               FontSize="13" />
+                                    <TextBlock Text="See what's on the release calendar"
+                                               Foreground="#8F98A0"
+                                               FontSize="11"
+                                               Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource MenuItemStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="All Charts &amp; Stats"
+                                               Foreground="#C7D5E0"
+                                               FontWeight="Bold"
+                                               FontSize="13" />
+                                    <TextBlock Text="Explore top titles by week, month, or year"
+                                               Foreground="#8F98A0"
+                                               FontSize="11"
+                                               Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Stredné bannery -->
+                    <StackPanel Grid.Column="1"
+                                Margin="12">
+                        <Border Style="{StaticResource BannerStyle}">
+                            <Grid>
+                                <!-- Tu daj Image namiesto Rectangle -->
+                                <Rectangle Fill="#223344"
+                                           Opacity="0.6" />
+                                <Border Background="White"
+                                        Padding="12,6"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="TOP SELLERS"
+                                               Foreground="#1B2838"
+                                               FontWeight="Black"
+                                               FontSize="13" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource BannerStyle}">
+                            <Grid>
+                                <Rectangle Fill="#1a3344"
+                                           Opacity="0.6" />
+                                <Border Background="White"
+                                        Padding="12,6"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="DISCOUNTS &amp; EVENTS"
+                                               Foreground="#1B2838"
+                                               FontWeight="Black"
+                                               FontSize="13"
+                                               TextAlignment="Center" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Pravé linky -->
+                    <Border Grid.Column="2"
+                            BorderBrush="#3D6B8C"
+                            BorderThickness="1,0,0,0"
+                            Padding="16">
+                        <StackPanel>
+                            <TextBlock Text="TOP DESTINATIONS"
+                                       Foreground="#8F98A0"
+                                       FontSize="10"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Free to Play"
+                                       Style="{StaticResource DropLinkStyle}" />
+                            <TextBlock Text="Demos"
+                                       Style="{StaticResource DropLinkStyle}" />
+                            <TextBlock Text="News &amp; Updates"
+                                       Style="{StaticResource DropLinkStyle}" />
+                            <TextBlock Text="Points Shop"
+                                       Style="{StaticResource DropLinkStyle}" />
+                            <TextBlock Text="Gift Cards"
+                                       Style="{StaticResource DropLinkStyle}" />
+
+                            <TextBlock Text="MY ACCOUNT"
+                                       Foreground="#8F98A0"
+                                       FontSize="10"
+                                       FontWeight="Bold"
+                                       Margin="0,16,0,8"/>
+                            <TextBlock Text="My Preferences"
+                                       Style="{StaticResource DropLinkStyle}" />
+                            <TextBlock Text="My Wishlist"
+                                       Style="{StaticResource DropLinkStyle}" />
+                            <TextBlock Text="My Family"
+                                       Style="{StaticResource DropLinkStyle}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- RECOMMENDATIONS DROPDOWN (príklad jednoduchší) -->
+            <Border x:Name="RecsDropdown"
+                    Visibility="Collapsed"
+                    Background="#2A3F56"
+                    BorderBrush="#4B8BB0"
+                    BorderThickness="1"
+                    Padding="20">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock Text="RECOMMENDED FOR YOU"
+                                   Foreground="#8F98A0"
+                                   FontSize="10"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,8" />
+                        <TextBlock Text="Recommended Games"
+                                   Style="{StaticResource DropLinkStyle}" />
+                        <TextBlock Text="New On Your Wishlist"
+                                   Style="{StaticResource DropLinkStyle}" />
+                        <TextBlock Text="More Like This"
+                                   Style="{StaticResource DropLinkStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- CATEGORIES DROPDOWN -->
+            <Border x:Name="CatDropdown"
+                    Visibility="Collapsed"
+                    Background="#2A3F56"
+                    BorderBrush="#4B8BB0"
+                    BorderThickness="1"
+                    Padding="20">
+                <WrapPanel Orientation="Horizontal">
+                    <TextBlock Text="Action  "
+                               Style="{StaticResource DropLinkStyle}"
+                               Margin="0,0,16,0" />
+                    <TextBlock Text="RPG  "
+                               Style="{StaticResource DropLinkStyle}"
+                               Margin="0,0,16,0" />
+                    <TextBlock Text="Strategy  "
+                               Style="{StaticResource DropLinkStyle}"
+                               Margin="0,0,16,0" />
+                    <TextBlock Text="Simulation  "
+                               Style="{StaticResource DropLinkStyle}"
+                               Margin="0,0,16,0" />
+                    <TextBlock Text="Indie  "
+                               Style="{StaticResource DropLinkStyle}"
+                               Margin="0,0,16,0" />
+                    <TextBlock Text="Adventure  "
+                               Style="{StaticResource DropLinkStyle}"
+                               Margin="0,0,16,0" />
+                </WrapPanel>
+            </Border>
+
+            <!-- HARDWARE DROPDOWN -->
+            <Border x:Name="HwDropdown"
+                    Visibility="Collapsed"
+                    Background="#2A3F56"
+                    BorderBrush="#4B8BB0"
+                    BorderThickness="1"
+                    Padding="20">
+                <StackPanel>
+                    <TextBlock Text="Steam Deck"
+                               Style="{StaticResource DropLinkStyle}" />
+                    <TextBlock Text="Controllers"
+                               Style="{StaticResource DropLinkStyle}" />
+                    <TextBlock Text="VR Headsets"
+                               Style="{StaticResource DropLinkStyle}" />
+                </StackPanel>
+            </Border>
         </Grid>
-    </Border>
+
+        <!-- Obsah stránky -->
+        <Border Grid.Row="2"
+                Background="#1B2838">
+            <TextBlock Text="Obsah stránky..."
+                       Foreground="#4B8BB0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="14" />
+        </Border>
+    </Grid>
 </Window>

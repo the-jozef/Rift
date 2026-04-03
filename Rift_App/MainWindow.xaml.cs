@@ -25,18 +25,18 @@ namespace Rift_App
             InitializeComponent();     
             DataContext = new WindowStateViewModel();
     
-
+  Window_Test test = new Window_Test();
+            test.Show();
+            this.Close();
             /*
             Authencation authencation = new Authencation();
             authencation.Show();
             this.Close();
 
 
-            /*
-           Window_Test test = new Window_Test();
-            test.Show();
-            this.Close();
-            */
+            
+         
+            
 
 
 

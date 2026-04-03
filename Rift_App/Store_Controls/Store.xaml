@@ -7,22 +7,36 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             xmlns:local2="clr-namespace:Rift_App.Store_Controls"
+             
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    
     <Grid>
-        <Border Background="{StaticResource RiftStoreBackground}">
+        <Border Grid.Row="0"
+                Background="{StaticResource RiftStoreBackground}"
+                CornerRadius="0,0,7.5,7.5">
             <Grid>
-                <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+                <ScrollViewer>
+                    <StackPanel Margin="0,0,0,20">
+                        <TextBlock Text="OBCHOD"
+                                   Foreground="White"
+                                   FontSize="24"
+                                   Margin="34,20,34,20" />
+                        <TextBlock Text="V obchode nájdeš rôzne doplnky a možnosti prispôsobenia pre tvoj Rift profil. Od unikátnych avatarov až po exkluzívne témy - všetko navrhnuté tak, aby tvoj profil vynikal!"
+                                   Foreground="#AAAAAA"
+                                   FontSize="14"
+                                   Margin="34,0,34,20" />
+                        <Button Content="Navštív obchod"
+                                Height="500"
+                                Width="150" />
 
 
+
+
+
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
         </Border>
     </Grid>
