@@ -32,7 +32,9 @@ namespace Rift_App.ViewModels
         }
         [RelayCommand]
         private static void CloseWindow()
-        {             App.Current.MainWindow.Close();
+        {             
+            App.Current.MainWindow.Close();
+     
         }
     }
 }

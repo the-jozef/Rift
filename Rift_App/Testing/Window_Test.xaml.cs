@@ -1,5 +1,4 @@
-﻿using Rift_App.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Rift_App.Login_Register
+namespace Rift_App.Testing
 {
     /// <summary>
-    /// Interaction logic for Authencation.xaml
+    /// Interaction logic for Window_Test.xaml
     /// </summary>
-    public partial class Authencation : Window
+    public partial class Window_Test : Window
     {
-        public Authencation()
+        public Window_Test()
         {
             InitializeComponent();
-            DataContext = new WindowStateViewModel();
         }
     }
 }

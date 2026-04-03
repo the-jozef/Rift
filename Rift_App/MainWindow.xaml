@@ -8,6 +8,7 @@
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
         xmlns:local="clr-namespace:Rift_App.Controls"
+        xmlns:local2="clr-namespace:Rift_App.Store_Controls"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="635"
@@ -17,8 +18,7 @@
         WindowStyle="None"
         AllowsTransparency="False"
         Background="Transparent"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
->
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
 
     <WindowChrome.WindowChrome>
         <shell:WindowChrome ResizeBorderThickness="7"
@@ -27,18 +27,19 @@
                             GlassFrameThickness="0" />
     </WindowChrome.WindowChrome>
 
-    <Border CornerRadius="8"
-            Background="{DynamicResource RiftBackground}"
+    <Border CornerRadius="8"  
             BorderBrush="{DynamicResource MaterialDesignDivider}"
-            BorderThickness="1"
+            BorderThickness="1.5"
             ClipToBounds="True">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="70" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <local:RiftTitleBar Grid.Row="0" />
-            <local:RiftMainwindow Grid.Row="1" />
+            <local:RiftTitleBar HorizontalAlignment="Stretch" Grid.Row="0" />
+            <local:RiftMainwindow HorizontalAlignment="Stretch" Grid.Row="1" />
+            <local2:Store HorizontalAlignment="Stretch" Grid.Row="2" />
         </Grid>
     </Border>
 </Window>
