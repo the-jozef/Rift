@@ -10,11 +10,72 @@
              d:DesignHeight="450" 
              d:DesignWidth="800">
     <Grid>
-        <Border>
-            <!-- Uprav si border a tu rob register-->
-            
-            
-            
+        <Border Grid.Row="0"
+            Background="#1C1E22"
+            CornerRadius="7.5,7.5,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,-9,-1">
+                <StackPanel Margin="0,0,0,20">
+
+                    <!-- TITLE -->
+                    <TextBlock Text="CREATE YOUR ACCOUNT"
+                   Foreground="White"
+                   FontSize="28"
+                   Margin="20,0,0,20"/>
+
+                    <!-- EMAIL -->
+                    <TextBlock Text="Email Address" Foreground="LightGray"
+                       Margin="34,0,0,0"/>
+                    <TextBox 
+                     Height="35"
+                     Width="650"
+                     Background="#2A3F5F"
+                     Foreground="White"
+                     BorderThickness="0"
+                     Margin="0,0,94,0"/>
+
+                    <!-- CONFIRM EMAIL -->
+                    <TextBlock Text="Confirm your Email Address" Foreground="LightGray"
+                       Margin="30,10,300,-1"/>
+                    <TextBox Height="35" 
+                     Margin="0,5,98,5"
+                     Width="650"
+                 Background="#2A3F5F"
+                 Foreground="White"
+                 BorderThickness="0"/>
+
+                    <!-- COUNTRY -->
+                    <TextBlock Text="Country of Residence" Foreground="LightGray"
+                       Margin="30,0,0,-1"/>
+                    <ComboBox Height="35" Margin="0,5,98,15"
+                      Width="650"
+                  Background="#2A3F5F"
+                  Foreground="White"
+                  BorderThickness="0">
+                        <ComboBoxItem Content="Slovakia"/>
+                        <ComboBoxItem Content="Czech Republic"/>
+                        <ComboBoxItem Content="Germany"/>
+                    </ComboBox>
+
+
+
+
+                    <!-- CHECKBOX -->
+                    <CheckBox Margin="30,0,98,15"
+                  Foreground="White"
+                  Content="I am 13 years of age or older and agree to the terms"/>
+                    <Button Content="Continue"
+                Height="40"
+                    Width="650"
+                    Margin="0,0,98,0"
+                Background="#66C0F4"
+                Foreground="White"
+                FontWeight="Bold"
+                BorderThickness="0"/>
+
+                    <!-- BUTTON -->
+
+                </StackPanel>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>
