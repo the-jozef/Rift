@@ -1,26 +1,32 @@
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Pridáme HttpClient na volanie Steam
 builder.Services.AddHttpClient();
 
-var app = builder.Build();
+// Pridaj CORS aby WPF mohla volať server
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
 
-// === STEAM API PROXY (univerzálny pre všetky Steam volania) ===
+var app = builder.Build();
+app.UseCors();
+
 app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFactory, IConfiguration config) =>
 {
-    var steamKey = config["SteamApiKey"];
+    // Najprv skúsi Environment Variable, potom appsettings.json
+    var steamKey = Environment.GetEnvironmentVariable("STEAM_API_KEY")
+                   ?? config["SteamApiKey"];
+
     if (string.IsNullOrEmpty(steamKey))
         return Results.BadRequest("Steam API key nie je nastavený.");
 
     try
     {
         var requestBody = await JsonSerializer.DeserializeAsync<SteamProxyRequest>(req.Body);
-
         var client = clientFactory.CreateClient();
 
-        // Zostaví URL napr. https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0001/
         string baseUrl = $"https://api.steampowered.com/{requestBody.Interface}/{requestBody.Method}/{requestBody.Version}/";
 
         var queryParams = requestBody.Parameters
@@ -43,7 +49,6 @@ app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFacto
 
 app.Run();
 
-// === Pomocná trieda (pridaj na úplný koniec súboru) ===
 public class SteamProxyRequest
 {
     public string Interface { get; set; } = string.Empty;
