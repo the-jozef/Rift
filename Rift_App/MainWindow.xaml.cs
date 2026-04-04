@@ -25,45 +25,51 @@ namespace Rift_App
             InitializeComponent();     
             DataContext = new WindowStateViewModel();
     
-  Window_Test test = new Window_Test();
-            test.Show();
-            this.Close();
-            /*
             Authencation authencation = new Authencation();
             authencation.Show();
             this.Close();
 
 
-            
-         
-            
-
-
-
             /*
-             // === TESTOVANIE REGISTRÁCIE ===(urobu noveho hraca automaticky pri spusteni appky)
-             
-            var auth = new AuthService();
+          Window_Test test = new Window_Test();
+                    test.Show();
+                    this.Close();
+                    /*
+                    Authencation authencation = new Authencation();
+                    authencation.Show();
+                    this.Close();
 
-            // === OPRÁVENE VOLANIE REGISTER ===
-            string errorMessage;
-            bool success = auth.Register("testuser", "mojeheslo123", "76561197960287930", out errorMessage);
 
-            if (success)
-            {
-                MessageBox.Show("Testový používateľ bol úspešne zaregistrovaný!",
-                                "Registrácia OK",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show($"Registrácia zlyhala:\n{errorMessage}",
-                                "Chyba registrácie",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-            }
-            */
+
+
+
+
+
+
+                    /*
+                     // === TESTOVANIE REGISTRÁCIE ===(urobu noveho hraca automaticky pri spusteni appky)
+
+                    var auth = new AuthService();
+
+                    // === OPRÁVENE VOLANIE REGISTER ===
+                    string errorMessage;
+                    bool success = auth.Register("testuser", "mojeheslo123", "76561197960287930", out errorMessage);
+
+                    if (success)
+                    {
+                        MessageBox.Show("Testový používateľ bol úspešne zaregistrovaný!",
+                                        "Registrácia OK",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Registrácia zlyhala:\n{errorMessage}",
+                                        "Chyba registrácie",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Warning);
+                    }
+                    */
 
 
 

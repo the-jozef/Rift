@@ -207,7 +207,8 @@
                                 Style="{StaticResource Rift_CreateAccount_Stackpanel}">
                         <TextBlock Style="{StaticResource Rift_CreateAccount_TextBlock}" />
                         <Button Style="{StaticResource Rift_CreateAccount_Button}"
-                                Command="{Binding Register_TestCommand}" />
+                                Command="{Binding DataContext.ShowRegisterCommand, 
+                          RelativeSource={RelativeSource AncestorType=Window}}" />
                     </StackPanel>
 
                     <!-- Hviezdy -->

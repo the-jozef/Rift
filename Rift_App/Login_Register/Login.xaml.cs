@@ -12,6 +12,7 @@ namespace Rift_App.Login_Register
         {
             InitializeComponent();
             DataContext = new LoginViewModel();
+           
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

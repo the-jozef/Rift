@@ -23,8 +23,8 @@ namespace Rift_App.Login_Register
         public Authencation()
         {
             InitializeComponent();
-            DataContext = new WindowStateViewModel();
-            DataContext = new ViewModels.Testing();
+            //DataContext = new ViewNavigator();
+           
         }
     }
 }

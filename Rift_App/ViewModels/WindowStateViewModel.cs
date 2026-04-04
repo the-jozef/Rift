@@ -1,11 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using Rift_App.Login_Register;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Rift_App.ViewModels
 {
@@ -26,7 +29,6 @@ namespace Rift_App.ViewModels
         }
 
 
-
         [RelayCommand]
         private static void MinimizeWindow()
         {
@@ -37,24 +39,6 @@ namespace Rift_App.ViewModels
         {             
             App.Current.MainWindow.Close();
      
-        }
-
-
-
-        //test
-        [RelayCommand]
-        public static void Login_Test()
-
-        {
-
-            Authencation authencation = new Authencation();
-
-            authencation.Show();
-
-            App.Current.MainWindow.Close();
-
-
-
         }
     }
 }

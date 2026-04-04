@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using Rift_App.Database;
+using Rift_App.Login_Register;
+using Rift_App.Services;
 using System;
 using System.Diagnostics;
 using System.Net;
@@ -11,12 +14,14 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using Rift_App.Services;
 
 namespace Rift_App.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
+       
+
+
         private readonly AuthService _authService = new AuthService();
         private readonly HttpClient _http = new HttpClient();
 

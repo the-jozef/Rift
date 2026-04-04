@@ -120,6 +120,12 @@ Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                        FontSize="14"
                                        VerticalAlignment="Center" />
                         </Button>
+                        <Button Width="50"
+                                Height="20"
+                                Command="{Binding DataContext.ShowLoginCommand, 
+                          RelativeSource={RelativeSource AncestorType=Window}}">
+                            
+                        </Button>
                     </StackPanel>
 
                 </StackPanel>
