@@ -361,9 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-# Sensitive files - never upload to GitHub
-appsettings.json
-*.db
-bin/
-obj/
