@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using Rift_App.Database;
@@ -19,16 +18,9 @@ namespace Rift_App.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
-       
-
-
         private readonly AuthService _authService = new AuthService();
         private readonly HttpClient _http = new HttpClient();
 
-        private static readonly string ApiKey = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build()["Steam:ApiKey"] ?? string.Empty;
 
         [ObservableProperty] private string currentSteamName = string.Empty;
         [ObservableProperty] private string currentSteamAvatar = string.Empty;
@@ -99,11 +91,10 @@ namespace Rift_App.ViewModels
 
                 string steamId64 = match.Groups[1].Value;
 
-                string apiUrl =
-                    "https://api.steampowered.com/ISteamUser/" +
-                    $"GetPlayerSummaries/v2/?key={ApiKey}&steamids={steamId64}";
+                var steamService = new SteamService();
+                string json = await steamService.GetPlayerSummary(steamId64);
 
-                string json = await _http.GetStringAsync(apiUrl);
+
                 var jObj = JObject.Parse(json);
                 var player = jObj["response"]?["players"]?[0];
 

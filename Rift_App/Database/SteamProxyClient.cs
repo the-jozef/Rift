@@ -13,7 +13,7 @@ namespace Rift_App.Database
         {
             _client = new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:7024/")   // Change this port to match your running SteamProxyBackend
+                BaseAddress = new Uri("https://rift-production-3468.up.railway.app/")   // Change this port to match your running SteamProxyBackend
             };
         }
 
