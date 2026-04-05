@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
+using Rift_App.Login_Register;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using MaterialDesignThemes.Wpf;
 
 namespace Rift_App.Controls
 {

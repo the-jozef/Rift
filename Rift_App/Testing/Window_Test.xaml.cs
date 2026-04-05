@@ -22,6 +22,17 @@ namespace Rift_App.Testing
         public Window_Test()
         {
             InitializeComponent();
+            this.MouseDown += (s, e) =>
+            {
+                if (BrowsePopup.IsOpen)
+                    BrowsePopup.IsOpen = false;
+            };
+        }
+
+        private void BrowseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle the popup open/closed
+            BrowsePopup.IsOpen = !BrowsePopup.IsOpen;
         }
     }
 }

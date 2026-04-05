@@ -306,7 +306,8 @@
                                             Style="{StaticResource Rift_PopupItems}" />
                                     <Button Content="Change Account"
                                             Style="{StaticResource Rift_PopupItems}"
-                                            Command="{Binding OpenAuthCommand}"/>
+                                            Command="{Binding ShowAuthencationCommand, 
+                  RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Button Content="Sign out of account..."
                                             Style="{StaticResource Rift_PopupItems}" />
                                 </StackPanel>

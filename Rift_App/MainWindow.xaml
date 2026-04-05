@@ -38,7 +38,8 @@
                 <RowDefinition Height="*" />
          
             </Grid.RowDefinitions>
-            <local:RiftTitleBar HorizontalAlignment="Stretch" Grid.Row="0" />
+            <local:RiftTitleBar HorizontalAlignment="Stretch"
+                                Grid.Row="0"/>
             <local:RiftMainwindow HorizontalAlignment="Stretch" Grid.Row="1" />
             <local2:Store HorizontalAlignment="Stretch" Grid.Row="2" />
         </Grid>

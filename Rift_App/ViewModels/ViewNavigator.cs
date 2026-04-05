@@ -9,36 +9,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Rift_App.ViewModels
-{/*
-    public class ViewNavigator
+{
+    public partial class Navigator : ObservableObject
     {
-
-        
-        
-
-        /*
         [ObservableProperty]
-        private object _currentView;
+        private object currentView;
 
-        public void AuthenticationViewModel()
+        public Navigator()
         {
-            _currentView = new LoginView();
-        }
-
-        [RelayCommand]
-        public void ShowRegister()
-        {
-            CurrentView = new RegisterView();
+            CurrentView = new Login();
         }
 
         [RelayCommand]
         public void ShowLogin()
         {
-            CurrentView = new LoginView();
+            CurrentView = new Login();
         }
 
-
-
-        */
-    
+        [RelayCommand]
+        public void ShowRegister()
+        {
+            CurrentView = new Register(); // tvoj Register UserControl
+        }
+    }
 }
