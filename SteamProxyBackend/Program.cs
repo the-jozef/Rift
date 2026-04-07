@@ -3,7 +3,6 @@ using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
 
-// Pridaj CORS aby WPF mohla volať server
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -13,9 +12,10 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 app.UseCors();
 
+app.MapGet("/", () => "Rift Steam Proxy is running.");
+
 app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFactory, IConfiguration config) =>
 {
-    // Najprv skúsi Environment Variable, potom appsettings.json
     var steamKey = Environment.GetEnvironmentVariable("STEAM_API_KEY")
                    ?? config["SteamApiKey"];
 
@@ -25,6 +25,10 @@ app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFacto
     try
     {
         var requestBody = await JsonSerializer.DeserializeAsync<SteamProxyRequest>(req.Body);
+
+        if (requestBody == null)
+            return Results.BadRequest("Request body je null.");
+
         var client = clientFactory.CreateClient();
 
         string baseUrl = $"https://api.steampowered.com/{requestBody.Interface}/{requestBody.Method}/{requestBody.Version}/";
@@ -47,7 +51,9 @@ app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFacto
     }
 });
 
-app.Run();
+// Render uses PORT env variable (default 10000)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+app.Run($"http://0.0.0.0:{port}");
 
 public class SteamProxyRequest
 {

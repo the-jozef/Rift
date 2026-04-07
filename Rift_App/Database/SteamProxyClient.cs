@@ -13,7 +13,8 @@ namespace Rift_App.Database
         {
             _client = new HttpClient
             {
-                BaseAddress = new Uri("https://rift-production-3468.up.railway.app/")   // Change this port to match your running SteamProxyBackend
+                BaseAddress = new Uri("https://rift-hupv.onrender.com/"),
+                Timeout = TimeSpan.FromSeconds(60) // Render cold start can be slow
             };
         }
 
@@ -28,9 +29,12 @@ namespace Rift_App.Database
             };
 
             var response = await _client.PostAsJsonAsync("api/steam", requestData);
-            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
 
-            return await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode || !content.TrimStart().StartsWith("{"))
+                throw new Exception($"Proxy chyba (HTTP {(int)response.StatusCode}): {content[..Math.Min(300, content.Length)]}");
+
+            return content;
         }
     }
 }
