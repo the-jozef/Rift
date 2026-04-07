@@ -44,65 +44,69 @@ namespace Rift_App.ViewModels
                 listener.Start();
 
                 string returnTo = "http://localhost:8080/callback/";
-                string steamUrl =
-                    "https://steamcommunity.com/openid/login" +
+                string realm = "http://localhost:8080/";
+
+                string steamUrl = "https://steamcommunity.com/openid/login" +
                     "?openid.ns=http://specs.openid.net/auth/2.0" +
                     "&openid.mode=checkid_setup" +
                     $"&openid.return_to={Uri.EscapeDataString(returnTo)}" +
-                    $"&openid.realm={Uri.EscapeDataString("http://localhost:8080/")}" +
+                    $"&openid.realm={Uri.EscapeDataString(realm)}" +
                     "&openid.identity=http://specs.openid.net/auth/2.0/identifier_select" +
                     "&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select";
 
                 Process.Start(new ProcessStartInfo(steamUrl) { UseShellExecute = true });
 
+                // Čakáme na callback (max 2 minúty)
                 var contextTask = listener.GetContextAsync();
                 if (await Task.WhenAny(contextTask, Task.Delay(120_000)) != contextTask)
                 {
                     listener.Stop();
-                    MessageBox.Show("Prihlasenie vyprsalo. Skus znova.", "Timeout");
+                    MessageBox.Show("Prihlásenie vypršalo. Skús znova.", "Timeout");
                     return;
                 }
 
                 var context = await contextTask;
+                var qs = context.Request.QueryString;
 
-                string html =
-                    "<html><body style='background:#1A1B1F;color:white;" +
-                    "font-family:sans-serif;display:flex;align-items:center;" +
-                    "justify-content:center;height:100vh;margin:0'>" +
-                    "<h2>Prihlasenie uspesne! Vrat sa do Rift App.</h2>" +
-                    "</body></html>";
-                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
-                context.Response.ContentLength64 = buffer.Length;
-                context.Response.OutputStream.Write(buffer);
-                context.Response.OutputStream.Close();
-                listener.Stop();
-
-                string fullUrl = context.Request.Url?.ToString() ?? "";
-                string decodedUrl = Uri.UnescapeDataString(fullUrl);
-
-                var match = Regex.Match(decodedUrl,
-                    @"openid\.claimed_id=https?://steamcommunity\.com/openid/id/(\d+)");
-
-                if (!match.Success)
+                // === OVERENIE OPENID (najdôležitejšia časť) ===
+                bool isValid = await VerifyOpenIdAsync(qs);
+                if (!isValid)
                 {
-                    MessageBox.Show("Nepodarilo sa ziskat Steam ID.", "Chyba");
+                    listener.Stop();
+                    MessageBox.Show("Overenie Steam prihlásenia zlyhalo (možno falšovaná požiadavka).", "Chyba");
                     return;
                 }
 
+                // Vyťaženie SteamID64 (bezpečne po overení)
+                string claimedId = qs["openid.claimed_id"] ?? "";
+                var match = Regex.Match(claimedId, @"https?://steamcommunity\.com/openid/id/(\d{17})");
+                if (!match.Success)
+                {
+                    listener.Stop();
+                    MessageBox.Show("Nepodarilo sa získať Steam ID.", "Chyba");
+                    return;
+                }
                 string steamId64 = match.Groups[1].Value;
 
-                var steamService = new SteamService();
-                string json = await steamService.GetPlayerSummary(steamId64);
+                // Odpoveď prehliadaču (pekná stránka)
+                string html = "<html><body style='background:#1A1B1F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0'><h2>Prihlásenie úspešné!<br>Môžeš zavrieť toto okno a vrátiť sa do Rift App.</h2></body></html>";
+                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
+                context.Response.ContentLength64 = buffer.Length;
+                await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+                context.Response.OutputStream.Close();
 
+                listener.Stop();
+
+                // === Tvoj pôvodný kód pokračuje ===
+                var steamService = new SteamService();
+                string json = await steamService.GetPlayerSummary(steamId64);   // tu máš už v0002
 
                 var jObj = JObject.Parse(json);
                 var player = jObj["response"]?["players"]?[0];
-
                 string steamName = player?["personaname"]?.ToString() ?? "Unknown";
                 string steamAvatar = player?["avatarfull"]?.ToString() ?? "";
 
-                bool exists = _authService.LoginWithSteam(
-                    steamId64, out string existingUsername, out string _);
+                bool exists = _authService.LoginWithSteam(steamId64, out string existingUsername, out string _);
 
                 if (exists)
                 {
@@ -110,11 +114,8 @@ namespace Rift_App.ViewModels
                     CurrentSteamName = existingUsername;
                     CurrentSteamAvatar = steamAvatar;
                     IsLoggedIn = true;
-
-                    // Zapamätaj si posledného používateľa
                     SessionService.Save(steamId64);
-
-                    MessageBox.Show($"Vitaj spat, {existingUsername}!", "Prihlasenie uspesne");
+                    MessageBox.Show($"Vitaj späť, {existingUsername}!", "Prihlásenie úspešné");
                     // TODO: otvor MainWindow
                 }
                 else
@@ -127,9 +128,46 @@ namespace Rift_App.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Chyba: {ex.Message}", "Chyba pri Steam prihlaseni");
+                MessageBox.Show($"Chyba pri Steam prihlásení: {ex.Message}", "Chyba");
             }
         }
+        private async Task<bool> VerifyOpenIdAsync(System.Collections.Specialized.NameValueCollection qs)
+        {
+            try
+            {
+                var values = new Dictionary<string, string>();
+
+                // 1. Skopírujeme VŠETKY openid.* parametre (vrátane signed, sig, claimed_id atď.)
+                foreach (var key in qs.AllKeys ?? Array.Empty<string>())
+                {
+                    if (key != null && key.StartsWith("openid."))
+                    {
+                        values[key] = qs[key] ?? string.Empty;
+                    }
+                }
+
+                // 2. Potom PREPÍŠEME iba to, čo je potrebné pre overenie
+                values["openid.ns"] = "http://specs.openid.net/auth/2.0";
+                values["openid.mode"] = "check_authentication";
+
+                var content = new FormUrlEncodedContent(values);
+                var response = await _http.PostAsync("https://steamcommunity.com/openid/login", content);
+                var responseText = await response.Content.ReadAsStringAsync();
+
+                // Debug (ak by ešte stále nefungovalo – uvidíš čo presne Steam vrátil)
+                // MessageBox.Show("Steam response:\n" + responseText, "Debug");
+
+                return responseText.Contains("is_valid:true");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Chyba pri overovaní OpenID: " + ex.Message, "Chyba");
+                return false;
+            }
+        }
+
+
+
 
         [RelayCommand]
         private void FinishSetup()

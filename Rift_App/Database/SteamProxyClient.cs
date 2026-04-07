@@ -14,17 +14,18 @@ namespace Rift_App.Database
             _client = new HttpClient
             {
                 BaseAddress = new Uri("https://rift-hupv.onrender.com/"),
-                Timeout = TimeSpan.FromSeconds(60) // Render cold start can be slow
+                Timeout = TimeSpan.FromSeconds(90)
             };
         }
 
-        public async Task<string> CallSteam(string interfaceName, string methodName, Dictionary<string, string> parameters)
+        // ←←← ZMENENÉ: pridali sme parameter version
+        public async Task<string> CallSteam(string interfaceName, string methodName, string version, Dictionary<string, string> parameters)
         {
             var requestData = new
             {
                 Interface = interfaceName,
                 Method = methodName,
-                Version = "v0001",
+                Version = version,           // teraz berieme správnu verziu
                 Parameters = parameters
             };
 
