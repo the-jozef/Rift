@@ -88,8 +88,8 @@ namespace Rift_App.ViewModels
                 }
                 string steamId64 = match.Groups[1].Value;
 
-                // Odpoveď prehliadaču (pekná stránka)
-                string html = "<html><body style='background:#1A1B1F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0'><h2>Prihlásenie úspešné!<br>Môžeš zavrieť toto okno a vrátiť sa do Rift App.</h2></body></html>";
+                // Odpoveď prehliadaču 
+                string html = "<html><body style='background:#1A1B1F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0'><h2>Successful sign up.<br>You can close this window and return to the RIFT App..</h2></body></html>";
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
                 context.Response.ContentLength64 = buffer.Length;
                 await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);

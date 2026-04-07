@@ -14,7 +14,7 @@ app.UseCors();
 
 app.MapGet("/", () => "Rift Steam Proxy is running.");
 
-app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFactory, IConfiguration config) =>
+app.MapPost("/api/steam", async (SteamProxyRequest requestBody, IHttpClientFactory clientFactory, IConfiguration config) =>
 {
     var steamKey = Environment.GetEnvironmentVariable("STEAM_API_KEY")
                    ?? config["SteamApiKey"];
@@ -24,13 +24,15 @@ app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFacto
 
     try
     {
-        var requestBody = await JsonSerializer.DeserializeAsync<SteamProxyRequest>(req.Body);
-
-        if (requestBody == null)
-            return Results.BadRequest("Request body je null.");
+        // ←←← NOVÉ: framework sám deserializuje telo (spoľahlivejšie ako manuálny DeserializeAsync)
+        if (requestBody == null
+            || string.IsNullOrEmpty(requestBody.Interface)
+            || string.IsNullOrEmpty(requestBody.Method))
+        {
+            return Results.BadRequest("Request body je neplatný (chýba Interface alebo Method).");
+        }
 
         var client = clientFactory.CreateClient();
-
         string baseUrl = $"https://api.steampowered.com/{requestBody.Interface}/{requestBody.Method}/{requestBody.Version}/";
 
         var queryParams = requestBody.Parameters
@@ -43,7 +45,8 @@ app.MapPost("/api/steam", async (HttpRequest req, IHttpClientFactory clientFacto
         var response = await client.GetAsync(fullUrl);
         var content = await response.Content.ReadAsStringAsync();
 
-        return Results.Content(content, "application/json");
+        // Lepšie forwardujeme aj status code zo Steamu (nie vždy 200)
+        return Results.Content(content, "application/json", statusCode: (int)response.StatusCode);
     }
     catch (Exception ex)
     {

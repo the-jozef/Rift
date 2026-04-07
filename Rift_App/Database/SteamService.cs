@@ -14,7 +14,6 @@ namespace Rift_App.Database
                 { "steamids", steamId64 }
             };
 
-            // ←←← TU JE KĽÚČ: používame v0002
             return await _proxy.CallSteam("ISteamUser", "GetPlayerSummaries", "v0002", parameters);
         }
     }
