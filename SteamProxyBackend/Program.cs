@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
+using System.Collections.Concurrent;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
@@ -9,28 +11,29 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 app.UseCors();
 
 app.MapGet("/", () => "Rift Steam Proxy is running.");
 
-app.MapPost("/api/steam", async (SteamProxyRequest requestBody, IHttpClientFactory clientFactory, IConfiguration config) =>
+app.MapPost("/api/steam", async (SteamProxyRequest requestBody, IHttpClientFactory clientFactory, IConfiguration config, IMemoryCache cache) =>
 {
-    var steamKey = Environment.GetEnvironmentVariable("STEAM_API_KEY")
-                   ?? config["SteamApiKey"];
-
+    var steamKey = Environment.GetEnvironmentVariable("STEAM_API_KEY") ?? config["SteamApiKey"];
     if (string.IsNullOrEmpty(steamKey))
         return Results.BadRequest("Steam API key nie je nastavený.");
 
+    // ←←← CACHE: rovnaký request vrátime z cache 60 sekúnd
+    var cacheKey = $"{requestBody.Interface}_{requestBody.Method}_{string.Join("_", requestBody.Parameters.OrderBy(p => p.Key).Select(p => p.Value))}";
+
+    if (cache.TryGetValue(cacheKey, out string? cachedResponse))
+        return Results.Content(cachedResponse, "application/json");
+
     try
     {
-        // ←←← NOVÉ: framework sám deserializuje telo (spoľahlivejšie ako manuálny DeserializeAsync)
-        if (requestBody == null
-            || string.IsNullOrEmpty(requestBody.Interface)
-            || string.IsNullOrEmpty(requestBody.Method))
-        {
-            return Results.BadRequest("Request body je neplatný (chýba Interface alebo Method).");
-        }
+        if (requestBody == null || string.IsNullOrEmpty(requestBody.Interface) || string.IsNullOrEmpty(requestBody.Method))
+            return Results.BadRequest("Request body je neplatný.");
 
         var client = clientFactory.CreateClient();
         string baseUrl = $"https://api.steampowered.com/{requestBody.Interface}/{requestBody.Method}/{requestBody.Version}/";
@@ -45,7 +48,9 @@ app.MapPost("/api/steam", async (SteamProxyRequest requestBody, IHttpClientFacto
         var response = await client.GetAsync(fullUrl);
         var content = await response.Content.ReadAsStringAsync();
 
-        // Lepšie forwardujeme aj status code zo Steamu (nie vždy 200)
+        // Uložíme do cache na 60 sekúnd
+        cache.Set(cacheKey, content, TimeSpan.FromSeconds(60));
+
         return Results.Content(content, "application/json", statusCode: (int)response.StatusCode);
     }
     catch (Exception ex)

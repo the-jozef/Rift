@@ -79,7 +79,7 @@
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="Margin"
-                Value="55,40,0,0" />
+                Value="55,35,0,0" />
     </Style>
 
     <!-- Textblock for Title_sign in -->
@@ -228,11 +228,11 @@
         <Setter Property="Content"
                 Value="Sign in" />
         <Setter Property="Width"
-                Value="230" />
+                Value="200" />
         <Setter Property="Height"
-                Value="50" />
+                Value="35" />
         <Setter Property="Margin"
-                Value="05,25,0,0" />
+                Value="05,23,0,0" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"

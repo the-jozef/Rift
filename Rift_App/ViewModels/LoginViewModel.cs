@@ -21,7 +21,6 @@ namespace Rift_App.ViewModels
         private readonly AuthService _authService = new AuthService();
         private readonly HttpClient _http = new HttpClient();
 
-
         [ObservableProperty] private string currentSteamName = string.Empty;
         [ObservableProperty] private string currentSteamAvatar = string.Empty;
         [ObservableProperty] private ulong currentSteamID64;
@@ -114,7 +113,7 @@ namespace Rift_App.ViewModels
                     CurrentSteamName = existingUsername;
                     CurrentSteamAvatar = steamAvatar;
                     IsLoggedIn = true;
-                    SessionService.Save(steamId64);
+                    new DatabaseService().SetCurrentSteamId(steamId64);
                     MessageBox.Show($"Vitaj späť, {existingUsername}!", "Prihlásenie úspešné");
                     // TODO: otvor MainWindow
                 }
@@ -154,9 +153,6 @@ namespace Rift_App.ViewModels
                 var response = await _http.PostAsync("https://steamcommunity.com/openid/login", content);
                 var responseText = await response.Content.ReadAsStringAsync();
 
-                // Debug (ak by ešte stále nefungovalo – uvidíš čo presne Steam vrátil)
-                // MessageBox.Show("Steam response:\n" + responseText, "Debug");
-
                 return responseText.Contains("is_valid:true");
             }
             catch (Exception ex)
@@ -165,9 +161,6 @@ namespace Rift_App.ViewModels
                 return false;
             }
         }
-
-
-
 
         [RelayCommand]
         private void FinishSetup()
@@ -199,8 +192,8 @@ namespace Rift_App.ViewModels
                 IsLoggedIn = true;
                 IsSetupMode = false;
 
-                // Zapamätaj si posledného používateľa
-                SessionService.Save(_tempSteamId64);
+                // ←←← OPRavené: správna premenná
+                new DatabaseService().SetCurrentSteamId(_tempSteamId64);
 
                 MessageBox.Show($"Ucet vytvoreny! Vitaj, {SetupUsername}!", "Hotovo");
                 // TODO: otvor MainWindow
@@ -223,12 +216,50 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private void Logout()
         {
-            SessionService.Clear();
+            new DatabaseService().ClearCurrentSteamId();
             IsLoggedIn = false;
             CurrentSteamName = string.Empty;
             CurrentSteamAvatar = string.Empty;
             CurrentSteamID64 = 0;
             MessageBox.Show("Odhlaseny!", "Logout");
         }
+        /*
+        public LoginViewModel()
+        {
+            // Auto-load pri štarte
+            var db = new DatabaseService();
+            var savedSteamId = db.GetCurrentSteamId();
+
+            if (!string.IsNullOrEmpty(savedSteamId))
+            {
+                // Skús prihlásiť existujúceho používateľa
+                bool exists = _authService.LoginWithSteam(savedSteamId,
+                    out string username, out string _);
+
+                if (exists)
+                {
+                    CurrentSteamID64 = ulong.Parse(savedSteamId);
+                    CurrentSteamName = username;
+                    IsLoggedIn = true;
+
+                    // Načítaj aj meno a avatar zo Steamu (voliteľné)
+                    _ = LoadSteamProfileAsync(savedSteamId);   // nová metóda nižšie
+                }
+            }
+        }
+        private async Task LoadSteamProfileAsync(string steamId64)
+        {
+            try
+            {
+                var steamService = new SteamService();
+                string json = await steamService.GetPlayerSummary(steamId64);
+                var jObj = JObject.Parse(json);
+                var player = jObj["response"]?["players"]?[0];
+
+                CurrentSteamName = player?["personaname"]?.ToString() ?? "Unknown";
+                CurrentSteamAvatar = player?["avatarfull"]?.ToString() ?? "";
+            }
+            catch {          }
+        }*/      
     }
 }
