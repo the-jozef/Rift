@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Rift_App.ViewModels;
+
+namespace Rift_App.Login_Register
+{
+    /// <summary>
+    /// Interaction logic for Login_loading.xaml
+    /// </summary>
+    public partial class Login_loading : UserControl
+    {
+        public Login_loading()
+        {
+            InitializeComponent();
+            DataContext = new LoginViewModel();
+        }
+    }
+}

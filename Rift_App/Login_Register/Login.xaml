@@ -141,8 +141,9 @@
                                 Height="30"
                                 Width="33"
                                 materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
-                                Command="{Binding CloseWindowCommand}">
-
+                                Command="{Binding DataContext.LoginLoadingCommand, 
+RelativeSource={RelativeSource AncestorType=Window}}">
+                        
                             <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
                                                         Kind="Close"
                                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />

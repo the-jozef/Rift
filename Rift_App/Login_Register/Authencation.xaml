@@ -31,7 +31,9 @@
             BorderThickness="1.5"
             ClipToBounds="True">
         <Grid>
-            <local:Login HorizontalAlignment="Stretch"/>
+            <ContentControl Content="{Binding CurrentView}" />
+
+
         </Grid>
     </Border>
 
