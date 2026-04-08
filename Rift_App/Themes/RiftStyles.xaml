@@ -700,8 +700,8 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
-    
-    
+
+
     <Style x:Key="Rift_CLear_Button"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignIconButton}">
@@ -718,7 +718,7 @@
                                              Height="15"
                                              Foreground="#4B4F55"
                                              HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"/>
+                                             VerticalAlignment="Center" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">
@@ -737,113 +737,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
-<!-- LOGIN-->
-
-    <!-- Logo in Login -->
-    <Style x:Key="Rift_Logo_login"
-           TargetType="Image">
-
-        <Setter Property="Source"
-                Value="/Icons/Rift_logo.png" />
-        <Setter Property="Width"
-                Value="55" />
-        <Setter Property="Height"
-                Value="55" />
-        <Setter Property="Margin"
-                Value="0,-10,0,-10" />
-        <Setter Property="Stretch"
-                Value="UniformToFill" />
-        <Setter Property="RenderOptions.BitmapScalingMode"
-                Value="HighQuality" />
-        <Setter Property="materialDesign:ElevationAssist.Elevation"
-                Value="Dp4" />
-        <Setter Property="Clip">
-            <Setter.Value>
-                <EllipseGeometry Center="27.5,27.5"
-                                 RadiusX="27.5"
-                                 RadiusY="27.5" />
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Title in Login-->
-    <Style x:Key="Rift_Title_login"
-           TargetType="TextBlock"
-           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
-
-        <Setter Property="Text"
-                Value="RIFT" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
-        <Setter Property="Margin"
-                Value="10,0.5,0,0" />
-        <Setter Property="Foreground"
-                Value="#F0F1F2" />
-        <Setter Property="FontSize"
-                Value="30" />
-        <Setter Property="FontFamily"
-                Value="Arial" />
-    </Style>
-
-    <!-- Button Logo/Title in Login-->
-    <Style x:Key="Rift_LogoHeader_login"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignFlatButton}">
-
-        <Setter Property="Height"
-                Value="65" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Margin"
-                Value="70,0,0,0" />
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Cursor"
-                Value="Hand" />
-        <Setter Property="Padding"
-                Value="0" />
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <StackPanel Orientation="Horizontal"
-                                Background="Transparent">
-                        <Image x:Name="Logo"
-                               Style="{StaticResource Rift_Logo_login}"
-                               Opacity="1" />
-                        <TextBlock x:Name="Title"
-                                   Style="{StaticResource Rift_Title_login}" />
-                    </StackPanel>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter TargetName="Logo"
-                                    Property="Opacity"
-                                    Value="0.8" />
-                            <Setter TargetName="Title"
-                                    Property="Foreground"
-                                    Value="White" />
-
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-
-
-
-
-
-
-
-
 </ResourceDictionary>

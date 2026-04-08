@@ -9,23 +9,61 @@
              mc:Ignorable="d"
              d:Height="435"
              d:Width="702">
+
     <UserControl.Resources>
         <Storyboard x:Key="PulseAnimation"
                     RepeatBehavior="Forever"
                     AutoReverse="True">
-
-            <DoubleAnimation Storyboard.TargetName="MyScale"
+            <DoubleAnimation Storyboard.TargetName="Elipse1"
                              Storyboard.TargetProperty="ScaleX"
-                             From="0.2"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse1"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.93"
+                             To="0.88"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse2"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse2"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse3"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.98"
+                             To="1.05"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse3"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="1"
+                             To="1.02"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse4"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.9"
                              To="1"
                              Duration="0:0:0:1" />
-
-            <DoubleAnimation Storyboard.TargetName="MyScale"
+            <DoubleAnimation Storyboard.TargetName="Elipse4"
                              Storyboard.TargetProperty="ScaleY"
-                             From="0.2"
-                             To="0.3"
+                             From="0.9"
+                             To="1.1"
                              Duration="0:0:0:1" />
-
+            <DoubleAnimation Storyboard.TargetName="Elipse5"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="1"
+                             To="1.1"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse5"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="1"
+                             To="1.3"
+                             Duration="0:0:0:1" />
         </Storyboard>
     </UserControl.Resources>
 
@@ -34,102 +72,127 @@
             <BeginStoryboard Storyboard="{StaticResource PulseAnimation}" />
         </EventTrigger>
     </UserControl.Triggers>
+
     <Grid>
         <Border Grid.Row="0"
-                Background="#1A1B1F"
                 CornerRadius="7.5,7.5,0,0">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1"
+                                     StartPoint="0.5,0">
+                    <GradientStop Color="#1E1E26" />
+                    <GradientStop Color="#1A1B1F"
+                                  Offset="0.788" />
+                </LinearGradientBrush>
+            </Border.Background>
 
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+       
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0"
                                 Grid.Column="0"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Left"
-                                Margin="66,28,0,0"
-                                Width="Auto"
-                                Height="57">
+                                Style="{StaticResource Rift_LoginTitle_stackpanel}">
                         <Image Style="{StaticResource Rift_Logo_login}" />
-
                         <TextBlock Style="{StaticResource Rift_Title_login}" />
                     </StackPanel>
 
                     <Grid Grid.Row="1">
-                        <StackPanel Orientation="Vertical"
-                                    HorizontalAlignment="Left"
-                                    Margin="48,20,0,0">
+                        <StackPanel Style="{StaticResource Rift_Layout_Stackpanel}">
 
+                            <TextBlock Style="{StaticResource Rift_SignIn_Title}" />
 
-                            <TextBlock Text="SIGN IN WITH ACCOUNT NAME"
-                                       HorizontalAlignment="Left"
-                                       FontSize="12"
-                                       FontWeight="SemiBold"
-                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                       Foreground="#1999FF">
-                            </TextBlock>
+                            <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
+                                     x:Name="UsernameBox" />
 
-                            <TextBox   Width="300"
-                                       Height="38"
-                                       FontSize="15"
-                                       Background="#32353C"
-                                       Margin="0,5,0,0">
+                            <TextBlock Style="{StaticResource Rift_Password_Title}" />
 
-                            </TextBox>
+                            <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}"
+                                         x:Name="PasswordBox"
+                                         PasswordChanged="PasswordBox_PasswordChanged" />
 
-                            <TextBlock Text="PASSWORD"
-                                       HorizontalAlignment="Left"
-                                       FontSize="12"
-                                       FontWeight="SemiBold"
-                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                       Foreground="#AAAAAA"
-                                       Margin="0,15,0,0">
-                            </TextBlock>
+                            <Button Style="{StaticResource Rift_SignIn_Button}"
+                                    Command="{Binding SignInCommand}" />
 
-                            <PasswordBox   Width="300"
-                                           Height="38"
-                                           FontSize="15"
-                                           Background="#32353C"
-                                           Margin="0,5,0,0">
-                            </PasswordBox>
+                            <Grid Margin="0,20,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="130" />
+                                </Grid.ColumnDefinitions>
 
-                            <Button Content="Sign in"
-                                    Width="230"
-                                    Height="50"
-                                    Foreground="White"
-                                    FontSize="16"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Margin="05,25,0,0">
-                                <Button.Background>
-                                    <LinearGradientBrush>
-                                        <GradientStop Color="#FF40AEFF"
-                                                      Offset="0.138" />
-                                        <GradientStop Color="#FF2C76FF"
-                                                      Offset="0.736" />
-                                    </LinearGradientBrush>
-                                </Button.Background>
+                                <Border Grid.Column="0"                                       
+                                        Margin="0,0,12,0"
+                                        Style="{StaticResource Rift_Border_lines}">
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="0.0,0"
+                                                             StartPoint="1.0,0">
+                                            <GradientStop Offset="1" />
+                                            <GradientStop Color="#969696"
+                                                          Offset="0.294" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
 
+                                <TextBlock Grid.Column="1"                                          
+                                           Style="{StaticResource Rift_TextBlock_or}" />
+
+                                <Border Grid.Column="2"                                        
+                                        Margin="12,0,0,0"
+                                        Style="{StaticResource Rift_Border_lines}">
+                                    
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="0.0,0"
+                                                             StartPoint="1.0,0">
+                                            <GradientStop Offset="0" />
+                                            <GradientStop Color="#969696"
+                                                          Offset="0.294" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Grid>
+
+                            
+                            
+                            <Button Style="{StaticResource Rift_Steam_button}"                                    
+                                    Command="{Binding SteamLoginCommand}" >
+                                
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    
+                                    <materialIcons:MaterialIcon Style="{StaticResource Rift_Steam_Icon}"/>
+                                    <TextBlock Style="{StaticResource Rift_Steam_Textblock}" />
+                                </StackPanel>
                             </Button>
                         </StackPanel>
                     </Grid>
-
                 </Grid>
+
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="360" />
                         <RowDefinition Height="Auto" />
-
+                        <RowDefinition Height="355" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+
+                    <Button Height="25"
+                            Width="115"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,50,0"
+                            Background="#32353C"
+                            Foreground="#AAAAAA"
+                            BorderThickness="0"
+                            FontSize="11"
+                            Content="Odhlasit sa (test)"
+                            Command="{Binding LogoutCommand}" />
 
                     <StackPanel Grid.Row="0"
                                 Margin="318,0,0,0"
@@ -148,139 +211,60 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                                         Kind="Close"
                                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
                         </Button>
-
                     </StackPanel>
 
                     <StackPanel Grid.Row="2"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Left"
-                                Height="Auto"
-                                Width="301"
-                                Margin="50,0,0,0">
-
-                        <TextBlock Text="Don't have a RIFT account?"
-                                   Foreground="#B0B0B0"
-                                   FontWeight="Regular"
-                                   FontSize="12"
-                                   Margin="0,0,10,0">
-
-
-                        </TextBlock>
-                        <Button Content="Create a Free Account"
-                                Width="Auto"
-                                Height="23"
-                                Background="Transparent"
-                                FontWeight="Regular"
-                                FontSize="12"
-                                Foreground="#B0B0B0">
-
-
-                        </Button>
+                                Style="{StaticResource Rift_CreateAccount_Stackpanel}">
+                        <TextBlock Style="{StaticResource Rift_CreateAccount_TextBlock}" />
+                        <Button Style="{StaticResource Rift_CreateAccount_Button}"
+                                Command="{Binding DataContext.ShowRegisterCommand, 
+                          RelativeSource={RelativeSource AncestorType=Window}}" />
                     </StackPanel>
-                    
-                    
-                    
-                    
+
                     <Canvas Grid.Row="1">
-                        <Ellipse Canvas.Left="30"
-                                 Canvas.Top="20"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
                         <Ellipse Canvas.Left="100"
                                  Canvas.Top="70"
-                                 Width="1.5"
-                                 Height="1.5"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="200"
                                  Canvas.Top="22"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="220"
                                  Canvas.Top="80"
-                                 Width="1"
-                                 Height="1"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="330"
-                                 Canvas.Top="15"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="325"
                                  Canvas.Top="90"
-                                 Width="1.5"
-                                 Height="1.5"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="290"
                                  Canvas.Top="50"
-                                 Width="1"
-                                 Height="1"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="60"
                                  Canvas.Top="140"
-                                 Width="1.5"
-                                 Height="1.5"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="155"
-                                 Canvas.Top="130"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="30"
                                  Canvas.Top="200"
-                                 Width="1"
-                                 Height="1"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="280"
-                                 Canvas.Top="150"
-                                 Width="1.5"
-                                 Height="1.5"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="20"
-                                 Canvas.Top="310"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="105"
-                                 Canvas.Top="335"
-                                 Width="1"
-                                 Height="1"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
+                        <Ellipse Canvas.Left="66"
+                                 Canvas.Top="285"
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="120"
                                  Canvas.Top="250"
-                                 Width="1.5"
-                                 Height="1.5"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="300"
+                                 Style="{StaticResource Rift_Stars}" />
+                        <Ellipse Canvas.Left="325"
                                  Canvas.Top="220"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="320"
-                                 Canvas.Top="320"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
+                        <Ellipse Canvas.Left="318"
+                                 Canvas.Top="283"
+                                 Style="{StaticResource Rift_Stars}" />
                         <Ellipse Canvas.Left="220"
                                  Canvas.Top="280"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
-                        <Ellipse Canvas.Left="200"
-                                 Canvas.Top="190"
-                                 Width="2"
-                                 Height="2"
-                                 Fill="#53AFFC" />
+                                 Style="{StaticResource Rift_Stars}" />
                     </Canvas>
-                    <Canvas Grid.Row="1">
 
-                        <Ellipse Width="450"
-                                 Height="380"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 Opacity="0.10"
-                                 RenderTransformOrigin="0.5,0.5">
+                    <Canvas Grid.Row="1">
+                        <Ellipse Width="360"
+                                 Height="320"
+                                 Opacity="0.15"
+                                 Canvas.Left="43">
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -290,17 +274,18 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                                   Offset="1" />
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
-                            <Ellipse.StrokeThickness>1</Ellipse.StrokeThickness>
                             <Ellipse.RenderTransform>
-                                <ScaleTransform x:Name="Ring3ScaleX"
+                                <ScaleTransform x:Name="Elipse1"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
-                        <Ellipse Width="380"
-                                 Height="324"
+
+                        <Ellipse Width="310"
+                                 Height="260"
                                  Opacity="0.15"
-                                 RenderTransformOrigin="0.5,0.5">
+                                 Canvas.Left="77"
+                                 Canvas.Top="31">
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -310,21 +295,18 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                                   Offset="1" />
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
-                            <Ellipse.StrokeThickness>1</Ellipse.StrokeThickness>
                             <Ellipse.RenderTransform>
-                                <ScaleTransform x:Name="Ring2ScaleX"
+                                <ScaleTransform x:Name="Elipse2"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
 
-                        <Ellipse x:Name="Ring1"
-                                 Width="290"
+                        <Ellipse Width="290"
                                  Height="240"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
                                  Opacity="0.22"
-                                 RenderTransformOrigin="0.5,0.5">
+                                 Canvas.Left="71"
+                                 Canvas.Top="60">
                             <Ellipse.Stroke>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,1">
@@ -334,31 +316,66 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                                   Offset="1" />
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
-                            <Ellipse.StrokeThickness>1.5</Ellipse.StrokeThickness>
                             <Ellipse.RenderTransform>
-                                <ScaleTransform x:Name="MyScale"
+                                <ScaleTransform x:Name="Elipse3"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
+
+                        <Ellipse Width="250"
+                                 Height="190"
+                                 Opacity="0.22"
+                                 Canvas.Left="91"
+                                 Canvas.Top="87">
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="1,1">
+                                    <GradientStop Color="#FF4AB8E8"
+                                                  Offset="0" />
+                                    <GradientStop Color="#FF1A6A9A"
+                                                  Offset="1" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="Elipse4"
+                                                ScaleX="1"
+                                                ScaleY="1" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+
+                        <Ellipse Width="173"
+                                 Height="151"
+                                 Opacity="0.5"
+                                 Canvas.Left="130"
+                                 Canvas.Top="114">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush GradientOrigin="0.45,0.40"
+                                                     Center="0.45,0.40"
+                                                     RadiusX="0.6"
+                                                     RadiusY="0.6">
+                                    <GradientStop Color="#FF8ADCF8"
+                                                  Offset="0.00" />
+                                    <GradientStop Color="#FF38A8DC"
+                                                  Offset="0.084" />
+                                    <GradientStop Color="#FF1060A0"
+                                                  Offset="0.432" />
+                                    <GradientStop Color="#FF062240"
+                                                  Offset="0.69" />
+                                    <GradientStop Color="#00000000"
+                                                  Offset="1.00" />
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="Elipse5"
+                                                ScaleX="1"
+                                                ScaleY="1" />
+                            </Ellipse.RenderTransform>
+                            <Ellipse.Effect>
+                                <BlurEffect Radius="28" />
+                            </Ellipse.Effect>
+                        </Ellipse>
                     </Canvas>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 </Grid>
             </Grid>

@@ -1,4 +1,8 @@
-﻿using Rift_App.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
+using Rift_App.Database;
+using Rift_App.Login_Register;
+using Rift_App.Testing;
+using Rift_App.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,8 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Rift_App.Login_Register;
-using Rift_App.Testing;
 
 namespace Rift_App
 {
@@ -23,12 +25,37 @@ namespace Rift_App
         {
             InitializeComponent();
             DataContext = new WindowStateViewModel();
-            
-            Authencation authencation = new Authencation();
-            authencation.Show();
-            this.Close();
-       
+
+           
+                
+        }
+        [RelayCommand]
+        private void ShowAuthencation()
+        {
+            var auth = new Authencation();
+            auth.Show();
 
         }
+        
+
+
+
+        /*
+                Authencation authencation = new Authencation();
+                authencation.Show();
+                this.Close();
+
+
+                /*
+              Window_Test test = new Window_Test();
+                        test.Show();
+                        this.Close();
+                        /*
+                        Authencation authencation = new Authencation();
+                        authencation.Show();
+                        this.Close();
+        */
+
+
     }
 }

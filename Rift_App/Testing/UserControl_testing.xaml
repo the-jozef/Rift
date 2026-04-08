@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Rift_App.Testing.UserControl_testing"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+             xmlns:local="clr-namespace:Rift_App.Testing"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <!-- Tvoje existujúce Resources a Triggers nechaj tak (PulseAnimation) -->
+
+    <Grid>
+        <Border Grid.Row="0"
+                CornerRadius="7.5,7.5,0,0">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1"
+                                     StartPoint="0.5,0">
+                    <GradientStop Color="#1E1E26" />
+                    <GradientStop Color="#1A1B1F"
+                                  Offset="0.788" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- ĽAVÁ STRANA – LOGIN -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                Style="{StaticResource Rift_LoginTitle_stackpanel}">
+                        <Image Style="{StaticResource Rift_Logo_login}" />
+                        <TextBlock Style="{StaticResource Rift_Title_login}" />
+                    </StackPanel>
+
+                    <Grid Grid.Row="1">
+                        <StackPanel Style="{StaticResource Rift_Layout_Stackpanel}">
+                            <!-- NOVÉ: Steam Login -->
+                            <TextBlock Text="Prihlásiť sa cez Steam"
+                                       Style="{StaticResource Rift_SignIn_Title}"
+                                       Margin="0,20,0,10" />
+                            <TextBox x:Name="txtSteamId"
+                                     Style="{StaticResource Rift_SignIn_AccountName}"
+                                     materialDesign:HintAssist.Hint="SteamID64 alebo vanity URL (napr. 7656119... alebo profile url)" />
+
+                            <!-- Pôvodný lokálny login môžeš nechať alebo zakomentovať neskôr -->
+                            <!-- <TextBlock Style="{StaticResource Rift_SignIn_Title}" Text="Alebo lokálne meno"/> -->
+                            <!-- <TextBox Style="{StaticResource Rift_SignIn_AccountName}" /> -->
+                            <!-- <TextBlock Style="{StaticResource Rift_Password_Title}" /> -->
+                            <!-- <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}" /> -->
+
+                            <Button Style="{StaticResource Rift_SignIn_Button}"
+                                    Content="PRIHLÁSIŤ SA CEZ STEAM"
+                                    Command="{Binding LoginWithSteamCommand}"
+                                    CommandParameter="{Binding ElementName=txtSteamId, Path=Text}" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <!-- PRAVÁ STRANA (tvoja grafika) – nechaj tak -->
+                <Grid Grid.Column="1">
+                    <!-- Tvoj existujúci kód pre close button, canvas, elipsy... nechaj úplne tak -->
+                    <!-- ... (skopíruj si sem celú pravú časť z tvojho pôvodného XAML) ... -->
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -29,12 +29,7 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public void ShowRegister()
         {
-            CurrentView = new Register(); 
-        }
-        [RelayCommand]
-        public void LoginLoading()
-        {
-            CurrentView = new Login_loading();
+            CurrentView = new Register(); // tvoj Register UserControl
         }
     }
 }

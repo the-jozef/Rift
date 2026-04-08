@@ -1,5 +1,4 @@
-﻿using Rift_App.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,21 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Rift_App.Login_Register
+namespace Rift_App.Testing
 {
     /// <summary>
-    /// Interaction logic for Authencation.xaml
+    /// Interaction logic for UserControl_testing.xaml
     /// </summary>
-    public partial class Authencation : Window
+    public partial class UserControl_testing : UserControl
     {
-        public Navigator Navigator { get; } = new Navigator();
-        public Authencation()
+        public UserControl_testing()
         {
             InitializeComponent();
-            DataContext = Navigator;
-           
         }
     }
 }

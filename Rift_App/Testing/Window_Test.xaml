@@ -10,204 +10,349 @@
         Title="Window_Test"
         Height="450"
         Width="800">
-    
-    
-    <Grid>
- 
-        <Ellipse x:Name="Ring3"
-                 Width="520"
-                 Height="440"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,60,0,0"
-                 Opacity="0.10"
-                 RenderTransformOrigin="0.5,0.5">
-            <Ellipse.Stroke>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,1">
-                    <GradientStop Color="#FF1E6FA8"
-                                  Offset="0" />
-                    <GradientStop Color="#FF0A3A5C"
-                                  Offset="1" />
-                </LinearGradientBrush>
-            </Ellipse.Stroke>
-            <Ellipse.StrokeThickness>1</Ellipse.StrokeThickness>
-            <Ellipse.RenderTransform>
-                <ScaleTransform x:Name="Ring3ScaleX"
-                                ScaleX="1"
-                                ScaleY="1" />
-            </Ellipse.RenderTransform>
-        </Ellipse>
+    <Window.Resources>
+            <!-- Nav button style -->
+            <Style x:Key="NavButton"
+                   TargetType="Button"
+                   BasedOn="{StaticResource MaterialDesignFlatButton}">
+                <Setter Property="Foreground"
+                        Value="#c6d4df" />
+                <Setter Property="FontSize"
+                        Value="14" />
+                <Setter Property="Padding"
+                        Value="12,8" />
+                <Setter Property="Height"
+                        Value="48" />
+                <Setter Property="materialDesign:ButtonAssist.CornerRadius"
+                        Value="0" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Foreground"
+                                Value="White" />
+                        <Setter Property="Background"
+                                Value="#2a475e" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <Ellipse x:Name="Ring2"
-                 Width="400"
-                 Height="340"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,90,0,0"
-                 Opacity="0.15"
-                 RenderTransformOrigin="0.5,0.5">
-            <Ellipse.Stroke>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,1">
-                    <GradientStop Color="#FF2E8FC8"
-                                  Offset="0" />
-                    <GradientStop Color="#FF0D4870"
-                                  Offset="1" />
-                </LinearGradientBrush>
-            </Ellipse.Stroke>
-            <Ellipse.StrokeThickness>1</Ellipse.StrokeThickness>
-            <Ellipse.RenderTransform>
-                <ScaleTransform x:Name="Ring2ScaleX"
-                                ScaleX="1"
-                                ScaleY="1" />
-            </Ellipse.RenderTransform>
-        </Ellipse>
+            <!-- Popup link button style -->
+            <Style x:Key="PopupLink"
+                   TargetType="Button"
+                   BasedOn="{StaticResource MaterialDesignFlatButton}">
+                <Setter Property="Foreground"
+                        Value="#c6d4df" />
+                <Setter Property="FontSize"
+                        Value="13" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="Padding"
+                        Value="0,4" />
+                <Setter Property="Height"
+                        Value="Auto" />
+                <Setter Property="MinHeight"
+                        Value="28" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Foreground"
+                                Value="#66c0f4" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <Ellipse x:Name="Ring1"
-                 Width="290"
-                 Height="240"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,120,0,0"
-                 Opacity="0.22"
-                 RenderTransformOrigin="0.5,0.5">
-            <Ellipse.Stroke>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,1">
-                    <GradientStop Color="#FF4AB8E8"
-                                  Offset="0" />
-                    <GradientStop Color="#FF1A6A9A"
-                                  Offset="1" />
-                </LinearGradientBrush>
-            </Ellipse.Stroke>
-            <Ellipse.StrokeThickness>1.5</Ellipse.StrokeThickness>
-            <Ellipse.RenderTransform>
-                <ScaleTransform x:Name="Ring1ScaleX"
-                                ScaleX="1"
-                                ScaleY="1" />
-            </Ellipse.RenderTransform>
-        </Ellipse>
-        
-        <Ellipse x:Name="GlowEllipse"
-                 Width="340"
-                 Height="280"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,50,0,0"
-                 Opacity="0.90"
-                 RenderTransformOrigin="0.5,0.5">
-            <Ellipse.Fill>
+            <!-- Banner button style -->
+            <Style x:Key="BannerButton"
+                   TargetType="Button"
+                   BasedOn="{StaticResource MaterialDesignFlatButton}">
+                <Setter Property="Height"
+                        Value="90" />
+                <Setter Property="Padding"
+                        Value="0" />
+                <Setter Property="BorderThickness"
+                        Value="0" />
+                <Setter Property="Cursor"
+                        Value="Hand" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Opacity"
+                                Value="0.85" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Window.Resources>
 
-                <RadialGradientBrush GradientOrigin="0.45,0.40"
-                                     Center="0.45,0.40"
-                                     RadiusX="0.6"
-                                     RadiusY="0.6">
-                    <GradientStop Color="#FF8ADCF8"
-                                  Offset="0.00" />
-                    <GradientStop Color="#FF38A8DC"
-                                  Offset="0.25" />
-                    <GradientStop Color="#FF1060A0"
-                                  Offset="0.55" />
-                    <GradientStop Color="#FF062240"
-                                  Offset="0.80" />
-                    <GradientStop Color="#00000000"
-                                  Offset="1.00" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
+        <Grid>
+            <!-- ═══════════════ TOP NAV BAR ═══════════════ -->
+            <DockPanel VerticalAlignment="Top"
+                       Height="48"
+                       Background="#171a21"
+                       ZIndex="0">
 
-            <Ellipse.RenderTransform>
-                <ScaleTransform x:Name="GlowScaleX"
-                                ScaleX="1"
-                                ScaleY="1" />
-            </Ellipse.RenderTransform>
+                <StackPanel Orientation="Horizontal"
+                            DockPanel.Dock="Left">
 
-            <Ellipse.Effect>
-                <BlurEffect Radius="28" />
-            </Ellipse.Effect>
-        </Ellipse>
+                    <!-- BROWSE BUTTON (the one that opens the popup) -->
+                    <Grid>
+                        <Button x:Name="BrowseBtn"
+                                Style="{StaticResource NavButton}"
+                                Click="BrowseBtn_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Browse"
+                                           VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Kind="ChevronDown"
+                                                         Width="16"
+                                                         Height="16"
+                                                         Margin="4,0,0,0"
+                                                         VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
 
-        <Ellipse Width="80"
-                 Height="60"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Top"
-                 Margin="0,130,0,0"
-                 IsHitTestVisible="False">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#DDFFFFFF"
-                                  Offset="0.0" />
-                    <GradientStop Color="#4488CCFF"
-                                  Offset="0.5" />
-                    <GradientStop Color="#00000000"
-                                  Offset="1.0" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-            <Ellipse.Effect>
-                <BlurEffect Radius="8" />
-            </Ellipse.Effect>
-        </Ellipse>
-        <Canvas>
-            <Ellipse Canvas.Left="224"
-                     Canvas.Top="112"
-                     Width="5"
-                     Height="5"
-                     Fill="#CCFFFFFF"
-                     Opacity="0.9">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="242"
-                     Canvas.Top="100"
-                     Width="4"
-                     Height="4"
-                     Fill="#BBFFFFFF"
-                     Opacity="0.8">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="260"
-                     Canvas.Top="96"
-                     Width="5"
-                     Height="5"
-                     Fill="#CCEEFFFF"
-                     Opacity="0.85">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="278"
-                     Canvas.Top="105"
-                     Width="3"
-                     Height="3"
-                     Fill="#BBFFFFFF"
-                     Opacity="0.7">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="1.5" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="298"
-                     Canvas.Top="118"
-                     Width="4"
-                     Height="4"
-                     Fill="#AAEEFFFF"
-                     Opacity="0.75">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="2" />
-                </Ellipse.Effect>
-            </Ellipse>
-            <Ellipse Canvas.Left="315"
-                     Canvas.Top="130"
-                     Width="3"
-                     Height="3"
-                     Fill="#99EEFFFF"
-                     Opacity="0.6">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="1.5" />
-                </Ellipse.Effect>
-            </Ellipse>
-        </Canvas>
-    </Grid>
-</Window>
+                        <!-- ═══════ THE BIG POPUP ═══════ -->
+                        <Popup x:Name="BrowsePopup"
+                               PlacementTarget="{Binding ElementName=BrowseBtn}"
+                               Placement="Bottom"
+                               StaysOpen="False"
+                               AllowsTransparency="True">
+
+                            <Border Background="#2a3f5a"
+                                    BorderBrush="#3d6080"
+                                    BorderThickness="1"
+                                    Width="860"
+                                    Effect="{DynamicResource MaterialDesignShadowDepth4}">
+
+                                <Grid Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="220" />
+                                        <!-- Left menu -->
+                                        <ColumnDefinition Width="280" />
+                                        <!-- Banners -->
+                                        <ColumnDefinition Width="*" />
+                                        <!-- Right links -->
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- ── LEFT COLUMN: Menu Items ── -->
+                                    <Border Grid.Column="0"
+                                            Background="#1b2838"
+                                            Padding="16,16,16,20">
+                                        <StackPanel>
+
+                                            <Button Style="{StaticResource PopupLink}"
+                                                    Content="Store Home"
+                                                    Foreground="White"
+                                                    FontSize="14" />
+
+                                            <Separator Background="#3d6080"
+                                                       Margin="0,8" />
+
+                                            <!-- New Releases -->
+                                            <Button Style="{StaticResource PopupLink}"
+                                                    Margin="0,4,0,0">
+                                                <StackPanel>
+                                                    <TextBlock Text="New Releases"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="13" />
+                                                    <TextBlock Text="Explore new content on Steam"
+                                                               FontSize="11"
+                                                               Foreground="#8ba8be"
+                                                               TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Button>
+
+                                            <!-- Upcoming Releases -->
+                                            <Button Style="{StaticResource PopupLink}"
+                                                    Margin="0,8,0,0">
+                                                <StackPanel>
+                                                    <TextBlock Text="Upcoming Releases"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="13" />
+                                                    <TextBlock Text="See what's on the release calendar"
+                                                               FontSize="11"
+                                                               Foreground="#8ba8be"
+                                                               TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Button>
+
+                                            <!-- All Charts & Stats -->
+                                            <Button Style="{StaticResource PopupLink}"
+                                                    Margin="0,8,0,0">
+                                                <StackPanel>
+                                                    <TextBlock Text="All Charts &amp; Stats"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="13" />
+                                                    <TextBlock Text="Explore top titles by week, month, or year"
+                                                               FontSize="11"
+                                                               Foreground="#8ba8be"
+                                                               TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Button>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- ── MIDDLE COLUMN: Banner Buttons ── -->
+                                    <Border Grid.Column="1"
+                                            Padding="0">
+                                        <StackPanel>
+
+                                            <!-- TOP SELLERS banner -->
+                                            <Button Style="{StaticResource BannerButton}">
+                                                <Grid Width="280"
+                                                      Height="90"
+                                                      ClipToBounds="True">
+                                                    <Rectangle Fill="#7b2fe3"
+                                                               RadiusX="0"
+                                                               RadiusY="0" />
+                                                    <!-- Purple gradient overlay -->
+                                                    <Rectangle>
+                                                        <Rectangle.Fill>
+                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                 EndPoint="1,1">
+                                                                <GradientStop Color="#9b3de8"
+                                                                              Offset="0" />
+                                                                <GradientStop Color="#5a1fad"
+                                                                              Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
+                                                    <Border HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Background="White"
+                                                            Padding="20,6">
+                                                        <TextBlock Text="TOP SELLERS"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="18"
+                                                                   Foreground="#1b2838"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Button>
+
+                                            <!-- DISCOUNTS & EVENTS banner -->
+                                            <Button Style="{StaticResource BannerButton}">
+                                                <Grid Width="280"
+                                                      Height="90"
+                                                      ClipToBounds="True">
+                                                    <Rectangle>
+                                                        <Rectangle.Fill>
+                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                 EndPoint="1,1">
+                                                                <GradientStop Color="#0f8a6e"
+                                                                              Offset="0" />
+                                                                <GradientStop Color="#0a5c4a"
+                                                                              Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
+                                                    <Border HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Background="White"
+                                                            Padding="20,6">
+                                                        <TextBlock Text="DISCOUNTS &amp; EVENTS"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="16"
+                                                                   Foreground="#1b2838" />
+                                                    </Border>
+                                                </Grid>
+                                            </Button>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- ── RIGHT COLUMN: Top Destinations + My Account ── -->
+                                    <Border Grid.Column="2"
+                                            Background="#1b2838"
+                                            Padding="24,16,24,20">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- TOP DESTINATIONS -->
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="TOP DESTINATIONS"
+                                                           FontSize="11"
+                                                           FontWeight="Bold"
+                                                           Foreground="#8ba8be"
+                                                           Margin="0,0,0,10"/>
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="Free to Play" />
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="Demos" />
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="News &amp; Updates" />
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="Points Shop" />
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="Gift Cards" />
+                                            </StackPanel>
+
+                                            <!-- MY ACCOUNT -->
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="MY ACCOUNT"
+                                                           FontSize="11"
+                                                           FontWeight="Bold"
+                                                           Foreground="#8ba8be"
+                                                           Margin="0,0,0,10"/>
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="My Preferences" />
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="My Wishlist" />
+                                                <Button Style="{StaticResource PopupLink}"
+                                                        Content="My Family" />
+                                            </StackPanel>
+
+                                        </Grid>
+                                    </Border>
+
+                                </Grid>
+                            </Border>
+                        </Popup>
+                    </Grid>
+
+                    <!-- Other nav buttons (no popup, just placeholders) -->
+                    <Button Style="{StaticResource NavButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Recommendations" />
+                            <materialDesign:PackIcon Kind="ChevronDown"
+                                                     Width="16"
+                                                     Height="16"
+                                                     Margin="4,0,0,0"
+                                                     VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource NavButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Categories" />
+                            <materialDesign:PackIcon Kind="ChevronDown"
+                                                     Width="16"
+                                                     Height="16"
+                                                     Margin="4,0,0,0"
+                                                     VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource NavButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Hardware" />
+                            <materialDesign:PackIcon Kind="ChevronDown"
+                                                     Width="16"
+                                                     Height="16"
+                                                     Margin="4,0,0,0"
+                                                     VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+            </DockPanel>
+
+            <!-- Page content behind the nav -->
+            <TextBlock Text="Your page content goes here"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="#4a6a85"
+                       FontSize="20" />
+        </Grid>
+    </Window>

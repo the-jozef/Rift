@@ -1,0 +1,6 @@
+@SteamProxyBackend_HostAddress = http://localhost:5293
+
+GET {{SteamProxyBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
