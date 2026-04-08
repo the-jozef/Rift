@@ -282,6 +282,89 @@
         </Setter>
     </Style>
 
+    <!-- Border for Lines between or -->
+    <Style x:Key="Rift_Border_lines"
+           TargetType="Border">
+        
+        <Setter Property="Height"
+                Value="1"/>
+        <Setter Property="VerticalAlignment"
+                Value="Center"/>             
+     </Style>
+    
+    <!-- Textblock for OR -->
+    <Style x:Key="Rift_TextBlock_or"
+           TargetType="TextBlock">
+                        
+        <Setter Property="Text"
+                Value="or"/> 
+        <Setter Property="Height"
+                Value="16"/>
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Margin"
+                Value="12,0,12,0"/>        
+        <Setter Property="Foreground"
+                Value="#A8A8A8"/>
+        <Setter Property="FontWeight"
+                Value="Medium"/>              
+    </Style>
+
+<!-- Button for steam sign in -->
+    <Style x:Key="Rift_Steam_button"
+           TargetType="Button">
+
+        <Setter Property="Width"
+                Value="200" />
+        <Setter Property="Height"
+                Value="40"/>   
+        <Setter Property="HorizontalAlignment"
+                Value="Center"/>
+        <Setter Property="BorderThickness"
+                Value="0"/>
+        <Setter Property="Background">
+              <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,0">
+                    <GradientStop Color="#FF1B2838"
+                                  Offset="0" />
+                    <GradientStop Color="#FF2A475E"
+                                  Offset="1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Steam Icon -->
+    <Style x:Key="Rift_Steam_Icon"
+           TargetType="materialIcons:MaterialIcon">
+        
+        <Setter Property="Kind"
+                Value="Steam"/>
+        <Setter Property="Width"
+                Value="20"/>
+        <Setter Property="Height"
+                Value="20"/>
+        <Setter Property="Margin"
+                Value="0,0,8,0" />
+        <Setter Property="Foreground"
+                Value="White"/>                                  
+    </Style>
+
+    <!-- TextBlock for Steam sign in -->
+    <Style x:Key="Rift_Steam_Textblock"
+           TargetType="TextBlock">
+        
+        <Setter Property="Text"
+                Value="Sign in with Steam"/>
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Foreground"
+                Value="White"/>
+        <Setter Property="FontSize"
+                Value="14"/>                  
+    </Style>
+
     <!-- Stackpanel for Create new account -->
     <Style x:Key="Rift_CreateAccount_Stackpanel"
            TargetType="StackPanel">
