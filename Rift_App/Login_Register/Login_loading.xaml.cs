@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Rift_App.ViewModels;
 
 namespace Rift_App.Login_Register
 {
@@ -23,6 +24,7 @@ namespace Rift_App.Login_Register
         public Login_loading()
         {
             InitializeComponent();
+           // DataContext = new LoginViewModel();
         }
     }
 }
