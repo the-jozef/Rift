@@ -24,7 +24,7 @@ namespace Rift_App.Login_Register
         public Login_loading()
         {
             InitializeComponent();
-            DataContext = new LoginViewModel();
+           // DataContext = new LoginViewModel();
         }
     }
 }
