@@ -18,7 +18,6 @@ namespace Rift_App.ViewModels
     {
         private readonly AuthService _authService = new AuthService();
         private readonly HttpClient _http = new HttpClient();
-        private readonly DatabaseService _db = new DatabaseService();
 
         [ObservableProperty] private string currentSteamName = string.Empty;
         [ObservableProperty] private string currentSteamAvatar = string.Empty;
@@ -32,10 +31,24 @@ namespace Rift_App.ViewModels
 
         private string _tempSteamId64 = string.Empty;
 
-        // Konštruktor - žiadne auto-login pri štarte
         public LoginViewModel()
         {
-            // Úmyselne prázdny - žiadne načítavanie z databázy pri spustení
+            // Žiadne automatické prihlásenie pri štarte
+        }
+
+        private void AskForAutoLogin(string username, string plainPassword)
+        {
+            var result = MessageBox.Show(
+                $"Chcete zapnúť automatické prihlásenie pre hráča **{username}**?\n\n" +
+                "Pri ďalšom spustení sa vám vyplnia polia Account name a Password.",
+                "Automatické prihlásenie",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _authService.SaveRememberedCredentials(username, plainPassword);
+            }
         }
 
         [RelayCommand]
@@ -60,7 +73,7 @@ namespace Rift_App.ViewModels
 
                 Process.Start(new ProcessStartInfo(steamUrl) { UseShellExecute = true });
 
-                // Čakáme na callback max 2 minúty
+                // Čakáme na callback (max 2 minúty)
                 var contextTask = listener.GetContextAsync();
                 if (await Task.WhenAny(contextTask, Task.Delay(120_000)) != contextTask)
                 {
@@ -93,7 +106,7 @@ namespace Rift_App.ViewModels
 
                 string steamId64 = match.Groups[1].Value;
 
-                // Odpoveď do prehliadača
+                // Odpoveď prehliadaču
                 string html = "<html><body style='background:#1A1B1F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0'><h2>Prihlásenie úspešné.<br>Môžete zavrieť toto okno a vrátiť sa do RIFT App.</h2></body></html>";
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
                 context.Response.ContentLength64 = buffer.Length;
@@ -101,7 +114,7 @@ namespace Rift_App.ViewModels
                 context.Response.OutputStream.Close();
                 listener.Stop();
 
-                // Získanie informácií o hráčovi zo Steamu
+                // Načítanie údajov zo Steamu
                 var steamService = new SteamService();
                 string json = await steamService.GetPlayerSummary(steamId64);
                 var jObj = JObject.Parse(json);
@@ -115,18 +128,18 @@ namespace Rift_App.ViewModels
 
                 if (exists)
                 {
-                    // Existujúci účet
+                    // === EXISTUJÚCI ÚČET ===
                     CurrentSteamID64 = ulong.Parse(steamId64);
                     CurrentSteamName = existingUsername;
                     CurrentSteamAvatar = steamAvatar;
                     IsLoggedIn = true;
 
-                    AskForAutoLogin(steamId64, existingUsername);
                     MessageBox.Show($"Vitaj späť, {existingUsername}!", "Prihlásenie úspešné");
+                    // Pre existujúci Steam účet sa NEPÝTAME na auto-login (nemáme plain heslo)
                 }
                 else
                 {
-                    // Nový účet - prejdeme do setup módu
+                    // === NOVÝ ÚČET - prejdeme do setup módu ===
                     _tempSteamId64 = steamId64;
                     CurrentSteamName = steamName;
                     SetupUsername = steamName;
@@ -138,36 +151,16 @@ namespace Rift_App.ViewModels
                 MessageBox.Show($"Chyba pri Steam prihlásení: {ex.Message}", "Chyba");
             }
         }
-
-        // Metóda, ktorá sa pýta na automatické prihlásenie
-        private void AskForAutoLogin(string steamId64, string username)
-        {
-            var result = MessageBox.Show(
-                $"Chcete zapnúť automatické prihlásenie pre hráča **{username}**?\n\n" +
-                "Pri ďalšom spustení aplikácie budete automaticky prihlásený.",
-                "Automatické prihlásenie",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                _db.SetCurrentSteamId(steamId64);
-            }
-            // Ak Nie → nič sa neuloží
-        }
-
         [RelayCommand]
         private void FinishSetup()
         {
             HasSetupError = false;
-
             if (string.IsNullOrWhiteSpace(SetupUsername) || string.IsNullOrWhiteSpace(SetupPassword))
             {
                 SetupError = "Vyplň meno aj heslo!";
                 HasSetupError = true;
                 return;
             }
-
             if (SetupPassword.Length < 6)
             {
                 SetupError = "Heslo musí mať aspoň 6 znakov.";
@@ -185,8 +178,7 @@ namespace Rift_App.ViewModels
                 IsLoggedIn = true;
                 IsSetupMode = false;
 
-                // Po vytvorení nového účtu sa tiež opýtame na auto-login
-                AskForAutoLogin(_tempSteamId64, SetupUsername);
+                AskForAutoLogin(SetupUsername, SetupPassword);   // ← tu sa pýta a ukladá
 
                 MessageBox.Show($"Účet vytvorený! Vitaj, {SetupUsername}!", "Hotovo");
             }
@@ -195,6 +187,14 @@ namespace Rift_App.ViewModels
                 SetupError = errorMsg;
                 HasSetupError = true;
             }
+        }
+
+        // Stub pre normal login (aby XAML nepadal)
+        [RelayCommand]
+        private void SignIn()
+        {
+            // Tu môžeš neskôr implementovať normálne prihlásenie
+            MessageBox.Show("Normálne prihlásenie ešte nie je plne implementované v tejto verzii.", "Info");
         }
 
         [RelayCommand]
@@ -209,36 +209,30 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private void Logout()
         {
-            _db.ClearCurrentSteamId();        // vymaže nastavenie auto-login
             IsLoggedIn = false;
             CurrentSteamName = string.Empty;
             CurrentSteamAvatar = string.Empty;
             CurrentSteamID64 = 0;
-
             MessageBox.Show("Bol si odhlásený.", "Logout");
         }
 
+        // VerifyOpenIdAsync zostáva rovnaký ako mal si predtým...
         private async Task<bool> VerifyOpenIdAsync(System.Collections.Specialized.NameValueCollection qs)
         {
             try
             {
                 var values = new Dictionary<string, string>();
-
                 foreach (var key in qs.AllKeys ?? Array.Empty<string>())
                 {
-                    if (key != null && key.StartsWith("openid."))
-                    {
+                    if (key?.StartsWith("openid.") == true)
                         values[key] = qs[key] ?? string.Empty;
-                    }
                 }
-
                 values["openid.ns"] = "http://specs.openid.net/auth/2.0";
                 values["openid.mode"] = "check_authentication";
 
                 var content = new FormUrlEncodedContent(values);
                 var response = await _http.PostAsync("https://steamcommunity.com/openid/login", content);
                 var responseText = await response.Content.ReadAsStringAsync();
-
                 return responseText.Contains("is_valid:true");
             }
             catch

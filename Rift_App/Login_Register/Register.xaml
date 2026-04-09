@@ -11,174 +11,177 @@
              d:DesignWidth="800">
 
     <Grid>
-        <Border Background="#1C1E22"
+        <Border Grid.Row="0"
                 CornerRadius="7.5,7.5,0,0">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1"
+                                     StartPoint="0.5,0">
+                    <GradientStop Color="#1E1E26" />
+                    <GradientStop Color="#1A1B1F"
+                                  Offset="0.788" />
+                </LinearGradientBrush>
+            </Border.Background>
 
             <Grid>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition  Height="Auto"/>
-                    <RowDefinition  Height="Auto" />
-                    <RowDefinition  Height="*" />
-                    <RowDefinition  Height="*" />
-                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
+                <Grid Grid.Column="0">
 
-                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Row="0"
+                                Style="{StaticResource Rift_LoginTitle_stackpanel}">
 
-                    <StackPanel Grid.Column="0"
-                                Orientation="Vertical"
-                                Margin="50,35,0,0">
+                        <Image Style="{StaticResource Rift_Logo_login}" />
 
-                        <TextBlock Text="CREATE YOUR ACCOUNT"
-                                   Foreground="White"
-                                   FontSize="24"
-                                   Margin="0,0,0,6" />
+                        <StackPanel Orientation="Vertical">
 
-                        <StackPanel HorizontalAlignment="Left"
-                                    Orientation="Horizontal"
-                                    Margin="5,0,0,0">
-                            <materialIcons:MaterialIcon Kind="CheckCircleOutline"
-                                                        Width="20"
-                                                        Height="20"
-                                                        Foreground="Green" />
+                            <TextBlock Style="{StaticResource Rift_Title_login}" />
 
-                            <TextBlock Width="Auto"
-                                       Height="20"
-                                       Text="Logged with Steam"
-                                       Foreground="Green"
-                                       FontSize="15"
-                                       Margin="10,0,0,0">
-
-                            </TextBlock>
+                            <TextBlock Text="New Account"
+                                       Foreground="#AAAAAA"
+                                       FontSize="15" />
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1"
-                                Margin="0,0,0,00"
-                                Width="33"
+                    <StackPanel Grid.Row="1"
+                                Orientation="Vertical"
                                 VerticalAlignment="Top"
-                                HorizontalAlignment="Right">
+                                HorizontalAlignment="Left"
+                                Margin="50,30,0,0">
 
-                        <Button Style="{StaticResource Rift_CLoseButton}"
-                                Margin="0,0,0,0"
-                                Height="30"
-                                Width="33"
-                                materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
-                                Command="{Binding CloseWindowCommand}">
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
-                                                        Kind="Close"
-                                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
+                        <TextBlock Text="Connect With Steam"
+                                   Foreground="White"
+                                   FontSize="20" />
+
+                        <TextBlock Text="Link your Steam account to get started"
+                                   Foreground="#AAAAAA"
+                                   FontSize="15" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Vertical"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="50,30,0,0">
+
+                        <Button Style="{StaticResource Rift_Steam_button}"
+                                Command="{Binding SteamLoginCommand}">
+
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+
+                                <materialIcons:MaterialIcon Style="{StaticResource Rift_Steam_Icon}" />
+                                <TextBlock Style="{StaticResource Rift_Steam_Textblock}"
+                                           Text="Connect with Steam" />
+                            </StackPanel>
+                        </Button>
+
+                        <Grid Margin="0,20,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="133.5" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="130" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    Margin="0,0,12,0"
+                                    Style="{StaticResource Rift_Border_lines}">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.0,0"
+                                                         StartPoint="1.0,0">
+                                        <GradientStop Offset="1" />
+                                        <GradientStop Color="#969696"
+                                                      Offset="0.294" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <TextBlock Grid.Column="1"
+                                       Style="{StaticResource Rift_TextBlock_or}" />
+
+                            <Border Grid.Column="2"
+                                    Margin="12,0,0,0"
+                                    Style="{StaticResource Rift_Border_lines}">
+
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.0,0"
+                                                         StartPoint="1.0,0">
+                                        <GradientStop Offset="0" />
+                                        <GradientStop Color="#969696"
+                                                      Offset="0.294" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                        </Grid>
+
+                        <Button Background="Gray">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+                                <materialIcons:MaterialIcon Kind="ArrowLeft"
+                                                            Height="14"
+                                                            Width="14"
+                                                            Margin="0,4,6,0" />
+                                <TextBlock Text="Already have an account?"
+                                           FontSize="15" />
+                            </StackPanel>
                         </Button>
                     </StackPanel>
                 </Grid>
 
+                <Grid Grid.Column="1">
 
-                <StackPanel Grid.Row="1"
-                            Style="{StaticResource Rift_Layout_Stackpanel}"
-                            HorizontalAlignment="Left"
-                            Margin="90,25,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    <TextBlock Style="{StaticResource Rift_SignIn_Title}"
-                               Text="Account name"/>
 
-                    <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
-                             Text="{Binding SetupUsername, UpdateSourceTrigger=PropertyChanged}"
-                             x:Name="UsernameBox" />
 
-                    <TextBlock Style="{StaticResource Rift_Password_Title}" />
+                    <materialDesign:Card Grid.Row="1"
+                                        >
+                        <materialDesign:Card.Background>
+                            <LinearGradientBrush EndPoint="0.5,1"
+                                                 StartPoint="0.5,0"
+                                                 Opacity="0.1">
+                                <GradientStop Color="#57B7FF" />
+                            </LinearGradientBrush>
+                        </materialDesign:Card.Background>
 
-                    <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}"
-                                 x:Name="PasswordBox"
-                                  />
-
-                  
-
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal"
-                            Grid.Row="2"
-                            Margin="120,0,0,0">
-                    <Button Style="{StaticResource Rift_SignIn_Button}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            Command="{Binding SignInCommand}" />
-
-                    <Button Content="Cancel"
-                            Width="100"
-                            Height="44"
-                            VerticalAlignment="Top"
-                            Margin="0,23,0,0"
-                            Background="#32353C"
-                            Foreground="#AAAAAA"
-                            BorderThickness="0"
-                            FontSize="14"
-                            Command="{Binding CancelSetupCommand}" />
-
-                </StackPanel>
-
-                <StackPanel Grid.Row="3"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-
-                    <Button   Width="300"
-                              Height="50"
-                              HorizontalAlignment="Center"
-                              Margin="0,10,0,10"
-                              Background="Transparent"
-                             Command="{Binding SteamLoginCommand}" >
                         <StackPanel Orientation="Horizontal">
-
-                            <materialIcons:MaterialIcon Kind="
-                                                     ArrowLeft"
-                                                        Foreground="White"
-                                                        Height="20"
-                                                        Width="25">
-
-
+                            
+                            <materialIcons:MaterialIcon Kind="Steam"
+                                                        Width="20"
+                                                        Height="20">
                             </materialIcons:MaterialIcon>
 
-                            <TextBlock Text="Back to store"
-                                       Foreground="White"
-                                       FontSize="20">
-                                
+                            <TextBlock Text="Steam">
+
+
                             </TextBlock>
-
-
                         </StackPanel>
-
-
-                    </Button>
-                    
-                    
-                </StackPanel>
+                    </materialDesign:Card>
 
 
 
-                <StackPanel Grid.Row="3"
-                            HorizontalAlignment="Right">
-                    <TextBlock Text="{Binding SetupError}"
-                           Foreground="#FF4444"
-                           FontSize="11"
-                           Margin="0,0,0,10" />
-                             
-                   
-               
-                <Button Width="50"
-                        Height="20"
-                        Command="{Binding DataContext.ShowLoginCommand, 
-  RelativeSource={RelativeSource AncestorType=Window}}">
-
-                </Button>
-            </StackPanel>
 
 
 
+
+
+
+
+
+                </Grid>
             </Grid>
         </Border>
     </Grid>
