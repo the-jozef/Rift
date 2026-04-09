@@ -322,18 +322,47 @@
                 Value="Center"/>
         <Setter Property="BorderThickness"
                 Value="0"/>
-        <Setter Property="Background">
-              <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,0">
-                    <GradientStop Color="#FF1B2838"
-                                  Offset="0" />
-                    <GradientStop Color="#FF2A475E"
-                                  Offset="1" />
-                </LinearGradientBrush>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            BorderThickness="0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,0">
+                                <GradientStop Color="#FF1B2838"
+                                              Offset="0" />
+                                <GradientStop Color="#FF2A475E"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                                         EndPoint="1,0">
+                                        <GradientStop Color="#FF192636"
+                                                      Offset="0" />
+                                        <GradientStop Color="#FF294258"
+                                                      Offset="1" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
+
+
 
     <!-- Steam Icon -->
     <Style x:Key="Rift_Steam_Icon"

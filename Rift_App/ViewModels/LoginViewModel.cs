@@ -94,7 +94,7 @@ namespace Rift_App.ViewModels
                 string steamId64 = match.Groups[1].Value;
 
                 // Odpoveď do prehliadača
-                string html = "<html><body style='background:#1A1B1F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0'><h2>Succesful login.<br>You can close this window and return to the RIFT App.</h2></body></html>";
+                string html = "<html><body style='background:#1A1B1F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0'><h2>Prihlásenie úspešné.<br>Môžete zavrieť toto okno a vrátiť sa do RIFT App.</h2></body></html>";
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
                 context.Response.ContentLength64 = buffer.Length;
                 await context.Response.OutputStream.WriteAsync(buffer, 0, buffer.Length);

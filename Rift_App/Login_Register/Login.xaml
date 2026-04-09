@@ -124,7 +124,7 @@
 
                             <Grid Margin="0,20,0,20">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="130" />
+                                    <ColumnDefinition Width="133.5" />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="130" />
                                 </Grid.ColumnDefinitions>
@@ -159,9 +159,7 @@
                                     </Border.Background>
                                 </Border>
                             </Grid>
-
-                            
-                            
+                 
                             <Button Style="{StaticResource Rift_Steam_button}"                                    
                                     Command="{Binding SteamLoginCommand}" >
                                 
