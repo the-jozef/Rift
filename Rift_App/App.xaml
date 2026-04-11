@@ -15,7 +15,8 @@
                 <ResourceDictionary Source="Themes/RiftColors.xaml" />
                 <ResourceDictionary Source="Themes/RiftStyles.xaml" />
                 <ResourceDictionary Source="Login_Register/Login_layout.xaml" />
-                <ResourceDictionary Source="/Store_Controls/Store_layout.xaml" />
+                <ResourceDictionary Source="/Store/Store_layout.xaml" />
+                <ResourceDictionary Source="/Login_Register/Register_layout.xaml" />
             </ResourceDictionary.MergedDictionaries>
                 <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
                 <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Rift_App.Store_Controls
+namespace Rift_App.Store
 {
     /// <summary>
     /// Interaction logic for Store.xaml
