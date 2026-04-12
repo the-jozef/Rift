@@ -8,18 +8,17 @@
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.ViewModels"
-             mc:Ignorable="d"
-             >
+             mc:Ignorable="d">
     <Grid>
         <Border Grid.Row="0"
                 Background="{StaticResource RiftStoreBackground}"
                 CornerRadius="0,0,7.5,7.5">
             <Grid>
                 <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"
-                              VerticalAlignment="Top"
                               Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
                               Background="#1b2838"
-                              VerticalScrollBarVisibility="Auto">
+                              VerticalScrollBarVisibility="Auto"
+                              VerticalAlignment="Bottom">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="290" />
@@ -28,11 +27,13 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="150" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Column="0"
                                     Width="Auto"
@@ -1803,43 +1804,833 @@
                             </Grid>
                         </Grid>
 
+                        <Grid Grid.Row="6"
+                              Grid.Column="1"
+                              Height="Auto">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="80" />
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="13" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Row="1"
+                                  Grid.Column="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="5" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
+
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
+
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel Margin="73,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="68,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#CAD8DB"
+                                                       FontWeight="SemiBold"
+                                                       Margin="0,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="4"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel Margin="79,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="Free"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="20"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#CAD8DB"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="6"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
+
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
+
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="8"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
+
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
+
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
 
 
 
+                                <StackPanel Grid.Row="10"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
 
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
 
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
 
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
 
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
 
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
 
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
 
+                                        </StackPanel>
 
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
 
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
 
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
 
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
 
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
 
+                                <StackPanel Grid.Row="12"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
 
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
 
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
 
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
 
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
 
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
 
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
 
+                                        </StackPanel>
 
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
 
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
 
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
 
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
 
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
 
+                                <StackPanel Grid.Row="14"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
 
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
 
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
 
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
 
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
 
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
 
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
 
+                                        </StackPanel>
 
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
+
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
+
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="16"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
+
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
+
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="18"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="85"
+                                            Orientation="Horizontal">
+
+                                    <Image Source="/Icons/Red.png"
+                                           Width="175"
+                                           HorizontalAlignment="Left"
+                                           Stretch="UniformToFill" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Background="#0A1B29"
+                                                Width="410">
+
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="15,0,0,0"
+                                                    Width="250">
+
+                                            <TextBlock Text="R.E.P.O"
+                                                       Foreground="#CCDBE3"
+                                                       FontSize="22"
+                                                       Margin="0,5,0,0" />
+
+                                            <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                        Foreground="#7C8E9C"
+                                                                        HorizontalAlignment="Left"
+                                                                        Height="18"
+                                                                        Width="18"
+                                                                        Margin="2,3,0,0" />
+
+                                            <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                       Foreground="#7C8E9C"
+                                                       FontSize="11"
+                                                       Margin="2,10,0,0" />
+
+                                        </StackPanel>
+
+                                        <StackPanel>
+                                            <Border Background="#4c6b22"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="2,2,2,2"
+                                                    Padding="3,5,4,5"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Margin="0,20,0,0">
+
+                                                <TextBlock Text="-75%"
+                                                           TextAlignment="Center"
+                                                           FontSize="17"
+                                                           Foreground="#a4d007"
+                                                           FontWeight="Bold"
+                                                           Margin="0,-2,0,0" />
+                                            </Border>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="30,0,0,2"
+                                                    VerticalAlignment="Center">
+
+                                            <TextBlock Text="39,99€"
+                                                       FontSize="13.5"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextDecorations="Strikethrough"
+                                                       Foreground="#738895"
+                                                       Margin="5,-1.5,0,0"
+                                                       HorizontalAlignment="Right" />
+
+                                            <TextBlock Text="5,99€"
+                                                       HorizontalAlignment="Right"
+                                                       FontSize="18"
+                                                       Width="Auto"
+                                                       Height="Auto"
+                                                       TextAlignment="Center"
+                                                       Foreground="#a4d007"
+                                                       FontWeight="SemiBold"
+                                                       Margin="5,-1.5,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="20"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="35">
+
+                                    <StackPanel Background="#0C2433"
+                                                Width="580"                                               
+                                                HorizontalAlignment="Right">
+
+                                        <Button Background="Transparent"
+                                                BorderBrush="#96A2B0"
+                                                BorderThickness="0.5"
+                                                HorizontalAlignment="Right"
+                                                Width="85" 
+                                                Height="30"
+                                                Margin="3">
+
+                                            <TextBlock Text="Show more"
+                                                       Foreground="#C6D4DF"
+                                                       FontSize="12"
+                                                       Margin="-4,0,-5,0"/>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </ScrollViewer>
             </Grid>

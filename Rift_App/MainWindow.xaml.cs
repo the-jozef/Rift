@@ -26,8 +26,8 @@ namespace Rift_App
             InitializeComponent();
             DataContext = new WindowStateViewModel();
 
-           
-                
+
+
         }
         [RelayCommand]
         private void ShowAuthencation()
@@ -36,8 +36,13 @@ namespace Rift_App
             auth.Show();
 
         }
-        
+        [RelayCommand]
+        private void ShowLibrary()
+        {
+            
 
+
+        }
 
 
         /*
@@ -45,12 +50,10 @@ namespace Rift_App
                 authencation.Show();
                 this.Close();
 
-
-                /*
-              Window_Test test = new Window_Test();
-                        test.Show();
-                        this.Close();
-                        /*
+         Window_test2 test = new Window_test2();
+            test.Show();
+            this.Close();
+          
                         Authencation authencation = new Authencation();
                         authencation.Show();
                         this.Close();
