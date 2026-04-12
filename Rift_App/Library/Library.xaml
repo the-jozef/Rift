@@ -7,8 +7,8 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.Library"
              mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="800">
+             Height="635"
+             Width="1080">
     <Grid>
         <Border Grid.Row="0"
                 Background="{StaticResource RiftStoreBackground}"
