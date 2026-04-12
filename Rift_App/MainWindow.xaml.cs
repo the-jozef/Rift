@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Rift_App.Account;
 using Rift_App.Database;
 using Rift_App.Login_Register;
 using Rift_App.Testing;
@@ -26,6 +27,8 @@ namespace Rift_App
             InitializeComponent();
             DataContext = new WindowStateViewModel();
 
+            var testacc = new TestWindowAcc();
+            testacc.Show();
 
 
         }
@@ -36,13 +39,7 @@ namespace Rift_App
             auth.Show();
 
         }
-        [RelayCommand]
-        private void ShowLibrary()
-        {
-            
-
-
-        }
+   
 
 
         /*
