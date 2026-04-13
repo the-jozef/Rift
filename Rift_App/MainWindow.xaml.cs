@@ -27,8 +27,15 @@ namespace Rift_App
             InitializeComponent();
             DataContext = new WindowStateViewModel();
 
-            var testacc = new TestWindowAcc();
-            testacc.Show();
+
+
+
+
+
+
+
+            //var testacc = new TestWindowAcc();  //Account testing window
+            //testacc.Show();
 
 
         }
@@ -55,7 +62,5 @@ namespace Rift_App
                         authencation.Show();
                         this.Close();
         */
-
-
     }
 }

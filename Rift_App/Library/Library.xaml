@@ -7,8 +7,9 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.Library"
              mc:Ignorable="d"
-             Height="635"
-             Width="1080">
+             d:Height="1000"
+             d:Width="1000">
+
     <Grid>
         <Border Grid.Row="0"
                 Background="{StaticResource RiftStoreBackground}"
@@ -26,7 +27,9 @@
 
                 <Grid Grid.Row="1"
                       Grid.Column="0">
-                    <ScrollViewer Background="#22272E">
+                    <ScrollViewer Background="#22272E"
+                                  x:Name="MyScrollViewer"                     
+                                  Width="Auto">
 
                         <StackPanel>
 
@@ -68,14 +71,7 @@
 
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
@@ -117,47 +113,185 @@
                     </ScrollViewer>
                 </Grid>
 
-                <Grid Grid.Row="1"
-                      Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    
-                    
-                    
-                    <StackPanel VerticalAlignment="Top">
-                    <Image Source="/Icons/Red.png"
-                           Stretch="UniformToFill" 
-                           Height="310"/>
+                
+                
+                <ScrollViewer Background="#22272E"
+                              x:Name="MyScrollViewer2"
+                              Width="Auto"
+                              Grid.Row="1"
+                              Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
+                        <StackPanel VerticalAlignment="Top"
+                                    Grid.Row="0">
 
+                            <Image Source="/Icons/Red.png"
+                                   Stretch="UniformToFill"
+                                   Height="310" />
+                        </StackPanel>
 
+                        <Border BorderBrush="Green"
+                                BorderThickness="1"
+                                Height="1.5"
+                                Grid.Row="1">
+                        </Border>
 
+                        <Grid Grid.Row="2">
+                            <Grid.Background>
+                                <LinearGradientBrush EndPoint="0,1"
+                                                     StartPoint="0,0"
+                                                     Opacity="0.7">
 
-                    </StackPanel>
-                </Grid>
+                                    <GradientStop Color="#474A54"
+                                                  Offset="0" />
+                                    <GradientStop Color="#22262E"
+                                                  Offset="0.846" />
+                                </LinearGradientBrush>
+                            </Grid.Background>
 
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
+                            <StackPanel VerticalAlignment="Top"
+                                        Height="100"
+                                        Grid.Row="0">
 
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Left"
+                                            Width="Auto"
+                                            Height="50">
 
+                                    <Button BorderBrush="Transparent"
+                                            Width="100">
+                                        <Button.Background>
+                                            <LinearGradientBrush StartPoint="0,0"
+                                                                 EndPoint="1,0">
 
+                                                <GradientStop Color="#45C435"
+                                                              Offset="0.341" />
 
+                                                <GradientStop Color="#41AD36"
+                                                              Offset="1" />
 
+                                            </LinearGradientBrush>
+                                            
+                                        </Button.Background>
+                                        
+                                        <StackPanel Orientation="Horizontal">
 
+                                            <materialIcons:MaterialIcon Kind="Play"
+                                                                        Foreground="White"
+                                                                        Opacity="0.5"/>
 
+                                            <TextBlock Text="Play"
+                                                       Foreground="White" />
 
+                                        </StackPanel>
+                                    </Button>
 
+                                    <StackPanel Orientation="Vertical"
+                                                Margin="20,0,0,0">
 
+                                        <TextBlock  Text="LAST PLAYED"
+                                                    Foreground="#B6BBBF"
+                                                    FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"/>
 
+                                        <TextBlock  Text="Mar 21"
+                                                    Foreground="#92969C"
+                                                    FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"/>
 
+                                    </StackPanel>
 
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="15,0,0,0">
 
+                                        <StackPanel Orientation="Horizontal">
 
+                                            <materialIcons:MaterialIcon Kind="ClockOutline"
+                                                                        Foreground="#B6BBBF" />
 
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
 
+                                            <TextBlock Text="PLAY TIME"
+                                                       Foreground="#B6BBBF" />
 
+                                            <TextBlock Text="28.6 hours"
+                                                       Foreground="#92969C" />
+                                        </StackPanel>
+                                    </StackPanel>
 
+                                    <StackPanel Margin="15,0,0,0">
+
+                                        <Button Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                Height="55">
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialIcons:MaterialIcon Kind="MedalOutline"
+                                                                            Foreground="#B6BBBF" />
+
+                                                <StackPanel Orientation="Vertical">
+
+                                                    <TextBlock Text="ACHIEVEMENTS"
+                                                               Foreground="#B6BBBF" />
+
+                                                    <StackPanel Orientation="Horizontal">
+
+                                                        <TextBlock Text="22/57"
+                                                                   Foreground="#92969C" />
+
+                                                        <ProgressBar Background="Black"
+                                                                     BorderBrush="Transparent"
+                                                                     Width="55"
+                                                                     Foreground="#2D73FF"
+                                                                     Maximum="57"
+                                                                     Value="27" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel HorizontalAlignment="Right"
+                                            Background="#333B42" >
+                                    
+                                    
+                                    
+                                    
+                                </StackPanel>
+                                
+                                
+                            </StackPanel>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
 
 
             </Grid>
