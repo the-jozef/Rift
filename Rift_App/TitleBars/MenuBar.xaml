@@ -27,7 +27,7 @@
                 </Style>
             </Border.Style>
 
-            <Grid Height="70">
+            <Grid Height="80">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />

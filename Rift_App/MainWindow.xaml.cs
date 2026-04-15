@@ -34,8 +34,8 @@ namespace Rift_App
 
            
 
-           var testacc = new TestWindowAcc();  //Account testing window
-           testacc.Show();
+          // var testacc = new TestWindowAcc();  //Account testing window
+           //testacc.Show();
 
 
         }

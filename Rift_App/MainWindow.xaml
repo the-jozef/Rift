@@ -10,6 +10,7 @@
         xmlns:local="clr-namespace:Rift_App.TitleBars"
         xmlns:local2="clr-namespace:Rift_App.Store"
         xmlns:local3="clr-namespace:Rift_App.Library"
+        xmlns:local4="clr-namespace:Rift_App.StoreGamePage"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="635"
@@ -45,11 +46,14 @@
             
             <local:SearchBar HorizontalAlignment="Stretch" Grid.Row="1" />
 
-            <local3:Library HorizontalAlignment="Stretch"
-                            Grid.Row="2" />
+            <local4:GamePage HorizontalAlignment="Stretch"
+                             Grid.Row="2" />
 
+            <!--  <local3:Library HorizontalAlignment="Stretch"
+                 Grid.Row="2" /> -->
+            
             <!-- <local2:Store HorizontalAlignment="Stretch"
-               Grid.Row="2" />-->
+               Grid.Row="2" /> -->
         </Grid>
     </Border>
 </Window>
