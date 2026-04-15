@@ -25,7 +25,7 @@
            TargetType="Image">
 
         <Setter Property="Source"
-                Value="/Icons/Rift_logo.png" />
+                Value="/Image/Rift_logo.png" />
         <Setter Property="Width"
                 Value="55" />
         <Setter Property="Height"

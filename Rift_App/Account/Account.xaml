@@ -185,7 +185,7 @@
                                             Margin="0,0,16,0"
                                             CornerRadius="0">
                                         <Border>
-                                            <Image Source="/Icons/Red.png"
+                                            <Image Source="/Image/Red.png"
                                                    Stretch="UniformToFill" />
 
                                         </Border>
@@ -256,7 +256,7 @@
                                                     ClipToBounds="True">
                                                 <Border.Background>
 
-                                                    <ImageBrush ImageSource="/Icons/Red.png"
+                                                    <ImageBrush ImageSource="/Image/Red.png"
                                                                 Stretch="UniformToFill" />
                                                 </Border.Background>
                                                 <StackPanel VerticalAlignment="Bottom"
@@ -343,7 +343,7 @@
                                             <Border Grid.Column="0"
                                                     ClipToBounds="True">
                                                 <Border.Background>
-                                                    <ImageBrush ImageSource="/Icons/Red.png"
+                                                    <ImageBrush ImageSource="/Image/Red.png"
                                                                 Stretch="UniformToFill" />
                                                 </Border.Background>
 
@@ -417,7 +417,7 @@
                                             <Border Grid.Column="0"
                                                     ClipToBounds="True">
                                                 <Border.Background>
-                                                    <ImageBrush ImageSource="/Icons/Red.png"
+                                                    <ImageBrush ImageSource="/Image/Red.png"
                                                                 Stretch="UniformToFill" />
                                                 </Border.Background>
 
@@ -588,7 +588,7 @@
                                         CornerRadius="3"
                                         Margin="0,0,6,0">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="/Icons/Red.png"
+                                        <ImageBrush ImageSource="/Image/Red.png"
                                                     Stretch="UniformToFill" />
                                     </Border.Background>
 
@@ -600,7 +600,7 @@
                                         CornerRadius="3"
                                         Margin="0,0,6,0">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="/Icons/Red.png"
+                                        <ImageBrush ImageSource="/Image/Red.png"
                                                     Stretch="UniformToFill" />
                                     </Border.Background>
 
@@ -613,7 +613,7 @@
                                         BorderBrush="#6A6A6A"
                                         BorderThickness="1">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="/Icons/Red.png"
+                                        <ImageBrush ImageSource="/Image/Red.png"
                                                     Stretch="UniformToFill" />
                                     </Border.Background>
 

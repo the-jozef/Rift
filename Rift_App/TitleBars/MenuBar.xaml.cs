@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
-using Rift_App.Login_Register;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
-namespace Rift_App.Controls
+namespace Rift_App.TitleBars
 {
     /// <summary>
-    /// Interaction logic for RiftTitleBar.xaml
+    /// Interaction logic for MenuBar.xaml
     /// </summary>
-    public partial class RiftTitleBar : UserControl
+    public partial class MenuBar : UserControl
     {
-        public RiftTitleBar()
+        public MenuBar()
         {
             InitializeComponent();
         }

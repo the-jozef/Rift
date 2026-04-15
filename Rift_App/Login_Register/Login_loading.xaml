@@ -41,7 +41,7 @@
                             Width="Auto"
                             Height="Auto">
 
-                    <Image Source="/Icons/Red.png"
+                    <Image Source="/Image/Red.png"
                            Width="20"
                            Height="20"
                            Margin="0,0,10,0"/>
@@ -95,7 +95,7 @@
                         <Ellipse Width="130"
                                  Height="130">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Icons/Rift_logo.png/"/>
+                                <ImageBrush ImageSource="/Image/Rift_logo.png/"/>
                                 
                             </Ellipse.Fill>
                             

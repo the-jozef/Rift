@@ -131,7 +131,7 @@
 
                                             <Image Stretch="UniformToFill"
                                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                                   Source="/Icons/Red.png" />
+                                                   Source="/Image/Red.png" />
                                         </Border>
 
 
@@ -174,7 +174,7 @@
                                                                 Grid.Column="0"
                                                                 HorizontalAlignment="Left">
                                                         <Image Stretch="UniformToFill"
-                                                               Source="/Icons/Red.png"
+                                                               Source="/Image/Red.png"
                                                                Width="155"
                                                                Height="70" />
 
@@ -184,7 +184,7 @@
                                                                 Grid.Column="1"
                                                                 HorizontalAlignment="Left">
                                                         <Image Stretch="UniformToFill"
-                                                               Source="/Icons/Red.png"
+                                                               Source="/Image/Red.png"
                                                                Height="70"
                                                                Width="155" />
 
@@ -194,7 +194,7 @@
                                                                 Grid.Column="0"
                                                                 HorizontalAlignment="Left">
                                                         <Image Stretch="UniformToFill"
-                                                               Source="/Icons/Red.png"
+                                                               Source="/Image/Red.png"
                                                                Width="155"
                                                                Height="70" />
 
@@ -204,7 +204,7 @@
                                                                 Grid.Column="1"
                                                                 HorizontalAlignment="Left">
                                                         <Image Stretch="UniformToFill"
-                                                               Source="/Icons/Red.png"
+                                                               Source="/Image/Red.png"
                                                                Height="70"
                                                                Width="155" />
 
@@ -436,7 +436,7 @@
 
                                 <Image Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Icons/Red.png"
+                                       Source="/Image/Red.png"
                                        Width="300"
                                        Height="150" />
 
@@ -496,7 +496,7 @@
 
                                 <Image Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Icons/Red.png"
+                                       Source="/Image/Red.png"
                                        Width="300"
                                        Height="150" />
 
@@ -556,7 +556,7 @@
 
                                 <Image Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Icons/Red.png"
+                                       Source="/Image/Red.png"
                                        Width="300"
                                        Height="150" />
 
@@ -616,7 +616,7 @@
 
                                 <Image Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Icons/Red.png"
+                                       Source="/Image/Red.png"
                                        Width="300"
                                        Height="150" />
 
@@ -676,7 +676,7 @@
 
                                 <Image Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Icons/Red.png"
+                                       Source="/Image/Red.png"
                                        Width="300"
                                        Height="150" />
 
@@ -736,7 +736,7 @@
 
                                 <Image Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Icons/Red.png"
+                                       Source="/Image/Red.png"
                                        Width="300"
                                        Height="150" />
 
@@ -806,7 +806,7 @@
                                           VerticalAlignment="Top"
                                           Width="Auto"
                                           Height="230"
-                                          Source="/Icons/Red.png"
+                                          Source="/Image/Red.png"
                                           LoadedBehavior="Play"
                                           UnloadedBehavior="Stop"
                                           Stretch="UniformToFill"
@@ -916,7 +916,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -947,7 +947,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -978,7 +978,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1009,7 +1009,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1135,7 +1135,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1241,7 +1241,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1378,7 +1378,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1484,7 +1484,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1685,7 +1685,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1716,7 +1716,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1747,7 +1747,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1778,7 +1778,7 @@
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Icons/Red.png"
+                                               Source="/Image/Red.png"
                                                Width="224"
                                                Height="120" />
 
@@ -1852,7 +1852,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -1933,7 +1933,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -1987,7 +1987,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2041,7 +2041,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2122,7 +2122,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2205,7 +2205,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2286,7 +2286,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2367,7 +2367,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2448,7 +2448,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />
@@ -2529,7 +2529,7 @@
                                             Height="85"
                                             Orientation="Horizontal">
 
-                                    <Image Source="/Icons/Red.png"
+                                    <Image Source="/Image/Red.png"
                                            Width="175"
                                            HorizontalAlignment="Left"
                                            Stretch="UniformToFill" />

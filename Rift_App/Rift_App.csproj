@@ -27,9 +27,6 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="Icons\client_login_bg_grid.jpg" />
-    <None Remove="Icons\Red.png" />
-    <None Remove="Icons\Rift_logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,13 +48,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Icons\client_login_bg_grid.jpg">
+    <Resource Include="Image\Steam.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Icons\Red.png">
+    <Resource Include="Image\Red.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Icons\Rift_logo.png">
+    <Resource Include="Image\Rift_logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

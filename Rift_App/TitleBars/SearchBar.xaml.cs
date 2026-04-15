@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Rift_App.Controls
+namespace Rift_App.TitleBars
 {
     /// <summary>
-    /// Interaction logic for RiftMainwindow.xaml
+    /// Interaction logic for SearchBar.xaml
     /// </summary>
-    public partial class RiftMainwindow : UserControl
+    public partial class SearchBar : UserControl
     {
-        public RiftMainwindow()
+        public SearchBar()
         {
             InitializeComponent();
         }

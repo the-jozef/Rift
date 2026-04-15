@@ -7,7 +7,7 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-        xmlns:local="clr-namespace:Rift_App.Controls"
+        xmlns:local="clr-namespace:Rift_App.TitleBars"
         xmlns:local2="clr-namespace:Rift_App.Store"
         xmlns:local3="clr-namespace:Rift_App.Library"
         mc:Ignorable="d"
@@ -39,12 +39,17 @@
                 <RowDefinition Height="*" />
          
             </Grid.RowDefinitions>
-            <local:RiftTitleBar HorizontalAlignment="Stretch"
+            
+            <local:MenuBar HorizontalAlignment="Stretch"
                                 Grid.Row="0"/>
-            <local:RiftMainwindow HorizontalAlignment="Stretch" Grid.Row="1" />
+            
+            <local:SearchBar HorizontalAlignment="Stretch" Grid.Row="1" />
+
             <local3:Library HorizontalAlignment="Stretch"
                             Grid.Row="2" />
-            <!-- <local2:Store HorizontalAlignment="Stretch" Grid.Row="2" /> -->
+
+            <!-- <local2:Store HorizontalAlignment="Stretch"
+               Grid.Row="2" />-->
         </Grid>
     </Border>
 </Window>

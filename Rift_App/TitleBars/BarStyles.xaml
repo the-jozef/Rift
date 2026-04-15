@@ -2,14 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
-    <!-- TitleBar -->
+
     
+    <!-- TitleBar -->
+
     <!-- Stackpanel TitleBar -->
     <Style x:Key="Rift_TitleBar"
            TargetType="StackPanel">
-        
+
         <Setter Property="Orientation"
-                Value="Horizontal" /> 
+                Value="Horizontal" />
     </Style>
 
     <!-- Logo -->
@@ -17,7 +19,7 @@
            TargetType="Image">
 
         <Setter Property="Source"
-                Value="/Icons/Rift_logo.png" />
+                Value="/Image/Rift_logo.png" />
         <Setter Property="Width"
                 Value="20" />
         <Setter Property="Height"
@@ -38,12 +40,13 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Title -->
+    
     <Style x:Key="Rift_Title"
            TargetType="TextBlock"
            BasedOn="{StaticResource MaterialDesignHeadline6TextBlock }">
-        
+
         <Setter Property="Text"
                 Value="RIFT" />
         <Setter Property="VerticalAlignment"
@@ -53,14 +56,15 @@
         <Setter Property="Margin"
                 Value="6,0.5,0,0" />
         <Setter Property="Foreground"
-                Value="{StaticResource RiftForeground}" />
+                Value="#8B929A" />
         <Setter Property="FontSize"
                 Value="12" />
         <Setter Property="FontFamily"
                 Value="Arial" />
     </Style>
 
-    <!-- StackPanel logo/name        To popupbox next time-->
+    <!-- StackPanel logo/name  To popupbox next time-->
+    
     <Style x:Key="Rift_LogoHeader"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
@@ -81,11 +85,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
+                    
                     <StackPanel Orientation="Horizontal"
                                 Background="Transparent">
+                        
                         <Image x:Name="Logo"
                                Style="{StaticResource Rift_Logo}"
                                Opacity="1" />
+                        
                         <TextBlock x:Name="Title"
                                    Style="{StaticResource Rift_Title}" />
                     </StackPanel>
@@ -95,14 +102,13 @@
                                  Value="True">
                             <Setter TargetName="Logo"
                                     Property="Opacity"
-                                    Value="0.8"/>
+                                    Value="0.8" />
                             <Setter TargetName="Title"
                                     Property="Foreground"
                                     Value="White" />
-                            
+
                         </Trigger>
                     </ControlTemplate.Triggers>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -160,21 +166,21 @@
         <Setter Property="FontFamily"
                 Value="Arial" />
     </Style>
-    
+
     <!-- ScrollViewer for PopupBox -->
     <Style x:Key="Rift_ScrollViewer"
            TargetType="ScrollViewer">
-        
+
         <Setter Property="VerticalScrollBarVisibility"
                 Value="Disabled" />
         <Setter Property="Background"
                 Value="#3D4450" />
     </Style>
-    
+
     <!-- StackPanel for PopupBox -->
     <Style x:Key="Rift_PopupStackPanel"
            TargetType="StackPanel">
-        
+
         <Setter Property="Width"
                 Value="Auto" />
         <Setter Property="Height"
@@ -182,12 +188,12 @@
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
     </Style>
-    
+
     <!-- Popupbox items -->
     <Style x:Key="Rift_PopupItems"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
-        
+
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
         <Setter Property="Foreground"
@@ -196,7 +202,7 @@
                 Value="11" />
         <Setter Property="FontFamily"
                 Value="Arial" />
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -228,7 +234,7 @@
     <Style x:Key="Rift_PopupBox_options"
            TargetType="materialDesign:PopupBox"
            BasedOn="{StaticResource {x:Type materialDesign:PopupBox}}">
-        
+
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Background"
@@ -272,13 +278,13 @@
         <Setter Property="Margin"
                 Value="0,0,0,2" />
         <Setter Property="VerticalAlignment"
-                    Value="Center" />
+                Value="Center" />
         <Setter Property="HorizontalAlignment"
-                    Value="Left" />
+                Value="Left" />
         <Setter Property="FontSize"
-                    Value="18" />
+                Value="18" />
         <Setter Property="FontFamily"
-                    Value="Arial" />
+                Value="Arial" />
         <Setter Property="FontWeight"
                 Value="SemiBold" />
     </Style>
@@ -295,7 +301,7 @@
         <Setter Property="HorizontalAlignment"
                 Value="Right" />
     </Style>
-    
+
     <!-- Popup for Notifications -->
     <Style x:Key="Rift_Notifications_PopupBox"
            TargetType="materialDesign:PopupBox"
@@ -331,7 +337,7 @@
                              Value="True">
                         <Setter Property="Background"
                                 Value="#2A2F38" />
-                        
+
                     </Trigger>
                     <Trigger Property="IsChecked"
                              Value="True">
@@ -342,7 +348,7 @@
             </Style>
         </Style.Resources>
     </Style>
-    
+
     <!-- Popupbox items for Notifications -->
     <Style x:Key="Rift_Notification_Item"
            TargetType="Button"
@@ -440,7 +446,7 @@
         <Setter Property="FontWeight"
                 Value="SemiBold" />
     </Style>
-    
+
     <!-- Icon for ChevronDown after Account-->
     <Style x:Key="Rift_ChevronDown_Icon"
            TargetType="materialIcons:MaterialIcon">
@@ -459,7 +465,7 @@
     <!-- StackPanel for Minimalize/Maximalize $ close  -->
     <Style x:Key="Rift_StackPanel_WindowButtons"
            TargetType="StackPanel">
-        
+
         <Setter Property="Margin"
                 Value="0,0,0,5" />
         <Setter Property="Width"
@@ -502,7 +508,7 @@
                         <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter TargetName="border"
-                                Property="Background">
+                                    Property="Background">
                                 <Setter.Value>
                                     <SolidColorBrush Color="White"
                                                      Opacity="0.2" />
@@ -514,7 +520,7 @@
                         <Trigger Property="IsPressed"
                                  Value="True">
                             <Setter TargetName="border"
-                                Property="Background">
+                                    Property="Background">
                                 <Setter.Value>
                                     <SolidColorBrush Color="White"
                                                      Opacity="0.2" />
@@ -528,7 +534,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Close button -->
     <Style x:Key="Rift_CLoseButton"
            TargetType="Button"
@@ -543,7 +549,7 @@
         <Setter Property="Foreground"
                 Value="#FF818181" />
         <Setter Property="Background"
-                Value="Transparent" />  
+                Value="Transparent" />
         <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Cursor"
@@ -564,8 +570,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">
-                            <Setter 
-                                    Property="Background"
+                            <Setter Property="Background"
                                     Value="#E22A27" />
                             <Setter Property="Foreground"
                                     Value="White" />
@@ -578,7 +583,7 @@
                             <Setter Property="Foreground"
                                     Value="White" />
                         </Trigger>
-                        
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -605,14 +610,14 @@
 
 
 
-    
-    
-    
-    
-    
-    
-    
-<!-- Fix from here-->
+
+
+
+
+
+
+
+    <!-- Fix from here-->
     <Style x:Key="Rift_Button3"
            TargetType="Button"
            BasedOn="{StaticResource MaterialDesignFlatButton}">
@@ -627,7 +632,7 @@
 
     </Style>
 
-    <!-- Steam-like Search Bar --> 
+    <!-- Steam-like Search Bar -->
     <Style x:Key="RiftSearchBar"
            TargetType="TextBox"
            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
@@ -635,7 +640,7 @@
         <Setter Property="Height"
                 Value="22" />
         <Setter Property="Width"
-                Value="165" /> 
+                Value="165" />
         <Setter Property="FontSize"
                 Value="15" />
         <Setter Property="Margin"

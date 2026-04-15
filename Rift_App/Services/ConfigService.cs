@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace Rift_App
+namespace Rift_App.Services
 {
     public class ConfigService
     {
@@ -47,4 +47,4 @@ namespace Rift_App
         }
     }
 }
-    
+
