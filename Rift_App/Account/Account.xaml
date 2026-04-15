@@ -7,7 +7,7 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.Account"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="1000" d:DesignWidth="2000">
     
     <UserControl.Resources>
 
@@ -140,33 +140,18 @@
             </LinearGradientBrush>
         </Border.Background>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Right">
 
-            <!-- ===== NAV BAR ===== -->
-            <Border Grid.Row="0"
-                    Background="#000000"
-                    Height="30"
-                    Opacity="0.85" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                 <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-            <!-- ===== MAIN CONTENT ===== -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="640" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- ===== CENTER COLUMN ===== -->
-                <ScrollViewer Grid.Column="1"
+                <ScrollViewer Grid.Column="0"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
 
-                        <!-- PROFILE HEADER AREA -->
                         <Border Background="#32213F"
                                 Padding="0,18,0,0">
                             <StackPanel>
@@ -489,7 +474,7 @@
                 </ScrollViewer>
 
                 <!-- ===== RIGHT SIDEBAR ===== -->
-                <Border Grid.Column="2">
+                <Border Grid.Column="1">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="0,1">
@@ -661,8 +646,6 @@
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
-
-            </Grid>
         </Grid>
     </Border>
 </UserControl>
