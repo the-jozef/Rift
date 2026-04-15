@@ -8,121 +8,118 @@
              xmlns:local="clr-namespace:Rift_App.Account"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <UserControl.Resources>
 
         <!-- Colors -->
-        <Color x:Key="BgDeep">#0e0e14</Color>
-        <Color x:Key="BgPanel">#1a1a2e</Color>
-        <Color x:Key="BgCard">#16213e</Color>
-        <Color x:Key="BgAccent">#0f3460</Color>
-        <Color x:Key="AccentCyan">#00b4d8</Color>
-        <Color x:Key="AccentPurple">#7b2d8b</Color>
-        <Color x:Key="AccentPink">#c77dff</Color>
-        <Color x:Key="TextPrimary">#e8eaf6</Color>
-        <Color x:Key="TextSecondary">#9e9eb8</Color>
-        <Color x:Key="TextMuted">#5a5a7a</Color>
-        <Color x:Key="BorderSubtle">#2a2a4a</Color>
+        <SolidColorBrush x:Key="PageBg"
+                         Color="#1B2838" />
+        <SolidColorBrush x:Key="ProfileHeaderBg"
+                         Color="#2E1A3A" />
+        <SolidColorBrush x:Key="ContentBg"
+                         Color="#32213F" />
+        <SolidColorBrush x:Key="CardBg"
+                         Color="#3D2650" />
+        <SolidColorBrush x:Key="SidebarBg"
+                         Color="#3D1F4E" />
+        <SolidColorBrush x:Key="SidebarTop"
+                         Color="#4A2060" />
+        <SolidColorBrush x:Key="AvatarBorder"
+                         Color="#4C8DB8" />
+        <SolidColorBrush x:Key="OnlineColor"
+                         Color="#57CBDE" />
+        <SolidColorBrush x:Key="TextWhite"
+                         Color="#FFFFFF" />
+        <SolidColorBrush x:Key="TextLight"
+                         Color="#C6D4DF" />
+        <SolidColorBrush x:Key="TextGray"
+                         Color="#8F98A0" />
+        <SolidColorBrush x:Key="TextDim"
+                         Color="#6A7880" />
+        <SolidColorBrush x:Key="EditBtnBg"
+                         Color="#6B3F7A" />
+        <SolidColorBrush x:Key="ProgressBg"
+                         Color="#2A1A35" />
+        <SolidColorBrush x:Key="ProgressFg"
+                         Color="#4A6A80" />
+        <SolidColorBrush x:Key="Divider"
+                         Color="#4A2D5C" />
+        <SolidColorBrush x:Key="GameRowBg"
+                         Color="#2A1838" />
+        <SolidColorBrush x:Key="AchRowBg"
+                         Color="#231430" />
 
-        <SolidColorBrush x:Key="BgDeepBrush"
-                         Color="{StaticResource BgDeep}" />
-        <SolidColorBrush x:Key="BgPanelBrush"
-                         Color="{StaticResource BgPanel}" />
-        <SolidColorBrush x:Key="BgCardBrush"
-                         Color="{StaticResource BgCard}" />
-        <SolidColorBrush x:Key="AccentCyanBrush"
-                         Color="{StaticResource AccentCyan}" />
-        <SolidColorBrush x:Key="AccentPurpleBrush"
-                         Color="{StaticResource AccentPurple}" />
-        <SolidColorBrush x:Key="AccentPinkBrush"
-                         Color="{StaticResource AccentPink}" />
-        <SolidColorBrush x:Key="TextPrimaryBrush"
-                         Color="{StaticResource TextPrimary}" />
-        <SolidColorBrush x:Key="TextSecondaryBrush"
-                         Color="{StaticResource TextSecondary}" />
-        <SolidColorBrush x:Key="TextMutedBrush"
-                         Color="{StaticResource TextMuted}" />
-        <SolidColorBrush x:Key="BorderSubtleBrush"
-                         Color="{StaticResource BorderSubtle}" />
-        <SolidColorBrush x:Key="TransparentBrush"
-                         Color="Transparent" />
-
-        <!-- ProgressBar Style -->
-        <Style x:Key="SteamProgressBar"
+        <!-- ===== PROGRESS BAR TEMPLATE ===== -->
+        <Style x:Key="SteamProgress"
                TargetType="ProgressBar">
             <Setter Property="Height"
-                    Value="5" />
-            <Setter Property="Background"
-                    Value="#2a2a4a" />
-            <Setter Property="Foreground">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#00b4d8"
-                                      Offset="0" />
-                        <GradientStop Color="#7b2d8b"
-                                      Offset="1" />
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
+                    Value="4" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ProgressBar">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="3"
-                                SnapsToDevicePixels="True">
-                            <Border x:Name="PART_Track"
-                                    CornerRadius="3">
+                        <Grid>
+                            <Border Background="#2A1A35"
+                                    CornerRadius="2" />
+                            <Border x:Name="PART_Track">
                                 <Border x:Name="PART_Indicator"
-                                        HorizontalAlignment="Left"
-                                        Background="{TemplateBinding Foreground}"
-                                        CornerRadius="3" />
+                                        Background="#577A92"
+                                        CornerRadius="2"
+                                        HorizontalAlignment="Left" />
                             </Border>
-                        </Border>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <!-- Edit Profile Button Style -->
-        <Style x:Key="EditProfileButton"
-               TargetType="Button">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#7b2d8b"
-                                      Offset="0" />
-                        <GradientStop Color="#0f3460"
-                                      Offset="1" />
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
+        <!-- ===== SIDEBAR LINK ===== -->
+        <Style x:Key="SidebarLinkStyle"
+               TargetType="TextBlock">
             <Setter Property="Foreground"
-                    Value="#e8eaf6" />
+                    Value="#8FB0C8" />
             <Setter Property="FontSize"
                     Value="12" />
-            <Setter Property="FontWeight"
-                    Value="SemiBold" />
-            <Setter Property="Padding"
-                    Value="18,8" />
+            <Setter Property="FontFamily"
+                    Value="Arial" />
+            <Setter Property="Margin"
+                    Value="0,0,0,11" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+        </Style>
+
+        <!-- ===== EDIT PROFILE BUTTON ===== -->
+        <Style x:Key="EditBtn"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#6B3F7A" />
+            <Setter Property="Foreground"
+                    Value="#C6D4DF" />
             <Setter Property="BorderThickness"
                     Value="0" />
+            <Setter Property="FontFamily"
+                    Value="Arial" />
+            <Setter Property="FontSize"
+                    Value="11" />
+            <Setter Property="Padding"
+                    Value="12,6" />
             <Setter Property="Cursor"
                     Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Padding="{TemplateBinding Padding}"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="6">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="2"
+                                Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver"
                                      Value="True">
-                                <Setter Property="Opacity"
-                                        Value="0.85" />
+                                <Setter Property="Background"
+                                        Value="#7D4D8F" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -130,831 +127,542 @@
             </Setter>
         </Style>
 
-        <!-- Sidebar Link Style -->
-        <Style x:Key="SidebarLink"
-               TargetType="TextBlock">
-            <Setter Property="Foreground"
-                    Value="#9e9eb8" />
-            <Setter Property="FontSize"
-                    Value="13" />
-            <Setter Property="Cursor"
-                    Value="Hand" />
-            <Setter Property="Margin"
-                    Value="0,5,0,5" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-                    <Setter Property="Foreground"
-                            Value="#00b4d8" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Game Card Border Style -->
-        <Style x:Key="GameCard"
-               TargetType="Border">
-            <Setter Property="Background"
-                    Value="#16213e" />
-            <Setter Property="CornerRadius"
-                    Value="10" />
-            <Setter Property="Margin"
-                    Value="0,0,0,12" />
-            <Setter Property="Padding"
-                    Value="14" />
-            <Setter Property="BorderBrush"
-                    Value="#2a2a4a" />
-            <Setter Property="BorderThickness"
-                    Value="1" />
-        </Style>
-
     </UserControl.Resources>
 
-    <!-- Root gradient background -->
-    <Grid>
-        <Grid.Background>
+    <Border>
+        <Border.Background>
             <LinearGradientBrush StartPoint="0,0"
                                  EndPoint="1,1">
-                <GradientStop Color="#0e0e14"
+                <GradientStop Color="#0E1921"
                               Offset="0" />
-                <GradientStop Color="#12102a"
-                              Offset="0.5" />
-                <GradientStop Color="#0e0e14"
+                <GradientStop Color="#131C28"
                               Offset="1" />
             </LinearGradientBrush>
-        </Grid.Background>
+        </Border.Background>
 
-        <!-- Subtle decorative radial glow top-right -->
-        <Ellipse Width="500"
-                 Height="350"
-                 HorizontalAlignment="Right"
-                 VerticalAlignment="Top"
-                 Margin="0,-100,-150,0"
-                 Opacity="0.12">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#7b2d8b"
-                                  Offset="0" />
-                    <GradientStop Color="Transparent"
-                                  Offset="1" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-        </Ellipse>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <!-- Subtle decorative radial glow bottom-left -->
-        <Ellipse Width="400"
-                 Height="300"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Bottom"
-                 Margin="-80,0,0,-60"
-                 Opacity="0.10">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#00b4d8"
-                                  Offset="0" />
-                    <GradientStop Color="Transparent"
-                                  Offset="1" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-        </Ellipse>
+            <!-- ===== NAV BAR ===== -->
+            <Border Grid.Row="0"
+                    Background="#000000"
+                    Height="30"
+                    Opacity="0.85" />
 
-        <!-- Main layout: 2 columns -->
-        <Grid Margin="32,28,32,28">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="260" />
-            </Grid.ColumnDefinitions>
+            <!-- ===== MAIN CONTENT ===== -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="640" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <!-- ═══════════════════════════════════════
-                 LEFT SIDE
-            ═══════════════════════════════════════ -->
-            <StackPanel Grid.Column="0"
-                        Margin="0,0,20,0">
+                <!-- ===== CENTER COLUMN ===== -->
+                <ScrollViewer Grid.Column="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
 
-                <!-- Profile Header Card -->
-                <Border x:Name="ProfileHeaderCard"
-                        CornerRadius="12"
-                        Padding="20,18"
-                        Margin="0,0,0,20"
-                        BorderThickness="1"
-                        BorderBrush="#2a2a4a">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0"
-                                             EndPoint="1,1">
-                            <GradientStop Color="#1a1a2e"
-                                          Offset="0" />
-                            <GradientStop Color="#16213e"
-                                          Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.Background>
+                        <!-- PROFILE HEADER AREA -->
+                        <Border Background="#32213F"
+                                Padding="0,18,0,0">
+                            <StackPanel>
+                                <Grid Margin="0,0,0,18">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                                    <!-- Avatar box -->
+                                    <Border Grid.Column="0"
+                                            Width="100"
+                                            Height="100"
+                                            BorderBrush="#4C8DB8"
+                                            BorderThickness="2"
+                                            Margin="0,0,16,0"
+                                            CornerRadius="0">
+                                        <Border>
+                                            <Image Source="/Icons/Red.png"
+                                                   Stretch="UniformToFill" />
 
-                        <!-- Avatar placeholder -->
-                        <Border x:Name="AvatarPlaceholder"
-                                Grid.Column="0"
-                                Width="88"
-                                Height="88"
-                                CornerRadius="10"
-                                BorderBrush="#00b4d8"
-                                BorderThickness="2"
-                                Margin="0,0,18,0">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0"
-                                                     EndPoint="1,1">
-                                    <GradientStop Color="#0f3460"
-                                                  Offset="0" />
-                                    <GradientStop Color="#1a1a2e"
-                                                  Offset="1" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <!-- Inner decorative cross-hair to hint placeholder -->
-                            <Grid>
-                                <Line X1="0"
-                                      Y1="44"
-                                      X2="88"
-                                      Y2="44"
-                                      Stroke="#2a2a4a"
-                                      StrokeThickness="1"
-                                      Opacity="0.5" />
-                                <Line X1="44"
-                                      Y1="0"
-                                      X2="44"
-                                      Y2="88"
-                                      Stroke="#2a2a4a"
-                                      StrokeThickness="1"
-                                      Opacity="0.5" />
-                                <Ellipse Width="22"
-                                         Height="22"
-                                         Stroke="#2a2a4a"
-                                         StrokeThickness="1"
-                                         Opacity="0.5"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center" />
-                            </Grid>
-                        </Border>
+                                        </Border>
+                                    </Border>
 
-                        <!-- Username + status -->
-                        <StackPanel Grid.Column="1"
-                                    VerticalAlignment="Center">
-                            <TextBlock x:Name="UsernameText"
-                                       Text="Guest"
-                                       FontSize="24"
-                                       FontWeight="Bold"
-                                       Foreground="#e8eaf6" />
-                            <StackPanel Orientation="Horizontal"
-                                        Margin="0,6,0,0">
-                                <Ellipse Width="8"
-                                         Height="8"
-                                         Fill="#57cc99"
-                                         Margin="0,0,6,0"
-                                         VerticalAlignment="Center" />
-                                <TextBlock Text="Currently Online"
-                                           Foreground="#57cc99"
-                                           FontSize="12" />
+                                    <!-- Name / alias -->
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Bottom"
+                                                Margin="0,0,0,4">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Guest"
+                                                       FontFamily="Arial"
+                                                       FontSize="21"
+                                                       FontWeight="Bold"
+                                                       Foreground="#FFFFFF" />
+                                            <TextBlock Text=" "
+                                                       FontSize="13"
+                                                       Foreground="#8F98A0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="2,3,0,0" />
+                                        </StackPanel>
+                                        <TextBlock Text="Your name"
+                                                   FontFamily="Arial"
+                                                   FontSize="12"
+                                                   Foreground="#8F98A0"
+                                                   Margin="0,3,0,0" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- RECENT ACTIVITY BAR -->
+                                <Border Background="#2B1C37"
+                                        Padding="0,8">
+                                    <Grid Margin="0,0,0,0">
+                                        <TextBlock Text="Recent Activity"
+                                                   FontFamily="Arial"
+                                                   FontSize="13"
+                                                   FontWeight="Bold"
+                                                   Foreground="#C6D4DF"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left" />
+                                        <TextBlock Text="0 hours past 2 weeks"
+                                                   FontFamily="Arial"
+                                                   FontSize="12"
+                                                   Foreground="#8F98A0"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Border>
                             </StackPanel>
-                            <TextBlock Text="No nickname set"
-                                       Foreground="#5a5a7a"
-                                       FontSize="12"
-                                       Margin="0,4,0,0" />
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-                <!-- Recent Activity Header -->
-                <Grid Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="RecentActivityLabel"
-                               Text="Recent Activity"
-                               FontSize="15"
-                               FontWeight="SemiBold"
-                               Foreground="#e8eaf6"
-                               VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="1"
-                               Text="0 hours past 2 weeks"
-                               FontSize="12"
-                               Foreground="#5a5a7a"
-                               VerticalAlignment="Center" />
-                </Grid>
-
-                <!-- ScrollViewer for game cards -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
-                              MaxHeight="480">
-                    <StackPanel x:Name="GameListPanel">
-
-                        <!-- ── Game Card 1 ── -->
-                        <Border Style="{StaticResource GameCard}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                                <!-- Game image placeholder -->
-                                <Border x:Name="GameImage1"
-                                        Grid.Column="0"
-                                        Grid.RowSpan="2"
-                                        Width="112"
-                                        Height="64"
-                                        CornerRadius="7"
-                                        Margin="0,0,14,0"
-                                        Background="#0f3460"
-                                        BorderBrush="#2a2a4a"
-                                        BorderThickness="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center">
-                                    <Grid>
-                                        <Rectangle Fill="#2a2a4a"
-                                                   Opacity="0.4"
-                                                   RadiusX="6"
-                                                   RadiusY="6" />
-                                        <TextBlock Text="IMG"
-                                                   Foreground="#3a3a5a"
-                                                   FontSize="11"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" />
-                                    </Grid>
-                                </Border>
-
-                                <!-- Game info -->
-                                <StackPanel Grid.Column="1"
-                                            Grid.Row="0"
-                                            Orientation="Horizontal"
-                                            VerticalAlignment="Top"
-                                            Margin="0,0,0,4">
-                                    <TextBlock Text="Game Name"
-                                               FontSize="14"
-                                               FontWeight="SemiBold"
-                                               Foreground="#e8eaf6"
-                                               VerticalAlignment="Center" />
-                                    <TextBlock Text="  ·  63 hrs on record"
-                                               FontSize="12"
-                                               Foreground="#5a5a7a"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1"
-                                            Grid.Row="1"
-                                            Margin="0,2,0,0">
-                                    <TextBlock Text="Last played: 7 Apr"
-                                               FontSize="11"
-                                               Foreground="#5a5a7a"
-                                               Margin="0,0,0,6" />
-
-                                    <!-- Achievement row -->
-                                    <Grid Margin="0,0,0,6">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0"
-                                                   Text="Achievements"
-                                                   FontSize="11"
-                                                   Foreground="#9e9eb8"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,0,8,0" />
-                                        <ProgressBar Grid.Column="1"
-                                                     Style="{StaticResource SteamProgressBar}"
-                                                     Value="67"
-                                                     Maximum="100"
-                                                     VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="2"
-                                                   Text="18 / 27"
-                                                   FontSize="11"
-                                                   Foreground="#9e9eb8"
-                                                   VerticalAlignment="Center"
-                                                   Margin="8,0,0,0" />
-                                    </Grid>
-
-                                    <!-- Achievement icon placeholders -->
-                                    <StackPanel Orientation="Horizontal"
-                                                Margin="0,4,0,0">
-                                        <Border x:Name="AchIcon1_1"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon1_2"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon1_3"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon1_4"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon1_5"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#1a1a2e"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1">
-                                            <TextBlock Text="+13"
-                                                       FontSize="9"
-                                                       Foreground="#9e9eb8"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
-                                        </Border>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Grid>
                         </Border>
 
-                        <!-- ── Game Card 2 ── -->
-                        <Border Style="{StaticResource GameCard}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                        <!-- GAME CARDS AREA -->
+                        <Border Background="#2B1C37"
+                                Padding="0,1,0,8">
+                            <StackPanel>
 
-                                <Border x:Name="GameImage2"
-                                        Grid.Column="0"
-                                        Grid.RowSpan="2"
-                                        Width="112"
-                                        Height="64"
-                                        CornerRadius="7"
-                                        Margin="0,0,14,0"
-                                        Background="#0f3460"
-                                        BorderBrush="#2a2a4a"
-                                        BorderThickness="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center">
-                                    <Grid>
-                                        <Rectangle Fill="#2a2a4a"
-                                                   Opacity="0.4"
-                                                   RadiusX="6"
-                                                   RadiusY="6" />
-                                        <TextBlock Text="IMG"
-                                                   Foreground="#3a3a5a"
-                                                   FontSize="11"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" />
-                                    </Grid>
-                                </Border>
+                                <!-- ===== GAME 1: No Man's Sky ===== -->
+                                <Border Margin="0,10,0,0"
+                                        Background="#1E1228">
+                                    <StackPanel>
+                                        <Grid Height="70">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="184" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="1"
-                                            Grid.Row="0"
-                                            Orientation="Horizontal"
-                                            VerticalAlignment="Top"
-                                            Margin="0,0,0,4">
-                                    <TextBlock Text="Game Name"
-                                               FontSize="14"
-                                               FontWeight="SemiBold"
-                                               Foreground="#e8eaf6"
-                                               VerticalAlignment="Center" />
-                                    <TextBlock Text="  ·  0.3 hrs on record"
-                                               FontSize="12"
-                                               Foreground="#5a5a7a"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
+                                            <Border Grid.Column="0"
+                                                    ClipToBounds="True">
+                                                <Border.Background>
 
-                                <StackPanel Grid.Column="1"
-                                            Grid.Row="1"
-                                            Margin="0,2,0,0">
-                                    <TextBlock Text="Last played: 24 Mar"
-                                               FontSize="11"
-                                               Foreground="#5a5a7a"
-                                               Margin="0,0,0,6" />
-                                    <Grid Margin="0,0,0,6">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0"
-                                                   Text="Achievements"
-                                                   FontSize="11"
-                                                   Foreground="#9e9eb8"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,0,8,0" />
-                                        <ProgressBar Grid.Column="1"
-                                                     Style="{StaticResource SteamProgressBar}"
-                                                     Value="0"
-                                                     Maximum="100"
-                                                     VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="2"
-                                                   Text="0 / 17"
-                                                   FontSize="11"
-                                                   Foreground="#9e9eb8"
-                                                   VerticalAlignment="Center"
-                                                   Margin="8,0,0,0" />
-                                    </Grid>
-                                    <TextBlock Text="No achievements unlocked"
-                                               FontSize="11"
-                                               Foreground="#3a3a5a"
-                                               FontStyle="Italic" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                                                    <ImageBrush ImageSource="/Icons/Red.png"
+                                                                Stretch="UniformToFill" />
+                                                </Border.Background>
+                                                <StackPanel VerticalAlignment="Bottom"
+                                                            Margin="8,0,8,4">
 
-                        <!-- ── Game Card 3 ── -->
-                        <Border Style="{StaticResource GameCard}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                                                    <TextBlock Text=""
+                                                               FontFamily="Arial"
+                                                               FontSize="9"
+                                                               FontWeight="Bold"
+                                                               Foreground="#AADDEE" />
+                                                </StackPanel>
+                                            </Border>
 
-                                <Border x:Name="GameImage3"
-                                        Grid.Column="0"
-                                        Grid.RowSpan="2"
-                                        Width="112"
-                                        Height="64"
-                                        CornerRadius="7"
-                                        Margin="0,0,14,0"
-                                        Background="#0f3460"
-                                        BorderBrush="#2a2a4a"
-                                        BorderThickness="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center">
-                                    <Grid>
-                                        <Rectangle Fill="#2a2a4a"
-                                                   Opacity="0.4"
-                                                   RadiusX="6"
-                                                   RadiusY="6" />
-                                        <TextBlock Text="IMG"
-                                                   Foreground="#3a3a5a"
-                                                   FontSize="11"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" />
-                                    </Grid>
-                                </Border>
+                                            <Grid Grid.Column="1"
+                                                  Margin="12,0,12,0">
+                                                <StackPanel HorizontalAlignment="Left"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="???"
+                                                               FontFamily="Arial"
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               Foreground="#C6D4DF" />
+                                                </StackPanel>
+                                                <StackPanel HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="63 hrs on record"
+                                                               FontFamily="Arial"
+                                                               FontSize="12"
+                                                               Foreground="#8F98A0"
+                                                               HorizontalAlignment="Right" />
+                                                    <TextBlock Text="last played on 7 Apr"
+                                                               FontFamily="Arial"
+                                                               FontSize="11"
+                                                               Foreground="#6A7880"
+                                                               HorizontalAlignment="Right"
+                                                               Margin="0,2,0,0" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
 
-                                <StackPanel Grid.Column="1"
-                                            Grid.Row="0"
-                                            Orientation="Horizontal"
-                                            VerticalAlignment="Top"
-                                            Margin="0,0,0,4">
-                                    <TextBlock Text="Game Name"
-                                               FontSize="14"
-                                               FontWeight="SemiBold"
-                                               Foreground="#e8eaf6"
-                                               VerticalAlignment="Center" />
-                                    <TextBlock Text="  ·  29 hrs on record"
-                                               FontSize="12"
-                                               Foreground="#5a5a7a"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
+                                        <Border Background="#1A0E24"
+                                                Padding="12,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="120" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="1"
-                                            Grid.Row="1"
-                                            Margin="0,2,0,0">
-                                    <TextBlock Text="Last played: 21 Mar"
-                                               FontSize="11"
-                                               Foreground="#5a5a7a"
-                                               Margin="0,0,0,6" />
-                                    <Grid Margin="0,0,0,6">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0"
-                                                   Text="Achievements"
-                                                   FontSize="11"
-                                                   Foreground="#9e9eb8"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,0,8,0" />
-                                        <ProgressBar Grid.Column="1"
-                                                     Style="{StaticResource SteamProgressBar}"
-                                                     Value="39"
-                                                     Maximum="100"
-                                                     VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="2"
-                                                   Text="22 / 57"
-                                                   FontSize="11"
-                                                   Foreground="#9e9eb8"
-                                                   VerticalAlignment="Center"
-                                                   Margin="8,0,0,0" />
-                                    </Grid>
-                                    <StackPanel Orientation="Horizontal"
-                                                Margin="0,4,0,0">
-                                        <Border x:Name="AchIcon3_1"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon3_2"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon3_3"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border x:Name="AchIcon3_4"
-                                                Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#0f3460"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1"
-                                                Margin="0,0,5,0" />
-                                        <Border Width="28"
-                                                Height="28"
-                                                CornerRadius="5"
-                                                Background="#1a1a2e"
-                                                BorderBrush="#2a2a4a"
-                                                BorderThickness="1">
-                                            <TextBlock Text="+17"
-                                                       FontSize="9"
-                                                       Foreground="#9e9eb8"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="0"
+                                                           Text="Achievement Progress"
+                                                           FontFamily="Arial"
+                                                           FontSize="11"
+                                                           Foreground="#8F98A0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="  18 of 27  "
+                                                           FontFamily="Arial"
+                                                           FontSize="11"
+                                                           Foreground="#8F98A0"
+                                                           VerticalAlignment="Center" />
+                                                <ProgressBar Grid.Column="2"
+                                                             Style="{StaticResource SteamProgress}"
+                                                             Value="67"
+                                                             VerticalAlignment="Center" />
+
+
+                                            </Grid>
                                         </Border>
                                     </StackPanel>
-                                </StackPanel>
-                            </Grid>
+                                </Border>
+
+                                <!-- ===== GAME 2: Wallpaper Engine ===== -->
+                                <Border Margin="0,10,0,0"
+                                        Background="#1E1228">
+                                    <StackPanel>
+                                        <Grid Height="70">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="184" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.Column="0"
+                                                    ClipToBounds="True">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="/Icons/Red.png"
+                                                                Stretch="UniformToFill" />
+                                                </Border.Background>
+
+                                            </Border>
+
+                                            <Grid Grid.Column="1"
+                                                  Margin="12,0,12,0">
+                                                <TextBlock Text="???"
+                                                           FontFamily="Arial"
+                                                           FontSize="14"
+                                                           FontWeight="Bold"
+                                                           Foreground="#C6D4DF"
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Center" />
+                                                <StackPanel HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="0.3 hrs on record"
+                                                               FontFamily="Arial"
+                                                               FontSize="12"
+                                                               Foreground="#8F98A0"
+                                                               HorizontalAlignment="Right" />
+                                                    <TextBlock Text="last played on 24 Mar"
+                                                               FontFamily="Arial"
+                                                               FontSize="11"
+                                                               Foreground="#6A7880"
+                                                               HorizontalAlignment="Right"
+                                                               Margin="0,2,0,0" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+
+                                        <Border Background="#1A0E24"
+                                                Padding="12,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="160" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"
+                                                           Text="Achievement Progress"
+                                                           FontFamily="Arial"
+                                                           FontSize="11"
+                                                           Foreground="#8F98A0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="  0 of 17  "
+                                                           FontFamily="Arial"
+                                                           FontSize="11"
+                                                           Foreground="#8F98A0"
+                                                           VerticalAlignment="Center" />
+                                                <ProgressBar Grid.Column="2"
+                                                             Style="{StaticResource SteamProgress}"
+                                                             Value="0"
+                                                             VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- ===== GAME 3: Assassin's Creed Unity ===== -->
+                                <Border Margin="0,10,0,0"
+                                        Background="#1E1228">
+                                    <StackPanel>
+                                        <Grid Height="70">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="184" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.Column="0"
+                                                    ClipToBounds="True">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="/Icons/Red.png"
+                                                                Stretch="UniformToFill" />
+                                                </Border.Background>
+
+                                            </Border>
+
+                                            <Grid Grid.Column="1"
+                                                  Margin="12,0,12,0">
+                                                <TextBlock Text="???"
+                                                           FontFamily="Arial"
+                                                           FontSize="14"
+                                                           FontWeight="Bold"
+                                                           Foreground="#C6D4DF"
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Center" />
+                                                <StackPanel HorizontalAlignment="Right"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="29 hrs on record"
+                                                               FontFamily="Arial"
+                                                               FontSize="12"
+                                                               Foreground="#8F98A0"
+                                                               HorizontalAlignment="Right" />
+                                                    <TextBlock Text="last played on 21 Mar"
+                                                               FontFamily="Arial"
+                                                               FontSize="11"
+                                                               Foreground="#6A7880"
+                                                               HorizontalAlignment="Right"
+                                                               Margin="0,2,0,0" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+
+                                        <Border Background="#1A0E24"
+                                                Padding="12,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="80" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0"
+                                                           Text="Achievement Progress"
+                                                           FontFamily="Arial"
+                                                           FontSize="11"
+                                                           Foreground="#8F98A0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="  22 of 57  "
+                                                           FontFamily="Arial"
+                                                           FontSize="11"
+                                                           Foreground="#8F98A0"
+                                                           VerticalAlignment="Center" />
+                                                <ProgressBar Grid.Column="2"
+                                                             Style="{StaticResource SteamProgress}"
+                                                             Value="39"
+                                                             VerticalAlignment="Center" />
+
+
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
                         </Border>
 
                     </StackPanel>
                 </ScrollViewer>
 
-            </StackPanel>
-
-            <!-- ═══════════════════════════════════════
-                 RIGHT SIDE
-            ═══════════════════════════════════════ -->
-            <StackPanel Grid.Column="1">
-
-                <!-- Level + Edit Profile card -->
-                <Border x:Name="ProfileInfoCard"
-                        CornerRadius="12"
-                        Padding="18,16"
-                        Margin="0,0,0,16"
-                        BorderThickness="1"
-                        BorderBrush="#2a2a4a">
+                <!-- ===== RIGHT SIDEBAR ===== -->
+                <Border Grid.Column="2">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="0,1">
-                            <GradientStop Color="#1a1a2e"
-                                          Offset="0" />
-                            <GradientStop Color="#12102a"
-                                          Offset="1" />
+                            <GradientStop Color="#4A1F60"
+                                          Offset="0.0" />
+                            <GradientStop Color="#3A1A50"
+                                          Offset="0.3" />
+                            <GradientStop Color="#2D1440"
+                                          Offset="1.0" />
                         </LinearGradientBrush>
                     </Border.Background>
-                    <StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Background="#FF171212">
+                        <StackPanel Margin="16,18,16,16">
 
-                        <!-- Level row -->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,0,0,10">
-                            <TextBlock Text="Level"
-                                       FontSize="14"
-                                       Foreground="#9e9eb8"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,8,0" />
-                            <Border x:Name="LevelBadge"
-                                    Width="34"
-                                    Height="34"
-                                    CornerRadius="17"
-                                    BorderThickness="2">
-                                <Border.BorderBrush>
-                                    <LinearGradientBrush StartPoint="0,0"
-                                                         EndPoint="1,1">
-                                        <GradientStop Color="#00b4d8"
-                                                      Offset="0" />
-                                        <GradientStop Color="#7b2d8b"
-                                                      Offset="1" />
-                                    </LinearGradientBrush>
-                                </Border.BorderBrush>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0"
-                                                         EndPoint="1,1">
-                                        <GradientStop Color="#0f3460"
-                                                      Offset="0" />
-                                        <GradientStop Color="#1a1a2e"
-                                                      Offset="1" />
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <TextBlock Text="1"
-                                           FontSize="14"
+                            <!-- LEVEL row -->
+                            <Grid Margin="0,0,0,10">
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="Level"
+                                               FontFamily="Arial"
+                                               FontSize="18"
+                                               FontWeight="Bold"
+                                               Foreground="#C6D4DF"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,10,0" />
+                                    <Border Width="28"
+                                            Height="28"
+                                            BorderBrush="#8F98A0"
+                                            BorderThickness="1"
+                                            CornerRadius="14">
+                                        <TextBlock Text="?"
+                                                   FontFamily="Arial"
+                                                   FontSize="13"
+                                                   FontWeight="Bold"
+                                                   Foreground="#C6D4DF"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Badge hint text -->
+                            <TextBlock FontFamily="Arial"
+                                       FontSize="11"
+                                       Foreground="#8F98A0"
+                                       TextWrapping="Wrap"
+                                       LineHeight="17"
+                                       Margin="0,0,0,14">
+                                <Run Text="You can feature one of your Badges here. Select one from your" />
+                                
+                                <Run Text="page." />
+                            </TextBlock>
+
+
+
+
+                            <!-- Divider -->
+                            <Border Height="1"
+                                    Background="DarkSlateGray"
+                                    Margin="0,0,0,14" />
+
+                            <!-- Currently Online -->
+                            <TextBlock Text="Currently Online"
+                                       FontFamily="Arial"
+                                       FontSize="13"
+                                       FontWeight="Bold"
+                                       Foreground="#57CBDE"
+                                       Margin="0,0,0,18" />
+
+                            <!-- BADGES row -->
+                            <Grid Margin="0,0,0,6">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Badges"
+                                               FontFamily="Arial"
+                                               FontSize="12"
+                                               Foreground="#8F98A0"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,6,0" />
+                                    <TextBlock Text="0"
+                                               FontFamily="Arial"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="#C6D4DF"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Badge icons -->
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,6,0,18">
+                                <!-- Badge 1: 10+ years service -->
+                                <Border Width="54"
+                                        Height="54"
+                                        CornerRadius="3"
+                                        Margin="0,0,6,0">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="/Icons/Red.png"
+                                                    Stretch="UniformToFill" />
+                                    </Border.Background>
+
+                                </Border>
+
+                                <!-- Badge 2: Steam 2025 -->
+                                <Border Width="54"
+                                        Height="54"
+                                        CornerRadius="3"
+                                        Margin="0,0,6,0">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="/Icons/Red.png"
+                                                    Stretch="UniformToFill" />
+                                    </Border.Background>
+
+                                </Border>
+
+                                <!-- Badge 3: Level 2 square -->
+                                <Border Width="54"
+                                        Height="54"
+                                        CornerRadius="3"
+                                        BorderBrush="#6A6A6A"
+                                        BorderThickness="1">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="/Icons/Red.png"
+                                                    Stretch="UniformToFill" />
+                                    </Border.Background>
+
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Games count -->
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,18">
+                                <TextBlock Text="Games"
+                                           FontFamily="Arial"
+                                           FontSize="12"
+                                           Foreground="#8F98A0"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <TextBlock Text="0"
+                                           FontFamily="Arial"
+                                           FontSize="18"
                                            FontWeight="Bold"
-                                           Foreground="#e8eaf6"
-                                           HorizontalAlignment="Center"
+                                           Foreground="#C6D4DF"
                                            VerticalAlignment="Center" />
-                            </Border>
+                            </StackPanel>
+
+                            <!-- Divider -->
+                            <Border Height="1"
+                                    Background="#5A2D70"
+                                    Margin="0,0,0,14" />
+
+                            <!-- Sidebar links -->
+                            <TextBlock Text="Inventory"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+                            <TextBlock Text="Screenshots"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+                            <TextBlock Text="Videos"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+                            <TextBlock Text="Workshop Items"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+                            <TextBlock Text="Reviews"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+                            <TextBlock Text="Guides"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+                            <TextBlock Text="Artwork"
+                                       Style="{StaticResource SidebarLinkStyle}" />
+
                         </StackPanel>
-
-                        <TextBlock Text="Select a badge from Edit Profile page."
-                                   FontSize="11"
-                                   Foreground="#5a5a7a"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,14" />
-
-                        <Button x:Name="EditProfileButton"
-                                Content="Edit Profile"
-                                Style="{StaticResource EditProfileButton}"
-                                HorizontalAlignment="Left" />
-                    </StackPanel>
+                    </ScrollViewer>
                 </Border>
 
-                <!-- Badges section -->
-                <Border x:Name="BadgesCard"
-                        CornerRadius="12"
-                        Padding="18,14"
-                        Margin="0,0,0,16"
-                        BorderThickness="1"
-                        BorderBrush="#2a2a4a">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0"
-                                             EndPoint="0,1">
-                            <GradientStop Color="#1a1a2e"
-                                          Offset="0" />
-                            <GradientStop Color="#12102a"
-                                          Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <StackPanel>
-
-                        <!-- Badges header -->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,0,0,12">
-                            <TextBlock Text="Badges"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="#9e9eb8"
-                                       VerticalAlignment="Center" />
-                            <TextBlock Text="  3"
-                                       FontSize="16"
-                                       FontWeight="Bold"
-                                       Foreground="#e8eaf6"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-
-                        <!-- Badge icon placeholders -->
-                        <StackPanel Orientation="Horizontal">
-                            <Border x:Name="BadgePlaceholder1"
-                                    Width="44"
-                                    Height="44"
-                                    CornerRadius="8"
-                                    Background="#0f3460"
-                                    BorderBrush="#2a2a4a"
-                                    BorderThickness="1"
-                                    Margin="0,0,8,0">
-                                <TextBlock Text="B"
-                                           Foreground="#3a3a5a"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="16" />
-                            </Border>
-                            <Border x:Name="BadgePlaceholder2"
-                                    Width="44"
-                                    Height="44"
-                                    CornerRadius="8"
-                                    Background="#0f3460"
-                                    BorderBrush="#2a2a4a"
-                                    BorderThickness="1"
-                                    Margin="0,0,8,0">
-                                <TextBlock Text="B"
-                                           Foreground="#3a3a5a"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="16" />
-                            </Border>
-                            <Border x:Name="BadgePlaceholder3"
-                                    Width="44"
-                                    Height="44"
-                                    CornerRadius="8"
-                                    Background="#0f3460"
-                                    BorderBrush="#2a2a4a"
-                                    BorderThickness="1">
-                                <TextBlock Text="B"
-                                           Foreground="#3a3a5a"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="16" />
-                            </Border>
-                        </StackPanel>
-
-                    </StackPanel>
-                </Border>
-
-                <!-- Stats + Links card -->
-                <Border x:Name="StatsCard"
-                        CornerRadius="12"
-                        Padding="18,14"
-                        BorderThickness="1"
-                        BorderBrush="#2a2a4a">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0"
-                                             EndPoint="0,1">
-                            <GradientStop Color="#1a1a2e"
-                                          Offset="0" />
-                            <GradientStop Color="#12102a"
-                                          Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <StackPanel>
-
-                        <!-- Games count row -->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,0,0,10">
-                            <TextBlock Text="Games"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="#9e9eb8"
-                                       VerticalAlignment="Center" />
-                            <TextBlock Text="  12"
-                                       FontSize="16"
-                                       FontWeight="Bold"
-                                       Foreground="#e8eaf6"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-
-                        <!-- Thin divider -->
-                        <Rectangle Height="1"
-                                   Fill="#2a2a4a"
-                                   Margin="0,0,0,10" />
-
-                        <!-- Nav links -->
-                        <TextBlock x:Name="LinkInventory"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Inventory" />
-                        <TextBlock x:Name="LinkScreenshots"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Screenshots" />
-                        <TextBlock x:Name="LinkVideos"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Videos" />
-                        <TextBlock x:Name="LinkWorkshop"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Workshop Items" />
-                        <TextBlock x:Name="LinkReviews"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Reviews" />
-                        <TextBlock x:Name="LinkGuides"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Guides" />
-                        <TextBlock x:Name="LinkArtwork"
-                                   Style="{StaticResource SidebarLink}"
-                                   Text="Artwork" />
-
-                    </StackPanel>
-                </Border>
-
-            </StackPanel>
-            <!-- End RIGHT SIDE -->
-
+            </Grid>
         </Grid>
-        <!-- End Main Grid -->
-
-    </Grid>
+    </Border>
 </UserControl>

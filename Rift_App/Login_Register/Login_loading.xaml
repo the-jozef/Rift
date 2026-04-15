@@ -92,12 +92,16 @@
                             </Ellipse.RenderTransform>
                         </Ellipse>
 
-                        <!-- Statický obrázok vo vnútri kruhu -->
-                        <Image Source="/Icons/Rift_logo.png"
-                               Width="80"
-                               Height="80"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                        <Ellipse Width="130"
+                                 Height="130">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Icons/Rift_logo.png/"/>
+                                
+                            </Ellipse.Fill>
+                            
+                        </Ellipse>
+                        
+                        
                     </Grid>
 
                 </StackPanel>
