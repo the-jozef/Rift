@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Rift_App.AppController;
+using Rift_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,22 +11,25 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Rift_App.ViewModels;
 
 namespace Rift_App.Login_Register
 {
-    /// <summary>
-    /// Interaction logic for Login_loading.xaml
-    /// </summary>
     public partial class Login_loading : UserControl
     {
+        private VideoBackground_Loading _videoController;
+
+        public event EventHandler VideoReady;
         public Login_loading()
         {
             InitializeComponent();
-           // DataContext = new LoginViewModel();
+            _videoController = new VideoBackground_Loading(BgVideo);
+            _videoController.VideoReady += (s, e) => VideoReady?.Invoke(this, e);
+
         }
+  
     }
 }

@@ -4,8 +4,13 @@ using Rift_App.Login_Register;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace Rift_App.ViewModels
 {
@@ -36,10 +41,20 @@ namespace Rift_App.ViewModels
         {
             CurrentView = new Register();
         }
-       
+        [RelayCommand]
+        private void Loading()
+        {
+            var loadingView = new Login_loading { Opacity = 0 };
 
-     
-
-
+            loadingView.VideoReady += (s, e) =>
+            {
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(300));
+                    loadingView.BeginAnimation(UIElement.OpacityProperty, fadeIn); 
+                    CurrentView = loadingView;
+                });
+            };
+        }
     }
 }

@@ -74,8 +74,8 @@
     </UserControl.Triggers>
 
     <Grid>
-        <Border Grid.Row="0"
-                CornerRadius="7.5,7.5,0,0">
+        <Border CornerRadius="7.5,7.5,0,0">
+            
             <Border.Background>
                 <LinearGradientBrush StartPoint="1,0"
                                      EndPoint="0,1">
