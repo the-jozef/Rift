@@ -215,7 +215,7 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                 Style="{StaticResource Rift_CreateAccount_Stackpanel}">
                         <TextBlock Style="{StaticResource Rift_CreateAccount_TextBlock}" />
                         <Button Style="{StaticResource Rift_CreateAccount_Button}"
-                                Command="{Binding DataContext.ShowRegisterCommand, 
+                                Command="{Binding DataContext.ShowSteamConnectionCommand, 
                           RelativeSource={RelativeSource AncestorType=Window}}" />
                     </StackPanel>
 

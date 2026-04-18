@@ -25,42 +25,25 @@ namespace Rift_App
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new WindowStateViewModel();
+
+            //DataContext = new MainViewModel();
+            DataContext = new WindowViewModel();
 
 
 
 
 
-
-           
-
-          // var testacc = new TestWindowAcc();  //Account testing window
-           //testacc.Show();
-
-
+            // var testacc = new TestWindowAcc();  //Account testing window
+            //testacc.Show();
         }
-        [RelayCommand]
-        private void ShowAuthencation()
-        {
-            var auth = new Authencation();
-            auth.Show();
-
-        }
-   
-
-
+      
         /*
-                Authencation authencation = new Authencation();
-                authencation.Show();
-                this.Close();
+               
 
          Window_test2 test = new Window_test2();
             test.Show();
             this.Close();
-          
-                        Authencation authencation = new Authencation();
-                        authencation.Show();
-                        this.Close();
+           
         */
     }
 }

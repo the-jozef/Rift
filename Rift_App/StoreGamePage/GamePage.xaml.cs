@@ -24,5 +24,17 @@ namespace Rift_App.StoreGamePage
         {
             InitializeComponent();
         }
+
+        private void MediaScroll_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            MediaScroll.ScrollToHorizontalOffset(
+                MediaScroll.HorizontalOffset - e.Delta / 3.0);
+            e.Handled = true;
+        }
+
+        private void Border_Drop(object sender, DragEventArgs e)
+        {
+
+        }
     }
 }

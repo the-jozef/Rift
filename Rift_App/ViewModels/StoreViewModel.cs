@@ -9,7 +9,7 @@ namespace Rift_App.ViewModels
 {
     public class StoreViewModel : INotifyPropertyChanged
     {
-        // INotifyPropertyChanged implementacia
+
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

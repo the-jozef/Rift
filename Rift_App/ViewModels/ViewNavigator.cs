@@ -7,29 +7,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Rift_App.ViewModels
 {
-    public partial class Navigator : ObservableObject
+    public partial class Navigator : ViewBase
     {
-        [ObservableProperty]
-        private object currentView;
+        public ICommand ShowAuthencationCommand {  get; }
+
 
         public Navigator()
         {
-            CurrentView = new Login();
+            ShowAuthencationCommand = new RelayCommand(
+                () =>
+                {
+                    var auth = new Authencation();
+                    auth.Show();
+
+                });
+
+
+
         }
 
-        [RelayCommand]
-        public void ShowLogin()
-        {
-            CurrentView = new Login();
-        }
 
-        [RelayCommand]
-        public void ShowRegister()
-        {
-            CurrentView = new Register(); // tvoj Register UserControl
-        }
+
     }
 }

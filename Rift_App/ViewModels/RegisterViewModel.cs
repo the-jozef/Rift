@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Rift_App.Login_Register;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +12,34 @@ namespace Rift_App.ViewModels
     public partial class RegisterViewModel : ObservableObject
     {
         [ObservableProperty]
-        private bool _isOnStep1 = true;
+        private object currentView;
 
-        [RelayCommand]
-        private void SteamLogin()
+        public RegisterViewModel()
         {
-            IsOnStep1 = false; // prepne na Step 2
+            CurrentView = new Login();
         }
 
         [RelayCommand]
-        private void CancelSetup()
+        public void ShowLogin()
         {
-            IsOnStep1 = true; // vráti na Step 1
+            CurrentView = new Login();
         }
+
+        [RelayCommand]
+        public void ShowSteamConnection()
+        {
+            CurrentView = new SteamConnection();
+        }
+
+        [RelayCommand]
+        private void ShowRegister()
+        {
+            CurrentView = new Register();
+        }
+       
+
+     
+
+
     }
 }

@@ -13,11 +13,11 @@
         <Border Grid.Row="0"    
                 CornerRadius="0,0,7.5,7.5">
             <Grid>
-                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"
-                              Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"                              
                               Background="#1b2838"
                               VerticalScrollBarVisibility="Auto"
-                              VerticalAlignment="Bottom">
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="290" />
@@ -104,7 +104,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Grid.Row="0">
-                                <TextBlock HorizontalAlignment="Left"
+                                <TextBlock HorizontalAlignment="Left"                                                                                    
                                            Text="Featured &amp; Recommended"
                                            Foreground="White"
                                            FontSize="14"

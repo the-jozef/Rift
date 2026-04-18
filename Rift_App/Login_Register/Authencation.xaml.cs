@@ -20,11 +20,11 @@ namespace Rift_App.Login_Register
     /// </summary>
     public partial class Authencation : Window
     {
-        public Navigator Navigator { get; } = new Navigator();
+        public RegisterViewModel Register { get; } = new RegisterViewModel();
         public Authencation()
         {
             InitializeComponent();
-            DataContext = Navigator;
+            DataContext = Register;
            
         }
     }

@@ -41,10 +41,13 @@
                                 Grid.Column="0"
                                 Style="{StaticResource Rift_TitleBar}">
 
-                    <Button Style="{StaticResource Rift_LogoHeader}" />
+                    <Button Style="{StaticResource Rift_LogoHeader}"
+                            WindowChrome.IsHitTestVisibleInChrome="True"/>
 
                     <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                             Margin="20,0.5,0,0">
+                                             Margin="20,0.5,0,0"
+                                             WindowChrome.IsHitTestVisibleInChrome="True">
+                        
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock Text="View">
                                 <TextBlock.Style>
@@ -67,15 +70,20 @@
                         <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
                             <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
                                 <Button Content="Library"
+                                        Command="{Binding DataContext.LibraryCommand, 
+                  RelativeSource={RelativeSource AncestorType=Window}}"
                                         Style="{StaticResource Rift_PopupItems}" />
                                 <Button Content="Store"
+                                        Command="{Binding DataContext.StoreCommand, 
+                  RelativeSource={RelativeSource AncestorType=Window}}"
                                         Style="{StaticResource Rift_PopupItems}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
 
                     <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                             Margin="15,0.5,0,0">
+                                             Margin="15,0.5,0,0"
+                                             WindowChrome.IsHitTestVisibleInChrome="True">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock Text="Games">
                                 <TextBlock.Style>
@@ -98,13 +106,16 @@
                         <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
                             <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
                                 <Button Content="View Games Library"
+                                        Command="{Binding DataContext.LibraryCommand, 
+                  RelativeSource={RelativeSource AncestorType=Window}}"
                                         Style="{StaticResource Rift_PopupItems}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
 
                     <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                             Margin="16,0.5,0,0">
+                                             Margin="16,0.5,0,0"
+                                             WindowChrome.IsHitTestVisibleInChrome="True">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock Text="Help">
                                 <TextBlock.Style>
@@ -149,7 +160,9 @@
                                 Grid.RowSpan="2">
 
                         <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="30,0,0,0">
+                                                 Margin="30,0,0,0"
+                                                 WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialDesign:PopupBox.ToggleContent>
                                 <TextBlock Text="STORE">
                                     <TextBlock.Style>
@@ -185,7 +198,9 @@
                         </materialDesign:PopupBox>
 
                         <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="20,0,0,0">
+                                                 Margin="20,0,0,0"
+                                                 WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialDesign:PopupBox.ToggleContent>
                                 <TextBlock Text="LIBRARY">
                                     <TextBlock.Style>
@@ -208,13 +223,17 @@
                             <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
                                 <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
                                     <Button Content="Home"
+                                            Command="{Binding DataContext.StoreCommand, 
+                  RelativeSource={RelativeSource AncestorType=Window}}"
                                             Style="{StaticResource Rift_PopupItems}" />
                                 </StackPanel>
                             </ScrollViewer>
                         </materialDesign:PopupBox>
 
                         <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="20,0,0,0">
+                                                 Margin="20,0,0,0"
+                                                 WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialDesign:PopupBox.ToggleContent>
                                 <TextBlock Text="NICKNAME">
                                     <TextBlock.Style>
@@ -261,7 +280,8 @@
                                 Grid.Column="1"
                                 Grid.Row="0">
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_Notifications_PopupBox}">
+                        <materialDesign:PopupBox Style="{StaticResource Rift_Notifications_PopupBox}"
+                                                 WindowChrome.IsHitTestVisibleInChrome="True">
                             <materialDesign:PopupBox.ToggleContent>
                                 <materialIcons:MaterialIcon Kind="Bell">
                                     <materialIcons:MaterialIcon.Style>
@@ -290,7 +310,9 @@
                             </ScrollViewer>
                         </materialDesign:PopupBox>
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_Account}">
+                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_Account}"
+                                                 WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialDesign:PopupBox.ToggleContent>
                                 <Border Style="{StaticResource Rift_Border_Account}">
                                     <StackPanel Orientation="Horizontal"
@@ -307,10 +329,13 @@
                                             Style="{StaticResource Rift_PopupItems}" />
                                     <Button Content="Change Account"
                                             Style="{StaticResource Rift_PopupItems}"
-                                            Command="{Binding ShowAuthencationCommand, 
-               RelativeSource={RelativeSource AncestorType=Window}}" />
+                                            Command="{Binding Navigator.ShowAuthencationCommand}" />
                                     <Button Content="Sign out of account..."
                                             Style="{StaticResource Rift_PopupItems}" />
+                                    <Button Style="{StaticResource Rift_PopupItems}"
+                                            Content="Test GamePage"
+                                            Command="{Binding DataContext.GamePageCommand, 
+                  RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
                             </ScrollViewer>
                         </materialDesign:PopupBox>
@@ -321,7 +346,9 @@
                                 Grid.Row="0">
 
                         <Button Style="{StaticResource Rift_StateWindow_Button}"
-                                Command="{Binding MinimizeWindowCommand}">
+                                Command="{Binding WindowState.MinimizeCommand}"
+                                WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
                                                         Kind="Minimize"
                                                         Foreground="{Binding Foreground, 
@@ -330,7 +357,9 @@
                         </Button>
 
                         <Button Style="{StaticResource Rift_StateWindow_Button}"
-                                Command="{Binding MaximizeWindowCommand}">
+                                Command="{Binding WindowState.MaximizeCommand}"
+                                WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
                                                         Kind="WindowMaximize"
                                                         Foreground="{Binding Foreground, 
@@ -344,8 +373,9 @@
                                 Height="30"
                                 Width="33"
                                 materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
-                                Command="{Binding CloseWindowCommand}">
-
+                                Command="{Binding WindowState.CloseCommand}"
+                                WindowChrome.IsHitTestVisibleInChrome="True">
+                            
                             <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
                                                         Kind="Close"
                                                         Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}">

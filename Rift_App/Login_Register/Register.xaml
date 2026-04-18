@@ -276,7 +276,9 @@
 
                         <Button Style="{StaticResource Rift_Return_Button}"
                                 Margin="0,0,0,0"
-                                Content="Back" />
+                                Content="Back"
+                                Command="{Binding DataContext.ShowLoginCommand, 
+RelativeSource={RelativeSource AncestorType=Window}}" />
                     </StackPanel>
 
                 </Grid>

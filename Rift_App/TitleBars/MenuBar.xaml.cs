@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rift_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace Rift_App.TitleBars
         public MenuBar()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
         }
     }
 }

@@ -8,37 +8,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Rift_App.ViewModels
 {
-    public partial class WindowStateViewModel : ObservableObject
+    public class WindowStateViewModel : ViewBase
     {
-        
-        [RelayCommand]
-        private static void MaximizeWindow()
+        public ICommand MinimizeCommand { get; }
+        public ICommand MaximizeCommand { get; }
+        public ICommand CloseCommand { get; }
+
+        public WindowStateViewModel()
         {
-            if (App.Current.MainWindow.WindowState == System.Windows.WindowState.Maximized)
-            {
-                App.Current.MainWindow.WindowState = System.Windows.WindowState.Normal;
-            }
-            else
-            {
-                App.Current.MainWindow.WindowState = System.Windows.WindowState.Maximized;
-            }
-        }
+            MinimizeCommand = new RelayCommand(
+                () => App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized);
 
 
-        [RelayCommand]
-        private static void MinimizeWindow()
-        {
-            App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized;
-        }
-        [RelayCommand]
-        private static void CloseWindow()
-        {             
-            App.Current.MainWindow.Close();
-     
+            MaximizeCommand = new RelayCommand(
+                ()=>
+            {
+                var win = App.Current.MainWindow;
+                win.WindowState = win.WindowState == System.Windows.WindowState.Maximized
+                    ? System.Windows.WindowState.Normal
+                    : System.Windows.WindowState.Maximized;
+            });
+
+            CloseCommand = new RelayCommand(
+                () => App.Current.MainWindow.Close());
         }
     }
 }

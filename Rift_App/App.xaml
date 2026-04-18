@@ -18,11 +18,14 @@
                 <ResourceDictionary Source="Login_Register/Login_layout.xaml" />
                 <ResourceDictionary Source="/Store/Store_layout.xaml" />
                 <ResourceDictionary Source="/Login_Register/Register_layout.xaml" />
-                
+                <ResourceDictionary Source="/StoreGamePage/GamePage_layout.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
-                <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-                <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <converters:RiftStringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:RiftBoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:RiftInverseBoolToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <converters:RiftBoolToGridRowHeightConverter x:Key="BoolToGridRowHeightConverter" />
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
