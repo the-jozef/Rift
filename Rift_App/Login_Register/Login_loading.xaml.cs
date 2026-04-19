@@ -26,10 +26,9 @@ namespace Rift_App.Login_Register
         public Login_loading()
         {
             InitializeComponent();
+
             _videoController = new VideoBackground_Loading(BgVideo);
             _videoController.VideoReady += (s, e) => VideoReady?.Invoke(this, e);
-
-        }
-  
+        }       
     }
 }

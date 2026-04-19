@@ -13,13 +13,16 @@ namespace Rift_App.AppController
         private readonly MediaElement _videoPlayer;
         public event EventHandler VideoReady;
 
-    
         public VideoBackground_Loading(MediaElement videoPlayer)
         {
             _videoPlayer = videoPlayer;
 
             _videoPlayer.MediaOpened += OnMediaOpened;
             _videoPlayer.MediaEnded += OnMediaEnded;
+        }
+        public void Start()
+        {
+            _videoPlayer.Position = TimeSpan.Zero;
             _videoPlayer.Play();
         }
 
@@ -31,9 +34,7 @@ namespace Rift_App.AppController
         private void OnMediaEnded(object sender, RoutedEventArgs e)
         {
             _videoPlayer.Position = TimeSpan.Zero;
-            _videoPlayer.Play();
+            _videoPlayer.Play();       
         }
-
-
     }
 }

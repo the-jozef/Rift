@@ -44,6 +44,8 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private void Loading()
         {
+            //CurrentView = new Login_loading();
+            
             var loadingView = new Login_loading { Opacity = 0 };
 
             loadingView.VideoReady += (s, e) =>
@@ -54,7 +56,7 @@ namespace Rift_App.ViewModels
                     loadingView.BeginAnimation(UIElement.OpacityProperty, fadeIn); 
                     CurrentView = loadingView;
                 });
-            };
+            };     
         }
-    }
+    }   
 }

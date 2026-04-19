@@ -5,202 +5,195 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Rift_App.Login_Register"
              mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignHeight="435"
+             d:DesignWidth="702" >
 
     <UserControl.Resources>
 
-        <Storyboard x:Key="SpinAnim"
+        <Storyboard x:Key="SpinBlue"
                     RepeatBehavior="Forever">
-            <DoubleAnimation Storyboard.TargetName="SpinnerEllipse"
-                             Storyboard.TargetProperty="StrokeDashOffset"
+            <DoubleAnimation Storyboard.TargetName="BlueGroup"
+                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                              From="0"
-                             To="-99"
-                             Duration="0:0:2.5" />
+                             To="360"
+                             Duration="0:0:1.2" />
+        </Storyboard>
+        
+        <Storyboard x:Key="SpinGray"
+                    RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="GrayGroup"
+                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                             From="0"
+                             To="360"
+                             Duration="0:0:0.85" />
         </Storyboard>
 
-        <Storyboard x:Key="GrowAnim"
+        <Storyboard x:Key="FadeAnim"
                     RepeatBehavior="Forever">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SpinnerEllipse"
-                                           Storyboard.TargetProperty="StrokeDashArray"
-                                           Duration="0:0:5.0">
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.0">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>2 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>15 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.6">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>30 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.9">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>42 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:1.2">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>50 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:1.6">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>48 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:2.1">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>44 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:2.6">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>38 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:3.1">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>30 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:3.6">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>20 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:4.1">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>12 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:4.5">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>6 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:4.8">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>3 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-                <DiscreteObjectKeyFrame KeyTime="0:0:5.0">
-                    <DiscreteObjectKeyFrame.Value>
-                        <DoubleCollection>2 1000</DoubleCollection>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
-
-            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SpinnerContainer"
+                                           Storyboard.TargetProperty="Opacity"
+                                           Duration="0:0:4.1">
+                <LinearDoubleKeyFrame KeyTime="0:0:0.00"
+                                      Value="1" />
+                <LinearDoubleKeyFrame KeyTime="0:0:1.20"
+                                      Value="1" />
+                <LinearDoubleKeyFrame KeyTime="0:0:2.50"
+                                      Value="0" />
+                <LinearDoubleKeyFrame KeyTime="0:0:5.20"
+                                      Value="1" />
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
     </UserControl.Resources>
 
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="Loaded">
-            <BeginStoryboard Storyboard="{StaticResource SpinAnim}" />
-            <BeginStoryboard Storyboard="{StaticResource GrowAnim}" />
+            <BeginStoryboard Storyboard="{StaticResource SpinBlue}" />
+            <BeginStoryboard Storyboard="{StaticResource SpinGray}" />
+            <BeginStoryboard Storyboard="{StaticResource FadeAnim}" />
         </EventTrigger>
     </UserControl.Triggers>
 
     <Grid>
-        <Border x:Name="VideoBorder"
-                CornerRadius="7.5,7.5,0,0">
-            <Border.Background>
-                <VisualBrush Stretch="UniformToFill">
-                    <VisualBrush.Visual>
-                        <MediaElement x:Name="BgVideo"
-                                      Source="Videos/Background_animation.mp4"
-                                      LoadedBehavior="Manual"
-                                      UnloadedBehavior="Stop"
-                                      IsMuted="True"
-                                      Stretch="UniformToFill"
-                                      IsHitTestVisible="False" />
-                    </VisualBrush.Visual>
-                </VisualBrush>
-            </Border.Background>
-        </Border>
+        <MediaElement x:Name="BgVideo"
+                      Source="Background_animation.mp4"
+                      LoadedBehavior="Play"
+                      UnloadedBehavior="Manual"
+                      IsMuted="True"
+                      Stretch="UniformToFill"
+                      IsHitTestVisible="False"/>
 
         <Border CornerRadius="7.5,7.5,0,0"
                 Background="Gray"
-                Opacity="0.15" />
+                Opacity="0.15"
+                Panel.ZIndex="1"/>
 
-        <Grid>
+        <Grid Panel.ZIndex="2">
+            
             <Grid.RowDefinitions>
-                <RowDefinition Height="280" />
+                <RowDefinition Height="220" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                
+
                 <StackPanel VerticalAlignment="Bottom"
-                            HorizontalAlignment="Center"
-                            Width="130"
-                            Height="160">
+                            HorizontalAlignment="Center" >
 
                     <Grid Width="130"
                           Height="130">
 
-                        <Ellipse Width="130"
-                                 Height="130"
-                                 StrokeThickness="1.5">
-                            <Ellipse.Stroke>
-                                <SolidColorBrush Color="#199FFF"
-                                                 Opacity="0.12" />
-                            </Ellipse.Stroke>
-                        </Ellipse>
+                        <Grid x:Name="SpinnerContainer"
+                              Width="130"
+                              Height="130">
 
-                        <Ellipse x:Name="SpinnerEllipse"
-                                 Width="130"
-                                 Height="130"
-                                 StrokeThickness="4"
-                                 StrokeDashArray="2 1000"
-                                 StrokeDashOffset="0"
-                                 StrokeStartLineCap="Round"
-                                 StrokeEndLineCap="Round">
-                            <Ellipse.Stroke>
-                                <LinearGradientBrush StartPoint="0,0"
-                                                     EndPoint="1,1">
-                                    <GradientStop Color="#66CCFF"
-                                                  Offset="0.0" />
-                                    <GradientStop Color="#199FFF"
-                                                  Offset="0.5" />
-                                    <GradientStop Color="#0A4FA8"
-                                                  Offset="1.0" />
-                                </LinearGradientBrush>
-                            </Ellipse.Stroke>
-                        </Ellipse>
+                            <Grid x:Name="BlueGroup"
+                                  Width="130"
+                                  Height="130"
+                                  RenderTransformOrigin="0.5,0.5">
+                                
+                                <Grid.RenderTransform>
+                                    <RotateTransform Angle="0" />
+                                </Grid.RenderTransform>
+
+                                <Ellipse Width="130"
+                                         Height="130"
+                                         StrokeThickness="4"
+                                         StrokeDashArray="51 51"
+                                         StrokeDashOffset="0"
+                                         StrokeStartLineCap="Round"
+                                         StrokeEndLineCap="Round"
+                                         StrokeDashCap="Round">
+
+                                    <Ellipse.Stroke>
+                                        <SolidColorBrush Color="#66CCFF" />
+                                    </Ellipse.Stroke>
+                                </Ellipse>
+                            </Grid>
+
+                            <Grid x:Name="GrayGroup"
+                                  Width="130"
+                                  Height="130"
+                                  RenderTransformOrigin="0.5,0.5">
+                                
+                                <Grid.RenderTransform>
+                                    <RotateTransform Angle="0" />
+                                </Grid.RenderTransform>
+
+                                <Ellipse Width="130"
+                                         Height="130"
+                                         StrokeThickness="3"
+                                         StrokeDashArray="45 150"
+                                         StrokeDashOffset="0"
+                                         StrokeStartLineCap="Round"
+                                         StrokeEndLineCap="Round"
+                                         StrokeDashCap="Round">
+                                    
+                                    <Ellipse.Stroke>
+                                        <SolidColorBrush Color="#BBBBBB"
+                                                         Opacity="0.5" />
+                                    </Ellipse.Stroke>
+                                </Ellipse>
+                            </Grid>
+
+                        </Grid>
 
                         <Ellipse Width="105"
                                  Height="105"
                                  StrokeThickness="1.5">
+                            
                             <Ellipse.Stroke>
                                 <SolidColorBrush Color="#83289C"
                                                  Opacity="0.35" />
                             </Ellipse.Stroke>
+                            
                             <Ellipse.Fill>
                                 <ImageBrush ImageSource="/Image/Rift_logo.png" />
                             </Ellipse.Fill>
                         </Ellipse>
                     </Grid>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Center"
+                            Margin="0,25,0,0">
+
+                    <TextBlock VerticalAlignment="Center"                           
+                               HorizontalAlignment="Center"                                                       
+                               Text="Loading..."
+                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                               Foreground="White"
+                               FontSize="24">
+
+                    </TextBlock>
+
+                    <StackPanel HorizontalAlignment="left"
+                                Orientation="Horizontal"
+                                Grid.Row="1"
+                                VerticalAlignment="Top"
+                                Margin="-8,35,0,0">
+
+                        <Border Width="28"
+                                Height="28">
+
+                            <Image Source="/Image/Red.png"
+                                   Width="28"
+                                   Height="28"
+                                   Stretch="UniformToFill" />
+                            </Border>
+
+                        <TextBlock Margin="5,5,0,0"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Text="Guest_user"
+                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                   Foreground="#EBEBEB"
+                                   FontSize="19" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Grid>
