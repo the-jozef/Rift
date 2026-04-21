@@ -1,0 +1,56 @@
+﻿<Window x:Class="Rift_App.Login_Register.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Rift_App.Login_Register"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800">
+    <!-- Use ImageBrush as the Window background so missing-image or layering issues are less likely -->
+    <Window.Background>
+        <ImageBrush 
+            ImageSource="/Icons/Steam.jpg"
+            Stretch="Fill"/>
+    </Window.Background>
+
+    <Grid>
+        <!-- Content sits above the background image -->
+        <Grid>
+            <!-- sak nase logo -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
+                <Image Source="/Icons/Rift_logo.png" Width="35" Height="35" Margin="0,0,10,0"/>
+                <TextBlock Text="RIFT®" FontSize="24" Foreground="White" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Who's playing?" 
+                           FontSize="22" 
+                           Foreground="White" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,20"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Margin" Value="0,0,20,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <StackPanel>
+                        <Button Width="120" Height="120" Background="Transparent" BorderBrush="Gray" BorderThickness="1">
+                            <Grid>
+                                <Image Source="/Icons/Red.png" Stretch="UniformToFill" Margin="-15,-2,-17,-6"/>
+                            </Grid>
+                        </Button>
+                        <TextBlock Text="Guest" Foreground="White" FontSize="16" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                        <TextBlock Text="Account name: guest" Foreground="Gray"/>
+                    </StackPanel>
+
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,0,0">
+                        <Button Content="+" Width="120" Height="120" FontSize="80" Background="Transparent" Foreground="White" BorderThickness="2" Margin="0,0,0,30" BorderBrush="#FF75797D"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
