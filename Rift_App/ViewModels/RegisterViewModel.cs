@@ -42,6 +42,11 @@ namespace Rift_App.ViewModels
             CurrentView = new Register();
         }
         [RelayCommand]
+        private void AccountSelection()
+        {
+            CurrentView = new AccountSelection();
+        }
+        [RelayCommand]
         private void Loading()
         {
             //CurrentView = new Login_loading();
