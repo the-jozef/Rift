@@ -57,7 +57,7 @@ namespace Rift_App.ViewModels
                 ShowSearchBar = false;
             });
 
-            CurrentView = new Store.Store();
+            CurrentView = new GamePage();    //actual 
             ShowSearchBar = true;
         }
     }

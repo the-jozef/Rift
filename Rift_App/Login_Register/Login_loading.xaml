@@ -56,7 +56,7 @@
 
     <Grid>
         <MediaElement x:Name="BgVideo"
-                      Source="Background_animation.mp4"
+                      Source="Videos\Background_animation.mp4"
                       LoadedBehavior="Play"
                       UnloadedBehavior="Manual"
                       IsMuted="True"
