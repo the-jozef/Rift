@@ -21,9 +21,8 @@ namespace Rift_App.ViewModels
 
         public RegisterViewModel()
         {
-            CurrentView = new Login();
+            CurrentView = new AccountSelection();
         }
-
         [RelayCommand]
         public void ShowLogin()
         {

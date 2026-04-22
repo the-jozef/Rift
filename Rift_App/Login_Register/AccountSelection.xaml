@@ -99,7 +99,9 @@
                                         Height="120"
                                         VerticalAlignment="Top"
                                         Background="Transparent"
-                                        BorderBrush="Transparent">
+                                        BorderBrush="Transparent"
+                                        Command="{Binding DataContext.ShowLoginCommand, 
+RelativeSource={RelativeSource AncestorType=Window}}">
 
                                     <materialIcons:MaterialIcon Kind="Plus"
                                                                 Width="45"
