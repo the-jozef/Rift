@@ -38,5 +38,9 @@ namespace Rift_App.AppController
             _videoPlayer.Position = TimeSpan.Zero;
             _videoPlayer.Play();
         }
+        public void Pause()
+        {
+            _videoPlayer?.Pause();
+        }
     }
 }

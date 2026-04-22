@@ -1,43 +1,56 @@
 ﻿using Rift_App.AppController;
-using Rift_App.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Rift_App.Login_Register
 {
     public partial class Login_loading : UserControl
     {
-        private MediaClock _mediaClock;
+        private VideoBackground_Loading _videoController;
+
+        // Event, ak by si ho niekedy potreboval (pre flags v ViewModel)
+        public event EventHandler? VideoReady;
 
         public Login_loading()
         {
             InitializeComponent();
+
+            // Nastavíme controller hneď pri vytvorení
+            _videoController = new VideoBackground_Loading(BgVideo);
+            _videoController.VideoReady += OnVideoReady;
+
+            // Loaded používame len na spustenie videa OD ZAČIATKU pri zobrazení
             this.Loaded += OnLoaded;
+        }
+
+        /// <summary>
+        /// Spustí načítanie videa čo najskôr (volané z ViewModelu v konštruktore)
+        /// </summary>
+        public void PreloadVideo()
+        {
+            _videoController.Start();
+        }
+
+        private void OnVideoReady(object sender, EventArgs e)
+        {
+            VideoReady?.Invoke(this, e);
+
+            // Po načítaní videa ho hneď zastavíme (nechceme, aby bežalo na pozadí pred zobrazením)
+            if (BgVideo != null)
+            {
+                BgVideo.Pause();
+            }
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var uri = new Uri("Videos/Background_animation.mp4", UriKind.Relative);
-            var timeline = new MediaTimeline(uri) { RepeatBehavior = RepeatBehavior.Forever };
-            _mediaClock = timeline.CreateClock();
-            BgVideo.Clock = _mediaClock;
-            _mediaClock.Controller.Begin();
+            // Keď sa UserControl zobrazí → spustíme video OD ZAČIATKU
+            if (BgVideo != null)
+            {
+                BgVideo.Position = TimeSpan.Zero;
+                BgVideo.Play();
+            }
         }
     }
-    //_videoController = new VideoBackground_Loading(BgVideo);
-    //_videoController.VideoReady += (s, e) => VideoReady?.Invoke(this, e);
-    //this.Loaded += (s, e) => _videoController.Start();
 }

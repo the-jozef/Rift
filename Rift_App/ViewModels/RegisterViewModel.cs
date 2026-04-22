@@ -2,9 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Rift_App.Login_Register;
 using System;
-using System.Windows;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
 
 namespace Rift_App.ViewModels
 {
@@ -14,14 +11,31 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private object accountSelectionView;
 
         private Login_loading _preloadedLoading;
-        private Window _hiddenWindow;
+
+        // Tvoje flags (ak ich chceš neskôr použiť na ešte presnejší control)
         private bool _loadingReady = false;
         private bool _loadingRequested = false;
 
         public RegisterViewModel()
         {
             CurrentView = new AccountSelection();
-          
+
+            // === PRELOAD === 
+            _preloadedLoading = new Login_loading();
+            _preloadedLoading.VideoReady += PreloadedLoading_VideoReady;
+            _preloadedLoading.PreloadVideo();   // ← video sa začne načítavať už teraz
+        }
+
+        private void PreloadedLoading_VideoReady(object? sender, EventArgs e)
+        {
+            _loadingReady = true;
+
+            // Ak niekto stlačil Loading ešte pred dokončením preloadu, prepneme teraz
+            if (_loadingRequested)
+            {
+                CurrentView = _preloadedLoading;
+                _loadingRequested = false;
+            }
         }
 
         [RelayCommand]
@@ -39,7 +53,19 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private void Loading()
         {
-                CurrentView = new Login_loading(); // video už hrá → okamžite
+            if (_loadingReady)
+            {
+                // Video je už pripravené → ihneď zobrazíme s videom od začiatku
+                CurrentView = _preloadedLoading;
+            }
+            else
+            {
+                // Ešte sa nenačítalo (veľmi nepravdepodobné, ak je ViewModel vytvorený na začiatku)
+                _loadingRequested = true;
+                // Môžeš tu nechať aktuálny view (user uvidí, že sa nič nedeje 0,1s)
+                // alebo rovno prepnúť (video sa spustí hneď ako bude ready)
+                CurrentView = _preloadedLoading;
+            }
         }
     }
 }
