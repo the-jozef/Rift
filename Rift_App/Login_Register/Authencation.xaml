@@ -7,7 +7,7 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-        xmlns:local="clr-namespace:Rift_App.Login_Register"
+        xmlns:local="clr-namespace:Rift_App.Login_Register" 
         mc:Ignorable="d"
         Title="Authencation"
         Height="438"
@@ -31,12 +31,18 @@
             BorderThickness="1.5"
             ClipToBounds="True">
         <Grid>
-            
-            <ContentControl Content="{Binding CurrentView}" />
-            <!--  -->
-           
 
+
+            <!-- <ContentControl Content="{Binding AccountSelectionView}" /> -->
+            
+            <ContentControl Content="{Binding CurrentView}"
+                            Visibility="{Binding CurrentView, 
+                    Converter={StaticResource NullToVisibilityConverter}}" />
+
+            <ContentControl Content="{Binding PreloadView1}"
+                            Width="0"
+                            Height="0"
+                            Visibility="Hidden" />
         </Grid>
     </Border>
-
 </Window>

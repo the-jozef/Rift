@@ -56,12 +56,11 @@
 
     <Grid>
         <MediaElement x:Name="BgVideo"
-                      Source="Videos\Background_animation.mp4"
-                      LoadedBehavior="Play"
-                      UnloadedBehavior="Manual"
                       IsMuted="True"
                       Stretch="UniformToFill"
-                      IsHitTestVisible="False"/>
+                      IsHitTestVisible="False"
+                      LoadedBehavior="Manual"
+                      UnloadedBehavior="Manual" />
 
         <Border CornerRadius="7.5,7.5,0,0"
                 Background="Gray"

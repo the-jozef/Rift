@@ -20,15 +20,24 @@ namespace Rift_App.Login_Register
 {
     public partial class Login_loading : UserControl
     {
-        private VideoBackground_Loading _videoController;
+        private MediaClock _mediaClock;
 
-        public event EventHandler VideoReady;
         public Login_loading()
         {
             InitializeComponent();
+            this.Loaded += OnLoaded;
+        }
 
-            _videoController = new VideoBackground_Loading(BgVideo);
-            _videoController.VideoReady += (s, e) => VideoReady?.Invoke(this, e);
-        }       
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var uri = new Uri("Videos/Background_animation.mp4", UriKind.Relative);
+            var timeline = new MediaTimeline(uri) { RepeatBehavior = RepeatBehavior.Forever };
+            _mediaClock = timeline.CreateClock();
+            BgVideo.Clock = _mediaClock;
+            _mediaClock.Controller.Begin();
+        }
     }
+    //_videoController = new VideoBackground_Loading(BgVideo);
+    //_videoController.VideoReady += (s, e) => VideoReady?.Invoke(this, e);
+    //this.Loaded += (s, e) => _videoController.Start();
 }
