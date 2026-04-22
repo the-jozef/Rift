@@ -46,12 +46,15 @@
                            Height="20"
                            Margin="0,0,10,0"/>
 
-                    <TextBlock Width="Auto"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Top"
-                               Text="Guest_user"
-                               Foreground="Gray"
-                               FontSize="18" />
+    <Grid>
+
+        <MediaElement x:Name="BgVideo"
+               Source="Videos\Background_animation.mp4"
+               LoadedBehavior="Play"
+               UnloadedBehavior="Manual"
+               IsMuted="True"
+               Stretch="UniformToFill"
+               IsHitTestVisible="False"/>
 
 
                 </StackPanel>

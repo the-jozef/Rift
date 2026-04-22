@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Rift_App.ViewModels;
+using System.Windows.Threading;
+using static Rift_App.ViewModels.RegisterViewModel;
 
 namespace Rift_App.Login_Register
 {
@@ -24,7 +25,17 @@ namespace Rift_App.Login_Register
         public Login_loading()
         {
             InitializeComponent();
-           // DataContext = new LoginViewModel();
+
+            ViewModels.RegisterViewModel.BackToStore();
+
+            // _videoController = new VideoBackground_Loading(BgVideo);
+            //_videoController.VideoReady += (s, e) => VideoReady?.Invoke(this, e);
+
         }
+
+       
+        
+            
+        
     }
 }
