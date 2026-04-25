@@ -12,7 +12,7 @@ namespace Rift_App.Services
     public static class ApiService
     {
         // RENDER URL 
-        private const string BaseUrl = "https://rift-hupv.onrender.com/";
+        private const string BaseUrl = "https://rift-hupv.onrender.com";
 
         private static readonly HttpClient _http = new HttpClient
         {
