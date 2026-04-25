@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rift_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,9 @@ using System.Windows.Shapes;
 
 namespace Rift_App.TitleBars
 {
-    public partial class SearchBar : UserControl
+    public partial class MenuBar : UserControl
     {
-        public SearchBar()
+        public MenuBar()
         {
             InitializeComponent();
         }

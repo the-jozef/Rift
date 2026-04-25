@@ -7,13 +7,13 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-        xmlns:local="clr-namespace:Rift_App.Controls"
-        xmlns:local2="clr-namespace:Rift_App.Store_Controls"
+        xmlns:local="clr-namespace:Rift_App.TitleBars"
+        xmlns:vm="clr-namespace:Rift_App.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="635"
         Width="1080"
-        ResizeMode="CanResize"
+        ResizeMode="{Binding WindowState.IsMaximized}"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="False"
@@ -22,7 +22,7 @@
 
     <WindowChrome.WindowChrome>
         <shell:WindowChrome ResizeBorderThickness="7"
-                            CaptionHeight="2"
+                            CaptionHeight="65"
                             CornerRadius="8"
                             GlassFrameThickness="0" />
     </WindowChrome.WindowChrome>
@@ -31,15 +31,30 @@
             BorderBrush="{DynamicResource MaterialDesignDivider}"
             BorderThickness="1.5"
             ClipToBounds="True">
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+
+                <RowDefinition Height="{Binding ShowSearchBar, 
+                   Converter={StaticResource BoolToGridRowHeightConverter}}" />
+                
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <local:RiftTitleBar HorizontalAlignment="Stretch" Grid.Row="0" />
-            <local:RiftMainwindow HorizontalAlignment="Stretch" Grid.Row="1" />
-            <local2:Store HorizontalAlignment="Stretch" Grid.Row="2" />
+
+            <local:MenuBar HorizontalAlignment="Stretch"
+                           Grid.Row="0" />
+
+            <local:SearchBar Grid.Row="1"
+                             Height="45"
+                             HorizontalAlignment="Stretch"
+                             Visibility="{Binding ShowSearchBar, 
+                              Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+            <ContentControl Grid.Row="2"
+                            Content="{Binding CurrentView}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
         </Grid>
     </Border>
 </Window>

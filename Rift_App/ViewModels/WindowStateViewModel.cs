@@ -1,40 +1,39 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
+using Rift_App.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using System.Windows.Controls;
+using System.Windows.Input;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Rift_App.ViewModels
 {
-    public partial class WindowStateViewModel : ObservableObject
+    public class WindowStateViewModel
     {
-        [RelayCommand]
-        private static void MaximizeWindow()
+        public ICommand MinimizeCommand { get; }
+        public ICommand MaximizeCommand { get; }
+        public ICommand CloseCommand { get; }
+
+        public WindowStateViewModel()
         {
-            if (App.Current.MainWindow.WindowState == System.Windows.WindowState.Maximized)
+            MinimizeCommand = new RelayCommand(
+                () => App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized);
+
+            MaximizeCommand = new RelayCommand(() =>
             {
-                App.Current.MainWindow.WindowState = System.Windows.WindowState.Normal;
-            }
-            else
-            {
-                App.Current.MainWindow.WindowState = System.Windows.WindowState.Maximized;
-            }
-        }
+                var win = App.Current.MainWindow;
+                win.WindowState = win.WindowState == System.Windows.WindowState.Maximized
+                    ? System.Windows.WindowState.Normal
+                    : System.Windows.WindowState.Maximized;
+            });
 
-
-
-        [RelayCommand]
-        private static void MinimizeWindow()
-        {
-            App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized;
-        }
-        [RelayCommand]
-        private static void CloseWindow()
-        {             
-            App.Current.MainWindow.Close();
-     
+            CloseCommand = new RelayCommand(
+                () => App.Current.MainWindow.Close());
         }
     }
 }

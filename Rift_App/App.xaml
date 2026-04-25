@@ -3,22 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             xmlns:converters="clr-namespace:Rift_App.Converters"
-             StartupUri="MainWindow.xaml">
+             xmlns:converters="clr-namespace:Rift_App.Converters">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Dark"
                                              PrimaryColor="Blue"
                                              SecondaryColor="LightBlue" />
+
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
-                <ResourceDictionary Source="Themes/RiftColors.xaml" />
-                <ResourceDictionary Source="Themes/RiftStyles.xaml" />
-                
-                
+                <ResourceDictionary Source="/TitleBars/BarStyles.xaml" />
+                <ResourceDictionary Source="/Authorization/Authorization_layout.xaml" />
+                <ResourceDictionary Source="/Store/Store_layout.xaml" />
+                <ResourceDictionary Source="/StoreGamePage/GamePage_layout.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
-                <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+
+            <converters:RiftStringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:RiftBoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:RiftInverseBoolToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <converters:RiftBoolToGridRowHeightConverter x:Key="BoolToGridRowHeightConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

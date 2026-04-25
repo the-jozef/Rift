@@ -1,35 +1,63 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Icons\Rift_logo.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="44\**" />
+		<Compile Remove="Service\**" />
+		<EmbeddedResource Remove="44\**" />
+		<EmbeddedResource Remove="Service\**" />
+		<None Remove="44\**" />
+		<None Remove="Service\**" />
+		<Page Remove="44\**" />
+		<Page Remove="Service\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
-    <PackageReference Include="Material.Icons.WPF" Version="3.0.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.3.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Videos\Background_animation.mp4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Icons\Rift_logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Videos\Background_animation.mp4">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="44\" />
-    <Folder Include="Service\" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Password hashing -->
+		<PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+
+		<!-- MVVM toolkit -->
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+
+		<!-- Material Design UI -->
+		<PackageReference Include="Material.Icons.WPF" Version="3.0.2" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.3.1" />
+
+		<!-- JSON for API calls -->
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Image\Steam.jpg">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Image\Red.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Image\Rift_logo.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="AppController\" />
+	</ItemGroup>
 
 </Project>
