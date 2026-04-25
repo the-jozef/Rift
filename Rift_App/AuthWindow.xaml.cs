@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 
 namespace Rift_App
 {
+    /// Authentication Window — contains all auth UserControls.
+    /// AccountSelection, Login, SteamConnection, Register.
     public partial class AuthWindow : Window
     {
         public AuthWindow()
@@ -28,11 +30,13 @@ namespace Rift_App
                 this.Hide();
             };
         }
+        /// Sets the current UserControl inside AuthWindow.
+        /// Nastaví aktuálny UserControl v AuthWindow.
         public void ShowView(UserControl view)
         {
             try
             {
-                Content = view;
+               Content = view;
             }
             catch { }
         }

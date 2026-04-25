@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Rift_App.Authorization;
 using Rift_App.Loading;
-using Rift_App.Login_Register;
 using Rift_App.Services;
 using System;
 using System.Windows.Threading;

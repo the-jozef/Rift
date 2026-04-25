@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Rift_App.GameModels;
-using Rift_App.Image;
 using Rift_App.Models;
 using Rift_App.Services;
 using Rift_App.ViewModels;

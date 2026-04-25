@@ -1,5 +1,4 @@
-﻿using Rift_App.GameModels;
-using Rift_App.Models;
+﻿using Rift_App.Models;
 using Rift_App.Services;
 using Rift_App.ViewModels;
 using System;
@@ -16,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 
 namespace Rift_App.Wishlist
 {
@@ -69,8 +69,8 @@ namespace Rift_App.Wishlist
         {
             try
             {
-                //  if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
-                //  if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
+               // if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
+                //if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
             }
             catch { }
         }

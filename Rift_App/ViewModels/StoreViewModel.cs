@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Rift_App.GameModels;
-using Rift_App.Image;
 using Rift_App.Models;
 using Rift_App.Services;
 using System.Collections.Generic;
@@ -9,6 +7,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Rift_App.ViewModels;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Rift_App.ViewModels
 {

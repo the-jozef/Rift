@@ -96,8 +96,7 @@
                                                     <ScrollViewer Style="{StaticResource SteamScrollViewerStyle}"
                                                                   HorizontalScrollBarVisibility="Auto"
                                                                   VerticalScrollBarVisibility="Disabled"
-                                                                  x:Name="MediaScroll"
-                                                                  PreviewMouseWheel="MediaScroll_PreviewMouseWheel"
+                                                                  x:Name="MediaScroll"                                                             
                                                                   Width="810">
 
                                                         <StackPanel Orientation="Horizontal"

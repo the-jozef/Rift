@@ -30,16 +30,9 @@
             BorderThickness="1.5"
             ClipToBounds="True">
         <Grid>
-            <!-- <ContentControl Content="{Binding AccountSelectionView}" /> -->
-
-            <ContentControl Content="{Binding CurrentView}"
-                            Visibility="{Binding CurrentView, 
-                    Converter={StaticResource NullToVisibilityConverter}}" />
-
-            <ContentControl Content="{Binding PreloadView1}"
-                            Width="0"
-                            Height="0"
-                            Visibility="Hidden" />
+           
+            <ContentControl x:Name="MainContent" />
+            
         </Grid>
     </Border>
 </Window>

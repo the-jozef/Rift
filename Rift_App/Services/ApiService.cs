@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Rift_App.GameModels;
 using Rift_App.Models;
-using Rift_App.Models.Rift_App.Models;
-using Rift_App.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +11,8 @@ namespace Rift_App.Services
 {
     public static class ApiService
     {
-        // !! CHANGE THIS TO YOUR RENDER URL !!
-        private const string BaseUrl = "https://your-render-app.onrender.com";
+        // RENDER URL 
+        private const string BaseUrl = "https://rift-hupv.onrender.com/";
 
         private static readonly HttpClient _http = new HttpClient
         {
@@ -34,13 +31,7 @@ namespace Rift_App.Services
         {
             try
             {
-                var body = ToJson(new
-                {
-                    Username = username,
-                    Password = password,
-                    SteamId64 = steamId64,
-                    DeviceToken = DeviceTokenService.GetOrCreate()
-                });
+                var body = ToJson(new { Username = username, Password = password, SteamId64 = steamId64, DeviceToken = DeviceTokenService.GetOrCreate() });
                 var response = await _http.PostAsync($"{BaseUrl}/api/auth/register", body);
                 return FromJson<AuthResponse>(await response.Content.ReadAsStringAsync());
             }
@@ -51,12 +42,7 @@ namespace Rift_App.Services
         {
             try
             {
-                var body = ToJson(new
-                {
-                    Username = username,
-                    Password = password,
-                    DeviceToken = DeviceTokenService.GetOrCreate()
-                });
+                var body = ToJson(new { Username = username, Password = password, DeviceToken = DeviceTokenService.GetOrCreate() });
                 var response = await _http.PostAsync($"{BaseUrl}/api/auth/login", body);
                 return FromJson<AuthResponse>(await response.Content.ReadAsStringAsync());
             }
@@ -67,11 +53,7 @@ namespace Rift_App.Services
         {
             try
             {
-                var body = ToJson(new
-                {
-                    SteamId64 = steamId64,
-                    DeviceToken = DeviceTokenService.GetOrCreate()
-                });
+                var body = ToJson(new { SteamId64 = steamId64, DeviceToken = DeviceTokenService.GetOrCreate() });
                 var response = await _http.PostAsync($"{BaseUrl}/api/auth/steam-login", body);
                 return FromJson<AuthResponse>(await response.Content.ReadAsStringAsync());
             }
@@ -223,7 +205,8 @@ namespace Rift_App.Services
         }
     }
 
-    // ─── RESPONSE TYPES — only for API communication, NOT models ─────────────
+    // ─── RESPONSE TYPES — only for API communication ──────────────────────────
+    // GameModel, PlayerInfo, AccountInfo sú v Rift_App.Models — nie tu
 
     public class AuthResponse
     {
@@ -243,8 +226,9 @@ namespace Rift_App.Services
         public string LastLocation { get; set; } = "Store";
     }
 
+    // GamesResponse uses GameModel from Rift_App.Models via using directive
     public class GamesResponse
     {
-        public List<Models.GameModel> Games { get; set; } = new();
+        public List<GameModel> Games { get; set; } = new();
     }
 }

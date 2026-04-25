@@ -1,5 +1,4 @@
 ﻿using Rift_App.Models;
-using Rift_App.Models.Rift_App.Models;
 using Rift_App.Services;
 using Rift_App.ViewModels;
 using System;

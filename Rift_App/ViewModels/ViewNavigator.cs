@@ -3,11 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Rift_App.Authorization;
-using Rift_App.GameModels;
 using Rift_App.Loading;
-using Rift_App.Login_Register;
 using Rift_App.Models;
-using Rift_App.Models.Rift_App.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +40,11 @@ namespace Rift_App.ViewModels
         }
 
         // ─── LOADING ──────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Shows LoadingWindow — hides everything else.
+        /// FIXED: No ShowDialog — only Show()
+        /// </summary>
         public void ShowLoading()
         {
             try
@@ -55,6 +57,7 @@ namespace Rift_App.ViewModels
         }
 
         // ─── AUTH WINDOW ──────────────────────────────────────────────────
+
         public void ShowAccountSelection()
         {
             try
@@ -98,6 +101,10 @@ namespace Rift_App.ViewModels
         }
 
         // ─── MAIN WINDOW ──────────────────────────────────────────────────
+
+        /// <summary>
+        /// FIXED: Uses Rift_App.Models.PlayerInfo and Rift_App.Models.GameModel
+        /// </summary>
         public void ShowMainWindow(
             PlayerInfo? playerInfo,
             List<GameModel> library,

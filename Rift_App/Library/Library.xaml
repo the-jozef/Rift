@@ -25,6 +25,11 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
+                <Grid x:Name="GuestPanel"
+                      Visibility="Collapsed">
+                    <TextBlock Text="You are browsing as a guest. Sign in to see your games." />
+                </Grid>
+                
                 <Grid Grid.Row="1"
                       Grid.Column="0">
                     <ScrollViewer Background="#22272E"
@@ -76,7 +81,7 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Row="0"
-                                            x:Name="MyStackPanel">
+                                            x:Name="GamesPanel">
                                     <ItemsControl ItemsSource="{Binding Games}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>

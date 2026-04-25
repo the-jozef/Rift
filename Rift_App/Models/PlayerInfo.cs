@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Models
 {
-    namespace Rift_App.Models
+    public class PlayerInfo
     {
-        public class PlayerInfo
-        {
-            public string SteamId { get; set; } = string.Empty;
-            public string Username { get; set; } = string.Empty;
-            public string AvatarUrl { get; set; } = string.Empty;
-            public string ProfileUrl { get; set; } = string.Empty;
-        }
+        public string SteamId { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string AvatarUrl { get; set; } = string.Empty;
+        public string ProfileUrl { get; set; } = string.Empty;
     }
 }

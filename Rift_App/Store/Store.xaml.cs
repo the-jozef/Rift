@@ -1,6 +1,4 @@
-﻿using Rift_App.GameModels;
-using Rift_App.Models;
-using Rift_App.ViewModels;
+﻿using Rift_App.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Rift_App.ViewModels;
 
-namespace Rift_App.Store_Controls
+namespace Rift_App.Store
 {
     public partial class Store : UserControl
     {

@@ -1,5 +1,4 @@
-﻿using Rift_App.GameModels;
-using Rift_App.Models;
+﻿using Rift_App.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,6 +27,8 @@ namespace Rift_App.StoreGamePage
         }
 
         // ─── LOAD GAME DATA ───────────────────────────────────────────────
+        /// Called by MainWindow.ShowGamePage() with selected game.
+
         public void LoadGame(GameModel game)
         {
             try
@@ -40,10 +41,9 @@ namespace Rift_App.StoreGamePage
 
         // ─── BUY BUTTON ───────────────────────────────────────────────────
 
-        /// <summary>
         /// Buy button — asks user: open in Browser or Steam app?
         /// Tlačidlo kúpiť — pýta sa: otvoriť v prehliadači alebo Steam appke?
-        /// </summary>
+
         private void BuyButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -74,10 +74,8 @@ namespace Rift_App.StoreGamePage
 
         // ─── PLAY BUTTON ──────────────────────────────────────────────────
 
-        /// <summary>
         /// Play button — launches game directly via Steam protocol.
-        /// Tlačidlo hrať — spustí hru priamo cez Steam protokol.
-        /// </summary>
+
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             try

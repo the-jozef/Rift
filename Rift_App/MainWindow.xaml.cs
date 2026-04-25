@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Rift_App.ac
-
 using Rift_App.Account;
 using Rift_App.Authorization;
-using Rift_App.GameModels;
 using Rift_App.Models;
-using Rift_App.Models.Rift_App.Models;
 using Rift_App.Services;
-using Rift_App.Store_Controls;
 using Rift_App.Testing;
 using Rift_App.ViewModels;
 using System.Text;
@@ -38,6 +33,8 @@ namespace Rift_App
         }
 
         // ─── INITIALIZE DATA ──────────────────────────────────────────────
+
+        /// Called by ViewNavigator when all data is loaded.
         /// Navigates to last known location.
         public void InitializeData(
             PlayerInfo? playerInfo,
@@ -79,7 +76,7 @@ namespace Rift_App
             try
             {
                 _ = ApiService.SaveSessionAsync("Store");
-                Content = new Store();
+                Content = new Store.Store();
             }
             catch { }
         }
@@ -109,11 +106,12 @@ namespace Rift_App
             try
             {
                 _ = ApiService.SaveSessionAsync("Account");
-                Content = new Acconu();
+                Content = new Account.Account();
             }
             catch { }
         }
         /// Opens game detail page — called from Store, Library, Wishlist.
+        /// Otvorí detail hry — volané zo Store, Library, Wishlist.
         public void ShowGamePage(GameModel game)
         {
             try
@@ -138,6 +136,8 @@ namespace Rift_App
         }
 
         // ─── GUEST MODE ───────────────────────────────────────────────────
+
+        /// True if browsing as guest — not logged in.
         public bool IsGuest => !SessionManager.IsLoggedIn;
     }
 }

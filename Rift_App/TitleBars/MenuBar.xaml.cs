@@ -16,15 +16,11 @@ using System.Windows.Shapes;
 
 namespace Rift_App.TitleBars
 {
-    /// <summary>
-    /// Interaction logic for MenuBar.xaml
-    /// </summary>
     public partial class MenuBar : UserControl
     {
         public MenuBar()
         {
-            InitializeComponent();
-            DataContext = new MainViewModel();
+            InitializeComponent();     
         }
     }
 }
