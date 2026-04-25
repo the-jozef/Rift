@@ -1,33 +1,61 @@
-﻿using Rift_App.Database;
+﻿using Rift_App.Loading;
 using Rift_App.Services;
 using System.Windows;
+using Rift_App.ViewModels;
 
 namespace Rift_App
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            new DatabaseService().Initialize();
 
-            string? lastSteamId = SessionService.Load();
-            if (lastSteamId != null)
+            try
             {
-                var auth = new AuthService();
-                bool exists = auth.LoginWithSteam(
-                    lastSteamId, out string username, out string _);
+                // Create all 3 windows
+                var loadingWindow = new LoadingWindow();
+                var authWindow = new AuthWindow();
+                var mainWindow = new MainWindow();
 
-                if (exists)
+                // Initialize ViewNavigator — singleton
+                ViewNavigator.Initialize(loadingWindow, authWindow, mainWindow);
+
+                // Register device on server
+                await ApiService.InitDeviceAsync();
+
+                // Check for saved session
+                var session = await ApiService.GetSessionAsync();
+
+                if (session != null && session.HasSession)
                 {
-                    MessageBox.Show($"Automaticky prihlaseny: {username}");
-                    // TODO: otvor MainWindow
+                    // Known account → set session → show Loading
+                    SessionManager.SetSession(
+                        session.UserId!.Value,
+                        session.Username!,
+                        session.SteamId64!,
+                        session.LastLocation
+                    );
+                    ViewNavigator.Instance?.ShowLoading();
                 }
                 else
                 {
-                    SessionService.Clear();
+                    // No session → AccountSelection
+                    ViewNavigator.Instance?.ShowAccountSelection();
                 }
             }
+            catch
+            {
+                try { ViewNavigator.Instance?.ShowAccountSelection(); }
+                catch { new AuthWindow().Show(); }
+            }
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            try { SteamAuthService.Cancel(); }
+            catch { }
+            base.OnExit(e);
         }
     }
 }

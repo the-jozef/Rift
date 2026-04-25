@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Rift_App.Login_Register;
+using Rift_App.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Rift_App.ViewModels
 {
-    public class WindowStateViewModel : ViewBase
+    public class WindowStateViewModel
     {
         public ICommand MinimizeCommand { get; }
         public ICommand MaximizeCommand { get; }
@@ -24,9 +24,7 @@ namespace Rift_App.ViewModels
             MinimizeCommand = new RelayCommand(
                 () => App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized);
 
-
-            MaximizeCommand = new RelayCommand(
-                ()=>
+            MaximizeCommand = new RelayCommand(() =>
             {
                 var win = App.Current.MainWindow;
                 win.WindowState = win.WindowState == System.Windows.WindowState.Maximized

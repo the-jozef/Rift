@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Rift_App.Library;
+using Rift_App.Authorization;
 using Rift_App.Store;
 using Rift_App.StoreGamePage;
 using System.ComponentModel;
@@ -11,11 +12,23 @@ namespace Rift_App.ViewModels
 {
     public class WindowViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
+        // Sub-ViewModels
         public WindowStateViewModel WindowState { get; }
+        public StoreViewModel Store { get; }
+
+        // Current page shown in MainWindow
+        // Aktuálna stránka zobrazená v MainWindow
+        private object _currentView = new object();
+        public object CurrentView
+        {
+            get => _currentView;
+            set { _currentView = value; OnPropertyChanged(); }
+        }
 
         private bool _showSearchBar;
         public bool ShowSearchBar
@@ -24,20 +37,17 @@ namespace Rift_App.ViewModels
             set { _showSearchBar = value; OnPropertyChanged(); }
         }
 
-        private UserControl _currentView;
-        public UserControl CurrentView
-        {
-            get => _currentView;
-            set { _currentView = value; OnPropertyChanged(); }
-        }
+        // ─── NAVIGATION COMMANDS ──────────────────────────────────────────
 
         public ICommand StoreCommand { get; }
         public ICommand LibraryCommand { get; }
         public ICommand GamePageCommand { get; }
+        public ICommand SwitchAccountCommand { get; }
 
         public WindowViewModel()
         {
             WindowState = new WindowStateViewModel();
+            Store = new StoreViewModel();
 
             StoreCommand = new RelayCommand(() =>
             {
@@ -57,7 +67,20 @@ namespace Rift_App.ViewModels
                 ShowSearchBar = false;
             });
 
-            CurrentView = new GamePage();    //actual 
+            // FIXED: Use ViewNavigator.Instance instead of new ViewNavigator()
+            // Používame ViewNavigator.Instance namiesto new ViewNavigator()
+            SwitchAccountCommand = new RelayCommand(() =>
+            {
+                try
+                {
+                    Services.SessionManager.Clear();
+                    ViewNavigator.Instance?.SwitchAccount();
+                }
+                catch { }
+            });
+
+            // Default page
+            CurrentView = new Store.Store();
             ShowSearchBar = true;
         }
     }

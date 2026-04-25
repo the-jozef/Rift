@@ -1,5 +1,6 @@
 ﻿using Rift_App.GameModels;
 using Rift_App.Models;
+using Rift_App.Services;
 using Rift_App.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,27 +17,36 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Rift_App.Store_Controls
+namespace Rift_App.Wishlist
 {
-    public partial class Store : UserControl
+    public partial class Wishlist : UserControl
     {
-        private readonly StoreViewModel _viewModel;
+        private readonly WishlistViewModel _viewModel;
 
-        public Store()
+        public Wishlist()
         {
             InitializeComponent();
 
-            _viewModel = new StoreViewModel();
+            _viewModel = new WishlistViewModel();
             DataContext = _viewModel;
 
-            // When game clicked → open StoreGamePage
-            // Keď klikne na hru → otvorí StoreGamePage
+            // When game clicked → open store game page
             _viewModel.OnGameSelected += HandleGameSelected;
 
-            // Load store data when page opens
             Loaded += async (s, e) =>
             {
-                try { await _viewModel.LoadStoreCommand.ExecuteAsync(null); }
+                try
+                {
+                    // Guest mode — show message, don't load
+                    // Hosť — zobrazíme správu, nenačítame nič
+                    if (!SessionManager.IsLoggedIn)
+                    {
+                        ShowGuestMessage();
+                        return;
+                    }
+
+                    await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
+                }
                 catch { }
             };
         }
@@ -47,32 +57,21 @@ namespace Rift_App.Store_Controls
         {
             try
             {
-                // Navigate to game detail page
-                // Navigujeme na stránku detailu hry
                 var mainWindow = Application.Current.MainWindow as MainWindow;
                 mainWindow?.ShowGamePage(game);
             }
             catch { }
         }
 
-        // ─── SHOW MORE BUTTONS ────────────────────────────────────────────
-        // Called from XAML buttons
+        // ─── GUEST MESSAGE ────────────────────────────────────────────────
 
-        private async void ShowMoreNewTrending_Click(object sender, RoutedEventArgs e)
+        private void ShowGuestMessage()
         {
-            try { await _viewModel.ShowMoreNewTrendingCommand.ExecuteAsync(null); }
-            catch { }
-        }
-
-        private async void ShowMoreTopSellers_Click(object sender, RoutedEventArgs e)
-        {
-            try { await _viewModel.ShowMoreTopSellersCommand.ExecuteAsync(null); }
-            catch { }
-        }
-
-        private async void ShowMoreSpecials_Click(object sender, RoutedEventArgs e)
-        {
-            try { await _viewModel.ShowMoreSpecialsCommand.ExecuteAsync(null); }
+            try
+            {
+                //  if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
+                //  if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
+            }
             catch { }
         }
 

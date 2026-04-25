@@ -1,70 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Rift_App.Models;
+using Rift_App.Services;
+using Rift_App.ViewModels;
 
 namespace Rift_App.Library
 {
-    /// <summary>
-    /// Interaction logic for Library.xaml
-    /// </summary>
     public partial class Library : UserControl
     {
+        private readonly LibraryViewModel _viewModel;
+
         public Library()
         {
             InitializeComponent();
 
-            for(int i = 1; i <= 60; i++)
-{
-                var button = new Button
-                {
-                    Background = Brushes.Transparent,
-                    BorderBrush = Brushes.Transparent,
-                    Height = 23
-                };
+            _viewModel = new LibraryViewModel();
+            DataContext = _viewModel;
 
-                var stackPanel = new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    Width = 235,
-                    Height = 22
-                };
+            // When game clicked → open game page
+            _viewModel.OnGameSelected += HandleGameSelected;
 
-                var image = new Image
+            Loaded += async (s, e) =>
+            {
+                try
                 {
-                    Height = 20,
-                    Width = 20,
-                    Margin = new Thickness(5, 0, 0, 0),
-                    Stretch = Stretch.UniformToFill,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    Source = new BitmapImage(new Uri("/Icons/Red.png", UriKind.Relative))
-                };
+                    // Guest mode — show message, don't load
+                    // Hosť — zobrazíme správu, nenačítame nič
+                    if (!SessionManager.IsLoggedIn)
+                    {
+                        ShowGuestMessage();
+                        return;
+                    }
 
-                var textBlock = new TextBlock
-                {
-                    Text = "Game " + i,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9197A5")),
-                    FontSize = 15,
-                    FontWeight = FontWeights.SemiBold,
-                    Margin = new Thickness(6,-2, 0, 0)
-                };
+                    await _viewModel.LoadLibraryCommand.ExecuteAsync(null);
+                }
+                catch { }
+            };
+        }
 
-                stackPanel.Children.Add(image);
-                stackPanel.Children.Add(textBlock);
-                button.Content = stackPanel;
-                MyStackPanel.Children.Add(button);
+        // ─── GAME SELECTED ────────────────────────────────────────────────
+
+        private void HandleGameSelected(GameModel game)
+        {
+            try
+            {
+                var mainWindow = Application.Current.MainWindow as MainWindow;
+                mainWindow?.ShowGamePage(game);
             }
+            catch { }
+        }
 
+        // ─── GUEST MESSAGE ────────────────────────────────────────────────
+
+        private void ShowGuestMessage()
+        {
+            try
+            {
+                // Show guest panel, hide games list
+                // Zobrazíme hosťovský panel, skryjeme zoznam hier
+                if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
+                if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
+            }
+            catch { }
+        }
+
+        // ─── GAME CLICK ───────────────────────────────────────────────────
+
+        private void GameItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (sender is Button btn && btn.DataContext is GameModel game)
+                    _viewModel.SelectGameCommand.Execute(game);
+            }
+            catch { }
+        }
+
+        // ─── SEARCH BOX ───────────────────────────────────────────────────
+        // Bound via TextChanged in XAML
+
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (sender is TextBox tb)
+                    _viewModel.SearchText = tb.Text;
+            }
+            catch { }
         }
     }
 }
