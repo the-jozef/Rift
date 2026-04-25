@@ -4,11 +4,6 @@ using SteamProxyBackend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ─── DATABASE CONNECTION ──────────────────────────────────────────────────────
-// Supabase dáva URL vo formáte postgresql://user:pass@host:port/db
-// Npgsql potrebuje: Host=...;Database=...;Username=...;Password=...
-// Preto konvertujeme — that's why we convert
-
 var rawConnectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
     ?? builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new Exception("DATABASE_URL environment variable not set.");
@@ -36,14 +31,22 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// ─── AUTO MIGRATE ─────────────────────────────────────────────────────────────
+// ─── CREATE TABLES IF NOT EXISTS ─────────────────────────────────────────────
+// EnsureCreated nevyžaduje migrations — vytvorí tabuľky automaticky
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.EnsureCreated();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database setup error: {ex.Message}");
+        // Continue anyway — server starts even if DB fails
+    }
 }
 
-// ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -54,29 +57,26 @@ app.MapControllers();
 var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
 app.Run($"http://0.0.0.0:{port}");
 
-// ─── HELPER — converts postgresql:// URL to Npgsql format ────────────────────
+// ─── HELPER ───────────────────────────────────────────────────────────────────
 static string ConvertSupabaseUrl(string url)
 {
     try
     {
-        // If it's already in Npgsql format (Host=...) return as is
-        // Ak je už v Npgsql formáte, vrátime tak ako je
         if (!url.StartsWith("postgresql://") && !url.StartsWith("postgres://"))
             return url;
 
         var uri = new Uri(url);
-
         var host = uri.Host;
-        var port = uri.Port > 0 ? uri.Port : 5432;
+        var port = uri.Port > 0 ? uri.Port : 6543;
         var database = uri.AbsolutePath.TrimStart('/');
-        var username = uri.UserInfo.Split(':')[0];
-        var password = uri.UserInfo.Split(':')[1];
+        var userInfo = uri.UserInfo.Split(':');
+        var username = userInfo[0];
+        var password = userInfo[1];
 
         return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
     }
     catch
     {
-        // If conversion fails — return original and let Npgsql try
         return url;
     }
 }
