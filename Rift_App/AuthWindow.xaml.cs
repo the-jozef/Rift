@@ -22,6 +22,7 @@ namespace Rift_App
         public AuthWindow()
         {
             InitializeComponent();
+            DataContext = new Test();
 
             // Closing = hide, not exit — zatvorenie = skryje sa, neukončí app
             this.Closing += (s, e) =>
@@ -32,6 +33,7 @@ namespace Rift_App
         }
         /// Sets the current UserControl inside AuthWindow.
         /// Nastaví aktuálny UserControl v AuthWindow.
+        
         public void ShowView(UserControl view)
         {
             try

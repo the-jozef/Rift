@@ -74,6 +74,7 @@ namespace Rift_App.ViewModels
         {
             try
             {
+
                 _authWindow.ShowView(new Login());
                 _authWindow.Show();
             }

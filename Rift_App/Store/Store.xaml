@@ -7,10 +7,10 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             xmlns:local="clr-namespace:Rift_App.ViewModels"
+             xmlns:local="clr-namespace:Rift_App.Store"
              mc:Ignorable="d">
     <Grid>
-        <Border Grid.Row="0"    
+        <Border  
                 CornerRadius="0,0,7.5,7.5">
             <Grid>
                 <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"                              
@@ -34,6 +34,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="150" />
                         </Grid.RowDefinitions>
+                        
                         <StackPanel Grid.Column="0"
                                     Width="Auto"
                                     Height="Auto"

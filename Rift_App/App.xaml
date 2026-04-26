@@ -8,10 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <materialDesign:BundledTheme BaseTheme="Dark"
-                                             PrimaryColor="Blue"
-                                             SecondaryColor="LightBlue" />
-
+               
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
                 <ResourceDictionary Source="/TitleBars/BarStyles.xaml" />
                 <ResourceDictionary Source="/Authorization/Authorization_layout.xaml" />

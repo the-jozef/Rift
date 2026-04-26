@@ -1,4 +1,6 @@
-﻿using Rift_App.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Rift_App.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,7 +25,7 @@ namespace Rift_App.Authorization
             InitializeComponent();
 
             _viewModel = new LoginViewModel();
-            DataContext = _viewModel;
+           DataContext = _viewModel;
 
             // Login success → Loading screen
             _viewModel.OnLoginSuccess += () =>
@@ -49,7 +51,7 @@ namespace Rift_App.Authorization
 
         // ─── PASSWORD BOX ─────────────────────────────────────────────────
         // PasswordBox nepodporuje binding — riešime ručne (manually)
-
+       
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             try
