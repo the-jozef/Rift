@@ -89,8 +89,8 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                 HorizontalAlignment="Left"
                                 Margin="85,22,0,0">
 
-                        <TextBlock Style="{StaticResource Rift_SignIn_Title}"
-                                   Text="Account name" />
+                        <TextBlock Style="{StaticResource Rift_SignIn_Title2}"
+                                   />
 
                         <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
                                  Text="{Binding SetupUsername, UpdateSourceTrigger=PropertyChanged}"

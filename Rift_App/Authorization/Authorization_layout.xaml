@@ -860,7 +860,7 @@
                             BorderThickness="0">
                         <Border.Background>
                             <LinearGradientBrush>
-                                <GradientStop Color="#A12FFF"
+                                <GradientStop Color="#9E4CB5"
                                               Offset="0.138" />
                                 <GradientStop Color="#C44AE4"
                                               Offset="0.736" />
@@ -888,6 +888,25 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <!-- Textblock for Title_sign in -->
+    <Style x:Key="Rift_SignIn_Title2"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
+
+        <Setter Property="Text"
+                Value=" Account name" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="Foreground"
+                Value="#CC63FF" />
+        <Setter Property="FontSize"
+                Value="13.5" />
+        <Setter Property="FontFamily"
+                Value="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
     </Style>
 
 
