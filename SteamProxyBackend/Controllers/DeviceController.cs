@@ -24,7 +24,8 @@ namespace SteamProxyBackend.Controllers
                 if (string.IsNullOrWhiteSpace(request.DeviceToken))
                     return BadRequest(new { Success = false, Message = "Device token is required." });
 
-                var device = await _db.Devices.FirstOrDefaultAsync(d => d.DeviceToken == request.DeviceToken);
+                var device = await _db.Devices
+                    .FirstOrDefaultAsync(d => d.DeviceToken == request.DeviceToken);
 
                 if (device == null)
                 {
@@ -75,6 +76,7 @@ namespace SteamProxyBackend.Controllers
         }
 
         // ─── GET LAST SESSION ─────────────────────────────────────────────────
+        // FIXED: No longer joins Devices table — only uses DeviceAccounts + Users
 
         [HttpGet("{token}/session")]
         public async Task<IActionResult> GetSession(string token)
@@ -84,20 +86,22 @@ namespace SteamProxyBackend.Controllers
                 if (string.IsNullOrWhiteSpace(token))
                     return BadRequest(new { Success = false, Message = "Device token is required." });
 
+                // Only query DeviceAccounts and Users — no Devices table join
+                // Len DeviceAccounts a Users — žiadny join s Devices tabuľkou
                 var lastActive = await _db.DeviceAccounts
                     .Where(da => da.DeviceToken == token && da.IsLastActive)
                     .Include(da => da.User)
                     .FirstOrDefaultAsync();
 
-                if (lastActive == null)
+                if (lastActive == null || lastActive.User == null)
                     return Ok(new SessionResponse { HasSession = false });
 
                 return Ok(new SessionResponse
                 {
                     HasSession = true,
                     UserId = lastActive.UserId,
-                    Username = lastActive.User!.Username,
-                    SteamId64 = lastActive.User!.SteamId64,
+                    Username = lastActive.User.Username,
+                    SteamId64 = lastActive.User.SteamId64,
                     LastLocation = lastActive.LastLocation
                 });
             }
