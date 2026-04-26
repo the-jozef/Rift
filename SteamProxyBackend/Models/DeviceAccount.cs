@@ -14,8 +14,8 @@ namespace SteamProxyBackend.Models
         public DateTime LastLoginAt { get; set; } = DateTime.UtcNow;
         public bool IsLastActive { get; set; } = false;
 
-        // Navigation property — needed for Include(da => da.User) in queries
-        [ForeignKey("UserId")]
+        // Navigation property — NO [ForeignKey] attribute here
+        // Foreign key is configured in AppDbContext.OnModelCreating
         public User? User { get; set; }
     }
 }
