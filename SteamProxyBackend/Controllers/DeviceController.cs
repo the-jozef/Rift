@@ -77,36 +77,36 @@ namespace SteamProxyBackend.Controllers
 
         // ─── GET LAST SESSION ─────────────────────────────────────────────────
         // FIXED: No longer joins Devices table — only uses DeviceAccounts + Users
-        [HttpGet("{token}/session")]
-        public async Task<IActionResult> GetSession(string token)
+       [HttpGet("{token}/session")]
+public async Task<IActionResult> GetSession(string token)
+{
+    try
+    {
+        if (string.IsNullOrWhiteSpace(token))
+            return BadRequest(new { Success = false, Message = "Device token is required." });
+
+        var lastActive = await _db.DeviceAccounts
+            .Where(da => da.DeviceToken == token && da.IsLastActive)
+            .Include(da => da.User)
+            .FirstOrDefaultAsync();
+
+        if (lastActive == null || lastActive.User == null)
+            return Ok(new SessionResponse { HasSession = false });
+
+        return Ok(new SessionResponse
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(token))
-                    return BadRequest(new { Success = false, Message = "Device token is required." });
-
-                var lastActive = await _db.DeviceAccounts
-                    .Where(da => da.DeviceToken == token && da.IsLastActive)
-                    .Include(da => da.User)
-                    .FirstOrDefaultAsync();
-
-                if (lastActive == null || lastActive.User == null)
-                    return Ok(new SessionResponse { HasSession = false });
-
-                return Ok(new SessionResponse
-                {
-                    HasSession = true,
-                    UserId = lastActive.UserId,
-                    Username = lastActive.User.Username,
-                    SteamId64 = lastActive.User.SteamId64,
-                    LastLocation = lastActive.LastLocation
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Success = false, Message = ex.Message });
-            }
-        }
+            HasSession = true,
+            UserId = lastActive.UserId,
+            Username = lastActive.User.Username,
+            SteamId64 = lastActive.User.SteamId64,
+            LastLocation = lastActive.LastLocation
+        });
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { Success = false, Message = ex.Message });
+    }
+}
 
         // ─── SAVE SESSION ─────────────────────────────────────────────────────
 
