@@ -22,7 +22,7 @@ namespace SteamProxyBackend.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<DeviceAccount> DeviceAccounts { get; set; } = new List<DeviceAccount>();
-        public ICollection<LoginHistory> LoginHistories { get; set; } = new List<LoginHistory>();
+        //public ICollection<DeviceAccount> DeviceAccounts { get; set; } = new List<DeviceAccount>();
+       // public ICollection<LoginHistory> LoginHistories { get; set; } = new List<LoginHistory>();
     }
 }

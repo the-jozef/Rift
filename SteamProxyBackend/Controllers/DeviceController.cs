@@ -43,6 +43,7 @@ namespace SteamProxyBackend.Controllers
         }
 
         // ─── GET ALL ACCOUNTS ON DEVICE ───────────────────────────────────────
+        // FIXED: Raw SQL — no EF navigation properties
 
         [HttpGet("{token}/accounts")]
         public async Task<IActionResult> GetAccounts(string token)
@@ -52,19 +53,18 @@ namespace SteamProxyBackend.Controllers
                 if (string.IsNullOrWhiteSpace(token))
                     return BadRequest(new { Success = false, Message = "Device token is required." });
 
-                var accounts = await _db.DeviceAccounts
-                    .Where(da => da.DeviceToken == token)
-                    .Include(da => da.User)
-                    .OrderByDescending(da => da.LastLoginAt)
-                    .Select(da => new AccountInfo
-                    {
-                        UserId = da.UserId,
-                        Username = da.User!.Username,
-                        SteamId64 = da.User!.SteamId64,
-                        LastLocation = da.LastLocation,
-                        LastLoginAt = da.LastLoginAt,
-                        IsLastActive = da.IsLastActive
-                    })
+                var accounts = await _db.Database.SqlQueryRaw<AccountInfo>(@"
+                    SELECT 
+                        da.""UserId"",
+                        u.""Username"",
+                        u.""SteamId64"",
+                        da.""LastLocation"",
+                        da.""LastLoginAt"",
+                        da.""IsLastActive""
+                    FROM ""DeviceAccounts"" da
+                    INNER JOIN ""Users"" u ON da.""UserId"" = u.""Id""
+                    WHERE da.""DeviceToken"" = {0}
+                    ORDER BY da.""LastLoginAt"" DESC", token)
                     .ToListAsync();
 
                 return Ok(accounts);
@@ -76,37 +76,39 @@ namespace SteamProxyBackend.Controllers
         }
 
         // ─── GET LAST SESSION ─────────────────────────────────────────────────
-        // FIXED: No longer joins Devices table — only uses DeviceAccounts + Users
-       [HttpGet("{token}/session")]
-public async Task<IActionResult> GetSession(string token)
-{
-    try
-    {
-        if (string.IsNullOrWhiteSpace(token))
-            return BadRequest(new { Success = false, Message = "Device token is required." });
+        // FIXED: Raw SQL — no EF navigation properties
 
-        var lastActive = await _db.DeviceAccounts
-            .Where(da => da.DeviceToken == token && da.IsLastActive)
-            .Include(da => da.User)
-            .FirstOrDefaultAsync();
-
-        if (lastActive == null || lastActive.User == null)
-            return Ok(new SessionResponse { HasSession = false });
-
-        return Ok(new SessionResponse
+        [HttpGet("{token}/session")]
+        public async Task<IActionResult> GetSession(string token)
         {
-            HasSession = true,
-            UserId = lastActive.UserId,
-            Username = lastActive.User.Username,
-            SteamId64 = lastActive.User.SteamId64,
-            LastLocation = lastActive.LastLocation
-        });
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, new { Success = false, Message = ex.Message });
-    }
-}
+            try
+            {
+                if (string.IsNullOrWhiteSpace(token))
+                    return BadRequest(new { Success = false, Message = "Device token is required." });
+
+                var results = await _db.Database.SqlQueryRaw<SessionResponse>(@"
+                    SELECT 
+                        TRUE as ""HasSession"",
+                        da.""UserId"",
+                        u.""Username"",
+                        u.""SteamId64"",
+                        da.""LastLocation""
+                    FROM ""DeviceAccounts"" da
+                    INNER JOIN ""Users"" u ON da.""UserId"" = u.""Id""
+                    WHERE da.""DeviceToken"" = {0} AND da.""IsLastActive"" = TRUE
+                    LIMIT 1", token)
+                    .ToListAsync();
+
+                if (results == null || results.Count == 0)
+                    return Ok(new SessionResponse { HasSession = false });
+
+                return Ok(results[0]);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Success = false, Message = ex.Message });
+            }
+        }
 
         // ─── SAVE SESSION ─────────────────────────────────────────────────────
 
@@ -115,18 +117,15 @@ public async Task<IActionResult> GetSession(string token)
         {
             try
             {
-                var deviceAccount = await _db.DeviceAccounts
-                    .FirstOrDefaultAsync(da =>
-                        da.DeviceToken == request.DeviceToken &&
-                        da.UserId == request.UserId);
+                var rows = await _db.Database.ExecuteSqlRawAsync(@"
+                    UPDATE ""DeviceAccounts""
+                    SET ""LastLocation"" = {0}, ""LastLoginAt"" = NOW()
+                    WHERE ""DeviceToken"" = {1} AND ""UserId"" = {2}",
+                    request.LastLocation, request.DeviceToken, request.UserId);
 
-                if (deviceAccount == null)
+                if (rows == 0)
                     return NotFound(new { Success = false, Message = "Account not found on this device." });
 
-                deviceAccount.LastLocation = request.LastLocation;
-                deviceAccount.LastLoginAt = DateTime.UtcNow;
-
-                await _db.SaveChangesAsync();
                 return Ok(new { Success = true });
             }
             catch (Exception ex)
@@ -142,14 +141,13 @@ public async Task<IActionResult> GetSession(string token)
         {
             try
             {
-                var deviceAccount = await _db.DeviceAccounts
-                    .FirstOrDefaultAsync(da => da.DeviceToken == token && da.UserId == userId);
+                var rows = await _db.Database.ExecuteSqlRawAsync(@"
+                    DELETE FROM ""DeviceAccounts""
+                    WHERE ""DeviceToken"" = {0} AND ""UserId"" = {1}",
+                    token, userId);
 
-                if (deviceAccount == null)
+                if (rows == 0)
                     return NotFound(new { Success = false, Message = "Account not found on this device." });
-
-                _db.DeviceAccounts.Remove(deviceAccount);
-                await _db.SaveChangesAsync();
 
                 return Ok(new { Success = true, Message = "Account removed from this device." });
             }
@@ -166,19 +164,17 @@ public async Task<IActionResult> GetSession(string token)
         {
             try
             {
-                var user = await _db.Users.FindAsync(userId);
+                await _db.Database.ExecuteSqlRawAsync(@"
+                    DELETE FROM ""LoginHistories"" WHERE ""UserId"" = {0}", userId);
 
-                if (user == null)
+                await _db.Database.ExecuteSqlRawAsync(@"
+                    DELETE FROM ""DeviceAccounts"" WHERE ""UserId"" = {0}", userId);
+
+                var rows = await _db.Database.ExecuteSqlRawAsync(@"
+                    DELETE FROM ""Users"" WHERE ""Id"" = {0}", userId);
+
+                if (rows == 0)
                     return NotFound(new { Success = false, Message = "Account not found." });
-
-                var deviceAccounts = _db.DeviceAccounts.Where(da => da.UserId == userId);
-                var loginHistories = _db.LoginHistories.Where(lh => lh.UserId == userId);
-
-                _db.DeviceAccounts.RemoveRange(deviceAccounts);
-                _db.LoginHistories.RemoveRange(loginHistories);
-                _db.Users.Remove(user);
-
-                await _db.SaveChangesAsync();
 
                 return Ok(new { Success = true, Message = "Account permanently deleted." });
             }
