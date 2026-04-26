@@ -10,10 +10,9 @@
              xmlns:local="clr-namespace:Rift_App.Store"
              mc:Ignorable="d">
     <Grid>
-        <Border  
-                CornerRadius="0,0,7.5,7.5">
+        <Border CornerRadius="0,0,7.5,7.5">
             <Grid>
-                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"                              
+                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"
                               Background="#1b2838"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Stretch"
@@ -34,7 +33,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="150" />
                         </Grid.RowDefinitions>
-                        
+
                         <StackPanel Grid.Column="0"
                                     Width="Auto"
                                     Height="Auto"
@@ -105,7 +104,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Grid.Row="0">
-                                <TextBlock HorizontalAlignment="Left"                                                                                    
+                                <TextBlock HorizontalAlignment="Left"
                                            Text="Featured &amp; Recommended"
                                            Foreground="White"
                                            FontSize="14"
@@ -113,7 +112,6 @@
                             </StackPanel>
 
                             <materialDesign:Card VerticalAlignment="Bottom"
-                                                 Width="951"
                                                  Grid.Row="1"
                                                  Grid.Column="1"
                                                  Background="Transparent"
@@ -132,7 +130,8 @@
 
                                             <Image Stretch="UniformToFill"
                                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                                   Source="/Image/Red.png" />
+                                                   Source="/Image/Red.png" 
+                                                   Width="630"/>
                                         </Border>
 
 
@@ -372,6 +371,7 @@
                                                      Height="70"
                                                      Margin="-27,0,0,0" />
                         </Button>
+                        
                         <Button Grid.Row="1"
                                 Grid.Column="2"
                                 HorizontalAlignment="Left"
@@ -402,390 +402,420 @@
                               Grid.Column="1"
                               materialDesign:ElevationAssist.Elevation="Dp24">
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="15" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="13.5" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Row="0"
-                                        Grid.Column="1"
-                                        Height="Auto"
-                                        Width="Auto">
+                            <Grid Grid.Column="1">
 
-                                <TextBlock HorizontalAlignment="Left"
-                                           Text="Discounts &amp; Events"
-                                           Foreground="White"
-                                           FontSize="14"
-                                           Margin="2,25,0,10" />
-                            </StackPanel>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Row="1"
-                                        Grid.Column="1"
-                                        Height="Auto"
-                                        Width="Auto"
-                                        Background="#1D698D"
-                                        HorizontalAlignment="Left"
-                                        Orientation="Vertical">
+                                <Grid Grid.Row="0">
 
-                                <Image Stretch="UniformToFill"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Image/Red.png"
-                                       Width="300"
-                                       Height="150" />
+                                    <StackPanel Height="Auto"
+                                                Width="Auto">
 
-                                <StackPanel Height="45"
-                                            Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
-
-                                    <Border Background="#4c6b22"
-                                            HorizontalAlignment="Right"
-                                            CornerRadius="2,0,0,2"
-                                            Padding="6,2,1,0"
-                                            Width="75"
-                                            Height="35">
-
-                                        <TextBlock Text="-75%"
-                                                   TextAlignment="Center"
-                                                   FontSize="27"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="Bold" />
-                                    </Border>
-
-                                    <StackPanel Orientation="Vertical"
-                                                Background="#173143"
-                                                HorizontalAlignment="Right"
-                                                Width="60"
-                                                Height="35">
-
-                                        <TextBlock Text="39,99€"
-                                                   FontSize="11"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   TextDecorations="Strikethrough"
-                                                   Foreground="#738895"
-                                                   Margin="6,1,-15,0" />
-
-                                        <TextBlock Text="25,99€"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="15"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,-1.5,2,0" />
+                                        <TextBlock HorizontalAlignment="Left"
+                                                   Text="Discounts &amp; Events"
+                                                   Foreground="White"
+                                                   FontSize="14"
+                                                   Margin="2,25,0,10" />
                                     </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                </Grid>
 
-                            <StackPanel Grid.Row="1"
-                                        Grid.Column="2"
-                                        Height="Auto"
-                                        Width="Auto"
-                                        Background="#1D698D"
-                                        HorizontalAlignment="Left"
-                                        Orientation="Vertical">
+                                <Grid Grid.Row="1">
 
-                                <Image Stretch="UniformToFill"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Image/Red.png"
-                                       Width="300"
-                                       Height="150" />
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="15" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
 
-                                <StackPanel Height="45"
-                                            Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
 
-                                    <Border Background="#4c6b22"
-                                            HorizontalAlignment="Right"
-                                            CornerRadius="2,0,0,2"
-                                            Padding="6,2,1,0"
-                                            Width="75"
-                                            Height="35">
+                                    <Grid Grid.Row="0"
+                                          Grid.Column="0">
 
-                                        <TextBlock Text="-75%"
-                                                   TextAlignment="Center"
-                                                   FontSize="27"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="Bold" />
-                                    </Border>
+                                        <StackPanel Height="Auto"
+                                                    Width="Auto"
+                                                    Background="#1D698D"
+                                                    HorizontalAlignment="Stretch"
+                                                    Orientation="Vertical">
 
-                                    <StackPanel Orientation="Vertical"
-                                                Background="#173143"
-                                                HorizontalAlignment="Right"
-                                                Width="60"
-                                                Height="35">
+                                            <Image Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Source="/Image/Red.png"
+                                                   HorizontalAlignment="Stretch"
+                                                   Height="150" />
 
-                                        <TextBlock Text="39,99€"
-                                                   FontSize="11"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   TextDecorations="Strikethrough"
-                                                   Foreground="#738895"
-                                                   Margin="6,1,-15,0" />
+                                            <StackPanel Height="45"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
 
-                                        <TextBlock Text="25,99€"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="15"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,-1.5,2,0" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                                <Border Background="#4c6b22"
+                                                        HorizontalAlignment="Right"
+                                                        CornerRadius="2,0,0,2"
+                                                        Padding="6,2,1,0"
+                                                        Width="75"
+                                                        Height="35">
 
-                            <StackPanel Grid.Row="1"
-                                        Grid.Column="3"
-                                        Height="Auto"
-                                        Width="Auto"
-                                        Background="#1D698D"
-                                        HorizontalAlignment="Left"
-                                        Orientation="Vertical">
+                                                    <TextBlock Text="-75%"
+                                                               TextAlignment="Center"
+                                                               FontSize="27"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="Bold" />
+                                                </Border>
 
-                                <Image Stretch="UniformToFill"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Image/Red.png"
-                                       Width="300"
-                                       Height="150" />
+                                                <StackPanel Orientation="Vertical"
+                                                            Background="#173143"
+                                                            HorizontalAlignment="Right"
+                                                            Width="60"
+                                                            Height="35">
 
-                                <StackPanel Height="45"
-                                            Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
+                                                    <TextBlock Text="39,99€"
+                                                               FontSize="11"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               TextDecorations="Strikethrough"
+                                                               Foreground="#738895"
+                                                               Margin="6,1,-15,0" />
 
-                                    <Border Background="#4c6b22"
-                                            HorizontalAlignment="Right"
-                                            CornerRadius="2,0,0,2"
-                                            Padding="6,2,1,0"
-                                            Width="75"
-                                            Height="35">
+                                                    <TextBlock Text="25,99€"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="15"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="SemiBold"
+                                                               Margin="6,-1.5,2,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
 
-                                        <TextBlock Text="-75%"
-                                                   TextAlignment="Center"
-                                                   FontSize="27"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="Bold" />
-                                    </Border>
+                                    <Grid Grid.Row="0"
+                                          Grid.Column="2">
 
-                                    <StackPanel Orientation="Vertical"
-                                                Background="#173143"
-                                                HorizontalAlignment="Right"
-                                                Width="60"
-                                                Height="35">
+                                        <StackPanel Height="Auto"
+                                                    Width="Auto"
+                                                    Background="#1D698D"
+                                                    HorizontalAlignment="Stretch"
+                                                    Orientation="Vertical">
 
-                                        <TextBlock Text="39,99€"
-                                                   FontSize="11"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   TextDecorations="Strikethrough"
-                                                   Foreground="#738895"
-                                                   Margin="6,1,-15,0" />
+                                            <Image Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Source="/Image/Red.png"
+                                                   HorizontalAlignment="Stretch"
+                                                   Height="150" />
 
-                                        <TextBlock Text="25,99€"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="15"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,-1.5,2,0" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                            <StackPanel Height="45"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
 
-                            <StackPanel Grid.Row="3"
-                                        Grid.Column="1"
-                                        Height="Auto"
-                                        Width="Auto"
-                                        Background="#1D698D"
-                                        HorizontalAlignment="Left"
-                                        Orientation="Vertical">
+                                                <Border Background="#4c6b22"
+                                                        HorizontalAlignment="Right"
+                                                        CornerRadius="2,0,0,2"
+                                                        Padding="6,2,1,0"
+                                                        Width="75"
+                                                        Height="35">
 
-                                <Image Stretch="UniformToFill"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Image/Red.png"
-                                       Width="300"
-                                       Height="150" />
+                                                    <TextBlock Text="-75%"
+                                                               TextAlignment="Center"
+                                                               FontSize="27"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="Bold" />
+                                                </Border>
 
-                                <StackPanel Height="45"
-                                            Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
+                                                <StackPanel Orientation="Vertical"
+                                                            Background="#173143"
+                                                            HorizontalAlignment="Right"
+                                                            Width="60"
+                                                            Height="35">
 
-                                    <Border Background="#4c6b22"
-                                            HorizontalAlignment="Right"
-                                            CornerRadius="2,0,0,2"
-                                            Padding="6,2,1,0"
-                                            Width="75"
-                                            Height="35">
+                                                    <TextBlock Text="39,99€"
+                                                               FontSize="11"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               TextDecorations="Strikethrough"
+                                                               Foreground="#738895"
+                                                               Margin="6,1,-15,0" />
 
-                                        <TextBlock Text="-75%"
-                                                   TextAlignment="Center"
-                                                   FontSize="27"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="Bold" />
-                                    </Border>
+                                                    <TextBlock Text="25,99€"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="15"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="SemiBold"
+                                                               Margin="6,-1.5,2,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
 
-                                    <StackPanel Orientation="Vertical"
-                                                Background="#173143"
-                                                HorizontalAlignment="Right"
-                                                Width="60"
-                                                Height="35">
+                                    <Grid Grid.Row="0"
+                                          Grid.Column="4">
+                                        <StackPanel Height="Auto"
+                                                    Width="Auto"
+                                                    Background="#1D698D"
+                                                    HorizontalAlignment="Stretch"
+                                                    Orientation="Vertical">
 
-                                        <TextBlock Text="39,99€"
-                                                   FontSize="11"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   TextDecorations="Strikethrough"
-                                                   Foreground="#738895"
-                                                   Margin="6,1,-15,0" />
+                                            <Image Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Source="/Image/Red.png"
+                                                   HorizontalAlignment="Stretch"
+                                                   Height="150" />
 
-                                        <TextBlock Text="25,99€"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="15"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,-1.5,2,0" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                            <StackPanel Height="45"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
 
-                            <StackPanel Grid.Row="3"
-                                        Grid.Column="2"
-                                        Height="Auto"
-                                        Width="Auto"
-                                        Background="#1D698D"
-                                        HorizontalAlignment="Left"
-                                        Orientation="Vertical">
+                                                <Border Background="#4c6b22"
+                                                        HorizontalAlignment="Right"
+                                                        CornerRadius="2,0,0,2"
+                                                        Padding="6,2,1,0"
+                                                        Width="75"
+                                                        Height="35">
 
-                                <Image Stretch="UniformToFill"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Image/Red.png"
-                                       Width="300"
-                                       Height="150" />
+                                                    <TextBlock Text="-75%"
+                                                               TextAlignment="Center"
+                                                               FontSize="27"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="Bold" />
+                                                </Border>
 
-                                <StackPanel Height="45"
-                                            Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
+                                                <StackPanel Orientation="Vertical"
+                                                            Background="#173143"
+                                                            HorizontalAlignment="Right"
+                                                            Width="60"
+                                                            Height="35">
 
-                                    <Border Background="#4c6b22"
-                                            HorizontalAlignment="Right"
-                                            CornerRadius="2,0,0,2"
-                                            Padding="6,2,1,0"
-                                            Width="75"
-                                            Height="35">
+                                                    <TextBlock Text="39,99€"
+                                                               FontSize="11"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               TextDecorations="Strikethrough"
+                                                               Foreground="#738895"
+                                                               Margin="6,1,-15,0" />
 
-                                        <TextBlock Text="-75%"
-                                                   TextAlignment="Center"
-                                                   FontSize="27"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="Bold" />
-                                    </Border>
+                                                    <TextBlock Text="25,99€"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="15"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="SemiBold"
+                                                               Margin="6,-1.5,2,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
 
-                                    <StackPanel Orientation="Vertical"
-                                                Background="#173143"
-                                                HorizontalAlignment="Right"
-                                                Width="60"
-                                                Height="35">
+                                    <Grid Grid.Row="2"
+                                          Grid.Column="0">
 
-                                        <TextBlock Text="39,99€"
-                                                   FontSize="11"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   TextDecorations="Strikethrough"
-                                                   Foreground="#738895"
-                                                   Margin="6,1,-15,0" />
+                                        <StackPanel Height="Auto"
+                                                    Width="Auto"
+                                                    Background="#1D698D"
+                                                    HorizontalAlignment="Stretch"
+                                                    Orientation="Vertical">
 
-                                        <TextBlock Text="25,99€"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="15"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,-1.5,2,0" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                            <Image Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Source="/Image/Red.png"
+                                                   HorizontalAlignment="Stretch"
+                                                   Height="150" />
 
-                            <StackPanel Grid.Row="3"
-                                        Grid.Column="3"
-                                        Height="Auto"
-                                        Width="Auto"
-                                        Background="#1D698D"
-                                        HorizontalAlignment="Left"
-                                        Orientation="Vertical">
+                                            <StackPanel Height="45"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
 
-                                <Image Stretch="UniformToFill"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       Source="/Image/Red.png"
-                                       Width="300"
-                                       Height="150" />
+                                                <Border Background="#4c6b22"
+                                                        HorizontalAlignment="Right"
+                                                        CornerRadius="2,0,0,2"
+                                                        Padding="6,2,1,0"
+                                                        Width="75"
+                                                        Height="35">
 
-                                <StackPanel Height="45"
-                                            Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
+                                                    <TextBlock Text="-75%"
+                                                               TextAlignment="Center"
+                                                               FontSize="27"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="Bold" />
+                                                </Border>
 
-                                    <Border Background="#4c6b22"
-                                            HorizontalAlignment="Right"
-                                            CornerRadius="2,0,0,2"
-                                            Padding="6,2,1,0"
-                                            Width="75"
-                                            Height="35">
+                                                <StackPanel Orientation="Vertical"
+                                                            Background="#173143"
+                                                            HorizontalAlignment="Right"
+                                                            Width="60"
+                                                            Height="35">
 
-                                        <TextBlock Text="-75%"
-                                                   TextAlignment="Center"
-                                                   FontSize="27"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="Bold" />
-                                    </Border>
+                                                    <TextBlock Text="39,99€"
+                                                               FontSize="11"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               TextDecorations="Strikethrough"
+                                                               Foreground="#738895"
+                                                               Margin="6,1,-15,0" />
 
-                                    <StackPanel Orientation="Vertical"
-                                                Background="#173143"
-                                                HorizontalAlignment="Right"
-                                                Width="60"
-                                                Height="35">
+                                                    <TextBlock Text="25,99€"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="15"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="SemiBold"
+                                                               Margin="6,-1.5,2,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
 
-                                        <TextBlock Text="39,99€"
-                                                   FontSize="11"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   TextDecorations="Strikethrough"
-                                                   Foreground="#738895"
-                                                   Margin="6,1,-15,0" />
+                                    <Grid Grid.Row="2"
+                                          Grid.Column="2">
 
-                                        <TextBlock Text="25,99€"
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="15"
-                                                   Width="Auto"
-                                                   Height="Auto"
-                                                   TextAlignment="Center"
-                                                   Foreground="#a4d007"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,-1.5,2,0" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                        <StackPanel Height="Auto"
+                                                    Width="Auto"
+                                                    Background="#1D698D"
+                                                    HorizontalAlignment="Stretch"
+                                                    Orientation="Vertical">
+
+                                            <Image Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Source="/Image/Red.png"
+                                                   HorizontalAlignment="Stretch"
+                                                   Height="150" />
+
+                                            <StackPanel Height="45"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
+
+                                                <Border Background="#4c6b22"
+                                                        HorizontalAlignment="Right"
+                                                        CornerRadius="2,0,0,2"
+                                                        Padding="6,2,1,0"
+                                                        Width="75"
+                                                        Height="35">
+
+                                                    <TextBlock Text="-75%"
+                                                               TextAlignment="Center"
+                                                               FontSize="27"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="Bold" />
+                                                </Border>
+
+                                                <StackPanel Orientation="Vertical"
+                                                            Background="#173143"
+                                                            HorizontalAlignment="Right"
+                                                            Width="60"
+                                                            Height="35">
+
+                                                    <TextBlock Text="39,99€"
+                                                               FontSize="11"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               TextDecorations="Strikethrough"
+                                                               Foreground="#738895"
+                                                               Margin="6,1,-15,0" />
+
+                                                    <TextBlock Text="25,99€"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="15"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="SemiBold"
+                                                               Margin="6,-1.5,2,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2"
+                                          Grid.Column="4">
+
+                                        <StackPanel Height="Auto"
+                                                    Width="Auto"
+                                                    Background="#1D698D"
+                                                    HorizontalAlignment="Stretch"
+                                                    Orientation="Vertical">
+
+                                            <Image Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Source="/Image/Red.png"
+                                                   HorizontalAlignment="Stretch"
+                                                   Height="150" />
+
+                                            <StackPanel Height="45"
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
+
+                                                <Border Background="#4c6b22"
+                                                        HorizontalAlignment="Right"
+                                                        CornerRadius="2,0,0,2"
+                                                        Padding="6,2,1,0"
+                                                        Width="75"
+                                                        Height="35">
+
+                                                    <TextBlock Text="-75%"
+                                                               TextAlignment="Center"
+                                                               FontSize="27"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="Bold" />
+                                                </Border>
+
+                                                <StackPanel Orientation="Vertical"
+                                                            Background="#173143"
+                                                            HorizontalAlignment="Right"
+                                                            Width="60"
+                                                            Height="35">
+
+                                                    <TextBlock Text="39,99€"
+                                                               FontSize="11"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               TextDecorations="Strikethrough"
+                                                               Foreground="#738895"
+                                                               Margin="6,1,-15,0" />
+
+                                                    <TextBlock Text="25,99€"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="15"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="#a4d007"
+                                                               FontWeight="SemiBold"
+                                                               Margin="6,-1.5,2,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         </Grid>
 
                         <Grid Grid.Row="2"
@@ -806,7 +836,7 @@
                                           Grid.Column="1"
                                           VerticalAlignment="Top"
                                           Width="Auto"
-                                          Height="230"
+                                          Height="250"
                                           Source="/Image/Red.png"
                                           LoadedBehavior="Play"
                                           UnloadedBehavior="Stop"
@@ -870,168 +900,178 @@
 
                         <Grid Grid.Row="3"
                               Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="55" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
+                                                
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="13.5" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="13" />
                             </Grid.ColumnDefinitions>
 
+                            <Grid Grid.Column="1">
 
-                            <StackPanel Grid.Row="1"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
 
-                                <TextBlock HorizontalAlignment="Left"
-                                           Text="Recommended Based on the Games You Play"
-                                           Foreground="White"
-                                           FontSize="14"
-                                           Margin="2,5,0,4" />
-                            </StackPanel>
 
-                            <Grid Grid.Row="2"
-                                  Grid.Column="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Row="0">
+                                    <StackPanel HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
 
-                                <StackPanel Grid.Column="0"
-                                            Height="Auto"
-                                            Width="Auto"
-                                            Background="#374351">
-
-                                    <StackPanel Orientation="Vertical"
-                                                HorizontalAlignment="Left">
-
-                                        <Image Stretch="UniformToFill"
-                                               RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Image/Red.png"
-                                               Width="224"
-                                               Height="120" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left"
-                                                    Background="#242C36"
-                                                    Margin="4,4,0,4"
-                                                    Height="Auto"
-                                                    Width="Auto">
-
-                                            <TextBlock Text="Free To Play"
-                                                       HorizontalAlignment="Center"
-                                                       FontSize="13"
-                                                       Width="Auto"
-                                                       Height="Auto"
-                                                       TextAlignment="Center"
-                                                       Foreground="White"
-                                                       Margin="5,-1,5,1" />
-                                        </StackPanel>
+                                        <TextBlock HorizontalAlignment="Left"
+                                                   Text="Recommended Based on the Games You Play"
+                                                   Foreground="White"
+                                                   FontSize="14"
+                                                   Margin="2,55,0,4" />
                                     </StackPanel>
-                                </StackPanel>
+                                </Grid>
 
-                                <StackPanel Grid.Column="2"
-                                            Height="Auto"
-                                            Background="#374351">
+                                <Grid Grid.Row="1">
+<!--tu som skoncil-->
+                                    <!-- CHANGE 3: columns * not Auto, StackPanels Stretch, images no Width="224" -->
+                                    <Grid Grid.Row="2"
+                                          Grid.Column="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <StackPanel Orientation="Vertical">
-
-                                        <Image Stretch="UniformToFill"
-                                               RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Image/Red.png"
-                                               Width="224"
-                                               Height="120" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left"
-                                                    Background="#242C36"
-                                                    Margin="4,4,0,4"
+                                        <StackPanel Grid.Column="0"
                                                     Height="Auto"
-                                                    Width="Auto">
+                                                    HorizontalAlignment="Stretch"
+                                                    Background="#374351">
 
-                                            <TextBlock Text="Free To Play"
-                                                       HorizontalAlignment="Center"
-                                                       FontSize="13"
-                                                       Width="Auto"
-                                                       Height="Auto"
-                                                       TextAlignment="Center"
-                                                       Foreground="White"
-                                                       Margin="5,-1,5,1" />
+                                            <StackPanel Orientation="Vertical"
+                                                        HorizontalAlignment="Stretch">
+
+                                                <Image Stretch="UniformToFill"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       Source="/Image/Red.png"
+                                                       HorizontalAlignment="Stretch"
+                                                       Height="120" />
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Left"
+                                                            Background="#242C36"
+                                                            Margin="4,4,0,4"
+                                                            Height="Auto"
+                                                            Width="Auto">
+
+                                                    <TextBlock Text="Free To Play"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="13"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="White"
+                                                               Margin="5,-1,5,1" />
+                                                </StackPanel>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
 
-                                <StackPanel Grid.Column="4"
-                                            Height="Auto"
-                                            Background="#374351">
-
-                                    <StackPanel Orientation="Vertical">
-
-                                        <Image Stretch="UniformToFill"
-                                               RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Image/Red.png"
-                                               Width="224"
-                                               Height="120" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left"
-                                                    Background="#242C36"
-                                                    Margin="4,4,0,4"
+                                        <StackPanel Grid.Column="2"
                                                     Height="Auto"
-                                                    Width="Auto">
+                                                    HorizontalAlignment="Stretch"
+                                                    Background="#374351">
 
-                                            <TextBlock Text="Free To Play"
-                                                       HorizontalAlignment="Center"
-                                                       FontSize="13"
-                                                       Width="Auto"
-                                                       Height="Auto"
-                                                       TextAlignment="Center"
-                                                       Foreground="White"
-                                                       Margin="5,-1,5,1" />
+                                            <StackPanel Orientation="Vertical">
+
+                                                <Image Stretch="UniformToFill"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       Source="/Image/Red.png"
+                                                       HorizontalAlignment="Stretch"
+                                                       Height="120" />
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Left"
+                                                            Background="#242C36"
+                                                            Margin="4,4,0,4"
+                                                            Height="Auto"
+                                                            Width="Auto">
+
+                                                    <TextBlock Text="Free To Play"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="13"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="White"
+                                                               Margin="5,-1,5,1" />
+                                                </StackPanel>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
 
-                                <StackPanel Grid.Column="6"
-                                            Height="Auto"
-                                            Background="#374351">
-
-                                    <StackPanel Orientation="Vertical">
-
-                                        <Image Stretch="UniformToFill"
-                                               RenderOptions.BitmapScalingMode="HighQuality"
-                                               Source="/Image/Red.png"
-                                               Width="224"
-                                               Height="120" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left"
-                                                    Background="#242C36"
-                                                    Margin="4,4,0,4"
+                                        <StackPanel Grid.Column="4"
                                                     Height="Auto"
-                                                    Width="Auto">
+                                                    HorizontalAlignment="Stretch"
+                                                    Background="#374351">
 
-                                            <TextBlock Text="Free To Play"
-                                                       HorizontalAlignment="Center"
-                                                       FontSize="13"
-                                                       Width="Auto"
-                                                       Height="Auto"
-                                                       TextAlignment="Center"
-                                                       Foreground="White"
-                                                       Margin="5,-1,5,1" />
+                                            <StackPanel Orientation="Vertical">
+
+                                                <Image Stretch="UniformToFill"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       Source="/Image/Red.png"
+                                                       HorizontalAlignment="Stretch"
+                                                       Height="120" />
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Left"
+                                                            Background="#242C36"
+                                                            Margin="4,4,0,4"
+                                                            Height="Auto"
+                                                            Width="Auto">
+
+                                                    <TextBlock Text="Free To Play"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="13"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="White"
+                                                               Margin="5,-1,5,1" />
+                                                </StackPanel>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
+
+                                        <StackPanel Grid.Column="6"
+                                                    Height="Auto"
+                                                    HorizontalAlignment="Stretch"
+                                                    Background="#374351">
+
+                                            <StackPanel Orientation="Vertical">
+
+                                                <Image Stretch="UniformToFill"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       Source="/Image/Red.png"
+                                                       HorizontalAlignment="Stretch"
+                                                       Height="120" />
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Left"
+                                                            Background="#242C36"
+                                                            Margin="4,4,0,4"
+                                                            Height="Auto"
+                                                            Width="Auto">
+
+                                                    <TextBlock Text="Free To Play"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="13"
+                                                               Width="Auto"
+                                                               Height="Auto"
+                                                               TextAlignment="Center"
+                                                               Foreground="White"
+                                                               Margin="5,-1,5,1" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
 
@@ -1114,30 +1154,31 @@
                                            Margin="2,5,0,4" />
                             </StackPanel>
 
+                            <!-- CHANGE 3: columns * not Auto, StackPanels Stretch, images no Width="224" -->
                             <Grid Grid.Row="2"
                                   Grid.Column="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0"
                                             Height="Auto"
-                                            Width="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical"
-                                                HorizontalAlignment="Left">
+                                                HorizontalAlignment="Stretch">
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Vertical"
@@ -1236,6 +1277,7 @@
 
                                 <StackPanel Grid.Column="2"
                                             Height="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical">
@@ -1243,7 +1285,7 @@
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Horizontal"
@@ -1373,6 +1415,7 @@
 
                                 <StackPanel Grid.Column="4"
                                             Height="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical">
@@ -1380,7 +1423,7 @@
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Vertical"
@@ -1479,6 +1522,7 @@
 
                                 <StackPanel Grid.Column="6"
                                             Height="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical">
@@ -1486,7 +1530,7 @@
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Vertical"
@@ -1664,30 +1708,31 @@
                                            Margin="2,5,0,4" />
                             </StackPanel>
 
+                            <!-- CHANGE 3: columns * not Auto, StackPanels Stretch, images no Width="224" -->
                             <Grid Grid.Row="2"
                                   Grid.Column="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0"
                                             Height="Auto"
-                                            Width="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical"
-                                                HorizontalAlignment="Left">
+                                                HorizontalAlignment="Stretch">
 
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Horizontal"
@@ -1711,6 +1756,7 @@
 
                                 <StackPanel Grid.Column="2"
                                             Height="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical">
@@ -1718,7 +1764,7 @@
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Horizontal"
@@ -1742,6 +1788,7 @@
 
                                 <StackPanel Grid.Column="4"
                                             Height="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical">
@@ -1749,7 +1796,7 @@
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Horizontal"
@@ -1773,6 +1820,7 @@
 
                                 <StackPanel Grid.Column="6"
                                             Height="Auto"
+                                            HorizontalAlignment="Stretch"
                                             Background="#374351">
 
                                     <StackPanel Orientation="Vertical">
@@ -1780,7 +1828,7 @@
                                         <Image Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"
                                                Source="/Image/Red.png"
-                                               Width="224"
+                                               HorizontalAlignment="Stretch"
                                                Height="120" />
 
                                         <StackPanel Orientation="Horizontal"
@@ -1847,20 +1895,19 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Row="0"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="0"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -1926,22 +1973,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="2"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="2"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -1980,22 +2026,21 @@
                                                        Margin="0,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="4"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="4"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2034,22 +2079,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="6"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="6"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2115,22 +2159,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="8"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="8"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2196,24 +2239,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-
-
-                                <StackPanel Grid.Row="10"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="10"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2279,22 +2319,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="12"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="12"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2360,22 +2399,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="14"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="14"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2441,22 +2479,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="16"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="16"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2522,22 +2559,21 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
-                                <StackPanel Grid.Row="18"
-                                            HorizontalAlignment="Left"
-                                            Width="Auto"
-                                            Height="85"
-                                            Orientation="Horizontal">
+                                <!-- CHANGE 4: DockPanel replaces horizontal StackPanel, Width="410" removed -->
+                                <DockPanel Grid.Row="18"
+                                           HorizontalAlignment="Stretch"
+                                           Height="85"
+                                           LastChildFill="True">
 
                                     <Image Source="/Image/Red.png"
                                            Width="175"
-                                           HorizontalAlignment="Left"
+                                           DockPanel.Dock="Left"
                                            Stretch="UniformToFill" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Background="#0A1B29"
-                                                Width="410">
+                                                Background="#0A1B29">
 
                                         <StackPanel Orientation="Vertical"
                                                     Margin="15,0,0,0"
@@ -2603,29 +2639,29 @@
                                                        Margin="5,-1.5,0,0" />
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
 
+                                <!-- CHANGE 5: Width="580" removed from inner StackPanel -->
                                 <StackPanel Grid.Row="20"
                                             HorizontalAlignment="Left"
                                             Width="Auto"
                                             Height="35">
 
                                     <StackPanel Background="#0C2433"
-                                                Width="580"                                               
-                                                HorizontalAlignment="Right">
+                                                HorizontalAlignment="Stretch">
 
                                         <Button Background="Transparent"
                                                 BorderBrush="#96A2B0"
                                                 BorderThickness="0.5"
                                                 HorizontalAlignment="Right"
-                                                Width="85" 
+                                                Width="85"
                                                 Height="30"
                                                 Margin="3">
 
                                             <TextBlock Text="Show more"
                                                        Foreground="#C6D4DF"
                                                        FontSize="12"
-                                                       Margin="-4,0,-5,0"/>
+                                                       Margin="-4,0,-5,0" />
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>
