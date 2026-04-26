@@ -54,8 +54,9 @@ namespace SteamProxyBackend.Data
                 entity.Property(e => e.IsLastActive).HasColumnName("IsLastActive");
                 entity.HasIndex(e => new { e.DeviceToken, e.UserId }).IsUnique();
 
-                entity.HasOne(e => e.User)
-                      .WithMany(u => u.DeviceAccounts)
+                // Relationship without navigation collection on User
+                entity.HasOne<User>()
+                      .WithMany()
                       .HasForeignKey(e => e.UserId);
             });
 
@@ -70,8 +71,9 @@ namespace SteamProxyBackend.Data
                 entity.Property(e => e.LoginAt).HasColumnName("LoginAt");
                 entity.Property(e => e.LoginMethod).HasColumnName("LoginMethod").IsRequired();
 
-                entity.HasOne(e => e.User)
-                      .WithMany(u => u.LoginHistories)
+                // Relationship without navigation collection on User
+                entity.HasOne<User>()
+                      .WithMany()
                       .HasForeignKey(e => e.UserId);
             });
         }
