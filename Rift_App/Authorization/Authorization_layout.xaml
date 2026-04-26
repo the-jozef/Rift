@@ -488,6 +488,7 @@
     </Style>
 
     <!--      REGISTER      -->
+    
     <!-- Title Stackpanel -->
     <Style x:Key="Rift_Title_stackpanel"
            TargetType="StackPanel">
@@ -515,7 +516,7 @@
         <Setter Property="Height"
                 Value="65" />
         <Setter Property="Margin"
-                Value="-5,-10,0,-10" />
+                Value="-10,-10,0,-10" />
         <Setter Property="Stretch"
                 Value="UniformToFill" />
         <Setter Property="RenderOptions.BitmapScalingMode"
@@ -556,7 +557,7 @@
         <Setter Property="VerticalAlignment"
                 Value="Top" />
         <Setter Property="Margin"
-                Value="72,50,0,0" />
+                Value="72,60,0,0" />
     </Style>
 
     <!-- Textblock for Connect with Steam -->
@@ -838,7 +839,7 @@
         <Setter Property="Height"
                 Value="35" />
         <Setter Property="Margin"
-                Value="20,26,0,0" />
+                Value="0,26,0,0" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"

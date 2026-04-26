@@ -102,7 +102,21 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0"
-                                Style="{StaticResource Rift_Title_stackpanel}">
+                                Style="{StaticResource Rift_Title_stackpanel}" 
+                                Margin="40,40,0,0">
+
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                Height="55"
+                                Width="37"
+                                Command="{Binding ShowLoginCommand}">
+
+                            <materialIcons:MaterialIcon Kind="ChevronLeft"
+                                                        Foreground="#BFBDBD"
+                                                        Height="60"
+                                                        Width="60"
+                                                        Margin="-35,-6,0,0" />
+                        </Button>
 
                         <Image Style="{StaticResource Rift_Logo_register}" />
 
@@ -116,16 +130,18 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="1"
+                    <StackPanel Grid.Row="1"                         
                                 Style="{StaticResource Rift_Stackpanel_Information}">
 
                         <TextBlock Style="{StaticResource Rift_Textblock_Connection}" />
 
                         <TextBlock Style="{StaticResource Rift_Textblock_AccountLink}" />
+                        
                     </StackPanel>
 
                     <StackPanel Grid.Row="2"
-                                Style="{StaticResource Rift_Stackpanel_Button Layout}">
+                                Style="{StaticResource Rift_Stackpanel_Button Layout}"
+                                Margin="90,45,0,0">
 
                         <Button Style="{StaticResource Rift_Steam_button}"
                                 Width="220"
@@ -139,51 +155,9 @@
                                                             Width="25"
                                                             Height="25" />
                                 <TextBlock Style="{StaticResource Rift_Steam_Textblock_register}" />
+                                
                             </StackPanel>
                         </Button>
-
-                        <Grid Margin="0,28,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="133.5" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="130" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0"
-                                    Margin="0,0,12,0"
-                                    Style="{StaticResource Rift_Border_lines}">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0.0,0"
-                                                         StartPoint="1.0,0">
-                                        <GradientStop Offset="1" />
-                                        <GradientStop Color="#969696"
-                                                      Offset="0.294" />
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-
-                            <TextBlock Grid.Column="1"
-                                       Style="{StaticResource Rift_TextBlock_or}"
-                                       FontSize="13"
-                                       Margin="12,-4,12,0" />
-
-                            <Border Grid.Column="2"
-                                    Margin="12,0,0,0"
-                                    Style="{StaticResource Rift_Border_lines}">
-
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0.0,0"
-                                                         StartPoint="1.0,0">
-                                        <GradientStop Offset="0" />
-                                        <GradientStop Color="#969696"
-                                                      Offset="0.294" />
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                        </Grid>
-
-                        <Button Style="{StaticResource Rift_Return_Button}"
-                                Command="{Binding ShowLoginCommand}" />
                     </StackPanel>
                 </Grid>
 

@@ -100,9 +100,27 @@
 
                     <StackPanel Grid.Row="0"
                                 Grid.Column="0"
-                                Style="{StaticResource Rift_LoginTitle_stackpanel}">
-                        <Image Style="{StaticResource Rift_Logo_login}" />
+                                Style="{StaticResource Rift_LoginTitle_stackpanel}"
+                                Margin="40,35,0,0">
+
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                Height="55"
+                                Width="37"
+                                Command="{Binding DataContext.ShowLoginCommand, 
+RelativeSource={RelativeSource AncestorType=Window}}">
+
+                            <materialIcons:MaterialIcon Kind="ChevronLeft"
+                                                        Foreground="#BFBDBD"
+                                                        Height="60"
+                                                        Width="60"
+                                                        Margin="-35,-6,0,0" />
+                        </Button>
+
+                        <Image Style="{StaticResource Rift_Logo_register}" />
+                        
                         <TextBlock Style="{StaticResource Rift_Title_login}" />
+                        
                     </StackPanel>
 
                     <Grid Grid.Row="1">
