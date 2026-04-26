@@ -838,7 +838,7 @@
         <Setter Property="Height"
                 Value="35" />
         <Setter Property="Margin"
-                Value="5,26,0,0" />
+                Value="20,26,0,0" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"
@@ -900,7 +900,7 @@
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Foreground"
-                Value="#CC63FF" />
+                Value="#C95CFF" />
         <Setter Property="FontSize"
                 Value="13.5" />
         <Setter Property="FontFamily"

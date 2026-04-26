@@ -77,7 +77,6 @@ namespace SteamProxyBackend.Controllers
 
         // ─── GET LAST SESSION ─────────────────────────────────────────────────
         // FIXED: No longer joins Devices table — only uses DeviceAccounts + Users
-
         [HttpGet("{token}/session")]
         public async Task<IActionResult> GetSession(string token)
         {
@@ -86,8 +85,6 @@ namespace SteamProxyBackend.Controllers
                 if (string.IsNullOrWhiteSpace(token))
                     return BadRequest(new { Success = false, Message = "Device token is required." });
 
-                // Only query DeviceAccounts and Users — no Devices table join
-                // Len DeviceAccounts a Users — žiadny join s Devices tabuľkou
                 var lastActive = await _db.DeviceAccounts
                     .Where(da => da.DeviceToken == token && da.IsLastActive)
                     .Include(da => da.User)
