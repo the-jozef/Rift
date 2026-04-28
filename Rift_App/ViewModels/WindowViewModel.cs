@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Rift_App.Library;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Rift_App.Authorization;
+using Rift_App.Library;
+using Rift_App.Services;
 using Rift_App.Store;
 using Rift_App.StoreGamePage;
 using System.ComponentModel;
@@ -10,78 +12,87 @@ using System.Windows.Input;
 
 namespace Rift_App.ViewModels
 {
-    public class WindowViewModel : INotifyPropertyChanged
+    public class WindowViewModel : ObservableObject
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        // ─── WINDOW STATE ─────────────────────────────────────────────────
+        public WindowStateViewModel WindowState { get; } = new();
 
-        protected void OnPropertyChanged([CallerMemberName] string? name = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        // ─── CURRENT VIEW ─────────────────────────────────────────────────
+        [ObservableProperty]
+        private object _currentView = null!;
 
-        // Sub-ViewModels
-        public WindowStateViewModel WindowState { get; }
-        public StoreViewModel Store { get; }
-
-        // Current page shown in MainWindow
-        // Aktuálna stránka zobrazená v MainWindow
-        private object _currentView = new object();
-        public object CurrentView
-        {
-            get => _currentView;
-            set { _currentView = value; OnPropertyChanged(); }
-        }
-
-        private bool _showSearchBar;
-        public bool ShowSearchBar
-        {
-            get => _showSearchBar;
-            set { _showSearchBar = value; OnPropertyChanged(); }
-        }
-
-        // ─── NAVIGATION COMMANDS ──────────────────────────────────────────
-
-        public ICommand StoreCommand { get; }
-        public ICommand LibraryCommand { get; }
-        public ICommand GamePageCommand { get; }
-        public ICommand SwitchAccountCommand { get; }
+        // ─── SEARCH BAR ───────────────────────────────────────────────────
+        [ObservableProperty]
+        private bool _showSearchBar = true;
 
         public WindowViewModel()
         {
-            WindowState = new WindowStateViewModel();
-            Store = new StoreViewModel();
+            ShowStore();
+        }
 
-            StoreCommand = new RelayCommand(() =>
-            {
-                CurrentView = new Store.Store();
-                ShowSearchBar = true;
-            });
+        // ─── NAVIGATION ───────────────────────────────────────────────────
 
-            LibraryCommand = new RelayCommand(() =>
-            {
-                CurrentView = new Library.Library();
-                ShowSearchBar = false;
-            });
-
-            GamePageCommand = new RelayCommand(() =>
-            {
-                CurrentView = new GamePage();
-                ShowSearchBar = false;
-            });
-
-            // FIXED: Use ViewNavigator.Instance instead of new ViewNavigator()
-            // Používame ViewNavigator.Instance namiesto new ViewNavigator()
-            SwitchAccountCommand = new RelayCommand(() =>
-            {
-                try
-                {
-                    Services.SessionManager.Clear();
-                    ViewNavigator.Instance?.SwitchAccount();
-                }
-                catch { }
-            });
-
-            // Default page
+        [RelayCommand]
+        public void ShowStore()
+        {
+            _ = ApiService.SaveSessionAsync("Store");
             CurrentView = new Store.Store();
             ShowSearchBar = true;
+        }
+
+        [RelayCommand]
+        public void ShowLibrary()
+        {
+            _ = ApiService.SaveSessionAsync("Library");
+            CurrentView = new Library.Library();
+            ShowSearchBar = false;
+        }
+
+        [RelayCommand]
+        public void ShowWishlist()
+        {
+            _ = ApiService.SaveSessionAsync("Wishlist");
+            CurrentView = new Wishlist.Wishlist();
+            ShowSearchBar = false;
+        }
+
+        [RelayCommand]
+        public void ShowAccount()
+        {
+            _ = ApiService.SaveSessionAsync("Account");
+            CurrentView = new Account.Account();
+            ShowSearchBar = false;
+        }
+
+        [RelayCommand]
+        public void ShowGamePage(Models.GameModel game)
+        {
+            var page = new StoreGamePage.GamePage();
+            page.LoadGame(game);
+            CurrentView = page;
+            ShowSearchBar = false;
+        }
+
+        // ─── SWITCH ACCOUNT ───────────────────────────────────────────────
+
+        [RelayCommand]
+        public void SwitchAccount()
+        {
+            SessionManager.Clear();
+            ViewNavigator.Instance?.SwitchToAuth();
+        }
+
+        // ─── NAVIGATE TO LAST LOCATION ────────────────────────────────────
+
+        public void NavigateToLastLocation(string location)
+        {
+            switch (location)
+            {
+                case "Library": ShowLibrary(); break;
+                case "Wishlist": ShowWishlist(); break;
+                case "Account": ShowAccount(); break;
+                default: ShowStore(); break;
+            }
         }
     }
 }

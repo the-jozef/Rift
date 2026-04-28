@@ -102,7 +102,7 @@
 
                         <Grid Grid.Row="0"
                               Grid.Column="1">
-                            
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -130,7 +130,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Column="0">
-                                    
+
                                     <Border CornerRadius="3,0,0,3"
                                             ClipToBounds="True"
                                             Width="630">
@@ -144,10 +144,10 @@
                                 </Grid>
 
                                 <Grid Grid.Column="1">
-                                    
+
                                     <Border Background="#0B151E"
                                             CornerRadius="0,3,3,0">
-                                        
+
                                         <Grid DataContext="{Binding CurrentGame}">
 
                                             <Grid.RowDefinitions>
@@ -170,7 +170,7 @@
 
                                             <Grid Grid.Row="1"
                                                   Margin="0,14,0,0">
-                                                
+
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="11" />
@@ -242,7 +242,7 @@
 
                                             <Grid Grid.Row="3">
                                                 <StackPanel Orientation="Horizontal">
-                                              
+
                                                     <ItemsControl ItemsSource="{Binding Tags}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -251,13 +251,13 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                
+
                                                                 <Border Background="#394148"
                                                                         materialDesign:ElevationAssist.Elevation="Dp6"
                                                                         CornerRadius="2"
                                                                         Padding="6,2"
                                                                         Margin="0,0,4,0">
-                                                                    
+
                                                                     <TextBlock Text="{Binding}"
                                                                                Foreground="White"
                                                                                FontSize="11" />
@@ -366,7 +366,7 @@
                                     <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Center"
                                                 Margin="0,8,0,0">
-                                        
+
                                         <RadioButton IsChecked="True"
                                                      GroupName="Carousel" />
                                         <RadioButton GroupName="Carousel" />
@@ -416,7 +416,7 @@
 
                         <Grid Grid.Row="1"
                               Grid.Column="2">
-                            
+
                             <Button HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Height="100"
@@ -874,7 +874,7 @@
                                               RenderOptions.BitmapScalingMode="HighQuality" />
                             </Grid>
                         </Grid>
-                        
+
                         <Grid Grid.Row="3"
                               Grid.Column="0">
 
@@ -906,10 +906,10 @@
                                                          Margin="-11,0,0,0" />
                             </Button>
                         </Grid>
-                        
+
                         <Grid Grid.Row="3"
                               Grid.Column="2">
-                            
+
                             <Button HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Height="100"
@@ -1017,7 +1017,7 @@
                                     </Grid>
 
                                     <Grid Grid.Column="2">
-                                        
+
                                         <StackPanel Orientation="Vertical"
                                                     HorizontalAlignment="Stretch"
                                                     Background="#374351">
@@ -1055,7 +1055,7 @@
                                     </Grid>
 
                                     <Grid Grid.Column="4">
-                                        
+
                                         <StackPanel Orientation="Vertical"
                                                     HorizontalAlignment="Stretch"
                                                     Background="#374351">
@@ -1093,7 +1093,7 @@
                                     </Grid>
 
                                     <Grid Grid.Column="6">
-                                        
+
                                         <StackPanel Orientation="Vertical"
                                                     HorizontalAlignment="Stretch"
                                                     Background="#374351">
@@ -1135,7 +1135,7 @@
 
                         <Grid Grid.Row="4"
                               Grid.Column="0">
-                            
+
                             <Button HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Height="100"
@@ -1167,7 +1167,7 @@
 
                         <Grid Grid.Row="4"
                               Grid.Column="2">
-                            
+
                             <Button HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Height="100"
@@ -1308,7 +1308,7 @@
                                                     <TextBlock Text="Tactical"
                                                                HorizontalAlignment="Center"
                                                                FontSize="13"
-                                                               Foreground="#67C1F5"/>
+                                                               Foreground="#67C1F5" />
                                                 </Border>
                                             </Grid>
 
@@ -1369,7 +1369,7 @@
                                                     <Border  Background="#242C36"
                                                              CornerRadius="0,2,2,0"
                                                              Padding="5,0,5,0">
-                                                        
+
                                                         <StackPanel Orientation="Horizontal"
                                                                     Margin="0,-1.5,0,0">
 
@@ -1388,7 +1388,7 @@
                                                     </Border>
                                                 </Grid>
                                             </Grid>
-                                         
+
                                             <Rectangle Height="1"
                                                        Width="Auto"
                                                        Fill="#376A91" />
@@ -1403,8 +1403,8 @@
 
                                                     <TextBlock Text="FPS"
                                                                HorizontalAlignment="Center"
-                                                               FontSize="13"                                                
-                                                               Foreground="#67C1F5"/>
+                                                               FontSize="13"
+                                                               Foreground="#67C1F5" />
                                                 </Border>
                                             </Grid>
 
@@ -1419,7 +1419,7 @@
                                                     <TextBlock Text="Realistic"
                                                                HorizontalAlignment="Center"
                                                                FontSize="13"
-                                                               Foreground="#67C1F5"/>
+                                                               Foreground="#67C1F5" />
                                                 </Border>
                                             </Grid>
 
@@ -1678,7 +1678,7 @@
 
                         <Grid Grid.Row="5"
                               Grid.Column="2">
-                            
+
                             <Button HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Height="100"
@@ -1877,39 +1877,30 @@
                               Grid.Column="1">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="25" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="250" />
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="1"
-                                  Margin="0,80,0,0">
+                                  Margin="0,70,0,0">
 
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="5" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <Grid Grid.Row="0">
+                                <Grid Grid.Row="0"
+                                      Margin="0,5,0,0">
 
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
@@ -1981,14 +1972,14 @@
                                                                    FontWeight="Bold" />
                                                     </Border>
                                                 </Grid>
-                                        
+
                                                 <Grid Grid.Column="2"
                                                       Margin="0,0,20,0">
 
                                                     <StackPanel Orientation="Vertical"
                                                                 HorizontalAlignment="Right"
                                                                 VerticalAlignment="Center">
-                                                        
+
                                                         <TextBlock Text="39,99€"
                                                                    FontSize="13.5"
                                                                    TextDecorations="Strikethrough"
@@ -2006,12 +1997,9 @@
                                         </Border>
                                     </DockPanel>
                                 </Grid>
-                                
-                                
-                                
-                                
-                                <!--tu som skoncil-->
-                                <Grid Grid.Row="2">
+
+                                <Grid Grid.Row="1"
+                                      Margin="0,5,0,0">
 
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
@@ -2022,50 +2010,73 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel Margin="73,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                <TextBlock Text="68,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#CAD8DB"
-                                                           FontWeight="SemiBold"
-                                                           Margin="0,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
+
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
+
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,10,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="68,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#CAD8DB"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="4">
+                                <Grid Grid.Row="2"
+                                      Margin="0,5,0,0">
 
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
@@ -2076,50 +2087,73 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel Margin="79,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                <TextBlock Text="Free"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="20"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#CAD8DB"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
+
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
+
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,10,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="Free"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="20"
+                                                                   Foreground="#CAD8DB"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="6">
+                                <Grid Grid.Row="3"
+                                      Margin="0,5,0,0">
 
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
@@ -2130,77 +2164,95 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
 
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
 
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
 
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="8">
+                                <Grid Grid.Row="4"
+                                      Margin="0,5,0,0">
 
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
@@ -2211,77 +2263,96 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
 
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
 
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
 
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="10">
+                                <Grid Grid.Row="5"
+                                      Margin="0,5,0,0">
+
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
                                                LastChildFill="True">
@@ -2291,158 +2362,96 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
 
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
 
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
 
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="12">
-                                    <DockPanel Grid.Row="12"
-                                               HorizontalAlignment="Stretch"
-                                               Height="85"
-                                               LastChildFill="True">
+                                <Grid Grid.Row="6"
+                                      Margin="0,5,0,0">
 
-                                        <Image Source="/Image/Red.png"
-                                               Width="175"
-                                               DockPanel.Dock="Left"
-                                               Stretch="UniformToFill" />
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
-
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
-
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
-
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
-
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
-
-                                            </StackPanel>
-
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
-
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
-
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
-
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
-
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </Grid>
-
-                                <Grid Grid.Row="14">
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
                                                LastChildFill="True">
@@ -2452,77 +2461,96 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
 
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
 
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
 
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="16">
+                                <Grid Grid.Row="7"
+                                      Margin="0,5,0,0">
+
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
                                                LastChildFill="True">
@@ -2532,77 +2560,96 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
 
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
 
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
 
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="18">
+                                <Grid Grid.Row="8"
+                                      Margin="0,5,0,0">
+
                                     <DockPanel HorizontalAlignment="Stretch"
                                                Height="85"
                                                LastChildFill="True">
@@ -2612,101 +2659,243 @@
                                                DockPanel.Dock="Left"
                                                Stretch="UniformToFill" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Background="#0A1B29">
+                                        <Border Background="#0A1B29">
 
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="15,0,0,0"
-                                                        Width="250">
+                                            <Grid>
 
-                                                <TextBlock Text="R.E.P.O"
-                                                           Foreground="#CCDBE3"
-                                                           FontSize="22"
-                                                           Margin="0,5,0,0" />
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#7C8E9C"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="18"
-                                                                            Width="18"
-                                                                            Margin="2,3,0,0" />
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
 
-                                                <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
-                                                           Foreground="#7C8E9C"
-                                                           FontSize="11"
-                                                           Margin="2,10,0,0" />
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
 
-                                            </StackPanel>
+                                                    <Grid Grid.Row="0">
 
-                                            <StackPanel>
-                                                <Border Background="#4c6b22"
-                                                        HorizontalAlignment="Left"
-                                                        CornerRadius="2,2,2,2"
-                                                        Padding="3,5,4,5"
-                                                        Width="Auto"
-                                                        Height="Auto"
-                                                        Margin="0,20,0,0">
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
 
-                                                    <TextBlock Text="-75%"
-                                                               TextAlignment="Center"
-                                                               FontSize="17"
-                                                               Foreground="#a4d007"
-                                                               FontWeight="Bold"
-                                                               Margin="0,-2,0,0" />
-                                                </Border>
-                                            </StackPanel>
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
 
-                                            <StackPanel Margin="30,0,0,2"
-                                                        VerticalAlignment="Center">
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
 
-                                                <TextBlock Text="39,99€"
-                                                           FontSize="13.5"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextDecorations="Strikethrough"
-                                                           Foreground="#738895"
-                                                           Margin="5,-1.5,0,0"
-                                                           HorizontalAlignment="Right" />
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
 
-                                                <TextBlock Text="5,99€"
-                                                           HorizontalAlignment="Right"
-                                                           FontSize="18"
-                                                           Width="Auto"
-                                                           Height="Auto"
-                                                           TextAlignment="Center"
-                                                           Foreground="#a4d007"
-                                                           FontWeight="SemiBold"
-                                                           Margin="5,-1.5,0,0" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DockPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="20">
+                                <Grid Grid.Row="9"
+                                      Margin="0,5,0,0">
 
-                                    <StackPanel HorizontalAlignment="Left"
-                                                Width="Auto"
-                                                Height="35">
+                                    <DockPanel HorizontalAlignment="Stretch"
+                                               Height="85"
+                                               LastChildFill="True">
 
-                                        <StackPanel Background="#0C2433"
-                                                    HorizontalAlignment="Stretch">
+                                        <Image Source="/Image/Red.png"
+                                               Width="175"
+                                               DockPanel.Dock="Left"
+                                               Stretch="UniformToFill" />
 
-                                            <Button Background="Transparent"
-                                                    BorderBrush="#96A2B0"
-                                                    BorderThickness="0.5"
-                                                    HorizontalAlignment="Right"
-                                                    Width="85"
-                                                    Height="30"
-                                                    Margin="3">
+                                        <Border Background="#0A1B29">
 
-                                                <TextBlock Text="Show more"
-                                                           Foreground="#C6D4DF"
+                                            <Grid>
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,0,0,0">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid Grid.Row="0">
+
+                                                        <TextBlock Text="R.E.P.O"
+                                                                   Foreground="#CCDBE3"
+                                                                   FontSize="22"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="1"
+                                                          Margin="2,3,0,0">
+
+                                                        <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Height="18"
+                                                                                    Width="18" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="2"
+                                                          Margin="2,10,5,0">
+
+                                                        <TextBlock Text="Strategy, Survival, Open World, Simulation, Tactic"
+                                                                   Foreground="#7C8E9C"
+                                                                   FontSize="11" />
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="15,-10,0,0">
+
+                                                    <Border Background="#4c6b22"
+                                                            VerticalAlignment="Center"
+                                                            CornerRadius="2,2,2,2"
+                                                            Padding="5,5,5,5">
+
+                                                        <TextBlock Text="-75%"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="20"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Column="2"
+                                                      Margin="0,0,20,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center">
+
+                                                        <TextBlock Text="39,99€"
+                                                                   FontSize="13.5"
+                                                                   TextDecorations="Strikethrough"
+                                                                   Foreground="#738895"
+                                                                   HorizontalAlignment="Right" />
+
+                                                        <TextBlock Text="5,99€"
+                                                                   HorizontalAlignment="Right"
+                                                                   FontSize="18"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </DockPanel>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="7"
+                              Grid.Column="1">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="250" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="1"
+                                  Margin="0,10,0,0">
+
+                                <Border Background="#0A1E29"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Top"
+                                        Padding="0,8,0,8">
+
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+
+                                        <TextBlock Text="Explore:"
+                                                   Foreground="#BAC9D6"
+                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                   VerticalAlignment="Center" />
+
+                                        <Button Background="Transparent"
+                                                BorderBrush="#9EA9B8"
+                                                BorderThickness="1"
+                                                Padding="15,8,6,2"
+                                                Margin="5,0,10,0"
+                                                MinHeight="0"
+                                                MinWidth="0"
+                                                Foreground="#C6D4DF">
+
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <TextBlock Text="Show More"
+                                                           FontFamily="Arial"
                                                            FontSize="12"
-                                                           Margin="-4,0,-5,0" />
-                                            </Button>
-                                        </StackPanel>
+                                                           FontWeight="SemiBold" />
+
+                                                <materialIcons:MaterialIcon Kind="MenuDown"
+                                                                            Height="23"
+                                                                            Width="23"
+                                                                            Margin="-2,-4,0,0" />
+                                            </StackPanel>
+                                        </Button>
                                     </StackPanel>
-                                </Grid>
+                                </Border>
                             </Grid>
                         </Grid>
                     </Grid>

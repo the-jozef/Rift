@@ -17,91 +17,19 @@ namespace Rift_App.Loading
 {
     public partial class LoadingWindow : Window
     {
-        private PlayerInfo? _playerInfo;
-        private List<GameModel> _library = new();
-        private List<GameModel> _wishlist = new();
+        public LoadingViewModel ViewModel { get; } = new LoadingViewModel();
 
         public LoadingWindow()
         {
             InitializeComponent();
-
-            // Closing = hide, not exit
-            this.Closing += (s, e) =>
-            {
-                e.Cancel = true;
-                this.Hide();
-            };
-
-            // Start loading when window opens
-            this.Loaded += async (s, e) =>
-            {
-                try { await LoadAllDataAsync(); }
-                catch { NavigateToMainWindow(); }
-            };
+            DataContext = ViewModel;
+            Closing += (s, e) => { e.Cancel = true; Hide(); };
         }
 
-        // ─── LOAD ALL DATA IN PARALLEL ────────────────────────────────────
+        // Called by App.xaml.cs on startup
+        public void StartStartup() => _ = ViewModel.StartupAsync();
 
-        private async Task LoadAllDataAsync()
-        {
-            try
-            {
-                var steamId = SessionManager.SteamId64;
-
-                // Guest mode — skip Steam data
-                // Hosť — preskočíme Steam dáta
-                if (string.IsNullOrEmpty(steamId))
-                {
-                    NavigateToMainWindow();
-                    return;
-                }
-
-                // Load everything at once — načítame všetko naraz
-                var playerTask = ApiService.GetPlayerInfoAsync(steamId);
-                var libraryTask = ApiService.GetLibraryAsync(steamId);
-                var wishlistTask = ApiService.GetWishlistAsync(steamId);
-
-                await Task.WhenAll(playerTask, libraryTask, wishlistTask);
-
-                _playerInfo = playerTask.Result;
-                _library = libraryTask.Result;
-                _wishlist = wishlistTask.Result;
-            }
-            catch
-            {
-                // Loading failed — still navigate with empty data
-            }
-            finally
-            {
-                NavigateToMainWindow();
-            }
-        }
-
-        // ─── NAVIGATE TO MAIN WINDOW ──────────────────────────────────────
-
-        private void NavigateToMainWindow()
-        {
-            try
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ViewNavigator.Instance?.ShowMainWindow(
-                        _playerInfo,
-                        _library,
-                        _wishlist,
-                        SessionManager.LastLocation
-                    );
-                });
-            }
-            catch
-            {
-                try
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                        ViewNavigator.Instance?.ShowMainWindow(null, new(), new(), "Store"));
-                }
-                catch { }
-            }
-        }
+        // Called by ViewNavigator after login/register
+        public void StartLoading() => _ = ViewModel.LoadSteamDataAsync();
     }
 }

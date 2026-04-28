@@ -10,30 +10,27 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows;
 
 namespace Rift_App.ViewModels
 {
-    public class WindowStateViewModel
+    public partial class WindowStateViewModel
     {
-        public ICommand MinimizeCommand { get; }
-        public ICommand MaximizeCommand { get; }
-        public ICommand CloseCommand { get; }
+        [RelayCommand]
+        private void Minimize() =>
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
 
-        public WindowStateViewModel()
+        [RelayCommand]
+        private void Maximize()
         {
-            MinimizeCommand = new RelayCommand(
-                () => App.Current.MainWindow.WindowState = System.Windows.WindowState.Minimized);
-
-            MaximizeCommand = new RelayCommand(() =>
-            {
-                var win = App.Current.MainWindow;
-                win.WindowState = win.WindowState == System.Windows.WindowState.Maximized
-                    ? System.Windows.WindowState.Normal
-                    : System.Windows.WindowState.Maximized;
-            });
-
-            CloseCommand = new RelayCommand(
-                () => App.Current.MainWindow.Close());
+            var win = Application.Current.MainWindow;
+            win.WindowState = win.WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
         }
+
+        [RelayCommand]
+        private void Close() =>
+            Application.Current.MainWindow.Close();
     }
 }

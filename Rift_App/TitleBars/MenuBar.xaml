@@ -9,379 +9,311 @@
              mc:Ignorable="d">
 
     <Grid>
-        <Border Grid.Row="0"
-                Background="#171D25"
-                CornerRadius="7.5,7.5,0,0">
-
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Setter Property="Padding"
-                            Value="0,0,0,0" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=WindowState}"
-                                     Value="Maximized">
-                            <Setter Property="Padding"
-                                    Value="0,7,0,0" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
+        <Border Style="{StaticResource Rift_Menubar_MainBorder}">
 
             <Grid Height="80">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
 
-                <StackPanel     Grid.Row="0"
-                                Grid.Column="0"
-                                Style="{StaticResource Rift_TitleBar}">
+                <Grid Grid.Column="0">
 
-                    <Button Style="{StaticResource Rift_LogoHeader}"
-                            WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                             Margin="20,0.5,0,0"
-                                             WindowChrome.IsHitTestVisibleInChrome="True">
-                        
-                        <materialDesign:PopupBox.ToggleContent>
-                            <TextBlock Text="View">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock"
-                                           BasedOn="{StaticResource Rift_PopupTextblock}">
-                                        <Setter Property="Foreground"
-                                                Value="#8B929A" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, 
-                                                      RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                         Value="True">
-                                                <Setter Property="Foreground"
-                                                        Value="White" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </materialDesign:PopupBox.ToggleContent>
-                        <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                <Button Content="Library"
-                                        Command="{Binding DataContext.LibraryCommand, 
-                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Style="{StaticResource Rift_PopupItems}" />
-                                <Button Content="Store"
-                                        Command="{Binding DataContext.StoreCommand, 
-                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Style="{StaticResource Rift_PopupItems}" />
-                            </StackPanel>
-                        </ScrollViewer>
-                    </materialDesign:PopupBox>
+                    <Grid Grid.Row="0">
 
-                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                             Margin="15,0.5,0,0"
-                                             WindowChrome.IsHitTestVisibleInChrome="True">
-                        <materialDesign:PopupBox.ToggleContent>
-                            <TextBlock Text="Games">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock"
-                                           BasedOn="{StaticResource Rift_PopupTextblock}">
-                                        <Setter Property="Foreground"
-                                                Value="#8B929A" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, 
-                                                      RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                         Value="True">
-                                                <Setter Property="Foreground"
-                                                        Value="White" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </materialDesign:PopupBox.ToggleContent>
-                        <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                <Button Content="View Games Library"
-                                        Command="{Binding DataContext.LibraryCommand, 
-                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Style="{StaticResource Rift_PopupItems}" />
-                            </StackPanel>
-                        </ScrollViewer>
-                    </materialDesign:PopupBox>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}"
-                                             Margin="16,0.5,0,0"
-                                             WindowChrome.IsHitTestVisibleInChrome="True">
-                        <materialDesign:PopupBox.ToggleContent>
-                            <TextBlock Text="Help">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock"
-                                           BasedOn="{StaticResource Rift_PopupTextblock}">
-                                        <Setter Property="Foreground"
-                                                Value="#8B929A"  />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, 
-                                                      RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                         Value="True">
-                                                <Setter Property="Foreground"
-                                                        Value="White" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </materialDesign:PopupBox.ToggleContent>
-                        <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                <Button Content="Rift Support"
-                                        Style="{StaticResource Rift_PopupItems}" />
-                                <Button Content="About RIFT"
-                                        Style="{StaticResource Rift_PopupItems}" />
-                            </StackPanel>
-                        </ScrollViewer>
-                    </materialDesign:PopupBox>
-                </StackPanel>
+                        <Grid Grid.Column="0"
+                              Margin="10,0,0,0">
 
-                <Grid Grid.Column="0"
-                      Grid.Row="1">
+                            <Button Style="{StaticResource Rift_MenuBar_LogoHeader}"
+                                    WindowChrome.IsHitTestVisibleInChrome="True" />
+                        </Grid>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="46" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1"
+                              Margin="20,0,0,1.4">
 
-                    <StackPanel Grid.Column="1"
-                                Grid.Row="1"
-                                Orientation="Horizontal"
-                                Grid.RowSpan="2">
+                            <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
+                                                     WindowChrome.IsHitTestVisibleInChrome="True">
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="30,0,0,0"
-                                                 WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialDesign:PopupBox.ToggleContent>
-                                <TextBlock Text="STORE">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock"
-                                               BasedOn="{StaticResource Rift_PopupTextblock_options}">
-                                            <Setter Property="Foreground"
-                                                    Value="#C4C7CC" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsMouseOver, 
-           RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                             Value="True">
-                                                    <Setter Property="Foreground"
-                                                            Value="White" />
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="View"
+                                               Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" />
 
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <Border Background="#3D4450"
-                                    SnapsToDevicePixels="True"
-                                    UseLayoutRounding="True">
-                                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                                    <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                        <Button Content="Featured"
-                                                Style="{StaticResource Rift_PopupItems}" />
-                                        <Button Content="Wishlist"
-                                                Style="{StaticResource Rift_PopupItems}" />
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+
+                                    <StackPanel>
+                                        <Button Content="Library"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Content="Store"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </ScrollViewer>
-                            </Border>
-                        </materialDesign:PopupBox>
+                            </materialDesign:PopupBox>
+                        </Grid>
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="20,0,0,0"
-                                                 WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialDesign:PopupBox.ToggleContent>
-                                <TextBlock Text="LIBRARY">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock"
-                                               BasedOn="{StaticResource Rift_PopupTextblock_options}">
-                                            <Setter Property="Foreground"
-                                                    Value="#C4C7CC" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsMouseOver, 
-                                  RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                             Value="True">
-                                                    <Setter Property="Foreground"
-                                                            Value="White" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                    <Button Content="Home"
-                                            Command="{Binding DataContext.StoreCommand, 
-                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                            Style="{StaticResource Rift_PopupItems}" />
-                                </StackPanel>
-                            </ScrollViewer>
-                        </materialDesign:PopupBox>
+                        <Grid Grid.Column="2"
+                              Margin="15,0,0,1.4">
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_options}"
-                                                 Margin="20,0,0,0"
-                                                 WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialDesign:PopupBox.ToggleContent>
-                                <TextBlock Text="NICKNAME">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock"
-                                               BasedOn="{StaticResource Rift_PopupTextblock_options}">
-                                            <Setter Property="Foreground"
-                                                    Value="#C4C7CC" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsMouseOver, 
-           RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                             Value="True">
-                                                    <Setter Property="Foreground"
-                                                            Value="White" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                    <Button Content="Profile"
-                                            Style="{StaticResource Rift_PopupItems}" />
-                                    <Button Content="Library"
-                                            Style="{StaticResource Rift_PopupItems}" />
-                                </StackPanel>
-                            </ScrollViewer>
-                        </materialDesign:PopupBox>
+                            <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
+                                                     WindowChrome.IsHitTestVisibleInChrome="True">
 
-                    </StackPanel>
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="Games"
+                                               Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" />
+
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+
+                                    <StackPanel>
+                                        <Button Content="View Games Library"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Content="View Store"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </Grid>
+
+                        <Grid Grid.Column="3"
+                              Margin="16,0,0,1.4">
+
+                            <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
+                                                     WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="Help"
+                                               Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" />
+
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+
+                                    <StackPanel>
+                                        <Button Content="Rift Support"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Button Content="About RIFT"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0"
+                              Margin="30,0,0,0">
+
+                            <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}"
+                                                     WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="STORE"
+                                               Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" />
+
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+
+                                    <StackPanel>
+                                        <Button Content="Featured"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Content="Wishlist"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </Grid>
+
+                        <Grid Grid.Column="1"
+                              Margin="20,0,0,0">
+
+                            <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}"
+                                                     WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="LIBRARY"
+                                               Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" />
+
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+
+                                    <StackPanel>
+                                        <Button Content="Home"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </Grid>
+
+                        <Grid Grid.Column="2"
+                              Margin="20,0,0,0">
+
+                            <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}"
+                                                     WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <TextBlock Text="NICKNAME"
+                                               Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" />
+
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+
+                                    <StackPanel>
+                                        <Button Content="Profile"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Content="Library"
+                                                Command=""
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </materialDesign:PopupBox>
+                        </Grid>
+                    </Grid>
                 </Grid>
 
-                <Grid Grid.Column="1"
-                      Grid.Row="0">
+                <Grid Grid.Column="1">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="0">
 
-                    <StackPanel Style="{StaticResource Rift_StackPanel_Action}"
-                                Grid.Column="1"
-                                Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_Notifications_PopupBox}"
-                                                 WindowChrome.IsHitTestVisibleInChrome="True">
-                            <materialDesign:PopupBox.ToggleContent>
-                                <materialIcons:MaterialIcon Kind="Bell">
-                                    <materialIcons:MaterialIcon.Style>
-                                        <Style TargetType="materialIcons:MaterialIcon">
-                                            <Setter Property="Foreground"
-                                                    Value="#959AA3" />
-                                            <Setter Property="Margin"
-                                                    Value="17.5,0,0,0" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsMouseOver, 
-                         RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
-                                                             Value="True">
-                                                    <Setter Property="Foreground"
-                                                            Value="#C7C9D1" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </materialIcons:MaterialIcon.Style>
-                                </materialIcons:MaterialIcon>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                    <Button Content="View Notifications"
-                                            Style="{StaticResource Rift_Notification_Item}" />
-                                </StackPanel>
-                            </ScrollViewer>
-                        </materialDesign:PopupBox>
+                        <Grid Grid.Column="0">
 
-                        <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox_Account}"
-                                                 WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialDesign:PopupBox.ToggleContent>
-                                <Border Style="{StaticResource Rift_Border_Account}">
-                                    <StackPanel Orientation="Horizontal"
-                                                VerticalAlignment="Center">
-                                        <TextBlock Text="Guest_test"
-                                                   Style="{StaticResource Rift_PopupTextblock_Account}" />
-                                        <materialIcons:MaterialIcon Style="{StaticResource Rift_ChevronDown_Icon}" />
-                                    </StackPanel>
-                                </Border>
-                            </materialDesign:PopupBox.ToggleContent>
-                            <ScrollViewer Style="{StaticResource Rift_ScrollViewer}">
-                                <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
-                                    <Button Content="View my profile"
-                                            Style="{StaticResource Rift_PopupItems}" />
-                                    <Button Content="Change Account"
-                                            Style="{StaticResource Rift_PopupItems}"
-                                            Command="{Binding Navigator.ShowAuthencationCommand}" />
-                                    <Button Content="Sign out of account..."
-                                            Style="{StaticResource Rift_PopupItems}" />
-                                    <Button Style="{StaticResource Rift_PopupItems}"
-                                            Content="Test GamePage"
-                                            Command="{Binding DataContext.GamePageCommand, 
-                  RelativeSource={RelativeSource AncestorType=Window}}" />
-                                </StackPanel>
-                            </ScrollViewer>
-                        </materialDesign:PopupBox>
+                            <StackPanel Orientation="Horizontal">
 
-                    </StackPanel>
-                    <StackPanel Style="{StaticResource Rift_StackPanel_WindowButtons}"
-                                Grid.Column="2"
-                                Grid.Row="0">
+                                <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Notifications}"
+                                                         WindowChrome.IsHitTestVisibleInChrome="True">
 
-                        <Button Style="{StaticResource Rift_StateWindow_Button}"
-                                Command="{Binding WindowState.MinimizeCommand}"
-                                WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
-                                                        Kind="Minimize"
-                                                        Foreground="{Binding Foreground, 
-                                                     RelativeSource={RelativeSource AncestorType=Button}}">
-                            </materialIcons:MaterialIcon>
-                        </Button>
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Notifications}" />
 
-                        <Button Style="{StaticResource Rift_StateWindow_Button}"
-                                Command="{Binding WindowState.MaximizeCommand}"
-                                WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
-                                                        Kind="WindowMaximize"
-                                                        Foreground="{Binding Foreground, 
-                                 RelativeSource={RelativeSource AncestorType=Button}}">
-                            </materialIcons:MaterialIcon>
-                        </Button>
+                                    </materialDesign:PopupBox.ToggleContent>
 
+                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
-                        <Button Style="{StaticResource Rift_CLoseButton}"
-                                Margin="0,-5,0,0"
-                                Height="30"
-                                Width="33"
-                                materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
-                                Command="{Binding WindowState.CloseCommand}"
-                                WindowChrome.IsHitTestVisibleInChrome="True">
-                            
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
-                                                        Kind="Close"
-                                                        Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}">
-                            </materialIcons:MaterialIcon>
-                        </Button>
-                    </StackPanel>
+                                        <StackPanel>
+                                            <Button Content="View Notifications"
+                                                    Command=""
+                                                    Style="{StaticResource Rift_MenuBar_Items_PopupBox_Notifications}" />
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </materialDesign:PopupBox>
+
+                                <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Account}"
+                                                         WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <Border Style="{StaticResource Rift_MenuBar_Border_PopupBox_Account}">
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Account}" />
+
+                                                <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Account}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </materialDesign:PopupBox.ToggleContent>
+
+                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Account}">
+
+                                        <StackPanel>
+                                            <Button Content="View my profile"
+                                                    Command=""
+                                                    Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+
+                                            <Button Content="Change Account"
+                                                    Command=""
+                                                    Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+
+                                            <Button Content="Sign out of account..."
+                                                    Command=""
+                                                    Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+
+                                            <Button  Content="Test GamePage"
+                                                     Command=""
+                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Maxi_Min}"
+                                        Command=""
+                                        WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                    <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
+                                                                Kind="Minimize"
+                                                                Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}" />
+                                </Button>
+
+                                <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Maxi_Min}"
+                                        Command=""
+                                        WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                    <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
+                                                                Kind="WindowMaximize"
+                                                                Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                </Button>
+
+                                <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Close}"
+                                        Command=""
+                                        WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                    <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
+                                                                Kind="Close"
+                                                                Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>

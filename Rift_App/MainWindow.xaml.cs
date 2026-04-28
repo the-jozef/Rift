@@ -15,129 +15,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 namespace Rift_App
 {
     public partial class MainWindow : Window
     {
+        public WindowViewModel ViewModel { get; } = new WindowViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
-
-            // Closing = hide, not exit
-            this.Closing += (s, e) =>
-            {
-                e.Cancel = true;
-                this.Hide();
-            };
+            DataContext = ViewModel;
+            Closing += (s, e) => { e.Cancel = true; Hide(); };
         }
-
-        // ─── INITIALIZE DATA ──────────────────────────────────────────────
-
-        /// Called by ViewNavigator when all data is loaded.
-        /// Navigates to last known location.
-        public void InitializeData(
-            PlayerInfo? playerInfo,
-            List<GameModel> library,
-            List<GameModel> wishlist,
-            string lastLocation)
-        {
-            try
-            {
-                NavigateToLocation(lastLocation);
-            }
-            catch
-            {
-                NavigateToLocation("Store");
-            }
-        }
-
-        // ─── LOCATION NAVIGATION ──────────────────────────────────────────
-
-        private void NavigateToLocation(string location)
-        {
-            try
-            {
-                switch (location)
-                {
-                    case "Library": ShowLibrary(); break;
-                    case "Wishlist": ShowWishlist(); break;
-                    case "Account": ShowAccount(); break;
-                    default: ShowStore(); break;
-                }
-            }
-            catch { ShowStore(); }
-        }
-
-        // ─── PAGE METHODS — called from MenuBar and code ──────────────────
-
-        public void ShowStore()
-        {
-            try
-            {
-                _ = ApiService.SaveSessionAsync("Store");
-                Content = new Store.Store();
-            }
-            catch { }
-        }
-
-        public void ShowLibrary()
-        {
-            try
-            {
-                _ = ApiService.SaveSessionAsync("Library");
-                Content = new Library.Library();
-            }
-            catch { }
-        }
-
-        public void ShowWishlist()
-        {
-            try
-            {
-                _ = ApiService.SaveSessionAsync("Wishlist");
-                Content = new Wishlist.Wishlist();
-            }
-            catch { }
-        }
-
-        public void ShowAccount()
-        {
-            try
-            {
-                _ = ApiService.SaveSessionAsync("Account");
-                Content = new Account.Account();
-            }
-            catch { }
-        }
-        /// Opens game detail page — called from Store, Library, Wishlist.
-        /// Otvorí detail hry — volané zo Store, Library, Wishlist.
-        public void ShowGamePage(GameModel game)
-        {
-            try
-            {
-                var gamePage = new StoreGamePage.GamePage();
-                gamePage.LoadGame(game);
-                Content = gamePage;
-            }
-            catch { }
-        }
-
-        // ─── SWITCH ACCOUNT ───────────────────────────────────────────────
-
-        public void SwitchAccount()
-        {
-            try
-            {
-                SessionManager.Clear();
-                ViewNavigator.Instance?.SwitchAccount();
-            }
-            catch { }
-        }
-
-        // ─── GUEST MODE ───────────────────────────────────────────────────
-
-        /// True if browsing as guest — not logged in.
-        public bool IsGuest => !SessionManager.IsLoggedIn;
     }
 }
