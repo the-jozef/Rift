@@ -17,15 +17,16 @@
                       Source="Videos\Background_animation.mp4"
                       IsMuted="True"
                       Stretch="UniformToFill"
-                      IsHitTestVisible="False" />
+                      IsHitTestVisible="False"
+                      Panel.ZIndex="0"/>
 
         <Border CornerRadius="7.5,7.5,0,0"
                 Background="Gray"
                 IsHitTestVisible="False"
                 Opacity="0.09"
-                Panel.ZIndex="1" />
+                Panel.ZIndex="1"/>
 
-        <Grid>
+        <Grid Panel.ZIndex="2">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -77,7 +78,8 @@
                                 <Button Background="Transparent"
                                         BorderBrush="Transparent"
                                         Width="140"
-                                        Height="110">
+                                        Height="110"
+                                        Command="{Binding SelectAccountCommand}">
 
                                     <Border BorderBrush="#505050"
                                             BorderThickness="2">

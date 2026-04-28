@@ -19,37 +19,37 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="170,0,0,0">
-                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                    <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock Text="Browse"
                                        VerticalAlignment="Center" />
                         </materialDesign:PopupBox.ToggleContent>
                         <ScrollViewer MaxHeight="200"
                                       VerticalScrollBarVisibility="Auto">
-                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                            <StackPanel>
                                 <Button Content="Library"
-                                        Style="{StaticResource Rift_PopupItems}" />
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 <Button Content="Games"
-                                        Style="{StaticResource Rift_PopupItems}" />
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 <Button Content="Store"
-                                        Style="{StaticResource Rift_PopupItems}" />
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
-                    <materialDesign:PopupBox Style="{StaticResource Rift_PopupBox}">
+                    <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock Text="Categories"
                                        VerticalAlignment="Center" />
                         </materialDesign:PopupBox.ToggleContent>
                         <ScrollViewer MaxHeight="200"
                                       VerticalScrollBarVisibility="Auto">
-                            <StackPanel Style="{StaticResource Rift_PopupStackPanel}">
+                            <StackPanel>
                                 <Button Content="Library"
-                                        Style="{StaticResource Rift_PopupItems}" />
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 <Button Content="Games"
-                                        Style="{StaticResource Rift_PopupItems}" />
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 <Button Content="Store"
-                                        Style="{StaticResource Rift_PopupItems}" />
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>

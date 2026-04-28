@@ -18,9 +18,6 @@ namespace Rift_App.TitleBars
 {
     public partial class MenuBar : UserControl
     {
-        public MenuBar()
-        {
-            InitializeComponent();     
-        }
+        public MenuBar() => InitializeComponent();
     }
 }

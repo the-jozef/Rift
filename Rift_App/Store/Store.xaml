@@ -12,7 +12,7 @@
     <Grid>
         <Border CornerRadius="0,0,7.5,7.5">
             <Grid>
-                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"
+                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Account}"
                               Background="#1b2838"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Stretch"

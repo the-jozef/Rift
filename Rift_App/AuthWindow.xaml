@@ -30,9 +30,10 @@
             BorderThickness="1.5"
             ClipToBounds="True">
         <Grid>
-           
-            <ContentControl x:Name="MainContent" />
-            
+
+            <ContentControl Content="{Binding CurrentView}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
         </Grid>
     </Border>
 </Window>

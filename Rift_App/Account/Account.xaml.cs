@@ -15,14 +15,8 @@ using System.Windows.Shapes;
 
 namespace Rift_App.Account
 {
-    /// <summary>
-    /// Interaction logic for Account.xaml
-    /// </summary>
     public partial class Account : UserControl
     {
-        public Account()
-        {
-            InitializeComponent();
-        }
+        public Account() => InitializeComponent();
     }
 }

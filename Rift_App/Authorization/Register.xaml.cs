@@ -16,59 +16,18 @@ namespace Rift_App.Authorization
 {
     public partial class Register : UserControl
     {
-        private readonly RegisterViewModel _viewModel;
-
-        public Register()
-        {
-            InitializeComponent();
-
-            _viewModel = new RegisterViewModel();
-            DataContext = _viewModel;
-
-            // Register success → Loading screen
-            _viewModel.OnRegisterSuccess += () =>
-            {
-                try { ViewNavigator.Instance?.ShowLoading(); }
-                catch { }
-            };
-
-            // Back to Login
-            _viewModel.OnGoToLogin += () =>
-            {
-                try { ViewNavigator.Instance?.ShowLogin(); }
-                catch { }
-            };
-        }
-
-        // ─── PRE-FILL — called after SteamConnection succeeds ────────────
-        // Predvyplnenie — volané po úspešnom Steam pripojení
-
-        public void PreFill(string steamId, string steamName)
-        {
-            try { _viewModel.PreFillSteam(steamId, steamName); }
-            catch { }
-        }
-
-        // ─── PASSWORD BOXES ───────────────────────────────────────────────
+        public Register() => InitializeComponent();
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (sender is PasswordBox pb)
-                    _viewModel.Password = pb.Password;
-            }
-            catch { }
+            if (DataContext is AuthViewModel vm && sender is PasswordBox pb)
+                vm.RegisterPassword = pb.Password;
         }
 
         private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (sender is PasswordBox pb)
-                    _viewModel.ConfirmPassword = pb.Password;
-            }
-            catch { }
+            if (DataContext is AuthViewModel vm && sender is PasswordBox pb)
+                vm.RegisterConfirmPassword = pb.Password;
         }
     }
 }

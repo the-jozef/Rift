@@ -52,8 +52,7 @@
                                 BorderBrush="Transparent"
                                 Height="55"
                                 Width="37"
-                                Command="{Binding DataContext.ShowLoginCommand, 
-RelativeSource={RelativeSource AncestorType=Window}}">
+                                Command="{Binding ShowLoginCommand}">
 
                             <materialIcons:MaterialIcon Kind="ChevronLeft"
                                                         Foreground="#BFBDBD"
@@ -92,7 +91,7 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                         <TextBlock Style="{StaticResource Rift_SignIn_Title2}" />
 
                         <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
-                                 Text="{Binding SetupUsername, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding RegisterUsername}"
                                  x:Name="UsernameBox"
                                  Width="275" />
 
@@ -100,6 +99,7 @@ RelativeSource={RelativeSource AncestorType=Window}}">
 
                         <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}"
                                      x:Name="PasswordBox"
+                                     PasswordChanged="PasswordBox_PasswordChanged"
                                      Width="275" />
                     </StackPanel>
 
@@ -108,7 +108,7 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                 Margin="120,28,0,0">
 
                         <Button Style="{StaticResource Rift_SignIn_Button_test}"
-                                Command="{Binding SignInCommand}"
+                                Command="{Binding RegisterCommand}"
                                 Content="Create Account"
                                 Margin="2,0,0,0" />
 
@@ -128,13 +128,13 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right">
 
-                        <Button Style="{StaticResource Rift_CLoseButton}"
+                        <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Close}"
                                 Margin="0,0,0,0"
                                 Height="30"
                                 Width="33"
                                 materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
-                                Command="{Binding WindowState.CloseCommand}">
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
+                                Command="{Binding ShowAccountSelectionCommand}">
+                            <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
                                                         Kind="Close"
                                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
                         </Button>

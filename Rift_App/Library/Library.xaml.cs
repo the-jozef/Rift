@@ -10,85 +10,41 @@ namespace Rift_App.Library
 {
     public partial class Library : UserControl
     {
-        private readonly LibraryViewModel _viewModel;
+        private readonly LibraryViewModel _viewModel = new();
 
         public Library()
         {
             InitializeComponent();
-
-            _viewModel = new LibraryViewModel();
             DataContext = _viewModel;
-
-            // When game clicked → open game page
-            _viewModel.OnGameSelected += HandleGameSelected;
-
-            Loaded += async (s, e) =>
-            {
-                try
-                {
-                    // Guest mode — show message, don't load
-                    // Hosť — zobrazíme správu, nenačítame nič
-                    if (!SessionManager.IsLoggedIn)
-                    {
-                        ShowGuestMessage();
-                        return;
-                    }
-
-                    await _viewModel.LoadLibraryCommand.ExecuteAsync(null);
-                }
-                catch { }
-            };
+            Loaded += Library_Loaded;
         }
 
-        // ─── GAME SELECTED ────────────────────────────────────────────────
-
-        private void HandleGameSelected(GameModel game)
+        private async void Library_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            if (!SessionManager.IsLoggedIn)
             {
-                var mainWindow = Application.Current.MainWindow as MainWindow;
-                mainWindow?.ShowGamePage(game);
+                ShowGuestMessage();
+                return;
             }
-            catch { }
+            await _viewModel.LoadLibraryCommand.ExecuteAsync(null);
         }
-
-        // ─── GUEST MESSAGE ────────────────────────────────────────────────
 
         private void ShowGuestMessage()
         {
-            try
-            {
-                // Show guest panel, hide games list
-                // Zobrazíme hosťovský panel, skryjeme zoznam hier
-                if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
-                if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
-            }
-            catch { }
+            if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
+            if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
         }
-
-        // ─── GAME CLICK ───────────────────────────────────────────────────
 
         private void GameItem_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (sender is Button btn && btn.DataContext is GameModel game)
-                    _viewModel.SelectGameCommand.Execute(game);
-            }
-            catch { }
+            if (sender is Button btn && btn.DataContext is GameModel game)
+                _viewModel.SelectGameCommand.Execute(game);
         }
-
-        // ─── SEARCH BOX ───────────────────────────────────────────────────
-        // Bound via TextChanged in XAML
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                if (sender is TextBox tb)
-                    _viewModel.SearchText = tb.Text;
-            }
-            catch { }
+            if (sender is TextBox tb)
+                _viewModel.SearchText = tb.Text;
         }
     }
 }

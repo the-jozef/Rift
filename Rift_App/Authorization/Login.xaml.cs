@@ -18,48 +18,13 @@ namespace Rift_App.Authorization
 {
     public partial class Login : UserControl
     {
-        private readonly LoginViewModel _viewModel;
+        public Login() => InitializeComponent();
 
-        public Login()
-        {
-            InitializeComponent();
-
-            _viewModel = new LoginViewModel();
-           DataContext = _viewModel;
-
-            // Login success → Loading screen
-            _viewModel.OnLoginSuccess += () =>
-            {
-                try { ViewNavigator.Instance?.ShowLoading(); }
-                catch { }
-            };
-
-            // Go to Register → SteamConnection first
-            _viewModel.OnGoToRegister += () =>
-            {
-                try { ViewNavigator.Instance?.ShowSteamConnection(); }
-                catch { }
-            };
-
-            // Back → AccountSelection
-            _viewModel.OnGoBack += () =>
-            {
-                try { ViewNavigator.Instance?.ShowAccountSelection(); }
-                catch { }
-            };
-        }
-
-        // ─── PASSWORD BOX ─────────────────────────────────────────────────
-        // PasswordBox nepodporuje binding — riešime ručne (manually)
-       
+        // PasswordBox cannot use binding — musíme to riešiť ručne
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (sender is PasswordBox pb)
-                    _viewModel.Password = pb.Password;
-            }
-            catch { }
+            if (DataContext is AuthViewModel vm && sender is PasswordBox pb)
+                vm.Password = pb.Password;
         }
     }
 }

@@ -107,8 +107,7 @@
                                 BorderBrush="Transparent"
                                 Height="55"
                                 Width="37"
-                                Command="{Binding DataContext.ShowLoginCommand, 
-RelativeSource={RelativeSource AncestorType=Window}}">
+                                Command="{Binding ShowAccountSelectionCommand}">
 
                             <materialIcons:MaterialIcon Kind="ChevronLeft"
                                                         Foreground="#BFBDBD"
@@ -129,15 +128,17 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                             <TextBlock Style="{StaticResource Rift_SignIn_Title}" />
 
                             <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
-                                     x:Name="UsernameBox" />
+                                     x:Name="UsernameBox"
+                                     Text="{Binding Username}" />
 
                             <TextBlock Style="{StaticResource Rift_Password_Title}" />
 
                             <PasswordBox Style="{StaticResource Rift_SignIn_PasswordBox}"
-                                         x:Name="PasswordBox" />
+                                         x:Name="PasswordBox"
+                                         PasswordChanged="PasswordBox_PasswordChanged" />
 
                             <Button Style="{StaticResource Rift_SignIn_Button}"
-                                    Command="{Binding LoadingCommand}" />
+                                    Command="{Binding LoginRiftCommand}" />
                             <!-- Command="{Binding SignInCommand}"-->
 
 
@@ -181,7 +182,7 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                             </Grid>
 
                             <Button Style="{StaticResource Rift_Steam_button}"
-                                    Command="{Binding SteamLoginCommand}">
+                                    Command="{Binding LoginSteamCommand}">
 
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Center">
@@ -217,14 +218,14 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                 Width="33"
                                 HorizontalAlignment="Left">
 
-                        <Button Style="{StaticResource Rift_CLoseButton}"
+                        <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Close}"
                                 Margin="0,0,0,0"
                                 Height="30"
                                 Width="33"
                                 materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
                                 Command="{Binding ShowAccountSelectionCommand}">
 
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_WindowState_Icons}"
+                            <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Account}"
                                                         Kind="Close"
                                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
                         </Button>
@@ -234,7 +235,7 @@ RelativeSource={RelativeSource AncestorType=Window}}">
                                 Style="{StaticResource Rift_CreateAccount_Stackpanel}">
                         <TextBlock Style="{StaticResource Rift_CreateAccount_TextBlock}" />
                         <Button Style="{StaticResource Rift_CreateAccount_Button}"
-                                Command="{Binding ShowSteamConnectionCommand}" />
+                                Command="{Binding ShowSteamConnectionCommand}"  />
                     </StackPanel>
 
                     <Canvas Grid.Row="1">

@@ -15,14 +15,8 @@ using System.Windows.Shapes;
 
 namespace Rift_App.TitleBars
 {
-    /// <summary>
-    /// Interaction logic for SearchBar.xaml
-    /// </summary>
     public partial class SearchBar : UserControl
     {
-        public SearchBar()
-        {
-            InitializeComponent();
-        }
+        public SearchBar() => InitializeComponent();
     }
 }

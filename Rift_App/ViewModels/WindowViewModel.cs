@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace Rift_App.ViewModels
 {
-    public class WindowViewModel : ObservableObject
+    public partial class WindowViewModel : ObservableObject
     {
         // ─── WINDOW STATE ─────────────────────────────────────────────────
         public WindowStateViewModel WindowState { get; } = new();

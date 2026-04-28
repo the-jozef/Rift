@@ -53,14 +53,14 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
                                     <StackPanel>
                                         <Button Content="Library"
-                                                Command=""
+                                                Command="{Binding ShowLibraryCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                         <Button Content="Store"
-                                                Command=""
+                                                Command="{Binding ShowStoreCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </ScrollViewer>
@@ -79,7 +79,7 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
                                     <StackPanel>
                                         <Button Content="View Games Library"
@@ -105,7 +105,7 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
                                     <StackPanel>
                                         <Button Content="Rift Support"
@@ -142,7 +142,7 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
                                     <StackPanel>
                                         <Button Content="Featured"
@@ -168,7 +168,7 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
                                     <StackPanel>
                                         <Button Content="Home"
@@ -191,7 +191,7 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options}">
+                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
 
                                     <StackPanel>
                                         <Button Content="Profile"
@@ -261,11 +261,11 @@
 
                                         <StackPanel>
                                             <Button Content="View my profile"
-                                                    Command=""
+                                                    Command="{Binding ShowAccountCommand}"
                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
                                             <Button Content="Change Account"
-                                                    Command=""
+                                                    Command="{Binding SwitchAccountCommand}"
                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
                                             <Button Content="Sign out of account..."
@@ -286,7 +286,7 @@
                             <StackPanel Orientation="Horizontal">
 
                                 <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Maxi_Min}"
-                                        Command=""
+                                        Command="{Binding WindowState.MinimizeCommand}"
                                         WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
@@ -295,7 +295,7 @@
                                 </Button>
 
                                 <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Maxi_Min}"
-                                        Command=""
+                                        Command="{Binding WindowState.MaximizeCommand}"
                                         WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
@@ -304,7 +304,7 @@
                                 </Button>
 
                                 <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Close}"
-                                        Command=""
+                                        Command="{Binding WindowState.CloseCommand}"
                                         WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
