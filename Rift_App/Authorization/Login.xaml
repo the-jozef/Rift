@@ -17,18 +17,8 @@
     </UserControl.Triggers>
     
     <Grid>
-        <Border Grid.Row="0"
-                CornerRadius="7.5,7.5,0,0">
+        <Border Style="{StaticResource Rift_Login_Main_Border}">
             
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1"
-                                     StartPoint="0.5,0">
-                    <GradientStop Color="#1E1E26" />
-                    <GradientStop Color="#1A1B1F"
-                                  Offset="0.788" />
-                </LinearGradientBrush>
-            </Border.Background>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -42,30 +32,29 @@
 
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0"
-                                Grid.Column="0"
-                                Style="{StaticResource Rift_LoginTitle_stackpanel}"
-                                Margin="40,35,0,0">
+                    <Grid Grid.Row="0">
 
-                        <Button Background="Transparent"
-                                BorderBrush="Transparent"
-                                Height="55"
-                                Width="37"
-                                Command="{Binding ShowAccountSelectionCommand}">
+                        <StackPanel Style="{StaticResource Rift_Login_StackPanel_Logo_Title}">
 
-                            <materialIcons:MaterialIcon Kind="ChevronLeft"
-                                                        Foreground="#BFBDBD"
-                                                        Height="60"
-                                                        Width="60"
-                                                        Margin="-35,-6,0,0" />
-                        </Button>
+                            <Button Style="{StaticResource Rift_Login_Button_Back_Arrow}"
+                                    Command="{Binding ShowAccountSelectionCommand}"/>
+                                                        
+                            <Image Style="{StaticResource Rift_Login_Image_Logo}" />
 
-                        <Image Style="{StaticResource Rift_Logo_register}" />
-                        
-                        <TextBlock Style="{StaticResource Rift_Title_login}" />
-                        
-                    </StackPanel>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="10,12,0,0">
+                                
+                                <TextBlock Style="{StaticResource Rift_Title_login}" />
 
+                                <TextBlock Style="{StaticResource Rift_Login_TextBlock_Profile}"/>                                          
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                <!--tu som skoncil + stack panel hore-->
+
+                    
+                    
+                   
                     <Grid Grid.Row="1">
                         <StackPanel Style="{StaticResource Rift_Layout_Stackpanel}">
 

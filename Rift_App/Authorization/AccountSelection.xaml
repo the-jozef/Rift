@@ -70,7 +70,7 @@
                             <Button Style="{StaticResource Rift_AccountSelection_Button_Account}"
                                     Command="{Binding SelectAccountCommand}"/>
          
-                            <Button Style="{StaticResource Rift_AccountSelection_Button_AddAccount}"
+                            <Button Style="{StaticResource Rift_AccountSelection_Button_Add_Account}"
                                     Command="{Binding ShowLoginCommand}"/>                            
                         </StackPanel>
                     </ScrollViewer>

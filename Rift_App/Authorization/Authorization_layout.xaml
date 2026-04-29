@@ -96,7 +96,7 @@
         <Setter Property="Text"
                 Value="RIFT®"/>
         <Setter Property="Foreground"
-                Value="White"/>
+                Value="#F0F1F2"/>
         <Setter Property="FontSize"
                 Value="34"/>
         <Setter Property="FontWeight"
@@ -247,8 +247,8 @@
                 </Setter>
     </Style>
 
-            <!-- Button AddAccount -->
-            <Style x:Key="Rift_AccountSelection_Button_AddAccount"
+            <!-- Button Add_Account -->
+            <Style x:Key="Rift_AccountSelection_Button_Add_Account"
                    TargetType="Button">
 
                 <Setter Property="Background"
@@ -278,7 +278,7 @@
             </Style>
 
                              <!-- Login -->
- 
+        <!-- Ellipse animation -->
         <Storyboard x:Key="PulseAnimation"
                     RepeatBehavior="Forever"
                     AutoReverse="True">
@@ -334,63 +334,95 @@
                              Duration="0:0:0:1" />
     </Storyboard>
 
- 
- 
- 
-         
+    <!-- Main Border -->
+    <Style x:Key="Rift_Login_Main_Border"
+           TargetType="Border">
+        
+        <Setter Property="CornerRadius"
+                Value="7.5,7.5,0,0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1"
+                                     StartPoint="0.5,0">
+                    <GradientStop Color="#1E1E26" />
+                    <GradientStop Color="#1A1B1F"
+                                  Offset="0.788" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-
-
-
-
-    
     <!-- Stackpanel Logo/Title -->
-    <Style x:Key="Rift_LoginTitle_stackpanel"
+    <Style x:Key="Rift_Login_StackPanel_Logo_Title"
            TargetType="StackPanel">
 
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Height"
-                Value="57" />
         <Setter Property="Orientation"
                 Value="Horizontal" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="50,36,0,0" />
+                Value="40,35,0,0" />
     </Style>
 
-    <!-- Logo -->
-    <Style x:Key="Rift_Logo_login"
+    <!-- Button in Login_Back_Arrow -->
+    <Style x:Key="Rift_Login_Button_Back_Arrow"
+           TargetType="Button">
+        
+        <Setter Property="Background"
+                Value="Transparent"/>
+        <Setter Property="BorderBrush"
+                Value="Transparent"/>
+        <Setter Property="Padding"
+                Value="0"/>
+        <Setter Property="MinHeight"
+                Value="0"/>
+        <Setter Property="MinWidth"
+                Value="0"/>
+        <Setter Property="Margin"
+                Value="0,-4,-3,0"/>
+        <Setter Property="Height"
+                Value="55"/>
+        <Setter Property="Width"
+                Value="37"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <materialIcons:MaterialIcon Kind="ChevronLeft"
+                                                Foreground="#BFBDBD"                                               
+                                                HorizontalAlignment="Center"
+                                                Height="60"
+                                                Width="60" />
+                    </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Image in Login_Logo -->
+    <Style x:Key="Rift_Login_Image_Logo"
            TargetType="Image">
 
         <Setter Property="Source"
                 Value="/Image/Rift_logo.png" />
         <Setter Property="Width"
-                Value="55" />
+                Value="75" />
         <Setter Property="Height"
-                Value="55" />
-        <Setter Property="Margin"
-                Value="0,-10,0,-10" />
+                Value="75" />
         <Setter Property="Stretch"
                 Value="UniformToFill" />
         <Setter Property="RenderOptions.BitmapScalingMode"
                 Value="HighQuality" />
-        <Setter Property="materialDesign:ElevationAssist.Elevation"
-                Value="Dp4" />
         <Setter Property="Clip">
             <Setter.Value>
-                <EllipseGeometry Center="27.5,27.5"
-                                 RadiusX="27.5"
-                                 RadiusY="27.5" />
+                <EllipseGeometry Center="37.5,37.5"
+                                 RadiusX="37.5"
+                                 RadiusY="37.5" />
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!-- Title -->
+    <!-- TextBlock in Login_Title -->
     <Style x:Key="Rift_Title_login"
-           TargetType="TextBlock"
-           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
+           TargetType="TextBlock" >
 
         <Setter Property="Text"
                 Value="RIFT" />
@@ -398,15 +430,33 @@
                 Value="Left" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
-        <Setter Property="Margin"
-                Value="10,0.5,0,0" />
         <Setter Property="Foreground"
                 Value="#F0F1F2" />
         <Setter Property="FontSize"
-                Value="30" />
+                Value="34" />
+        <Setter Property="Margin"
+                Value="0,0,0,-8"/>
         <Setter Property="FontFamily"
                 Value="Arial" />
+        <Setter Property="FontWeight"
+                Value="Medium"/>
     </Style>
+
+    <!-- Textblock Profile -->
+    <Style x:Key="Rift_Login_TextBlock_Profile"
+           TargetType="TextBlock">
+
+        <Setter Property="Text"
+                Value="New Account" />
+        <Setter Property="Foreground"
+                Value="#9E9E9E" />
+        <Setter Property="FontSize"
+                Value="20" />
+        <Setter Property="Text"
+                Value="Profile"/>
+    </Style>
+
+
 
     <!-- Stackpanel Login_layout -->
     <Style x:Key="Rift_Layout_Stackpanel"
