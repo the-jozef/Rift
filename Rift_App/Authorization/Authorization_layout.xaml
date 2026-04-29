@@ -3,7 +3,347 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
 
-    <!--    LOGIN   -->
+                                <!-- Account Selection -->
+    <!-- Image in Background -->
+    <Style x:Key="Rift_AccountSelection_Image_Background"
+           TargetType="Image">
+        
+        <Setter Property="Source"
+                Value="/Image/Steam.jpg"/>
+        <Setter Property="RenderOptions.BitmapScalingMode"
+                Value="HighQuality"/>
+        <Setter Property="Opacity"
+                Value="0.2"/>
+        <Setter Property="Panel.ZIndex"
+                Value="0"/>
+    </Style>
+
+    <!-- Video in Background -->
+    <Style x:Key="Rift_AccountSelection_Video_Background"
+           TargetType="MediaElement">
+        
+        <Setter Property="LoadedBehavior"
+                Value="Play"/>
+        <Setter Property="UnloadedBehavior"
+                Value="Manual"/>
+        <Setter Property="Source"
+                Value="Videos\Background_animation.mp4"/>
+        <Setter Property="IsMuted"
+                Value="True"/>
+        <Setter Property="Stretch"
+                Value="UniformToFill"/>
+        <Setter Property="IsHitTestVisible"
+                Value="False"/>
+        <Setter Property="Panel.ZIndex"
+                Value="1"/>
+    </Style>
+
+    <!-- Border in Background-->
+    <Style x:Key="Rift_AccountSelection_Border_Background"
+           TargetType="Border">
+        
+        <Setter Property="CornerRadius"
+                Value="7.5,7.5,0,0"/>
+        <Setter Property="Background"
+                Value="#505050"/>
+        <Setter Property="IsHitTestVisible"
+                Value="False"/>
+        <Setter Property="Opacity"
+                Value="0.09"/>
+        <Setter Property="Panel.ZIndex"
+                Value="2"/>
+    </Style>
+
+    <!-- StackPanel for Logo/Title -->
+    <Style x:Key="Rift_AccountSelection_StackPanel_Logo_Title"
+           TargetType="StackPanel">
+        
+        <Setter Property="Orientation"
+                Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment"
+                Value="Left"/>
+        <Setter Property="Margin"
+                Value="60,35,0,0"/>
+    </Style>
+
+    <!-- Image in Logo/Title -->
+    <Style x:Key="Rift_AccountSelection_Image_Logo_Title"
+           TargetType="Image">
+        
+        <Setter Property="Source"
+                Value="/Image/Rift_logo.png"/>
+        <Setter Property="Width"
+                Value="75"/>
+        <Setter Property="Height"
+                Value="75"/>
+        <Setter Property="Stretch"
+                Value="UniformToFill"/>
+        <Setter Property="RenderOptions.BitmapScalingMode"
+                Value="HighQuality"/>
+        <Setter Property="Clip">
+            <Setter.Value>
+                <EllipseGeometry Center="37.5,37.5"
+                                 RadiusX="37.5"
+                                 RadiusY="37.5" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+   <!-- TextBlock in Logo/Title -->
+    <Style x:Key="Rift_AccountSelection_Textblock_Logo_Title"
+           TargetType="TextBlock">
+        
+        <Setter Property="Text"
+                Value="RIFT®"/>
+        <Setter Property="Foreground"
+                Value="White"/>
+        <Setter Property="FontSize"
+                Value="34"/>
+        <Setter Property="FontWeight"
+                Value="Medium"/>
+        <Setter Property="VerticalAlignment"
+                Value="Center"/>
+        <Setter Property="FontFamily"
+                Value="Arial"/>
+        <Setter Property="Margin"
+                Value="10,0,0,0"/>
+    </Style>
+
+    <!-- Window State Icons -->
+    <Style x:Key="Rift_AccountSelection_Icon_WindowState"
+           TargetType="materialIcons:MaterialIcon">
+
+        <Setter Property="Width"
+                Value="20" />
+        <Setter Property="Height"
+                Value="20" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Foreground"
+                Value="#FF818181" />
+    </Style>
+
+    <!-- Close button -->
+    <Style x:Key="Rift_AccountSelection_WindowState_Button_Close"
+           TargetType="Button">
+
+        <Setter Property="Foreground"
+                Value="#FF818181" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="HorizontalAlignment"
+                Value="Right"/>
+        <Setter Property="VerticalAlignment"
+                Value="Top"/>
+        <Setter Property="Width"
+                Value="33" />
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="materialDesign:ButtonAssist.CornerRadius"
+                Value="0,7.5,0,0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="MinHeight"
+                Value="0" />
+        <Setter Property="MinWidth"
+                Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{Binding Path=(materialDesign:ButtonAssist.CornerRadius), 
+                        RelativeSource={RelativeSource TemplatedParent}}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="#E22A27" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="DarkRed" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TextBlock for -->
+    <Style x:Key="Rift_AccountSelection_Textblock_Text"
+           TargetType="TextBlock">
+        
+        <Setter Property="Text"
+                Value="Who's playing?"/>
+        <Setter Property="FontSize"
+                Value="27"/>
+        <Setter Property="FontWeight"
+                Value="Bold"/>
+        <Setter Property="Foreground"
+                Value="White"/>
+        <Setter Property="HorizontalAlignment"
+                Value="Center"/>
+    </Style>
+
+<!-- Stackpanel Content -->
+    <Style x:Key="Rift_AccountSelection_StackPanel_Content"
+           TargetType="StackPanel">
+        
+        <Setter Property="Orientation"
+                Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment"
+                Value="Center"/>
+        <Setter Property="VerticalAlignment"
+                Value="Top"/>
+    </Style>
+
+    <!-- Button Account -->
+    <Style x:Key="Rift_AccountSelection_Button_Account"
+                   TargetType="Button">
+
+                <Setter Property="Background"
+                        Value="Transparent"/>
+                <Setter Property="BorderBrush"
+                        Value="Transparent"/>
+                <Setter Property="Padding"
+                        Value="0"/>
+                <Setter Property="MinHeight"
+                        Value="0"/>
+                <Setter Property="MinWidth"
+                        Value="0"/>
+                <Setter Property="Width"
+                        Value="130"/>
+                <Setter Property="Height"
+                        Value="130"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border BorderBrush="#505050"
+                                    BorderThickness="2">
+                                <Image Source="/Image/Red.png"
+                                       Stretch="UniformToFill" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>                    
+                </Setter>
+    </Style>
+
+            <!-- Button AddAccount -->
+            <Style x:Key="Rift_AccountSelection_Button_AddAccount"
+                   TargetType="Button">
+
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+                <Setter Property="Padding"
+                        Value="0" />
+                <Setter Property="MinHeight"
+                        Value="0" />
+                <Setter Property="MinWidth"
+                        Value="0" />
+                <Setter Property="Width"
+                        Value="130" />
+                <Setter Property="Height"
+                        Value="130" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <materialIcons:MaterialIcon Kind="Plus"
+                                                        Width="90"
+                                                        Height="90"
+                                                        Foreground="White" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+                             <!-- Login -->
+ 
+        <Storyboard x:Key="PulseAnimation"
+                    RepeatBehavior="Forever"
+                    AutoReverse="True">
+            <DoubleAnimation Storyboard.TargetName="Elipse1"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse1"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.93"
+                             To="0.88"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse2"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse2"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.99"
+                             To="0.9"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse3"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.98"
+                             To="1.05"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse3"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="1"
+                             To="1.02"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse4"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0.9"
+                             To="1"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse4"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="0.9"
+                             To="1.1"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse5"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="1"
+                             To="1.1"
+                             Duration="0:0:0:1" />
+            <DoubleAnimation Storyboard.TargetName="Elipse5"
+                             Storyboard.TargetProperty="ScaleY"
+                             From="1"
+                             To="1.3"
+                             Duration="0:0:0:1" />
+    </Storyboard>
+
+ 
+ 
+ 
+         
+
+
+
+
+
+    
     <!-- Stackpanel Logo/Title -->
     <Style x:Key="Rift_LoginTitle_stackpanel"
            TargetType="StackPanel">

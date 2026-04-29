@@ -226,7 +226,7 @@
                             <StackPanel Orientation="Horizontal">
 
                                 <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Notifications}"
-                                                         WindowChrome.IsHitTestVisibleInChrome="True">
+                                                         WindowChrome.IsHitTestVisibleInChrome="True" >
 
                                     <materialDesign:PopupBox.ToggleContent>
                                         <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Notifications}" />
@@ -244,13 +244,16 @@
                                 </materialDesign:PopupBox>
 
                                 <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Account}"
-                                                         WindowChrome.IsHitTestVisibleInChrome="True">
+                                                         WindowChrome.IsHitTestVisibleInChrome="True" >
 
                                     <materialDesign:PopupBox.ToggleContent>
                                         <Border Style="{StaticResource Rift_MenuBar_Border_PopupBox_Account}">
 
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Account}" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Center">
+                                                
+                                                <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Account}" 
+                                                           Text="Dynamo_s.r.o"/>
 
                                                 <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Account}" />
                                             </StackPanel>

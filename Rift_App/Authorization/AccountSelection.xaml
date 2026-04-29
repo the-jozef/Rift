@@ -11,115 +11,69 @@
              d:DesignWidth="800">
     <Grid>
 
+        <Image Style="{StaticResource Rift_AccountSelection_Image_Background}"/>
+        
         <MediaElement x:Name="BgVideo"
-                      LoadedBehavior="Play"
-                      UnloadedBehavior="Manual"
-                      Source="Videos\Background_animation.mp4"
-                      IsMuted="True"
-                      Stretch="UniformToFill"
-                      IsHitTestVisible="False"
-                      Panel.ZIndex="0"/>
+                      Style="{StaticResource Rift_AccountSelection_Video_Background}"/>
 
-        <Border CornerRadius="7.5,7.5,0,0"
-                Background="Gray"
-                IsHitTestVisible="False"
-                Opacity="0.09"
-                Panel.ZIndex="1"/>
+        <Border Style="{StaticResource Rift_AccountSelection_Border_Background}"/>
 
-        <Grid Panel.ZIndex="2">
+        <Grid Panel.ZIndex="3">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="40" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Margin="60,40,0,0">
+                <StackPanel Style="{StaticResource Rift_AccountSelection_StackPanel_Logo_Title}">
 
-                    <Image Style="{StaticResource Rift_Logo_login}" />
+                    <Image Style="{StaticResource Rift_AccountSelection_Image_Logo_Title}"/>
 
-                    <TextBlock Text="RIFT®"
-                               Foreground="White"
-                               FontSize="25"
-                               FontFamily="Arial"
-                               VerticalAlignment="Center"
-                               Margin="10,0,0,0" />
+                    <TextBlock Style="{StaticResource Rift_AccountSelection_Textblock_Logo_Title}" />
                 </StackPanel>
+
+                <Button Style="{StaticResource Rift_AccountSelection_WindowState_Button_Close}"
+                        Command="">
+
+                    <materialIcons:MaterialIcon Style="{StaticResource Rift_AccountSelection_Icon_WindowState}"
+                                                Kind="Close"
+                                                Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}" />
+                </Button>
             </Grid>
 
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2"
+                  Margin="0,40,0,0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="0">
+                    
+                    <TextBlock Style="{StaticResource Rift_AccountSelection_Textblock_Text}" />
+                    
+                </Grid>
 
-                    <StackPanel Orientation="Vertical">
+                <Grid Grid.Row="1"
+                      Margin="0,25,0,0">
 
-                        <TextBlock Text="Who's playing?"
-                                   FontSize="27"
-                                   FontWeight="Bold"
-                                   Foreground="White"
-                                   HorizontalAlignment="Center" />
+                    <ScrollViewer Style="{StaticResource SteamScrollViewerStyle}"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled"
+                                  x:Name="MediaScroll">
 
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,25,0,0">
+                        <StackPanel Style="{StaticResource Rift_AccountSelection_StackPanel_Content}">
 
-                            <StackPanel Orientation="Vertical">
-
-                                <Button Background="Transparent"
-                                        BorderBrush="Transparent"
-                                        Width="140"
-                                        Height="110"
-                                        Command="{Binding SelectAccountCommand}">
-
-                                    <Border BorderBrush="#505050"
-                                            BorderThickness="2">
-
-                                        <Image Source="/Image/Red.png"
-                                               Stretch="UniformToFill" />
-                                    </Border>
-                                </Button>
-
-                                <StackPanel HorizontalAlignment="Center"
-                                            Margin="0,5,0,0">
-
-                                    <TextBlock Text="Guest_test"
-                                               FontWeight="Bold"
-                                               Foreground="White"
-                                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                               FontSize="17"
-                                               HorizontalAlignment="Center" />
-
-                                    <TextBlock Text="Account name: Guest_test"
-                                               Foreground="#8B929A"
-                                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                               FontSize="15" />
-                                </StackPanel>
-                            </StackPanel>
-
-                            <Button Width="120"
-                                    Height="120"
-                                    VerticalAlignment="Top"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Command="{Binding ShowLoginCommand}">
-
-                                <materialIcons:MaterialIcon Kind="Plus"
-                                                            Width="45"
-                                                            Height="45"
-                                                            Foreground="White" />
-                            </Button>
+                            <Button Style="{StaticResource Rift_AccountSelection_Button_Account}"
+                                    Command="{Binding SelectAccountCommand}"/>
+         
+                            <Button Style="{StaticResource Rift_AccountSelection_Button_AddAccount}"
+                                    Command="{Binding ShowLoginCommand}"/>                            
                         </StackPanel>
-                    </StackPanel>
+                    </ScrollViewer>
                 </Grid>
             </Grid>
         </Grid>

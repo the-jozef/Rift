@@ -10,72 +10,16 @@
              d:Height="435"
              d:Width="702">
 
-    <UserControl.Resources>
-        <Storyboard x:Key="PulseAnimation"
-                    RepeatBehavior="Forever"
-                    AutoReverse="True">
-            <DoubleAnimation Storyboard.TargetName="Elipse1"
-                             Storyboard.TargetProperty="ScaleX"
-                             From="0.99"
-                             To="0.9"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse1"
-                             Storyboard.TargetProperty="ScaleY"
-                             From="0.93"
-                             To="0.88"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse2"
-                             Storyboard.TargetProperty="ScaleX"
-                             From="0.99"
-                             To="0.9"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse2"
-                             Storyboard.TargetProperty="ScaleY"
-                             From="0.99"
-                             To="0.9"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse3"
-                             Storyboard.TargetProperty="ScaleX"
-                             From="0.98"
-                             To="1.05"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse3"
-                             Storyboard.TargetProperty="ScaleY"
-                             From="1"
-                             To="1.02"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse4"
-                             Storyboard.TargetProperty="ScaleX"
-                             From="0.9"
-                             To="1"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse4"
-                             Storyboard.TargetProperty="ScaleY"
-                             From="0.9"
-                             To="1.1"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse5"
-                             Storyboard.TargetProperty="ScaleX"
-                             From="1"
-                             To="1.1"
-                             Duration="0:0:0:1" />
-            <DoubleAnimation Storyboard.TargetName="Elipse5"
-                             Storyboard.TargetProperty="ScaleY"
-                             From="1"
-                             To="1.3"
-                             Duration="0:0:0:1" />
-        </Storyboard>
-    </UserControl.Resources>
-
     <UserControl.Triggers>
-        <EventTrigger RoutedEvent="UserControl.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource PulseAnimation}" />
-        </EventTrigger>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+        <BeginStoryboard Storyboard="{StaticResource PulseAnimation}" />
+    </EventTrigger>
     </UserControl.Triggers>
-
+    
     <Grid>
         <Border Grid.Row="0"
                 CornerRadius="7.5,7.5,0,0">
+            
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1"
                                      StartPoint="0.5,0">
@@ -126,7 +70,6 @@
                         <StackPanel Style="{StaticResource Rift_Layout_Stackpanel}">
 
                             <TextBlock Style="{StaticResource Rift_SignIn_Title}" />
-
                             <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
                                      x:Name="UsernameBox"
                                      Text="{Binding Username}" />

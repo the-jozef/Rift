@@ -270,10 +270,10 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
     <Style x:Key="Rift_MenuBar_PopupBox_Notifications"
            TargetType="materialDesign:PopupBox">
 
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
         <Setter Property="Padding"
                 Value="0" />
+        <Setter Property="Margin"
+                Value="6,6,0,6"/>
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
@@ -316,16 +316,20 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
         </Style.Resources>
     </Style>
 
-    <!-- Textblock in PopupBox_Options -->
+    <!-- Textblock in PopupBox_Notifications -->
     <Style x:Key="Rift_MenuBar_Icon_PopupBox_Notifications"
            TargetType="materialIcons:MaterialIcon">
 
         <Setter Property="Kind"
                 Value="Bell" />
+        <Setter Property="Margin"
+                Value="14,0,13,0"/>
         <Setter Property="Foreground"
                 Value="#959AA3" />
         <Setter Property="Width"
                 Value="20" />
+        <Setter Property="VerticalAlignment"
+                Value="Center"/>
         <Setter Property="Height"
                 Value="20" />
         <Setter Property="FontFamily"
@@ -376,11 +380,13 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
            TargetType="materialDesign:PopupBox">
 
         <Setter Property="Padding"
-                Value="0" />
+                Value="0" />       
+        <Setter Property="Margin"
+                Value="12,6,40,0"/>
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
-                Value="0" />
+                Value="90" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="VerticalAlignment"
@@ -404,9 +410,11 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
            TargetType="Border">
 
         <Setter Property="Padding"
-                Value="0" />
+                Value="5" />
         <Setter Property="Background"
                 Value="#23262E" />
+        <Setter Property="MinWidth"
+                Value="90"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver"
                      Value="True">
@@ -424,10 +432,6 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
     <Style x:Key="Rift_MenuBar_Textblock_PopupBox_Account"
            TargetType="TextBlock">
 
-        <Setter Property="Text"
-                Value="Guest_test" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
         <Setter Property="Foreground"
                 Value="#46B0FF" />
         <Setter Property="FontSize"
@@ -478,6 +482,8 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
                 Value="Transparent" />
         <Setter Property="BorderBrush"
                 Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0"/>
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
@@ -503,9 +509,9 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
            TargetType="materialIcons:MaterialIcon">
 
         <Setter Property="Width"
-                Value="13" />
+                Value="20" />
         <Setter Property="Height"
-                Value="13" />
+                Value="20" />
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
