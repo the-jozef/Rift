@@ -83,10 +83,10 @@
 
                                     <StackPanel>
                                         <Button Content="View Games Library"
-                                                Command=""
+                                                Command="{Binding ShowLibraryCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                         <Button Content="View Store"
-                                                Command=""
+                                                Command="{Binding ShowStoreCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </ScrollViewer>
@@ -146,10 +146,10 @@
 
                                     <StackPanel>
                                         <Button Content="Featured"
-                                                Command=""
+                                                Command="{Binding ShowStoreCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                         <Button Content="Wishlist"
-                                                Command=""
+                                                Command="{Binding ShowWishlistCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </ScrollViewer>
@@ -172,7 +172,7 @@
 
                                     <StackPanel>
                                         <Button Content="Home"
-                                                Command=""
+                                                Command="{Binding ShowStoreCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </ScrollViewer>
@@ -195,10 +195,10 @@
 
                                     <StackPanel>
                                         <Button Content="Profile"
-                                                Command=""
+                                                Command="{Binding ShowAccountCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                         <Button Content="Library"
-                                                Command=""
+                                                Command="{Binding ShowLibraryCommand}"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </ScrollViewer>
@@ -252,8 +252,8 @@
                                             <StackPanel Orientation="Horizontal"
                                                         HorizontalAlignment="Center">
                                                 
-                                                <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Account}" 
-                                                           Text="Dynamo_s.r.o"/>
+                                                <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Account}"
+                                                           Text="{Binding Username}" />
 
                                                 <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Account}" />
                                             </StackPanel>

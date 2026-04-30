@@ -12,61 +12,6 @@
              Height="438"
              Width="705">
 
-    <UserControl.Resources>
-        <Storyboard x:Key="LoadingAnimation"
-                    RepeatBehavior="Forever"
-                    Duration="0:0:3.8">
-
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Ellipse1"
-                                          Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
-                                          Duration="0:0:6"
-                                          BeginTime="0:0:0">
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:0" />
-                <LinearColorKeyFrame Value="#40AEF1"
-                                     KeyTime="0:0:0.8" />
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:1.6" />
-            </ColorAnimationUsingKeyFrames>
-
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Ellipse2"
-                                          Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
-                                          Duration="0:0:6"
-                                          BeginTime="0:0:0.6">
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:0" />
-                <LinearColorKeyFrame Value="#40AEF1"
-                                     KeyTime="0:0:0.8" />
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:1.6" />
-            </ColorAnimationUsingKeyFrames>
-
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Ellipse3"
-                                          Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
-                                          Duration="0:0:6"
-                                          BeginTime="0:0:1.2">
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:0" />
-                <LinearColorKeyFrame Value="#40AEF1"
-                                     KeyTime="0:0:0.8" />
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:1.6" />
-            </ColorAnimationUsingKeyFrames>
-
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Ellipse4"
-                                          Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
-                                          Duration="0:0:6"
-                                          BeginTime="0:0:1.8">
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:0" />
-                <LinearColorKeyFrame Value="#40AEF1"
-                                     KeyTime="0:0:0.8" />
-                <LinearColorKeyFrame Value="#FF1F1F1F"
-                                     KeyTime="0:0:1.6" />
-            </ColorAnimationUsingKeyFrames>
-        </Storyboard>
-    </UserControl.Resources>
-
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="Loaded">
             <BeginStoryboard Storyboard="{StaticResource LoadingAnimation}" />
@@ -74,18 +19,7 @@
     </UserControl.Triggers>
 
     <Grid>
-        <Border CornerRadius="7.5,7.5,0,0">
-
-            <Border.Background>
-                <LinearGradientBrush StartPoint="1,0"
-                                     EndPoint="0,1">
-                    <GradientStop Color="#FF1D1D25"
-                                  Offset="1" />
-                    <GradientStop Color="#1D1D21" />
-                    <GradientStop Color="#FF1E1E26"
-                                  Offset="0" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Style="{StaticResource Rift_SteamConnection_Main_Border}">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -101,127 +35,104 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0"
-                                Style="{StaticResource Rift_Title_stackpanel}" 
-                                Margin="40,40,0,0">
+                    <Grid Grid.Row="0">
 
-                        <Button Background="Transparent"
-                                BorderBrush="Transparent"
-                                Height="55"
-                                Width="37"
-                                Command="{Binding ShowLoginCommand}">
+                        <StackPanel Style="{StaticResource Rift_SteamConnection_StackPanel_Logo_Title}">
 
-                            <materialIcons:MaterialIcon Kind="ChevronLeft"
-                                                        Foreground="#BFBDBD"
-                                                        Height="60"
-                                                        Width="60"
-                                                        Margin="-35,-6,0,0" />
-                        </Button>
+                            <Button Style="{StaticResource Rift_SteamConnection_Button_Back_Arrow}"
+                                    Command="{Binding ShowAccountSelectionCommand}" />
 
-                        <Image Style="{StaticResource Rift_Logo_register}" />
+                            <Image Style="{StaticResource Rift_SteamConnection_Image_Logo}" />
+
+                            <StackPanel Style="{StaticResource Rift_SteamConnection_StackPanel_Title}">
+
+                                <TextBlock Style="{StaticResource Rift_SteamConnection_TextBlock_Title}" />
+
+                                <TextBlock Style="{StaticResource Rift_SteamConnection_TextBlock_Profile}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1"
+                          Margin="75,60,0,0">
 
                         <StackPanel Orientation="Vertical">
+                            <TextBlock Style="{StaticResource Rift_SteamConnection_Textblock_Connection}" />
 
-                            <TextBlock Style="{StaticResource Rift_Title_login}"
-                                       Margin="10,-1,0,0"
-                                       FontSize="30" />
-
-                            <TextBlock Style="{StaticResource Rift_TextBlock_NewAccount}" />
+                            <TextBlock Style="{StaticResource Rift_SteamConnection_Textblock_AccountLink}" />
                         </StackPanel>
-                    </StackPanel>
+                    </Grid>
 
-                    <StackPanel Grid.Row="1"                         
-                                Style="{StaticResource Rift_Stackpanel_Information}">
+                    <Grid Grid.Row="2"
+                          Margin="90,50,0,0">
 
-                        <TextBlock Style="{StaticResource Rift_Textblock_Connection}" />
-
-                        <TextBlock Style="{StaticResource Rift_Textblock_AccountLink}" />
-                        
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="2"
-                                Style="{StaticResource Rift_Stackpanel_Button Layout}"
-                                Margin="90,45,0,0">
-
-                        <Button Style="{StaticResource Rift_Steam_button}"
-                                Width="220"
-                                Height="43"
-                                Command="{Binding ConnectSteamCommand}">
-
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center">
-
-                                <materialIcons:MaterialIcon Style="{StaticResource Rift_Steam_Icon}"
-                                                            Width="25"
-                                                            Height="25" />
-                                <TextBlock Style="{StaticResource Rift_Steam_Textblock_register}" />
-                                
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
+                        <Button Style="{StaticResource Rift_SteamConnection_Button_SteamConnection}"
+                                Command="{Binding ConnectSteamCommand}" />
+                    </Grid>
                 </Grid>
 
                 <Grid Grid.Column="1">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="120" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="120" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0"
-                                Width="33"
-                                HorizontalAlignment="Right">
+                    <Grid Grid.Row="0">
 
-                        <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Close}"
-                                Height="30"
-                                Margin="0,0,0,0"
-                                Width="33"
-                                materialDesign:ButtonAssist.CornerRadius="0,7.5,0,0"
+                        <Button Style="{StaticResource Rift_SteamConnection_WindowState_Button_Close}"
                                 Command="{Binding ShowAccountSelectionCommand}">
 
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_WindowState}"
-                                                        Kind="Close"
-                                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
+                            <materialIcons:MaterialIcon Style="{StaticResource Rift_SteamConnection_Icon_WindowState}"
+                                                        Kind="Close" />
                         </Button>
-                    </StackPanel>
+                    </Grid>
 
-                    <StackPanel Grid.Row="2"
-                                Style="{StaticResource Rift_Stackpanel_Logo}">
+                    <Grid Grid.Row="1">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        <StackPanel>
-                            <Border Style="{StaticResource Rift_Border_Steam}">
+                        <StackPanel Grid.Row="1"
+                                    Style="{StaticResource Rift_SteamConnection_StackPanel_Loading_Logos}">
 
-                                <materialIcons:MaterialIcon Style="{StaticResource Rift_SteamIcon_border}" />
-                            </Border>
+                            <StackPanel>
+                                <Border Style="{StaticResource Rift_Border_Steam}">
+
+                                    <materialIcons:MaterialIcon Style="{StaticResource Rift_SteamIcon_border}" />
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="10,0,10,0">
+
+                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                         x:Name="Ellipse1" />
+
+                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                         x:Name="Ellipse2" />
+
+                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                         x:Name="Ellipse3" />
+
+                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                         x:Name="Ellipse4" />
+                            </StackPanel>
+
+                            <StackPanel>
+
+                                <Border Style="{StaticResource Rift_Border_Logo}">
+
+                                    <Image Style="{StaticResource Rift_Logo}" />
+
+                                </Border>
+                            </StackPanel>
                         </StackPanel>
-
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="10,0,10,0">
-
-                            <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
-                                     x:Name="Ellipse1" />
-
-                            <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
-                                     x:Name="Ellipse2" />
-
-                            <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
-                                     x:Name="Ellipse3" />
-
-                            <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
-                                     x:Name="Ellipse4" />
-                        </StackPanel>
-
-                        <StackPanel>
-
-                            <Border Style="{StaticResource Rift_Border_Logo}">
-
-                                <Image Style="{StaticResource Rift_Logo}" />
-
-                            </Border>
-                        </StackPanel>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>

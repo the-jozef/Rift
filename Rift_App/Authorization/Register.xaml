@@ -65,7 +65,7 @@
 
                         <StackPanel Orientation="Vertical">
 
-                            <TextBlock Style="{StaticResource Rift_Title_login}"
+                            <TextBlock 
                                        Margin="10,-1,0,0"
                                        FontSize="30" />
 
@@ -84,14 +84,14 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="2"
-                                Style="{StaticResource Rift_Layout_Stackpanel}"
+                               
                                 HorizontalAlignment="Left"
                                 Margin="85,22,0,0">
 
                         <TextBlock Style="{StaticResource Rift_SignIn_Title2}" />
 
-                        <TextBox Style="{StaticResource Rift_SignIn_AccountName}"
-                                 Text="{Binding RegisterUsername}"
+                        <TextBox 
+                                 Text="{Binding RegisterUsername, UpdateSourceTrigger=PropertyChanged}"
                                  x:Name="UsernameBox"
                                  Width="275" />
 

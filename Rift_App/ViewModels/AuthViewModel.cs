@@ -5,6 +5,17 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Rift_App.Authorization;
 using Rift_App.Services;
+using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
+using Rift_App.Loading;
+using Rift_App.Models;
+using Rift_App.ViewModels;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Rift_App.ViewModels
 {
@@ -150,7 +161,6 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private async Task ConnectSteamAsync()
         {
-            // Cancel previous if any — zrušíme predchádzajúce pripojenie
             SteamAuthService.Cancel();
 
             IsConnecting = true;
@@ -170,9 +180,27 @@ namespace Rift_App.ViewModels
                     return;
                 }
 
+                // ─── Prepne fokus späť na Rift apku ──────────────────────
+                // Focus back to Rift window after Steam browser closes
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var authWindow = Application.Current.Windows
+                        .OfType<AuthWindow>()
+                        .FirstOrDefault();
+
+                    if (authWindow != null)
+                    {
+                        authWindow.Activate();
+                        authWindow.Topmost = true;
+                        authWindow.Topmost = false;
+                        authWindow.Focus();
+                    }
+                });
+
                 SteamStatusMessage = "Connected! Loading your profile...";
 
-                // Check if already has Rift account
+                // Skontroluj ci uz ma Rift ucet
+                // Check if Steam account already has a Rift account
                 var existing = await ApiService.LoginSteamAsync(steamId);
                 if (existing != null && existing.Success)
                 {
@@ -182,6 +210,9 @@ namespace Rift_App.ViewModels
                 }
 
                 var playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
+
+                // Presunie na Register a predvyplni meno zo Steamu
+                // Navigate to Register and pre-fill Steam username
                 PreFillRegister(steamId, playerInfo?.Username ?? string.Empty);
             }
             catch

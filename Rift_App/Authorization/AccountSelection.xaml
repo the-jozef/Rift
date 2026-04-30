@@ -35,11 +35,10 @@
                 </StackPanel>
 
                 <Button Style="{StaticResource Rift_AccountSelection_WindowState_Button_Close}"
-                        Command="">
+                        Command="{Binding WindowState.CloseCommand}">
 
                     <materialIcons:MaterialIcon Style="{StaticResource Rift_AccountSelection_Icon_WindowState}"
-                                                Kind="Close"
-                                                Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=Button}}" />
+                                                Kind="Close"/>
                 </Button>
             </Grid>
 
@@ -58,7 +57,7 @@
                 </Grid>
 
                 <Grid Grid.Row="1"
-                      Margin="0,25,0,0">
+                      Margin="0,30,0,0">
 
                     <ScrollViewer Style="{StaticResource SteamScrollViewerStyle}"
                                   HorizontalScrollBarVisibility="Auto"
