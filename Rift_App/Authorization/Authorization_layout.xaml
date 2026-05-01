@@ -13,7 +13,7 @@
         <Setter Property="RenderOptions.BitmapScalingMode"
                 Value="HighQuality" />
         <Setter Property="Opacity"
-                Value="0.2" />
+                Value="0.5" />
         <Setter Property="Panel.ZIndex"
                 Value="0" />
     </Style>
@@ -233,15 +233,190 @@
         <Setter Property="Width"
                 Value="100" />
         <Setter Property="Height"
-                Value="100" />
+                Value="140" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border BorderBrush="#505050"
-                            BorderThickness="2">
-                        <Image Source="/Image/Red.png"
-                               Stretch="UniformToFill" />
-                    </Border>
+                    <Grid Width="100"
+                          Height="140">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <Border x:Name="AccountBorder"
+                                Grid.Row="0"
+                                Width="100"
+                                Height="100"
+                                BorderThickness="0.5"
+                                RenderTransformOrigin="0.5,0.5"
+                                VerticalAlignment="Top">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="#FF505050" />
+                            </Border.BorderBrush>
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="AccountScale"
+                                                ScaleX="1"
+                                                ScaleY="1" />
+                            </Border.RenderTransform>
+
+                            <Grid>
+                                <Image Source="/Image/Red.png"
+                                       Stretch="UniformToFill" />
+
+                                <materialDesign:PopupBox x:Name="OptionsBox"
+                                                         Style="{StaticResource Rift_MenuBar_PopupBox_Options}"
+                                                         HorizontalAlignment="Right"
+                                                         VerticalAlignment="Bottom"
+                                                         Margin="0,0,5,5"
+                                                         Opacity="0"
+                                                         PlacementMode="RightAndAlignTopEdges">
+
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <Border Width="30"
+                                                Height="20"
+                                                Background="#CC000000"                                             
+                                                CornerRadius="4"
+                                                Cursor="Hand">
+                                            
+                                            <TextBlock Text="···"
+                                                       Foreground="White"
+                                                       FontSize="11"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                        </Border>
+                                    </materialDesign:PopupBox.ToggleContent>
+
+                                    <Button Content="Remove this Account?"
+                                            Cursor="Hand"
+                                            Margin="5,4,0,0"
+                                            Command=""
+                                            CommandParameter="{TemplateBinding Tag}">
+                                        
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background"
+                                                        Value="#3D4450" />
+                                                <Setter Property="Foreground"
+                                                        Value="White" />
+                                                <Setter Property="BorderThickness"
+                                                        Value="0" />
+                                                <Setter Property="Padding"
+                                                        Value="4" />
+                                                <Setter Property="FontSize"
+                                                        Value="11" />
+                                                <Setter Property="FontFamily"
+                                                        Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                <Setter Property="FontWeight"
+                                                        Value="Medium" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="Bg"
+                                                                    Background="{TemplateBinding Background}"
+                                                                    CornerRadius="4"
+                                                                    Padding="{TemplateBinding Padding}">
+                                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                                  VerticalAlignment="Center" />
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver"
+                                                                         Value="True">
+                                                                    <Setter TargetName="Bg"
+                                                                            Property="Background"
+                                                                            Value="#26292E" />
+                                                                    <Setter Property="Foreground"
+                                                                            Value="Red" />
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </materialDesign:PopupBox>
+                            </Grid>
+                        </Border>
+
+                        <TextBlock x:Name="AccountNameLabel"
+                                   Grid.Row="1"
+                                   Text="{TemplateBinding Tag}"
+                                   Foreground="White"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Top"
+                                   Margin="0,6,0,0"
+                                   Opacity="0" />
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!-- Zväčšenie -->
+                                        <DoubleAnimation Storyboard.TargetName="AccountScale"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         To="1.1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="AccountScale"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         To="1.2"
+                                                         Duration="0:0:0.15" />
+
+                                        <!-- Text posuň dole aby nebol medzi -->
+                                        <ThicknessAnimation Storyboard.TargetName="AccountNameLabel"
+                                                            Storyboard.TargetProperty="Margin"
+                                                            To="0,25,0,0"
+                                                            Duration="0:0:0.15" />
+                                        <!-- "..." fade in -->
+                                        <DoubleAnimation Storyboard.TargetName="OptionsBox"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <!-- Text fade in -->
+                                        <DoubleAnimation Storyboard.TargetName="AccountNameLabel"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="AccountScale"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="AccountScale"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <ColorAnimation Storyboard.TargetName="AccountBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#FF505050"
+                                                        Duration="0:0:0.15" />
+                                       
+                                        <DoubleAnimation Storyboard.TargetName="OptionsBox"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="AccountNameLabel"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -265,19 +440,111 @@
                 Value="100" />
         <Setter Property="Height"
                 Value="100" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="Margin"
+                Value="20,0,0,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <materialIcons:MaterialIcon Kind="Plus"
-                                                Width="70"
-                                                Height="70"
-                                                Foreground="White" />
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Center">
+
+                        <Border x:Name="IconBorder"
+                                Width="100"
+                                Height="100"
+                                BorderThickness="2"
+                                BorderBrush="Transparent"
+                                Background="Transparent">
+                            
+                            <materialIcons:MaterialIcon x:Name="PlusIcon"
+                                                        Kind="Plus"
+                                                        Width="70"
+                                                        Height="70"
+                                                        Foreground="White"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center" />
+                        </Border>
+
+                        <TextBlock x:Name="AddAccountLabel"
+                                   Text="Add Account"
+                                   Foreground="White"
+                                   FontSize="12"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,6,0,0"
+                                   Opacity="0" />
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="IconBorder"
+                                                         Storyboard.TargetProperty="Width"
+                                                         To="80"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="IconBorder"
+                                                         Storyboard.TargetProperty="Height"
+                                                         To="80"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="PlusIcon"
+                                                         Storyboard.TargetProperty="Width"
+                                                         To="55"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="PlusIcon"
+                                                         Storyboard.TargetProperty="Height"
+                                                         To="55"
+                                                         Duration="0:0:0.15" />
+                                        <!-- Border to white -->
+                                        <ColorAnimation Storyboard.TargetName="IconBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="White"
+                                                        Duration="0:0:0.15" />
+                                        <!-- Label fade in -->
+                                        <DoubleAnimation Storyboard.TargetName="AddAccountLabel"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!-- Border back to original size -->
+                                        <DoubleAnimation Storyboard.TargetName="IconBorder"
+                                                         Storyboard.TargetProperty="Width"
+                                                         To="100"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="IconBorder"
+                                                         Storyboard.TargetProperty="Height"
+                                                         To="100"
+                                                         Duration="0:0:0.15" />
+                                        <!-- Border back to transparent -->
+                                        <ColorAnimation Storyboard.TargetName="IconBorder"
+                                                        Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="Transparent"
+                                                        Duration="0:0:0.15" />
+                                        <!-- Label fade out -->
+                                        <DoubleAnimation Storyboard.TargetName="AddAccountLabel"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-                                                     <!-- Login -->
+    <!-- Login -->
     <!-- Ellipse animation -->
     <Storyboard x:Key="PulseAnimation"
                 RepeatBehavior="Forever"
@@ -384,6 +651,8 @@
                 Value="55" />
         <Setter Property="Width"
                 Value="37" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -1135,6 +1404,8 @@
                 Value="55" />
         <Setter Property="Width"
                 Value="37" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -1409,15 +1680,12 @@
                 Value="Center" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
+        <Setter Property="Margin"
+                Value="0,5,0,0" />
     </Style>
 
-<!--tu som skoncil-->
-    
-    
-    
-    
-    
-    <Style x:Key="Rift_Border_Steam2"
+    <!-- Border for Steam Logo -->
+    <Style x:Key="Rift_SteamConnection_Border_Steam_Logo"
            TargetType="Border">
 
         <Setter Property="Width"
@@ -1452,7 +1720,7 @@
     </Style>
 
     <!-- Steam Icon in Border-->
-    <Style x:Key="Rift_SteamIcon_border2"
+    <Style x:Key="Rift_SteamConnection_Icon_Steam_Logo"
            TargetType="materialIcons:MaterialIcon">
 
         <Setter Property="Kind"
@@ -1470,7 +1738,7 @@
     </Style>
 
     <!-- Ellipses fro loading -->
-    <Style x:Key="Rift_Ellipse_Loading2"
+    <Style x:Key="Rift_SteamConnection_Ellipse_Loading"
            TargetType="Ellipse">
 
         <Setter Property="Width"
@@ -1496,7 +1764,7 @@
     </Style>
 
     <!-- Border for RIFT logo -->
-    <Style x:Key="Rift_Border_Logo2"
+    <Style x:Key="Rift_SteamConnection_Border_Rift_Logo"
            TargetType="Border">
 
         <Setter Property="Width"
@@ -1505,6 +1773,32 @@
                 Value="95" />
         <Setter Property="CornerRadius"
                 Value="20" />
+        <Setter Property="Margin"
+                Value="0,2,0,0" />
+
+        <Setter Property="Background">
+            <Setter.Value>
+
+                <ImageBrush ImageSource="/Image/Rift_logo.png"
+                            Stretch="UniformToFill" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="OpacityMask">
+            <Setter.Value>
+                <DrawingBrush>
+                    <DrawingBrush.Drawing>
+                        <GeometryDrawing Brush="Black">
+                            <GeometryDrawing.Geometry>
+                                
+                                <EllipseGeometry Center="60,60"
+                                                 RadiusX="60"
+                                                 RadiusY="60" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect Color="#83289C"
@@ -1514,127 +1808,160 @@
         </Setter>
     </Style>
 
-    <!-- Rift logo in Border -->
+                                               <!--      REGISTER      -->
 
-    <Style x:Key="Rift_Logo2"
-           TargetType="Image">
 
-        <Setter Property="Source"
-                Value="/Image/Rift_logo.png" />
-        <Setter Property="Width"
-                Value="95" />
-        <Setter Property="Height"
-                Value="95" />
-        <Setter Property="Margin"
-                Value="0,-10,0,-10" />
-        <Setter Property="Stretch"
-                Value="UniformToFill" />
-        <Setter Property="RenderOptions.BitmapScalingMode"
-                Value="HighQuality" />
-        <Setter Property="materialDesign:ElevationAssist.Elevation"
-                Value="Dp4" />
-        <Setter Property="Clip">
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Main Border -->
+    <Style x:Key="Rift_Register_Main_Border"
+           TargetType="Border">
+
+        <Setter Property="CornerRadius"
+                Value="7.5,7.5,0,0" />
+        <Setter Property="Background">
             <Setter.Value>
-                <EllipseGeometry Center="47.5,47.5"
-                                 RadiusX="47.5"
-                                 RadiusY="47.5" />
+                <LinearGradientBrush EndPoint="0.5,1"
+                                     StartPoint="0.5,0">
+                    <GradientStop Color="#1E1E26" />
+                    <GradientStop Color="#1A1B1F"
+                                  Offset="0.788" />
+                </LinearGradientBrush>
             </Setter.Value>
         </Setter>
     </Style>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--      REGISTER      -->
-
-    <!-- Title Stackpanel -->
-    <Style x:Key="Rift_Title_stackpanel"
+    <!-- Stackpanel Logo/Title -->
+    <Style x:Key="Rift_Register_StackPanel_Logo_Title"
            TargetType="StackPanel">
 
         <Setter Property="Orientation"
                 Value="Horizontal" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Height"
-                Value="Auto" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="60,40,0,0" />
+                Value="12,35,0,0" />
     </Style>
 
-    <!-- Logo -->
-    <Style x:Key="Rift_Logo_register"
+    <!-- Button in Register_Back_Arrow -->
+    <Style x:Key="Rift_Register_Button_Back_Arrow"
+           TargetType="Button">
+
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="MinHeight"
+                Value="0" />
+        <Setter Property="MinWidth"
+                Value="0" />
+        <Setter Property="Margin"
+                Value="0,0,-5,0" />
+        <Setter Property="Height"
+                Value="55" />
+        <Setter Property="Width"
+                Value="37" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <materialIcons:MaterialIcon Kind="ChevronLeft"
+                                                Foreground="#BFBDBD"
+                                                HorizontalAlignment="Center"
+                                                Height="50"
+                                                Width="50" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Image in Register_Logo -->
+    <Style x:Key="Rift_Register_Image_Logo"
            TargetType="Image">
 
         <Setter Property="Source"
                 Value="/Image/Rift_logo.png" />
         <Setter Property="Width"
-                Value="65" />
+                Value="60" />
         <Setter Property="Height"
-                Value="65" />
-        <Setter Property="Margin"
-                Value="-10,-10,0,-10" />
+                Value="60" />
         <Setter Property="Stretch"
                 Value="UniformToFill" />
         <Setter Property="RenderOptions.BitmapScalingMode"
                 Value="HighQuality" />
-        <Setter Property="materialDesign:ElevationAssist.Elevation"
-                Value="Dp4" />
         <Setter Property="Clip">
             <Setter.Value>
-                <EllipseGeometry Center="32.5,32.5"
-                                 RadiusX="32.5"
-                                 RadiusY="32.5" />
+                <EllipseGeometry Center="30,30"
+                                 RadiusX="30"
+                                 RadiusY="30" />
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!-- Textblock for New Account -->
-    <Style x:Key="Rift_TextBlock_NewAccount"
-           TargetType="TextBlock">
-
-        <Setter Property="Text"
-                Value="New Account" />
-        <Setter Property="Margin"
-                Value="9,-4,0,0" />
-        <Setter Property="Foreground"
-                Value="#9E9E9E" />
-        <Setter Property="FontSize"
-                Value="15" />
-    </Style>
-
-    <!-- Stackpanel for Information -->
-    <Style x:Key="Rift_Stackpanel_Information"
+    <!-- Stackpanel in Register_Title -->
+    <Style x:Key="Rift_Register_StackPanel_Title"
            TargetType="StackPanel">
 
         <Setter Property="Orientation"
                 Value="Vertical" />
+        <Setter Property="Margin"
+                Value="8,13,0,0" />
+    </Style>
+    <!-- TextBlock in Register_Title -->
+    <Style x:Key="Rift_Register_TextBlock_Title"
+           TargetType="TextBlock">
+
+        <Setter Property="Text"
+                Value="RIFT" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="VerticalAlignment"
                 Value="Top" />
+        <Setter Property="Foreground"
+                Value="#E6E7E8" />
+        <Setter Property="FontSize"
+                Value="32" />
         <Setter Property="Margin"
-                Value="72,60,0,0" />
+                Value="0,-10,0,0" />
+        <Setter Property="FontFamily"
+                Value="MotivaSans-Regular.ttf" />
+        <Setter Property="FontWeight"
+                Value="Medium" />
     </Style>
 
-    <!-- Textblock for Connect with Steam -->
-    <Style x:Key="Rift_Textblock_Connection"
+    <!-- Textblock Profile -->
+    <Style x:Key="Rift_Register_TextBlock_Profile"
+           TargetType="TextBlock">
+
+        <Setter Property="Foreground"
+                Value="#9E9E9E" />
+        <Setter Property="Margin"
+                Value="1,-5,0,0" />
+        <Setter Property="FontSize"
+                Value="16" />
+        <Setter Property="Text"
+                Value="New Account" />
+    </Style>
+
+    <!-- Textblock for Create your Account -->
+    <Style x:Key="Rift_Register_Textblock_Create"
            TargetType="TextBlock">
 
         <Setter Property="Text"
-                Value="Connect With Steam" />
+                Value="Create your Account" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"
@@ -1645,109 +1972,72 @@
                 Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
     </Style>
 
-    <!-- Textblock for Link Account -->
-    <Style x:Key="Rift_Textblock_AccountLink"
-           TargetType="TextBlock">
-
-        <Setter Property="Text"
-                Value="Link your Steam account to get started" />
-        <Setter Property="Margin"
-                Value="2,0,0,0" />
-        <Setter Property="Foreground"
-                Value="#9E9E9E" />
-        <Setter Property="FontSize"
-                Value="13.4" />
-    </Style>
-
-    <!-- Stackpanel for Button layout -->
-    <Style x:Key="Rift_Stackpanel_Button Layout"
+    <!-- Stackpanel Register_layout -->
+    <Style x:Key="Rift_Register_StackPanel_Layout"
            TargetType="StackPanel">
 
         <Setter Property="Orientation"
                 Value="Vertical" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
         <Setter Property="VerticalAlignment"
                 Value="Top" />
-        <Setter Property="Margin"
-                Value="52,60,0,0" />
     </Style>
 
-    <!-- TextBlock for Steam sign up -->
-    <Style x:Key="Rift_Steam_Textblock_register"
+    <!-- Textblock for Title_Account_Name -->
+    <Style x:Key="Rift_Register_TextBlock_Layout"
            TargetType="TextBlock">
 
         <Setter Property="Text"
-                Value="Connect with Steam" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
+                Value="Account name" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
         <Setter Property="Foreground"
-                Value="White" />
+                Value="#CD66FF" />
         <Setter Property="FontSize"
-                Value="14.5" />
-        <Setter Property="FontWeight"
-                Value="Regular" />
+                Value="14" />
         <Setter Property="FontFamily"
-                Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                Value="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
     </Style>
 
-    <!-- Button for Already have an Account -->
-    <Style x:Key="Rift_Return_Button"
-           TargetType="Button">
+    <!-- TextBox for sign up Account name -->
+    <Style x:Key="Rift_Register_TextBlock_Layout_AccountName"
+           TargetType="TextBox">
 
-        <Setter Property="Content"
-                Value="Already have an account ?" />
         <Setter Property="Width"
-                Value="Auto" />
+                Value="250" />
         <Setter Property="Height"
-                Value="40" />
+                Value="35" />
         <Setter Property="HorizontalAlignment"
-                Value="Center" />
+                Value="Left" />
         <Setter Property="Margin"
-                Value="7,0,0,0" />
+                Value="0,5,0,0" />
         <Setter Property="Background"
-                Value="Transparent" />
+                Value="#2F3138" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"
-                Value="15" />
-        <Setter Property="FontWeight"
-                Value="Medium" />
-        <Setter Property="FontStretch"
-                Value="Medium" />
-        <Setter Property="Cursor"
-                Value="Hand" />
+                Value="14" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
         <Setter Property="OverridesDefaultStyle"
                 Value="True" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center">
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}">
 
-                        <materialIcons:MaterialIcon x:Name="Icon"
-                                                    Kind="ArrowLeft"
-                                                    Height="14"
-                                                    Width="14"
-                                                    Margin="0,2,6,0" />
-                        <TextBlock x:Name="text"
-                                   Text="{TemplateBinding Content}"
-                                   FontSize="{TemplateBinding FontSize}"
-                                   FontWeight="{TemplateBinding FontWeight}"
-                                   FontStretch="{TemplateBinding FontStretch}"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="10,0,0,0" />
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">
-                            <Setter TargetName="text"
-                                    Property="Foreground"
-                                    Value="#F5F2F2" />
-                            <Setter TargetName="Icon"
-                                    Property="Foreground"
-                                    Value="#F5F2F2" />
+
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#393C44" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -1755,160 +2045,93 @@
         </Setter>
     </Style>
 
-    <!-- Stackpanel for Logo -->
-    <Style x:Key="Rift_Stackpanel_Logo"
-           TargetType="StackPanel">
+    <!-- Textblock for Title_password -->
+    <Style x:Key="Rift_Register_TextBlock_Layout_Password"
+           TargetType="TextBlock">
 
-        <Setter Property="Orientation"
-                Value="Horizontal" />
+        <Setter Property="Text"
+                Value="PASSWORD" />
         <Setter Property="HorizontalAlignment"
-                Value="Center" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="Width"
-                Value="Auto" />
-        <Setter Property="Height"
-                Value="Auto" />
+                Value="Left" />
+        <Setter Property="Margin"
+                Value="0,15,0,0" />
+        <Setter Property="Foreground"
+                Value="#AAAAAA" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontFamily"
+                Value="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
     </Style>
 
-    <Style x:Key="Rift_Border_Steam"
-           TargetType="Border">
+    <!-- Passwordbox for sign -->
+    <Style x:Key="Rift_Register_Password_Layout_Password"
+           TargetType="PasswordBox">
 
         <Setter Property="Width"
-                Value="93" />
+                Value="250" />
         <Setter Property="Height"
-                Value="93" />
+                Value="35" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="Margin"
+                Value="0,5,0,0" />
+        <Setter Property="Background"
+                Value="#2F3138" />
         <Setter Property="BorderBrush"
-                Value="#325C88" />
+                Value="Transparent" />
         <Setter Property="BorderThickness"
-                Value="0.5" />
-        <Setter Property="CornerRadius"
-                Value="50" />
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect Color="#3371B0"
-                                  BlurRadius="70"
-                                  ShadowDepth="0" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0"
-                                     EndPoint="1,1"
-                                     Opacity="0.8">
-                    <GradientStop Color="#FF1B2838"
-                                  Offset="0" />
-                    <GradientStop Color="#FF2A475E"
-                                  Offset="1" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Steam Icon in Border-->
-    <Style x:Key="Rift_SteamIcon_border"
-           TargetType="materialIcons:MaterialIcon">
-
-        <Setter Property="Kind"
-                Value="Steam" />
-        <Setter Property="Width"
-                Value="41" />
-        <Setter Property="Height"
-                Value="41" />
-        <Setter Property="HorizontalAlignment"
-                Value="Center" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
+                Value="0" />
         <Setter Property="Foreground"
                 Value="White" />
-    </Style>
-
-    <!-- Ellipses fro loading -->
-    <Style x:Key="Rift_Ellipse_Loading"
-           TargetType="Ellipse">
-
-        <Setter Property="Width"
-                Value="12" />
-        <Setter Property="Height"
-                Value="8" />
-        <Setter Property="Margin"
-                Value="2" />
-        <Setter Property="Opacity"
-                Value="0.8" />
-        <Setter Property="Fill">
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="PasswordChar"
+                Value="●" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="Template">
             <Setter.Value>
-                <SolidColorBrush Color="Transparent" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect Color="#FF007EFF"
-                                  BlurRadius="100"
-                                  ShadowDepth="0" />
-            </Setter.Value>
-        </Setter>
-    </Style>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}">
 
-    <!-- Border for RIFT logo -->
-    <Style x:Key="Rift_Border_Logo"
-           TargetType="Border">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="10,0,0,0" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
 
-        <Setter Property="Width"
-                Value="95" />
-        <Setter Property="Height"
-                Value="95" />
-        <Setter Property="CornerRadius"
-                Value="20" />
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect Color="#83289C"
-                                  BlurRadius="80"
-                                  ShadowDepth="1" />
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#393C44" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!-- Rift logo in Border -->
-
-    <Style x:Key="Rift_Logo"
-           TargetType="Image">
-
-        <Setter Property="Source"
-                Value="/Image/Rift_logo.png" />
-        <Setter Property="Width"
-                Value="95" />
-        <Setter Property="Height"
-                Value="95" />
-        <Setter Property="Margin"
-                Value="0,-10,0,-10" />
-        <Setter Property="Stretch"
-                Value="UniformToFill" />
-        <Setter Property="RenderOptions.BitmapScalingMode"
-                Value="HighQuality" />
-        <Setter Property="materialDesign:ElevationAssist.Elevation"
-                Value="Dp4" />
-        <Setter Property="Clip">
-            <Setter.Value>
-                <EllipseGeometry Center="47.5,47.5"
-                                 RadiusX="47.5"
-                                 RadiusY="47.5" />
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-    <!-- Button for Sign in -->
-    <Style x:Key="Rift_SignIn_Button_test"
+    <!-- Button for Sign up -->
+    <Style x:Key="Rift_Register_Button_Layout_SignUp"
            TargetType="Button">
 
         <Setter Property="Content"
-                Value="Sign in" />
+                Value="Create Account" />
         <Setter Property="Width"
-                Value="200" />
+                Value="190" />
         <Setter Property="Height"
                 Value="35" />
+        <Setter Property="Padding"
+                Value="0" />
         <Setter Property="Margin"
-                Value="0,26,0,0" />
+                Value="30,22,0,0" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"
@@ -1946,9 +2169,9 @@
                                     Property="Background">
                                 <Setter.Value>
                                     <LinearGradientBrush>
-                                        <GradientStop Color="#FF58B7FD"
+                                        <GradientStop Color="#994AB0"
                                                       Offset="0.138" />
-                                        <GradientStop Color="#FF2974FD"
+                                        <GradientStop Color="#B746D4"
                                                       Offset="0.736" />
                                     </LinearGradientBrush>
                                 </Setter.Value>
@@ -1960,24 +2183,196 @@
         </Setter>
     </Style>
 
-    <!-- Textblock for Title_sign in -->
-    <Style x:Key="Rift_SignIn_Title2"
-           TargetType="TextBlock"
-           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
+    <!-- Window State Icons -->
+    <Style x:Key="Rift_Register_Icon_WindowState"
+           TargetType="materialIcons:MaterialIcon">
 
-        <Setter Property="Text"
-                Value=" Account name" />
+        <Setter Property="Width"
+                Value="20" />
+        <Setter Property="Height"
+                Value="20" />
         <Setter Property="HorizontalAlignment"
-                Value="Left" />
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
         <Setter Property="Foreground"
-                Value="#C95CFF" />
-        <Setter Property="FontSize"
-                Value="13.5" />
-        <Setter Property="FontFamily"
-                Value="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-        <Setter Property="FontWeight"
-                Value="SemiBold" />
+                Value="#FF818181" />
     </Style>
 
+    <!-- Close button -->
+    <Style x:Key="Rift_Register_WindowState_Button_Close"
+           TargetType="Button">
 
+        <Setter Property="Foreground"
+                Value="#FF818181" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="HorizontalAlignment"
+                Value="Right" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="Width"
+                Value="33" />
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="materialDesign:ButtonAssist.CornerRadius"
+                Value="0,7.5,0,0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="MinHeight"
+                Value="0" />
+        <Setter Property="MinWidth"
+                Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{Binding Path=(materialDesign:ButtonAssist.CornerRadius), 
+                 RelativeSource={RelativeSource TemplatedParent}}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="#E22A27" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="DarkRed" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TextBlock Join_Rift -->
+    <Style x:Key="Rift_Register_TextBlock_Join_Rift"
+           TargetType="TextBlock">
+        
+        <Setter Property="Text"
+                Value="Join RIFT" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="FontSize"
+                Value="25" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+    </Style>
+
+    <!-- TextBlock Experience_Everything -->
+    <Style x:Key="Rift_Register_TextBlock_Experience_Everything"
+           TargetType="TextBlock">
+        
+        <Setter Property="Text"
+                Value="Experience Everything you need" />
+        <Setter Property="Foreground"
+                Value="#B0B0B0" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="FontFamily"
+                Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+        <Setter Property="FontSize"
+                Value="15" />
+    </Style>
+
+    <!-- StackPanel Informations-->
+    <Style x:Key="Rift_Register_StackPanel_Informations"
+           TargetType="StackPanel">
+        
+        <Setter Property="Orientation"
+                Value="Vertical" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+
+    <!-- Border Background_Informations -->
+    <Style x:Key="Rift_Register_Border_Informations"
+           TargetType="Border">
+        
+        <Setter Property="Background"
+                Value="#20222E" />
+        <Setter Property="Padding"
+                Value="5" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="BorderBrush"
+                Value="#282C38" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Margin"
+                Value="0,10,0,0" />
+    </Style>
+
+    <!-- Border Icon_Informations -->
+    <Style x:Key="Rift_Register_Border_Icon_Informations"
+           TargetType="Border">
+
+        <Setter Property="Background"
+                Value="#9C0FD6" />
+        <Setter Property="Width"
+                Value="30" />
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="CornerRadius"
+                Value="7" />
+    </Style>
+
+    <!-- Icon in Informations -->
+    <Style x:Key="Rift_Register_Icon_Informations"
+           TargetType="materialIcons:MaterialIcon">
+
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Height"
+                Value="20" />
+        <Setter Property="Width"
+                Value="20" />
+    </Style>
+
+    <!-- TextBlock Main_Information -->
+    <Style x:Key="Rift_Register_TextBlock_Main_Information"
+           TargetType="TextBlock">
+
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
+        <Setter Property="Foreground"
+                Value="White" />
+    </Style>
+
+    <!-- TextBlock Second_Information -->
+    <Style x:Key="Rift_Register_TextBlock_Second_Information"
+           TargetType="TextBlock">
+
+        <Setter Property="FontSize"
+                Value="10" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
+        <Setter Property="Foreground"
+                Value="#B0B0B0" />
+        <Setter Property="Margin"
+                Value="2,0,0,0" />
+    </Style>
 </ResourceDictionary>

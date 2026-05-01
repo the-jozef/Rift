@@ -18,8 +18,9 @@
 
     <Grid>
         <Border Style="{StaticResource Rift_Login_Main_Border}">
-            
+
             <Grid>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -29,29 +30,26 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
-
                         <StackPanel Style="{StaticResource Rift_Login_StackPanel_Logo_Title}">
-
+                            
                             <Button Style="{StaticResource Rift_Login_Button_Back_Arrow}"
                                     Command="{Binding ShowAccountSelectionCommand}" />
-
+                            
                             <Image Style="{StaticResource Rift_Login_Image_Logo}" />
-
+                            
                             <StackPanel Style="{StaticResource Rift_Login_StackPanel_Title}">
-
+                                
                                 <TextBlock Style="{StaticResource Rift_Login_TextBlock_Title}" />
-
+                                
                                 <TextBlock Style="{StaticResource Rift_Login_TextBlock_Profile}" />
                             </StackPanel>
                         </StackPanel>
                     </Grid>
 
                     <Grid Grid.Row="1">
-
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -64,16 +62,23 @@
                             <StackPanel Style="{StaticResource Rift_Login_StackPanel_Layout}">
 
                                 <TextBlock Style="{StaticResource Rift_Login_TextBlock_Layout}" />
-                                
+
                                 <TextBox Style="{StaticResource Rift_Login_TextBlock_Layout_AccountName}"
                                          x:Name="UsernameBox"
-                                         Text="{Binding Username}" />
+                                         Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <TextBlock Style="{StaticResource Rift_Login_TextBlock_Layout_Password}" />
 
                                 <PasswordBox Style="{StaticResource Rift_Login_Password_Layout_Password}"
                                              x:Name="PasswordBox"
                                              PasswordChanged="PasswordBox_PasswordChanged" />
+                                
+                                <TextBlock Text="{Binding ErrorMessage}"
+                                           Foreground="#FF6B6B"
+                                           FontSize="11"
+                                           Margin="2,6,0,0"
+                                           MaxHeight="64"
+                                           Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                                 <Button Style="{StaticResource Rift_Login_Button_Layout_SignIn}"
                                         Command="{Binding LoginRiftCommand}" />
@@ -83,26 +88,26 @@
 
                         <Grid Grid.Row="1"
                               Margin="47,20,0,0">
-
+                            
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="133.5" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="130" />
                             </Grid.ColumnDefinitions>
-
+                            
                             <Border Grid.Column="0"
                                     Style="{StaticResource Rift_Login_Border_Left_Line}" />
-
+                            
                             <TextBlock Grid.Column="1"
                                        Style="{StaticResource Rift_Login_TextBlock_or}" />
-
+                            
                             <Border Grid.Column="2"
                                     Style="{StaticResource Rift_Login_Border_Right_Line}" />
                         </Grid>
 
                         <Grid Grid.Row="2"
                               Margin="91,20,0,0">
-
+                            
                             <Button Style="{StaticResource Rift_Login_Button_SteamConnection}"
                                     Command="{Binding LoginSteamCommand}" />
                         </Grid>
@@ -110,7 +115,7 @@
                 </Grid>
 
                 <Grid Grid.Column="1">
-                    
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="355" />
@@ -118,12 +123,11 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
-
                         <Button Style="{StaticResource Rift_Login_WindowState_Button_Close}"
                                 Command="{Binding ShowAccountSelectionCommand}">
-
+                            
                             <materialIcons:MaterialIcon Style="{StaticResource Rift_Login_Icon_WindowState}"
-                                                        Kind="Close"/>
+                                                        Kind="Close" />
                         </Button>
                     </Grid>
 
@@ -131,12 +135,12 @@
                         
                         <StackPanel Style="{StaticResource Rift_Login_StackPanel_CreateAccount}">
                             
-                        <TextBlock Style="{StaticResource Rift_Login_TextBlock_CreateAccount}" />
+                            <TextBlock Style="{StaticResource Rift_Login_TextBlock_CreateAccount}" />
                             
-                        <Button Style="{StaticResource Rift_Login_Button_CreateAccount}"
-                                Command="{Binding ShowSteamConnectionCommand}" />
+                            <Button Style="{StaticResource Rift_Login_Button_CreateAccount}"
+                                    Command="{Binding ShowSteamConnectionCommand}" />
                         </StackPanel>
-                    </Grid>   
+                    </Grid>
 
                     <Canvas Grid.Row="1">
                         
@@ -179,6 +183,7 @@
                     </Canvas>
 
                     <Canvas Grid.Row="1">
+                        
                         <Ellipse Width="360"
                                  Height="320"
                                  Opacity="0.15"
@@ -186,70 +191,66 @@
                                  Style="{StaticResource Rift_Login_Rings}">
 
                             <Ellipse.RenderTransform>
-
                                 <ScaleTransform x:Name="Elipse1"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
-
+                        
                         <Ellipse Width="310"
                                  Height="260"
                                  Opacity="0.15"
                                  Canvas.Left="77"
                                  Canvas.Top="31"
                                  Style="{StaticResource Rift_Login_Rings}">
-
+                            
                             <Ellipse.RenderTransform>
-
                                 <ScaleTransform x:Name="Elipse2"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
-
+                        
                         <Ellipse Width="290"
                                  Height="240"
                                  Opacity="0.22"
                                  Canvas.Left="71"
                                  Canvas.Top="60"
                                  Style="{StaticResource Rift_Login_Rings}">
-
+                            
                             <Ellipse.RenderTransform>
-
                                 <ScaleTransform x:Name="Elipse3"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
-
+                        
                         <Ellipse Width="250"
                                  Height="190"
                                  Opacity="0.22"
                                  Canvas.Left="91"
                                  Canvas.Top="87"
                                  Style="{StaticResource Rift_Login_Rings}">
-
+                            
                             <Ellipse.RenderTransform>
-
                                 <ScaleTransform x:Name="Elipse4"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
-
+                        
                         <Ellipse Style="{StaticResource Rift_Login_Planet}"
                                  Canvas.Left="130"
                                  Canvas.Top="114">
-
+                            
                             <Ellipse.RenderTransform>
-                                
                                 <ScaleTransform x:Name="Elipse5"
                                                 ScaleX="1"
                                                 ScaleY="1" />
                             </Ellipse.RenderTransform>
                         </Ellipse>
                     </Canvas>
+
                 </Grid>
             </Grid>
         </Border>

@@ -24,7 +24,7 @@ namespace Rift_App.ViewModels
         // ─── WINDOW STATE ─────────────────────────────────────────────────
         public WindowStateViewModel WindowState { get; } = new();
 
-        // ─── CURRENT VIEW — switches between UserControls ─────────────────
+        // ─── CURRENT VIEW — prepína medzi UserControlmi ───────────────────
         [ObservableProperty]
         private object _currentView = null!;
 
@@ -40,7 +40,6 @@ namespace Rift_App.ViewModels
         // ─── REGISTER FIELDS ─────────────────────────────────────────────
         [ObservableProperty] private string _registerUsername = string.Empty;
         [ObservableProperty] private string _registerPassword = string.Empty;
-        [ObservableProperty] private string _registerConfirmPassword = string.Empty;
         [ObservableProperty] private bool _isSteamConnected = false;
         private string _steamId64 = string.Empty;
 
@@ -84,15 +83,24 @@ namespace Rift_App.ViewModels
             CurrentView = new Register();
         }
 
-        // ─── PRE-FILL REGISTER — called after Steam connect ───────────────
-
+        // ─── PRE-FILL REGISTER — volá sa po Steam pripojení ──────────────
+        // Sets Steam username and switches to Register view
         public void PreFillRegister(string steamId, string steamName)
         {
             _steamId64 = steamId;
             IsSteamConnected = true;
+
+            ShowRegister();
+
             if (!string.IsNullOrEmpty(steamName))
                 RegisterUsername = steamName;
-            ShowRegister();
+            else RegisterUsername = steamName;
+            MessageBox.Show(
+                $"Steam name {steamName} {RegisterUsername} connected successfully! Steam Id {steamId}",
+                "Steam Connected",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+         
         }
 
         // ─── LOGIN — Rift username + password ─────────────────────────────
@@ -100,11 +108,12 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private async Task LoginRiftAsync()
         {
+            ClearErrors();
+
             if (string.IsNullOrWhiteSpace(Username)) { ShowError("Please enter your username."); return; }
             if (string.IsNullOrWhiteSpace(Password)) { ShowError("Please enter your password."); return; }
 
             IsLoading = true;
-            ClearErrors();
 
             try
             {
@@ -112,14 +121,14 @@ namespace Rift_App.ViewModels
 
                 if (result == null || !result.Success)
                 {
-                    ShowError(result?.Message ?? "Could not connect to server.");
+                    ShowError(result?.Message ?? "Invalid username or password.");
                     return;
                 }
 
                 SessionManager.SetSession(result.UserId!.Value, result.Username!, result.SteamId64!);
                 ViewNavigator.Instance?.ShowLoading();
             }
-            catch { ShowError("Unexpected error. Please try again."); }
+            catch { ShowError("Could not connect to server. Check your internet."); }
             finally { IsLoading = false; }
         }
 
@@ -145,18 +154,22 @@ namespace Rift_App.ViewModels
 
                 if (result == null || !result.Success)
                 {
-                    ShowError("No Rift account found. Please register first.");
+                    MessageBox.Show(
+                        "No Rift account was found for this Steam account.\n\nPlease register first by clicking \"Create Account\".",
+                        "Account Not Found",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
                     return;
                 }
 
                 SessionManager.SetSession(result.UserId!.Value, result.Username!, result.SteamId64!);
                 ViewNavigator.Instance?.ShowLoading();
             }
-            catch { ShowError("Unexpected error. Please try again."); }
+            catch { ShowError("Could not connect to server. Check your internet."); }
             finally { IsLoading = false; }
         }
 
-        // ─── STEAM CONNECT — for Register ────────────────────────────────
+        // ─── STEAM CONNECT — pre Register ────────────────────────────────
 
         [RelayCommand]
         private async Task ConnectSteamAsync()
@@ -180,8 +193,20 @@ namespace Rift_App.ViewModels
                     return;
                 }
 
-                // ─── Prepne fokus späť na Rift apku ──────────────────────
-                // Focus back to Rift window after Steam browser closes
+                SteamStatusMessage = "Connected! Loading your profile...";
+
+                var existing = await ApiService.LoginSteamAsync(steamId);
+                if (existing != null && existing.Success)
+                {
+                    SteamHasError = true;
+                    SteamStatusMessage = "This Steam account already has a Rift account. Please login.";
+                    return;
+                }
+            
+                var playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
+
+                // FIX: Všetko čo mení UI musí bežať na UI threade
+                // Everything that touches UI must run on the UI thread
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var authWindow = Application.Current.Windows
@@ -195,25 +220,10 @@ namespace Rift_App.ViewModels
                         authWindow.Topmost = false;
                         authWindow.Focus();
                     }
+            
+                    // Must be here — otherwise TextBox binding does not work
+                    PreFillRegister(steamId, playerInfo?.Username ?? string.Empty);
                 });
-
-                SteamStatusMessage = "Connected! Loading your profile...";
-
-                // Skontroluj ci uz ma Rift ucet
-                // Check if Steam account already has a Rift account
-                var existing = await ApiService.LoginSteamAsync(steamId);
-                if (existing != null && existing.Success)
-                {
-                    SteamHasError = true;
-                    SteamStatusMessage = "This Steam account already has a Rift account. Please login.";
-                    return;
-                }
-
-                var playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
-
-                // Presunie na Register a predvyplni meno zo Steamu
-                // Navigate to Register and pre-fill Steam username
-                PreFillRegister(steamId, playerInfo?.Username ?? string.Empty);
             }
             catch
             {
@@ -228,15 +238,47 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private async Task RegisterAsync()
         {
-            if (string.IsNullOrWhiteSpace(RegisterUsername)) { ShowError("Please enter a username."); return; }
-            if (RegisterUsername.Length < 3) { ShowError("Username must be at least 3 characters."); return; }
-            if (string.IsNullOrWhiteSpace(RegisterPassword)) { ShowError("Please enter a password."); return; }
-            if (RegisterPassword.Length < 6) { ShowError("Password must be at least 6 characters."); return; }
-            if (RegisterPassword != RegisterConfirmPassword) { ShowError("Passwords do not match."); return; }
-            if (string.IsNullOrEmpty(_steamId64)) { ShowError("Please connect your Steam account first."); return; }
+            ClearErrors();
+
+            // ─── Validácia — Validation ───────────────────────────────────
+
+            if (string.IsNullOrWhiteSpace(RegisterUsername))
+            {
+                ShowError("Please enter a username.");
+                return;
+            }
+            if (RegisterUsername.Length < 3)
+            {
+                ShowError("Username must be at least 3 characters.");
+                return;
+            }
+            if (RegisterUsername.Length > 20)
+            {
+                ShowError("Username cannot be longer than 20 characters.");
+                return;
+            }
+            if (RegisterUsername.Contains(' '))
+            {
+                ShowError("Username cannot contain spaces.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(RegisterPassword))
+            {
+                ShowError("Please enter a password.");
+                return;
+            }
+            if (RegisterPassword.Length < 6)
+            {
+                ShowError("Password must be at least 6 characters.");
+                return;
+            }
+            if (RegisterPassword.Length > 50)
+            {
+                ShowError("Password cannot be longer than 50 characters.");
+                return;
+            }
 
             IsLoading = true;
-            ClearErrors();
 
             try
             {
@@ -244,6 +286,8 @@ namespace Rift_App.ViewModels
 
                 if (result == null || !result.Success)
                 {
+                    // Server vráti "Username or Steam account already registered." ak existuje
+                    // Server returns this if username or Steam is already taken
                     ShowError(result?.Message ?? "Could not connect to server.");
                     return;
                 }
@@ -251,7 +295,7 @@ namespace Rift_App.ViewModels
                 SessionManager.SetSession(result.UserId!.Value, result.Username!, result.SteamId64!);
                 ViewNavigator.Instance?.ShowLoading();
             }
-            catch { ShowError("Unexpected error. Please try again."); }
+            catch { ShowError("Could not connect to server. Check your internet."); }
             finally { IsLoading = false; }
         }
 

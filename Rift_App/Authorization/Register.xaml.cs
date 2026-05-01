@@ -11,23 +11,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace Rift_App.Authorization
 {
     public partial class Register : UserControl
     {
-        public Register() => InitializeComponent();
+        public Register()
+        {
+            InitializeComponent();
+        }
 
+        // PasswordBox cannot bind Password directly — solved via event
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is AuthViewModel vm && sender is PasswordBox pb)
                 vm.RegisterPassword = pb.Password;
-        }
-
-        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is AuthViewModel vm && sender is PasswordBox pb)
-                vm.RegisterConfirmPassword = pb.Password;
         }
     }
 }

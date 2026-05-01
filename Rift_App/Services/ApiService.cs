@@ -23,7 +23,10 @@ namespace Rift_App.Services
             new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
 
         private static T? FromJson<T>(string json) =>
-            JsonConvert.DeserializeObject<T>(json);
+         JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+         {
+             ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+         });
 
         // ─── AUTH ─────────────────────────────────────────────────────────────
 

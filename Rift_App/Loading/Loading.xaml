@@ -10,8 +10,8 @@
         xmlns:local="clr-namespace:Rift_App.Loading"
         mc:Ignorable="d"
         Title="Loading"
-        d:DesignHeight="435"
-        d:DesignWidth="702"
+        Height="438"
+        Width="705"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -66,6 +66,11 @@
 
     <Grid>
 
+        <Image Source="/Image/Steam.jpg"
+               Stretch="UniformToFill" 
+               RenderOptions.BitmapScalingMode="HighQuality"
+               Opacity="0.5"/>
+
         <MediaElement x:Name="BgVideo"
                       LoadedBehavior="Play"
                       UnloadedBehavior="Manual"
@@ -76,14 +81,13 @@
 
         <Border CornerRadius="7.5,7.5,0,0"
                 Background="Gray"
-                Opacity="0.15"
-                Panel.ZIndex="1" />
+                Opacity="0.15" />
 
-        <Grid Panel.ZIndex="2">
+        <Grid>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="220" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -166,46 +170,15 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1"
+                  Margin="10,25,0,0">
 
-                <StackPanel Orientation="Vertical"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Center"
-                            Margin="0,25,0,0">
-
-                    <TextBlock VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Text="Loading..."
-                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                               Foreground="White"
-                               FontSize="24">
-
-                    </TextBlock>
-
-                    <StackPanel HorizontalAlignment="left"
-                                Orientation="Horizontal"
-                                Grid.Row="1"
-                                VerticalAlignment="Top"
-                                Margin="-8,35,0,0">
-
-                        <Border Width="28"
-                                Height="28">
-
-                            <Image Source="/Image/Red.png"
-                                   Width="28"
-                                   Height="28"
-                                   Stretch="UniformToFill" />
-                        </Border>
-
-                        <TextBlock Margin="5,5,0,0"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Text="Guest_user"
-                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                   Foreground="#EBEBEB"
-                                   FontSize="19" />
-                    </StackPanel>
-                </StackPanel>
+                <TextBlock VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           Text="Loading..."
+                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                           Foreground="White"
+                           FontSize="24" />
             </Grid>
         </Grid>
     </Grid>

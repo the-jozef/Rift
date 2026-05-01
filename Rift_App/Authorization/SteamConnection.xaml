@@ -64,7 +64,7 @@
                     </Grid>
 
                     <Grid Grid.Row="2"
-                          Margin="90,50,0,0">
+                          Margin="95,60,0,0">
 
                         <Button Style="{StaticResource Rift_SteamConnection_Button_SteamConnection}"
                                 Command="{Binding ConnectSteamCommand}" />
@@ -89,48 +89,30 @@
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                        <StackPanel Style="{StaticResource Rift_SteamConnection_StackPanel_Loading_Logos}">
 
-                        <StackPanel Grid.Row="1"
-                                    Style="{StaticResource Rift_SteamConnection_StackPanel_Loading_Logos}">
+                            <Border Style="{StaticResource Rift_SteamConnection_Border_Steam_Logo}">
 
-                            <StackPanel>
-                                <Border Style="{StaticResource Rift_Border_Steam}">
-
-                                    <materialIcons:MaterialIcon Style="{StaticResource Rift_SteamIcon_border}" />
-                                </Border>
-                            </StackPanel>
+                                <materialIcons:MaterialIcon Style="{StaticResource Rift_SteamConnection_Icon_Steam_Logo}" />
+                            </Border>
 
                             <StackPanel Orientation="Horizontal"
                                         Margin="10,0,10,0">
 
-                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                <Ellipse Style="{StaticResource Rift_SteamConnection_Ellipse_Loading}"
                                          x:Name="Ellipse1" />
 
-                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                <Ellipse Style="{StaticResource Rift_SteamConnection_Ellipse_Loading}"
                                          x:Name="Ellipse2" />
 
-                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                <Ellipse Style="{StaticResource Rift_SteamConnection_Ellipse_Loading}"
                                          x:Name="Ellipse3" />
 
-                                <Ellipse Style="{StaticResource Rift_Ellipse_Loading}"
+                                <Ellipse Style="{StaticResource Rift_SteamConnection_Ellipse_Loading}"
                                          x:Name="Ellipse4" />
                             </StackPanel>
 
-                            <StackPanel>
-
-                                <Border Style="{StaticResource Rift_Border_Logo}">
-
-                                    <Image Style="{StaticResource Rift_Logo}" />
-
-                                </Border>
-                            </StackPanel>
+                            <Border Style="{StaticResource Rift_SteamConnection_Border_Rift_Logo}" />
                         </StackPanel>
                     </Grid>
                 </Grid>

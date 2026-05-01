@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Rift_App.Services
-{
+{ 
     public partial class SteamAuthService : ObservableObject
     {
         private const string SteamOpenIdUrl = "https://steamcommunity.com/openid/login";
@@ -78,7 +78,8 @@ namespace Rift_App.Services
             catch { }
         }
 
-        // FIX: contextTask sa vytvori raz — nie kazdy cyklus znova
+        // FIX: contextTask sa vytvori raz pred looopom — nie kazdy cyklus znova
+        // contextTask is created once before the loop — not recreated every 500ms
         private static async Task<string?> WaitForCallbackAsync(CancellationToken token)
         {
             if (_listener == null) return null;
@@ -102,6 +103,9 @@ namespace Rift_App.Services
 
                         return ExtractSteamId(fullUrl);
                     }
+
+                    // Delay skoncil — over cancellation a cakaj dalej
+                    // Delay elapsed — check cancellation and keep waiting
                 }
 
                 Debug.WriteLine("[Steam] Cancelled.");
