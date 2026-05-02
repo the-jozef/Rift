@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace Rift_App.ViewModels
 {
@@ -48,6 +49,10 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _steamHasError = false;
         [ObservableProperty] private bool _isConnecting = false;
 
+        // ─── DEVICE ACCOUNTS — zoznam účtov na tomto zariadení ───────────
+        // List of accounts on this device
+        public ObservableCollection<AccountInfo> DeviceAccounts { get; } = new();
+
         public AuthViewModel()
         {
             CurrentView = new AccountSelection();
@@ -60,6 +65,7 @@ namespace Rift_App.ViewModels
         {
             ClearErrors();
             CurrentView = new AccountSelection();
+            _ = LoadAccountsAsync(); // nacitaj ucty hned — load accounts immediately
         }
 
         [RelayCommand]
@@ -81,6 +87,47 @@ namespace Rift_App.ViewModels
         {
             ClearErrors();
             CurrentView = new Register();
+        }
+
+        // ─── NAČÍTAJ ÚČTY — volá sa pri otvorení AccountSelection ─────────
+        // Load device accounts — called when AccountSelection opens
+
+        public async Task LoadAccountsAsync()
+        {
+            try
+            {
+                var accounts = await ApiService.GetDeviceAccountsAsync();
+                DeviceAccounts.Clear();
+                foreach (var acc in accounts)
+                    DeviceAccounts.Add(acc);
+            }
+            catch { }
+        }
+
+        // ─── VYBER ÚČET — klik na existujúci účet ────────────────────────
+        // Select account — click on existing account tile
+
+        [RelayCommand]
+        private void SelectAccount(AccountInfo account)
+        {
+            if (account == null) return;
+            SessionManager.SetSession(account.UserId, account.Username, account.SteamId64, account.LastLocation);
+            ViewNavigator.Instance?.ShowLoading();
+        }
+
+        // ─── VYMAŽ ÚČET ZO ZARIADENIA — "Remove this Account" ────────────
+        // Remove account from device — does not delete the Rift account
+
+        [RelayCommand]
+        private async Task RemoveAccountAsync(AccountInfo account)
+        {
+            if (account == null) return;
+            try
+            {
+                await ApiService.RemoveAccountFromDeviceAsync(account.UserId);
+                DeviceAccounts.Remove(account);
+            }
+            catch { }
         }
 
         // ─── PRE-FILL REGISTER — volá sa po Steam pripojení ──────────────
@@ -123,6 +170,8 @@ namespace Rift_App.ViewModels
         }
 
         // ─── LOGIN — Steam ─────────────────────────────────────────────────
+        // Ak účet neexistuje — zobrazí MessageBox
+        // If account does not exist — shows MessageBox
 
         [RelayCommand]
         private async Task LoginSteamAsync()
@@ -201,9 +250,8 @@ namespace Rift_App.ViewModels
                     await Task.Delay(3000);
                 }
 
-                // Debug
-                MessageBox.Show($"playerInfo: {(playerInfo == null ? "NULL" : playerInfo.Username)}", "Debug");
-
+                // FIX: Všetko čo mení UI musí bežať na UI threade
+                // Everything that touches UI must run on the UI thread
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var authWindow = Application.Current.Windows
@@ -217,8 +265,7 @@ namespace Rift_App.ViewModels
                         authWindow.Topmost = false;
                         authWindow.Focus();
                     }
-            
-                    // Must be here — otherwise TextBox binding does not work
+
                     PreFillRegister(steamId, playerInfo?.Username ?? string.Empty);
                 });
             }
@@ -236,8 +283,6 @@ namespace Rift_App.ViewModels
         private async Task RegisterAsync()
         {
             ClearErrors();
-
-            // ─── Validácia — Validation ───────────────────────────────────
 
             if (string.IsNullOrWhiteSpace(RegisterUsername))
             {
@@ -283,8 +328,6 @@ namespace Rift_App.ViewModels
 
                 if (result == null || !result.Success)
                 {
-                    // Server vráti "Username or Steam account already registered." ak existuje
-                    // Server returns this if username or Steam is already taken
                     ShowError(result?.Message ?? "Could not connect to server.");
                     return;
                 }

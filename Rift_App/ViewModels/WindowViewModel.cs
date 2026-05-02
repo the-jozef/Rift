@@ -14,6 +14,9 @@ namespace Rift_App.ViewModels
 {
     public partial class WindowViewModel : ObservableObject
     {
+        // ─── USERNAME ──────────────────────────────────────────────────────
+        public string Username => SessionManager.Username;
+
         // ─── WINDOW STATE ─────────────────────────────────────────────────
         public WindowStateViewModel WindowState { get; } = new();
 

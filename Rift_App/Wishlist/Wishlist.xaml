@@ -16,8 +16,7 @@
         <Border CornerRadius="0,0,7.5,7.5">
 
             <Grid>
-                <ScrollViewer Style="{StaticResource Rift_ScrollViewer}"
-                              Background="#1b2838"
+                <ScrollViewer Background="#1b2838"
                               VerticalScrollBarVisibility="Auto"
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch">

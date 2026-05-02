@@ -263,21 +263,24 @@
                                     <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Account}">
 
                                         <StackPanel>
-                                            <Button Content="View my profile"
+                                            <Button Content="View my Profile"
                                                     Command="{Binding ShowAccountCommand}"
                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+
+                                            <Button Content="View my Wishlist"
+                                                    Command="{Binding ShowWishlistCommand}"
+                                                    Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+
+                                            <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
                                             <Button Content="Change Account"
                                                     Command="{Binding SwitchAccountCommand}"
                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
                                             <Button Content="Sign out of account..."
-                                                    Command=""
+                                                    Command="{Binding SwitchAccountCommand}"
                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
-
-                                            <Button  Content="Test GamePage"
-                                                     Command=""
-                                                     Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+                                          
                                         </StackPanel>
                                     </ScrollViewer>
                                 </materialDesign:PopupBox>
@@ -286,7 +289,8 @@
 
                         <Grid Grid.Column="1">
 
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Top">
 
                                 <Button Style="{StaticResource Rift_MenuBar_WindowState_Button_Maxi_Min}"
                                         Command="{Binding WindowState.MinimizeCommand}"

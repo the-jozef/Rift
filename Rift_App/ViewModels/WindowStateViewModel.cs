@@ -17,20 +17,21 @@ namespace Rift_App.ViewModels
     public partial class WindowStateViewModel
     {
         [RelayCommand]
-        private void Minimize() =>
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        private void Minimize() => Application.Current.MainWindow.WindowState = WindowState.Minimized;
 
-        [RelayCommand]
+    [RelayCommand]
         private void Maximize()
-        {
+        {           
             var win = Application.Current.MainWindow;
             win.WindowState = win.WindowState == WindowState.Maximized
-                ? WindowState.Normal
-                : WindowState.Maximized;
+               ? WindowState.Normal
+               : WindowState.Maximized;
         }
 
         [RelayCommand]
-        private void Close() =>
-            Application.Current.MainWindow.Close();
+        private void Close()
+        {
+            App.Current.Shutdown();
+        }
     }
 }

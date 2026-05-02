@@ -293,8 +293,8 @@
                                     <Button Content="Remove this Account?"
                                             Cursor="Hand"
                                             Margin="5,4,0,0"
-                                            Command=""
-                                            CommandParameter="{TemplateBinding Tag}">
+                                            Command="{Binding DataContext.RemoveAccountCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}">
                                         
                                         <Button.Style>
                                             <Style TargetType="Button">
@@ -344,7 +344,7 @@
 
                         <TextBlock x:Name="AccountNameLabel"
                                    Grid.Row="1"
-                                   Text="{TemplateBinding Tag}"
+                                   Text="{Binding Tag.Username, RelativeSource={RelativeSource TemplatedParent}}"
                                    Foreground="White"
                                    FontSize="12"
                                    FontWeight="SemiBold"

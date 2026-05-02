@@ -20,5 +20,13 @@ namespace Rift_App.Authorization
     public partial class AccountSelection : UserControl
     {
         public AccountSelection() => InitializeComponent();
+
+        // Načítaj účty hneď ako sa UC zobrazí
+        // Load accounts as soon as UC is shown
+        private async void AccountSelection_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AuthViewModel vm)
+                await vm.LoadAccountsAsync();
+        }
     }
 }

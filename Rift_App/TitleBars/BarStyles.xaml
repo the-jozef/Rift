@@ -90,7 +90,7 @@
 
     <!-- Popupbox View/Games/Help -->
     <Style x:Key="Rift_Menubar_PopupBox_Tools"
-           TargetType="materialDesign:PopupBox" >
+           TargetType="materialDesign:PopupBox">
 
         <Setter Property="Padding"
                 Value="0" />
@@ -111,23 +111,25 @@
 
         <Style.Resources>
             <Style TargetType="ToggleButton">
-                
                 <Setter Property="Background"
                         Value="Transparent" />
                 <Setter Property="BorderBrush"
                         Value="Transparent" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver"
-                             Value="True">
-                        <Setter Property="Background"
-                                Value="Transparent" />
-                    </Trigger>
-                    <Trigger Property="IsChecked"
-                             Value="True">
-                        <Setter Property="Background"
-                                Value="Transparent" />
-                    </Trigger>
-                </Style.Triggers>
+                <Setter Property="Cursor"
+                        Value="Hand" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="4,2">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </Style.Resources>
     </Style>
@@ -179,24 +181,43 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
                 Value="Transparent" />
         <Setter Property="BorderBrush"
                 Value="Transparent" />
+        <Setter Property="Padding"
+                Value="10,7" />
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
                 Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
 
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
-                <Setter Property="Foreground"
-                        Value="#2E2E2E" />
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="White"
-                                         Opacity="0.7" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#4A5160" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#555C6A" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- PopupBox Store/Library/Nickname -->
@@ -223,7 +244,7 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
                 Value="-5" />
         <Setter Property="PopupHorizontalOffset"
                 Value="4" />
-        
+
         <Style.Resources>
             <Style TargetType="ToggleButton">
 
@@ -231,7 +252,7 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
                         Value="Transparent" />
                 <Setter Property="BorderBrush"
                         Value="Transparent" />
-                
+
                 <Style.Triggers>
                     <Trigger Property="IsChecked"
                              Value="True">
@@ -289,7 +310,7 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
         <Setter Property="PopupMode"
                 Value="MouseOverEager" />
         <Setter Property="PopupVerticalOffset"
-                Value="7" />
+                Value="15" />
         <Setter Property="PopupHorizontalOffset"
                 Value="-35" />
         
@@ -375,14 +396,13 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
         </Setter>
     </Style>
 
-    <!-- PopupBox for Account -->
+    <!-- PopupBox Account -->
     <Style x:Key="Rift_MenuBar_PopupBox_Account"
            TargetType="materialDesign:PopupBox">
-
         <Setter Property="Padding"
-                Value="0" />       
+                Value="0" />
         <Setter Property="Margin"
-                Value="12,6,40,0"/>
+                Value="12,6,40,0" />
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
@@ -408,30 +428,24 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
     <!-- Border in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Border_PopupBox_Account"
            TargetType="Border">
-
         <Setter Property="Padding"
                 Value="5" />
         <Setter Property="Background"
                 Value="#23262E" />
         <Setter Property="MinWidth"
-                Value="90"/>
+                Value="90" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver"
                      Value="True">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush  Color="#2A4A5D"
-                                          Opacity="0.6" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Background"
+                        Value="#2A3A4A" />
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <!-- Textblock in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Textblock_PopupBox_Account"
            TargetType="TextBlock">
-
         <Setter Property="Foreground"
                 Value="#46B0FF" />
         <Setter Property="FontSize"
@@ -442,10 +456,9 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
                 Value="SemiBold" />
     </Style>
 
-    <!-- Icon in PopupBox_Account-->
+    <!-- Icon in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Icon_PopupBox_Account"
            TargetType="materialIcons:MaterialIcon">
-        
         <Setter Property="Kind"
                 Value="ChevronDown" />
         <Setter Property="Width"
@@ -465,8 +478,19 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
         <Setter Property="Background"
                 Value="#3D4450" />
     </Style>
+    
+    <!-- Separator in PopupBox_Account -->
+    <Style x:Key="Rift_MenuBar_Separator_PopupBox_Account"
+           TargetType="Separator">
+        <Setter Property="Background"
+                Value="#4A5160" />
+        <Setter Property="Height"
+                Value="1" />
+        <Setter Property="Margin"
+                Value="0,2" />
+    </Style>
 
-    <!--Items in PopupBox_Account-->
+    <!-- Items (Buttons) in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Items_PopupBox_Account"
            TargetType="Button">
 
@@ -483,25 +507,42 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
         <Setter Property="BorderBrush"
                 Value="Transparent" />
         <Setter Property="Padding"
-                Value="0"/>
+                Value="10,7" />
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
                 Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
 
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
-                <Setter Property="Foreground"
-                        Value="#2E2E2E" />
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="White"
-                                         Opacity="0.7" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="0">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#4A5160" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#555C6A" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Window State Icons -->
@@ -519,8 +560,7 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
         <Setter Property="Foreground"
                 Value="#FF818181" />
     </Style>
-    
-    <!-- Button for Minimalize/Maximalize Window State -->
+
     <Style x:Key="Rift_MenuBar_WindowState_Button_Maxi_Min"
            TargetType="Button">
 
@@ -542,32 +582,40 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
                 Value="0" />
         <Setter Property="Cursor"
                 Value="Hand" />
-        
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="White"
-                                         Opacity="0.2" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Foreground"
-                        Value="White" />
-            </Trigger>
-            <Trigger Property="IsPressed"
-                     Value="True">
-                <Setter 
-                        Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="White"
-                                         Opacity="0.2" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Foreground"
-                        Value="White" />
-            </Trigger>
-        </Style.Triggers>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#33FFFFFF" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#55FFFFFF" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Close button -->

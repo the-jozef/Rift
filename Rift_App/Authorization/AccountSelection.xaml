@@ -61,17 +61,31 @@
 
                     <ScrollViewer Style="{StaticResource SteamScrollViewerStyle}"
                                   HorizontalScrollBarVisibility="Auto"
-                                  VerticalScrollBarVisibility="Disabled"
-                                  x:Name="MediaScroll">
+                                  VerticalScrollBarVisibility="Disabled">
 
                         <StackPanel Style="{StaticResource Rift_AccountSelection_StackPanel_Content}">
 
-                            <Button Style="{StaticResource Rift_AccountSelection_Button_Account}"
-                                    Command="{Binding SelectAccountCommand}"
-                                    Tag="1414" />
-             
+                            <ItemsControl ItemsSource="{Binding DeviceAccounts}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Button Style="{StaticResource Rift_AccountSelection_Button_Account}"
+                                                Tag="{Binding}"
+                                                Command="{Binding DataContext.SelectAccountCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Margin="0,0,20,0" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
                             <Button Style="{StaticResource Rift_AccountSelection_Button_Add_Account}"
-                                    Command="{Binding ShowLoginCommand}"/>                            
+                                    Command="{Binding ShowLoginCommand}" />
+
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
