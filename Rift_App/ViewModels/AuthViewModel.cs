@@ -87,20 +87,16 @@ namespace Rift_App.ViewModels
         // Sets Steam username and switches to Register view
         public void PreFillRegister(string steamId, string steamName)
         {
+
             _steamId64 = steamId;
             IsSteamConnected = true;
-
-            ShowRegister();
-
-            if (!string.IsNullOrEmpty(steamName))
-                RegisterUsername = steamName;
-            else RegisterUsername = steamName;
+            RegisterUsername = steamName;
             MessageBox.Show(
-                $"Steam name {steamName} {RegisterUsername} connected successfully! Steam Id {steamId}",
-                "Steam Connected",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
-         
+               $"Steam name {steamName} {RegisterUsername} connected successfully! Steam Id {steamId}",
+               "Steam Connected",
+               MessageBoxButton.OK,
+               MessageBoxImage.Information);
+            ShowRegister();
         }
 
         // ─── LOGIN — Rift username + password ─────────────────────────────
@@ -202,11 +198,12 @@ namespace Rift_App.ViewModels
                     SteamStatusMessage = "This Steam account already has a Rift account. Please login.";
                     return;
                 }
-            
+
                 var playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
 
-                // FIX: Všetko čo mení UI musí bežať na UI threade
-                // Everything that touches UI must run on the UI thread
+                // Debug
+                MessageBox.Show($"playerInfo: {(playerInfo == null ? "NULL" : playerInfo.Username)}", "Debug");
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var authWindow = Application.Current.Windows

@@ -22,11 +22,7 @@ namespace Rift_App.Services
         private static StringContent ToJson(object obj) =>
             new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
 
-        private static T? FromJson<T>(string json) =>
-         JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
-         {
-             ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-         });
+        private static T? FromJson<T>(string json) => JsonConvert.DeserializeObject<T>(json);
 
         // ─── AUTH ─────────────────────────────────────────────────────────────
 
@@ -139,12 +135,16 @@ namespace Rift_App.Services
 
         public static async Task<PlayerInfo?> GetPlayerInfoAsync(string steamId64)
         {
-            try
+            for (int i = 0; i < 3; i++) // max 3 pokusy
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/player/{steamId64}");
-                return FromJson<PlayerInfo>(response);
+                try
+                {
+                    var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/player/{steamId64}");
+                    return FromJson<PlayerInfo>(response);
+                }
+                catch { await Task.Delay(2000); } // počkaj 2s a skús znova
             }
-            catch { return null; }
+            return null;
         }
 
         public static async Task<List<GameModel>> GetLibraryAsync(string steamId64)
