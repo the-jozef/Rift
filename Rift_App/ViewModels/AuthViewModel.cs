@@ -87,15 +87,9 @@ namespace Rift_App.ViewModels
         // Sets Steam username and switches to Register view
         public void PreFillRegister(string steamId, string steamName)
         {
-
             _steamId64 = steamId;
             IsSteamConnected = true;
             RegisterUsername = steamName;
-            MessageBox.Show(
-               $"Steam name {steamName} {RegisterUsername} connected successfully! Steam Id {steamId}",
-               "Steam Connected",
-               MessageBoxButton.OK,
-               MessageBoxImage.Information);
             ShowRegister();
         }
 
@@ -199,7 +193,13 @@ namespace Rift_App.ViewModels
                     return;
                 }
 
-                var playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
+                PlayerInfo? playerInfo = null;
+                for (int i = 0; i < 3; i++)
+                {
+                    playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
+                    if (playerInfo != null) break;
+                    await Task.Delay(3000);
+                }
 
                 // Debug
                 MessageBox.Show($"playerInfo: {(playerInfo == null ? "NULL" : playerInfo.Username)}", "Debug");

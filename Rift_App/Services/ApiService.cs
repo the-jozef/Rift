@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Rift_App.Services
 {
@@ -16,7 +17,7 @@ namespace Rift_App.Services
 
         private static readonly HttpClient _http = new HttpClient
         {
-            Timeout = TimeSpan.FromSeconds(30)
+            Timeout = TimeSpan.FromSeconds(90)
         };
 
         private static StringContent ToJson(object obj) =>
@@ -135,16 +136,12 @@ namespace Rift_App.Services
 
         public static async Task<PlayerInfo?> GetPlayerInfoAsync(string steamId64)
         {
-            for (int i = 0; i < 3; i++) // max 3 pokusy
+            try
             {
-                try
-                {
-                    var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/player/{steamId64}");
-                    return FromJson<PlayerInfo>(response);
-                }
-                catch { await Task.Delay(2000); } // počkaj 2s a skús znova
+                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/player/{steamId64}");
+                return FromJson<PlayerInfo>(response);
             }
-            return null;
+            catch { return null; }
         }
 
         public static async Task<List<GameModel>> GetLibraryAsync(string steamId64)
