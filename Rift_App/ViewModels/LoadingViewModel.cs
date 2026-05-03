@@ -10,7 +10,8 @@ namespace Rift_App.ViewModels
 {
     public partial class LoadingViewModel : ObservableObject
     {
-        // ─── MODE 1: Startup — called from App.xaml.cs ───────────────────
+        // ─── MODE 1: Startup — volá App.xaml.cs ──────────────────────────
+        // Called by App.xaml.cs on startup
 
         public async Task StartupAsync()
         {
@@ -41,7 +42,8 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── MODE 2: After login/register — called from ViewNavigator ─────
+        // ─── MODE 2: Po prihlásení — volá ViewNavigator ───────────────────
+        // Called by ViewNavigator after login/register
 
         public async Task LoadSteamDataAsync()
         {
@@ -64,6 +66,10 @@ namespace Rift_App.ViewModels
                     playerInfo = p.Result;
                     library = l.Result;
                     wishlist = w.Result;
+
+                    // Ulož avatar URL do SessionManager — store avatar URL
+                    if (playerInfo != null)
+                        SessionManager.SetAvatar(playerInfo.AvatarUrl);
                 }
             }
             catch { }

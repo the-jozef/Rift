@@ -25,11 +25,7 @@
     <!-- Button Logo/Title -->
     <Style x:Key="Rift_MenuBar_LogoHeader"
            TargetType="Button">
-
-        <Setter Property="Height"
-                Value="20" />
-        <Setter Property="Width"
-                Value="Auto" />
+        
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Background"
@@ -51,23 +47,23 @@
 
                         <Image x:Name="Logo"
                                Source="/Image/Rift_logo.png"
-                               Width="20"
-                               Height="20"
+                               Width="30"
+                               Height="30"
                                Stretch="UniformToFill"
                                RenderOptions.BitmapScalingMode="HighQuality">
 
                             <Image.Clip>
-                                <EllipseGeometry Center="10,10"
-                                                 RadiusX="10"
-                                                 RadiusY="10" />
+                                <EllipseGeometry Center="15,15"
+                                                 RadiusX="15"
+                                                 RadiusY="15" />
                             </Image.Clip>
                         </Image>
 
                         <TextBlock x:Name="Title"
                                    Text="RIFT"
                                    VerticalAlignment="Center"
-                                   Foreground="#8B929A"
-                                   FontSize="12"
+                                   Foreground="#ABB0BA"
+                                   FontSize="14"
                                    FontFamily="Arial" />
                     </StackPanel>
 
@@ -81,6 +77,9 @@
                             <Setter TargetName="Title"
                                     Property="Foreground"
                                     Value="White" />
+                            <Setter TargetName="Title" 
+                                Property="Opacity"
+                                    Value="0.7" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -102,13 +101,14 @@
                 Value="Transparent" />
         <Setter Property="BorderBrush"
                 Value="Transparent" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
         <Setter Property="materialDesign:RippleAssist.IsDisabled"
                 Value="True" />
         <Setter Property="PopupVerticalOffset"
-                Value="-9" />
+                Value="0" />
         <Setter Property="PopupHorizontalOffset"
                 Value="2" />
-
         <Style.Resources>
             <Style TargetType="ToggleButton">
                 <Setter Property="Background"
@@ -141,17 +141,12 @@
         <Setter Property="Foreground"
                 Value="#8B929A" />
         <Setter Property="FontSize"
-                Value="12.2" />
+                Value="13.2" />
         <Setter Property="FontFamily"
                 Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsMouseOver, 
-RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                         Value="True">
-                <Setter Property="Foreground"
-                        Value="White" />
-            </DataTrigger>
+            
         </Style.Triggers>
     </Style>
 
@@ -174,7 +169,7 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"
-                Value="11" />
+                Value="12" />
         <Setter Property="FontFamily"
                 Value="Arial" />
         <Setter Property="Background"
@@ -294,13 +289,15 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Margin"
-                Value="6,6,0,6"/>
+                Value="6,0,0,6"/>
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
                 Value="0" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
         <Setter Property="Background"
-                Value="#23262E" />
+                Value="#272A33" />
         <Setter Property="materialDesign:RippleAssist.IsDisabled"
                 Value="True" />
         <Setter Property="PopupAnimation"
@@ -310,10 +307,12 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
         <Setter Property="PopupMode"
                 Value="MouseOverEager" />
         <Setter Property="PopupVerticalOffset"
-                Value="15" />
+                Value="6" />
         <Setter Property="PopupHorizontalOffset"
-                Value="-35" />
-        
+                Value="-23" />
+        <Setter Property="Height"
+                Value="23" />
+
         <Style.Resources>
             <Style TargetType="ToggleButton">
                 <Setter Property="Background"
@@ -348,11 +347,11 @@ RelativeSource={RelativeSource AncestorType=ToggleButton}}"
         <Setter Property="Foreground"
                 Value="#959AA3" />
         <Setter Property="Width"
-                Value="20" />
+                Value="15" />
         <Setter Property="VerticalAlignment"
                 Value="Center"/>
         <Setter Property="Height"
-                Value="20" />
+                Value="15" />
         <Setter Property="FontFamily"
                 Value="Arial" />
         <Setter Property="FontWeight"
@@ -402,7 +401,7 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Margin"
-                Value="12,6,40,0" />
+                Value="12,0,50,0" />
         <Setter Property="MinHeight"
                 Value="0" />
         <Setter Property="MinWidth"
@@ -428,43 +427,51 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
     <!-- Border in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Border_PopupBox_Account"
            TargetType="Border">
-        <Setter Property="Padding"
-                Value="5" />
+        
         <Setter Property="Background"
-                Value="#23262E" />
+                Value="#272A33" />
         <Setter Property="MinWidth"
                 Value="90" />
+        <Setter Property="Height"
+                Value="23" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver"
                      Value="True">
                 <Setter Property="Background"
-                        Value="#2A3A4A" />
+                        Value="#263442" />
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    
     <!-- Textblock in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Textblock_PopupBox_Account"
            TargetType="TextBlock">
         <Setter Property="Foreground"
                 Value="#46B0FF" />
         <Setter Property="FontSize"
-                Value="13" />
+                Value="12" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Margin"
+                Value="5,1,0,0" />
         <Setter Property="FontFamily"
-                Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                Value="Arial" />
         <Setter Property="FontWeight"
-                Value="SemiBold" />
+                Value="Normal" />
     </Style>
 
     <!-- Icon in PopupBox_Account -->
     <Style x:Key="Rift_MenuBar_Icon_PopupBox_Account"
            TargetType="materialIcons:MaterialIcon">
+        
         <Setter Property="Kind"
                 Value="ChevronDown" />
         <Setter Property="Width"
-                Value="7" />
+                Value="14" />
         <Setter Property="Height"
-                Value="7" />
+                Value="14" />
+        <Setter Property="Margin"
+                Value="2,2,0,0" />
         <Setter Property="Foreground"
                 Value="#46B0FF" />
     </Style>

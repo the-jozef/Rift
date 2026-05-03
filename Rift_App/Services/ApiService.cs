@@ -12,7 +12,6 @@ namespace Rift_App.Services
 {
     public static class ApiService
     {
-        // RENDER URL 
         private const string BaseUrl = "https://rift-hupv.onrender.com";
 
         private static readonly HttpClient _http = new HttpClient
@@ -23,7 +22,8 @@ namespace Rift_App.Services
         private static StringContent ToJson(object obj) =>
             new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
 
-        private static T? FromJson<T>(string json) => JsonConvert.DeserializeObject<T>(json);
+        private static T? FromJson<T>(string json) =>
+            JsonConvert.DeserializeObject<T>(json);
 
         // ─── AUTH ─────────────────────────────────────────────────────────────
 
@@ -174,6 +174,19 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
+        // ─── FEATURED — dedikovaný Steam endpoint ─────────────────────────────
+        // Uses Steam's featured categories — returns properly curated games
+
+        public static async Task<List<GameModel>> GetFeaturedAsync()
+        {
+            try
+            {
+                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/store/featured");
+                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+            }
+            catch { return new List<GameModel>(); }
+        }
+
         public static async Task<List<GameModel>> GetNewTrendingAsync(int page = 0)
         {
             try
@@ -205,8 +218,7 @@ namespace Rift_App.Services
         }
     }
 
-    // ─── RESPONSE TYPES — only for API communication ──────────────────────────
-    // GameModel, PlayerInfo, AccountInfo sú v Rift_App.Models — nie tu
+    // ─── RESPONSE TYPES ───────────────────────────────────────────────────────
 
     public class AuthResponse
     {
@@ -226,7 +238,6 @@ namespace Rift_App.Services
         public string LastLocation { get; set; } = "Store";
     }
 
-    // GamesResponse uses GameModel from Rift_App.Models via using directive
     public class GamesResponse
     {
         public List<GameModel> Games { get; set; } = new();

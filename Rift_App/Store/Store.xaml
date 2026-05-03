@@ -48,7 +48,8 @@
                                     Foreground="White"
                                     Padding="0"
                                     MinHeight="0"
-                                    MinWidth="0">
+                                    MinWidth="0"
+                                    Command="{Binding PrevFeaturedCommand}">
 
                                 <Button.Background>
                                     <LinearGradientBrush StartPoint="1.0,0"
@@ -68,6 +69,7 @@
                             </Button>
                         </Grid>
 
+                        <!-- ─── Pravý chevron ────────────────────────────────────────────── -->
                         <Grid Grid.Column="2"
                               Grid.Row="0">
 
@@ -80,7 +82,8 @@
                                     Foreground="White"
                                     Padding="0"
                                     MinHeight="0"
-                                    MinWidth="0">
+                                    MinWidth="0"
+                                    Command="{Binding NextFeaturedCommand}">
 
                                 <Button.Background>
                                     <LinearGradientBrush StartPoint="1.0,0"
@@ -100,6 +103,7 @@
                             </Button>
                         </Grid>
 
+                        <!-- ─── Hlavná featured sekcia ───────────────────────────────────── -->
                         <Grid Grid.Row="0"
                               Grid.Column="1">
 
@@ -109,9 +113,9 @@
                                 <RowDefinition Height="50" />
                             </Grid.RowDefinitions>
 
+                            <!-- Nadpis -->
                             <Grid Grid.Row="0"
                                   Margin="0,25,0,0">
-
                                 <TextBlock HorizontalAlignment="Left"
                                            Text="Featured &amp; Recommended"
                                            Foreground="White"
@@ -119,8 +123,8 @@
                                            Margin="2,0,0,0" />
                             </Grid>
 
+                            <!-- Hlavný panel — 2 stĺpce: veľký obrázok + detail -->
                             <Grid Grid.Row="1"
-                                  Grid.Column="1"
                                   Margin="0,10,0,0"
                                   Height="350">
 
@@ -129,38 +133,37 @@
                                     <ColumnDefinition Width="330" />
                                 </Grid.ColumnDefinitions>
 
+                                <!-- Veľký obrázok — large header image -->
                                 <Grid Grid.Column="0">
-
                                     <Border CornerRadius="3,0,0,3"
                                             ClipToBounds="True"
                                             Width="630">
-
                                         <Border.Background>
                                             <ImageBrush Stretch="UniformToFill"
                                                         RenderOptions.BitmapScalingMode="HighQuality"
-                                                        ImageSource="/Image/Red.png" />
+                                                        ImageSource="{Binding CurrentFeaturedGame.HeaderImageUrl}" />
                                         </Border.Background>
                                     </Border>
                                 </Grid>
 
+                                <!-- Detail panel — NE nastavuj DataContext tu, binding ide cez parent VM -->
+                                <!-- Detail panel — do NOT set DataContext here, binding goes through parent VM -->
                                 <Grid Grid.Column="1">
-
                                     <Border Background="#0B151E"
                                             CornerRadius="0,3,3,0">
 
-                                        <Grid DataContext="{Binding CurrentGame}">
-
+                                        <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
 
+                                            <!-- Meno hry — game name -->
                                             <Grid Grid.Row="0">
-
-                                                <TextBlock Text="SUBNAUTICA"
+                                                <TextBlock Text="{Binding CurrentFeaturedGame.Name}"
                                                            FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                            Foreground="White"
                                                            TextWrapping="Wrap"
@@ -168,160 +171,196 @@
                                                            FontSize="23" />
                                             </Grid>
 
+                                            <!-- 4 screenshoty 2x2 — 4 screenshots 2x2 -->
                                             <Grid Grid.Row="1"
                                                   Margin="0,14,0,0">
-
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="11" />
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="11" />
                                                 </Grid.ColumnDefinitions>
-
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="11" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
 
-                                                <Grid Grid.Row="0"
-                                                      Grid.Column="0">
+                                                <Image Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Source="{Binding Screenshot1}"
+                                                       Stretch="UniformToFill"
+                                                       HorizontalAlignment="Left"
+                                                       Width="155"
+                                                       Height="70"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
 
-                                                    <Image Stretch="UniformToFill"
-                                                           Source="/Image/Red.png"
-                                                           HorizontalAlignment="Left"
-                                                           Width="155"
-                                                           Height="70" />
-                                                </Grid>
+                                                <Image Grid.Row="0"
+                                                       Grid.Column="2"
+                                                       Source="{Binding Screenshot2}"
+                                                       Stretch="UniformToFill"
+                                                       HorizontalAlignment="Left"
+                                                       Width="155"
+                                                       Height="70"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
 
-                                                <Grid Grid.Row="0"
-                                                      Grid.Column="2">
+                                                <Image Grid.Row="2"
+                                                       Grid.Column="0"
+                                                       Source="{Binding Screenshot3}"
+                                                       Stretch="UniformToFill"
+                                                       HorizontalAlignment="Left"
+                                                       Width="155"
+                                                       Height="70"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
 
-                                                    <Image Stretch="UniformToFill"
-                                                           Source="/Image/Red.png"
-                                                           HorizontalAlignment="Left"
-                                                           Height="70"
-                                                           Width="155" />
-                                                </Grid>
-
-                                                <Grid Grid.Row="2"
-                                                      Grid.Column="0">
-
-                                                    <Image Stretch="UniformToFill"
-                                                           Source="/Image/Red.png"
-                                                           HorizontalAlignment="Left"
-                                                           Width="155"
-                                                           Height="70" />
-                                                </Grid>
-
-                                                <Grid Grid.Row="2"
-                                                      Grid.Column="2">
-
-                                                    <Image Stretch="UniformToFill"
-                                                           Source="/Image/Red.png"
-                                                           HorizontalAlignment="Left"
-                                                           Height="70"
-                                                           Width="155" />
-                                                </Grid>
+                                                <Image Grid.Row="2"
+                                                       Grid.Column="2"
+                                                       Source="{Binding Screenshot4}"
+                                                       Stretch="UniformToFill"
+                                                       HorizontalAlignment="Left"
+                                                       Width="155"
+                                                       Height="70"
+                                                       RenderOptions.BitmapScalingMode="HighQuality" />
                                             </Grid>
 
+                                            <!-- Status text — "Recommended" (zelená) alebo "Available Now" (biela) -->
+                                            <!-- Status text — "Recommended" (green) or "Available Now" (white) -->
                                             <Grid Grid.Row="2"
                                                   Margin="0,12,0,0">
-
-                                                <TextBlock FontSize="17"
+                                                <TextBlock FontSize="15"
                                                            Margin="14,0,20,2"
                                                            TextWrapping="Wrap">
-                                                    
-                                             <Run Text="Recommended"
-                                                    Foreground="#4DC44D" />
-                                                    
-                                             <Run Text=" because you played before"
-                                                    Foreground="White" />
+
+                            <!-- Recommended — zelené -->
+                            <Run Text="{Binding CurrentFeaturedGame.StatusText}"
+                                                    Foreground="#4DC44D">
+                                <Run.Style>
+                                    <Style TargetType="Run">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentFeaturedGame.IsRecommended}"
+                                                                    Value="False">
+                                                <Setter Property="Foreground"
+                                                                        Value="White" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Run.Style>
+                            </Run>
                                                 </TextBlock>
                                             </Grid>
 
-                                            <Grid Grid.Row="3">
-                                                <StackPanel Orientation="Horizontal">
-
-                                                    <ItemsControl ItemsSource="{Binding Tags}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <WrapPanel />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-
-                                                                <Border Background="#394148"
-                                                                        materialDesign:ElevationAssist.Elevation="Dp6"
-                                                                        CornerRadius="2"
-                                                                        Padding="6,2"
-                                                                        Margin="0,0,4,0">
-
-                                                                    <TextBlock Text="{Binding}"
-                                                                               Foreground="White"
-                                                                               FontSize="11" />
-                                                                </Border>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </StackPanel>
+                                            <!-- Tagy — max 5 — Tags — max 5 -->
+                                            <Grid Grid.Row="3"
+                                                  Margin="15,6,15,0">
+                                                <ItemsControl ItemsSource="{Binding CurrentFeaturedGame.FeaturedTags}"
+                                                              VerticalAlignment="Top">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="#394148"
+                                                                    CornerRadius="2"
+                                                                    Padding="6,2"
+                                                                    Margin="0,0,3,3">
+                                                                <TextBlock Text="{Binding}"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="White"
+                                                                           FontSize="11" />
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
                                             </Grid>
 
-                                            <Grid Grid.Row="4">
+                                            <!-- Cena — 3 prípady: zľava / free / plná cena -->
+                                            <!-- Price — 3 cases: discount / free / full price -->
+                                            <Grid Grid.Row="4"
+                                                  Margin="10,8,10,10">
 
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
+                                                <!-- PRÍPAD 1: Zľava — discount badge + prečiarknutá cena + cena v zlave -->
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Left"
+                                                            Visibility="{Binding CurrentFeaturedGame.HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                                                <Grid Grid.Column="0">
+                                                    <Border Background="#4c6b22"
+                                                            CornerRadius="2,0,0,2"
+                                                            Padding="6,2">
+                                                        <TextBlock Text="{Binding CurrentFeaturedGame.DiscountPercent, StringFormat='-{0}%'}"
+                                                                   FontFamily="Arial"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="14"
+                                                                   Foreground="#a4d007"
+                                                                   FontWeight="Bold" />
+                                                    </Border>
 
-                                                    <StackPanel Orientation="Horizontal"
-                                                                HorizontalAlignment="Left"
-                                                                Margin="10,8,0,3">
-
-                                                        <Border Background="#4c6b22"
-                                                                CornerRadius="2,0,0,2"
-                                                                Padding="6,2">
-
-                                                            <TextBlock Text="-60%"
-                                                                       FontFamily="Arial"
-                                                                       VerticalAlignment="Center"
-                                                                       FontSize="14"
-                                                                       Foreground="#a4d007"
-                                                                       FontWeight="Bold" />
-                                                        </Border>
-
-                                                        <StackPanel Orientation="Horizontal">
-
-                                                            <TextBlock Text="79,99€"
-                                                                       FontSize="14"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                                       VerticalAlignment="Center"
+                                                    <Border Background="#1C2A35"
+                                                            CornerRadius="0,2,2,0"
+                                                            Padding="6,2">
+                                                        <StackPanel Orientation="Vertical">
+                                                            <TextBlock Text="{Binding CurrentFeaturedGame.Price}"
+                                                                       FontSize="11"
                                                                        TextDecorations="Strikethrough"
                                                                        Foreground="#738895"
-                                                                       Margin="6,2,0,0" />
-
-                                                            <TextBlock Text="25€"
-                                                                       FontSize="14"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                                       VerticalAlignment="Center"
-                                                                       Foreground="White"
-                                                                       FontWeight="Medium"
-                                                                       Margin="6,2,0,0" />
+                                                                       HorizontalAlignment="Right" />
+                                                            <TextBlock Text="{Binding CurrentFeaturedGame.Price}"
+                                                                       FontSize="13"
+                                                                       Foreground="#a4d007"
+                                                                       FontWeight="SemiBold" />
                                                         </StackPanel>
-                                                    </StackPanel>
-                                                </Grid>
+                                                    </Border>
+                                                </StackPanel>
+
+                                                <!-- PRÍPAD 2: Free to Play -->
+                                                <TextBlock Text="Free To Play"
+                                                           FontSize="14"
+                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="White"
+                                                           FontWeight="Medium"
+                                                           Visibility="{Binding CurrentFeaturedGame.IsFree, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                                <!-- PRÍPAD 3: Plná cena — full price (nie zľava, nie free) -->
+                                                <TextBlock Text="{Binding CurrentFeaturedGame.Price}"
+                                                           FontSize="14"
+                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="White"
+                                                           FontWeight="Medium">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <!-- Zobraz ak nie je free a nie je zľava -->
+                                                                <!-- Show if not free and no discount -->
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding CurrentFeaturedGame.HasDiscount}"
+                                                                                   Value="False" />
+                                                                        <Condition Binding="{Binding CurrentFeaturedGame.IsFree}"
+                                                                                   Value="False" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Visible" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+
                                             </Grid>
                                         </Grid>
                                     </Border>
                                 </Grid>
                             </Grid>
 
+                            <!-- Radio buttony — reagujú na FeaturedIndex aj ho menia -->
+                            <!-- Radio buttons — react to FeaturedIndex and change it -->
                             <Grid Grid.Row="2"
                                   Margin="0,5,0,0">
-
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
                                             Orientation="Horizontal">
@@ -367,16 +406,50 @@
                                                 HorizontalAlignment="Center"
                                                 Margin="0,8,0,0">
 
-                                        <RadioButton IsChecked="True"
-                                                     GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
-                                        <RadioButton GroupName="Carousel" />
+                                        <!-- Každý RadioButton:
+                     IsChecked — svieti ak FeaturedIndex == jeho číslo
+                     Command   — klik zmení featured na jeho index
+                     GroupName — WPF vyrieši exclusive selection -->
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=0, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="0" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=1, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="1" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=2, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="2" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=3, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="3" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=4, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="4" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=5, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="5" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=6, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="6" />
+
+                                        <RadioButton GroupName="FeaturedCarousel"
+                                                     IsChecked="{Binding FeaturedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=7, Mode=OneWay}"
+                                                     Command="{Binding SelectFeaturedCommand}"
+                                                     CommandParameter="7" />
+
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>

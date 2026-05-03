@@ -22,6 +22,7 @@
             <converters:RiftInverseBoolToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <converters:RiftBoolToGridRowHeightConverter x:Key="BoolToGridRowHeightConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:IndexEqualsConverter x:Key="IndexEqualsConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

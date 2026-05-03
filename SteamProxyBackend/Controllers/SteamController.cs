@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace SteamProxyBackend.Controllers
 {
@@ -12,14 +13,42 @@ namespace SteamProxyBackend.Controllers
         private readonly HttpClient _http;
         private readonly string _steamApiKey;
 
-        // Rate limiting — obmedzenie požiadaviek per IP
         private static readonly ConcurrentDictionary<string, DateTime> _lastRequestTime = new();
         private const int RateLimitSeconds = 2;
+
+        // Rýchly name-based prefilter — slová ktoré jednoznačne signalizujú 18+ obsah
+        // Quick name-based prefilter — words that clearly signal adult content
+        private static readonly string[] AdultKeywords = new[]
+        {
+            "hentai", "nude", "naked", "erotic", "xxx", "porn", "sex", "lewd",
+            "nsfw", "18+", "adult", "fuck", "futa", "cumming", "horny"
+        };
+
+        private static bool HasAdultName(string name)
+        {
+            var lower = name.ToLowerInvariant();
+            return AdultKeywords.Any(k => lower.Contains(k));
+        }
+
+        // Správny 18+ check cez content_descriptors — len sexual/nudity, nie violence
+        // Proper 18+ check via content_descriptors — sexual/nudity only, not violence
+        // ID 1 = Some Nudity or Sexual Content
+        // ID 3 = Adult Only Sexual Content  
+        // ID 4 = Frequent Nudity or Sexual Content
+        // ID 2 = Frequent Violence (CoD) — prechádza / passes
+        // ID 5 = General Mature Content (CoD) — prechádza / passes
+        private static bool HasExplicitContent(JToken? data)
+        {
+            if (data == null) return false;
+            var ids = data["content_descriptors"]?["ids"]?.ToObject<List<int>>() ?? new List<int>();
+            return ids.Contains(1) || ids.Contains(3) || ids.Contains(4);
+        }
 
         public SteamController(IHttpClientFactory httpFactory, IConfiguration config)
         {
             _http = httpFactory.CreateClient();
-            _steamApiKey = config["SteamApiKey"]
+            _steamApiKey = Environment.GetEnvironmentVariable("SteamApiKey")
+                ?? config["SteamApiKey"]
                 ?? throw new Exception("SteamApiKey not configured.");
         }
 
@@ -34,7 +63,7 @@ namespace SteamProxyBackend.Controllers
         private string GetClientIp() =>
             HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-        // ─── PLAYER SUMMARY ───────────────────────────────────────────────────
+        // ─── PLAYER SUMMARY ───────────────────────────────────────────────
 
         [HttpGet("player/{steamId}")]
         public async Task<IActionResult> GetPlayerSummary(string steamId)
@@ -61,13 +90,10 @@ namespace SteamProxyBackend.Controllers
                     ProfileUrl = (string)player.profileurl
                 });
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = ex.Message });
-            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── OWNED GAMES / LIBRARY ────────────────────────────────────────────
+        // ─── OWNED GAMES / LIBRARY ────────────────────────────────────────
 
         [HttpGet("library/{steamId}")]
         public async Task<IActionResult> GetOwnedGames(string steamId)
@@ -99,13 +125,10 @@ namespace SteamProxyBackend.Controllers
 
                 return Ok(new { Games = result });
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = ex.Message });
-            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── WISHLIST ─────────────────────────────────────────────────────────
+        // ─── WISHLIST ─────────────────────────────────────────────────────
 
         [HttpGet("wishlist/{steamId}")]
         public async Task<IActionResult> GetWishlist(string steamId)
@@ -135,13 +158,10 @@ namespace SteamProxyBackend.Controllers
 
                 return Ok(new { Games = result });
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = ex.Message });
-            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── GAME DETAILS ─────────────────────────────────────────────────────
+        // ─── GAME DETAILS — s 18+ filtrom ─────────────────────────────────
 
         [HttpGet("game/{appId}")]
         public async Task<IActionResult> GetGameDetails(int appId)
@@ -153,44 +173,105 @@ namespace SteamProxyBackend.Controllers
 
                 var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=us&l=en";
                 var response = await _http.GetStringAsync(url);
-                var data = JsonConvert.DeserializeObject<dynamic>(response);
-                var gameData = data?[appId.ToString()]?.data;
+                var json = JObject.Parse(response);
+                var gameData = json[appId.ToString()]?["data"];
 
                 if (gameData == null)
                     return NotFound(new { Message = "Game not found." });
 
-                bool isFree = (bool)(gameData.is_free ?? false);
-                string price = isFree ? "Free" : (string)(gameData.price_overview?.final_formatted ?? "N/A");
+                // Meno check — rýchly filter pred content_descriptors
+                // Name check — quick filter before content_descriptors
+                string name = gameData["name"]?.Value<string>() ?? "";
+                if (HasAdultName(name))
+                    return StatusCode(451, new { Message = "Content filtered." });
 
-                var genres = new List<string>();
-                if (gameData.genres != null)
-                    foreach (var g in gameData.genres)
-                        genres.Add((string)g.description);
+                // Content descriptors check
+                if (HasExplicitContent(gameData))
+                    return StatusCode(451, new { Message = "Content filtered." });
 
-                var screenshots = new List<string>();
-                if (gameData.screenshots != null)
-                    foreach (var s in gameData.screenshots)
-                        screenshots.Add((string)s.path_full);
+                bool isFree = gameData["is_free"]?.Value<bool>() ?? false;
+                string price = isFree ? "Free" : gameData["price_overview"]?["final_formatted"]?.Value<string>() ?? "N/A";
+
+                var genres = gameData["genres"]?
+                    .Select(g => g["description"]?.Value<string>() ?? "")
+                    .Where(g => !string.IsNullOrEmpty(g))
+                    .ToList() ?? new List<string>();
+
+                var screenshots = gameData["screenshots"]?
+                    .Select(s => s["path_full"]?.Value<string>() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .ToList() ?? new List<string>();
 
                 return Ok(new
                 {
                     AppId = appId,
-                    Name = (string)gameData.name,
-                    Description = (string)gameData.short_description,
-                    HeaderImageUrl = (string)gameData.header_image,
+                    Name = name,
+                    Description = gameData["short_description"]?.Value<string>() ?? "",
+                    HeaderImageUrl = gameData["header_image"]?.Value<string>() ?? "",
                     Price = price,
                     Genres = genres,
                     Screenshots = screenshots,
                     SteamStoreUrl = $"https://store.steampowered.com/app/{appId}"
                 });
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = ex.Message });
-            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── STORE CATEGORIES ─────────────────────────────────────────────────
+        // ─── FEATURED — používa specials sekciu ───────────────────────────
+        // Uses specials section — contains well-known games like Cyberpunk, GTA V, Rust
+        // Filtruje 18+ cez meno — name-based 18+ filter
+
+        [HttpGet("store/featured")]
+        public async Task<IActionResult> GetFeatured()
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests. Please wait." });
+
+                var url = "https://store.steampowered.com/api/featuredcategories/?cc=us&l=en";
+                var response = await _http.GetStringAsync(url);
+                var json = JObject.Parse(response);
+
+                // specials = Featured & Recommended hry — zľavy na známe hry
+                // specials = Featured & Recommended games — discounts on well-known games
+                var items = json["specials"]?["items"];
+
+                if (items == null) return Ok(new { Games = new List<object>() });
+
+                var result = new List<object>();
+                foreach (var item in items)
+                {
+                    string name = item["name"]?.Value<string>() ?? "";
+
+                    // Preskočiť 18+ podľa mena — skip adult content by name
+                    if (HasAdultName(name)) continue;
+
+                    int finalPrice = item["final_price"]?.Value<int>() ?? 0;
+                    int origPrice = item["original_price"]?.Value<int>() ?? 0;
+                    int discount = item["discount_percent"]?.Value<int>() ?? 0;
+
+                    string price = finalPrice == 0 ? "Free"
+                        : $"${finalPrice / 100.0:F2}";
+                    string originalPriceStr = origPrice == 0 ? "" : $"${origPrice / 100.0:F2}";
+
+                    result.Add(new
+                    {
+                        AppId = item["id"]?.Value<int>() ?? 0,
+                        Name = name,
+                        HeaderImageUrl = item["header_image"]?.Value<string>() ?? "",
+                        Price = price,
+                        OriginalPrice = originalPriceStr,
+                        DiscountPercent = discount
+                    });
+                }
+
+                return Ok(new { Games = result });
+            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+
+        // ─── NEW TRENDING — s name filtrom ────────────────────────────────
 
         [HttpGet("store/newtrending")]
         public async Task<IActionResult> GetNewTrending([FromQuery] int page = 0)
@@ -204,15 +285,17 @@ namespace SteamProxyBackend.Controllers
 
                 var url = "https://store.steampowered.com/api/featuredcategories/?cc=us&l=en";
                 var response = await _http.GetStringAsync(url);
-                var data = JsonConvert.DeserializeObject<dynamic>(response);
-                var items = data?.new_releases?.items;
+                var json = JObject.Parse(response);
+                var items = json["new_releases"]?["items"];
 
                 if (items == null) return Ok(new { Games = new List<object>() });
 
-                return Ok(new { Games = GetPage(items, page) });
+                return Ok(new { Games = GetPage(items, page, filterAdult: true) });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
+
+        // ─── TOP SELLERS ──────────────────────────────────────────────────
 
         [HttpGet("store/topsellers")]
         public async Task<IActionResult> GetTopSellers([FromQuery] int page = 0)
@@ -226,15 +309,17 @@ namespace SteamProxyBackend.Controllers
 
                 var url = "https://store.steampowered.com/api/featuredcategories/?cc=us&l=en";
                 var response = await _http.GetStringAsync(url);
-                var data = JsonConvert.DeserializeObject<dynamic>(response);
-                var items = data?.top_sellers?.items;
+                var json = JObject.Parse(response);
+                var items = json["top_sellers"]?["items"];
 
                 if (items == null) return Ok(new { Games = new List<object>() });
 
-                return Ok(new { Games = GetPage(items, page) });
+                return Ok(new { Games = GetPage(items, page, filterAdult: true) });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
+
+        // ─── SPECIALS ─────────────────────────────────────────────────────
 
         [HttpGet("store/specials")]
         public async Task<IActionResult> GetSpecials([FromQuery] int page = 0)
@@ -248,19 +333,19 @@ namespace SteamProxyBackend.Controllers
 
                 var url = "https://store.steampowered.com/api/featuredcategories/?cc=us&l=en";
                 var response = await _http.GetStringAsync(url);
-                var data = JsonConvert.DeserializeObject<dynamic>(response);
-                var items = data?.specials?.items;
+                var json = JObject.Parse(response);
+                var items = json["specials"]?["items"];
 
                 if (items == null) return Ok(new { Games = new List<object>() });
 
-                return Ok(new { Games = GetPage(items, page) });
+                return Ok(new { Games = GetPage(items, page, filterAdult: true) });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── HELPER ───────────────────────────────────────────────────────────
+        // ─── HELPER ───────────────────────────────────────────────────────
 
-        private List<object> GetPage(dynamic items, int page)
+        private List<object> GetPage(JToken items, int page, bool filterAdult = false)
         {
             var result = new List<object>();
             int skip = page * 10;
@@ -268,16 +353,24 @@ namespace SteamProxyBackend.Controllers
 
             foreach (var item in items)
             {
+                string name = item["name"]?.Value<string>() ?? "";
+
+                // Preskočiť 18+ — skip adult
+                if (filterAdult && HasAdultName(name)) continue;
+
                 if (count < skip) { count++; continue; }
                 if (result.Count >= 10) break;
 
+                int finalPrice = item["final_price"]?.Value<int>() ?? 0;
+                int discount = item["discount_percent"]?.Value<int>() ?? 0;
+
                 result.Add(new
                 {
-                    AppId = (int)item.id,
-                    Name = (string)item.name,
-                    HeaderImageUrl = (string)item.header_image,
-                    Price = (string)(item.final_price == 0 ? "Free" : item.final_formatted ?? "N/A"),
-                    DiscountPercent = (int)(item.discount_percent ?? 0)
+                    AppId = item["id"]?.Value<int>() ?? 0,
+                    Name = name,
+                    HeaderImageUrl = item["header_image"]?.Value<string>() ?? "",
+                    Price = finalPrice == 0 ? "Free" : $"${finalPrice / 100.0:F2}",
+                    DiscountPercent = discount
                 });
 
                 count++;

@@ -14,9 +14,6 @@ namespace Rift_App.ViewModels
 {
     public partial class WindowViewModel : ObservableObject
     {
-        // ─── USERNAME ──────────────────────────────────────────────────────
-        public string Username => SessionManager.Username;
-
         // ─── WINDOW STATE ─────────────────────────────────────────────────
         public WindowStateViewModel WindowState { get; } = new();
 
@@ -27,6 +24,11 @@ namespace Rift_App.ViewModels
         // ─── SEARCH BAR ───────────────────────────────────────────────────
         [ObservableProperty]
         private bool _showSearchBar = true;
+
+        // ─── PLAYER INFO — pre MenuBar binding ───────────────────────────
+        // Exposed from SessionManager for MenuBar binding
+        public string Username => SessionManager.Username;
+        public string AvatarUrl => SessionManager.AvatarUrl;
 
         public WindowViewModel()
         {

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Rift_App.ViewModels;
+using Rift_App.Services;
 
 namespace Rift_App.Store
 {
@@ -25,13 +26,33 @@ namespace Rift_App.Store
         {
             InitializeComponent();
             DataContext = _viewModel;
-            Loaded += async (s, e) => await _viewModel.LoadStoreCommand.ExecuteAsync(null);
+
+            // Napoj event — ked user klikne na hru nacitaj plne detaily a prepni na GamePage
+            // Wire event — when user clicks a game, load full details and navigate to GamePage
+            _viewModel.OnGameSelected += OnGameSelected;
+
+            Loaded += async (s, e) =>
+            {
+                await _viewModel.LoadStoreCommand.ExecuteAsync(null);
+                MessageBox.Show($"Loaded: {_viewModel.NewTrending.Count} games", "Debug");
+            };
         }
 
-        private void GameItem_Click(object sender, RoutedEventArgs e)
+        // Nacita plne detaily hry zo Steam API a otvori GamePage
+        // Loads full game details from Steam API and opens GamePage
+        private async void OnGameSelected(GameModel game)
         {
-            if (sender is Button btn && btn.DataContext is GameModel game)
-                _viewModel.SelectGameCommand.Execute(game);
+            // Hra zo store listu ma iba zakladne info (meno, header, cena)
+            // Game from store list only has basic info (name, header, price)
+            // Donacitaj plne detaily — screenshoty, popis, zanre
+            // Load full details — screenshots, description, genres
+            var fullGame = await ApiService.GetGameDetailsAsync(game.AppId);
+
+            // Ak API zlyhalo pouzi co mame — if API failed use what we have
+            var gameToShow = fullGame ?? game;
+
+            if (Application.Current.MainWindow is MainWindow main)
+                main.ViewModel.ShowGamePageCommand.Execute(gameToShow);
         }
     }
 }
