@@ -15,7 +15,7 @@ namespace Rift_App
             var loading = new LoadingWindow();
             var main = new MainWindow();
 
-            TagService.InitAsync();
+            _ = TagService.InitAsync();
 
             ViewNavigator.Initialize(auth, loading, main);
 

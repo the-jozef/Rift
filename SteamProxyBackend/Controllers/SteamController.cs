@@ -16,12 +16,63 @@ namespace SteamProxyBackend.Controllers
         private static readonly ConcurrentDictionary<string, DateTime> _lastRequestTime = new();
         private const int RateLimitSeconds = 2;
 
-        // Rýchly name-based prefilter — slová ktoré jednoznačne signalizujú 18+ obsah
-        // Quick name-based prefilter — words that clearly signal adult content
+        // ─── KURÁTORSKÝ ZOZNAM POPULÁRNYCH HIER ──────────────────────────
+        // Curated list of popular well-known games with full screenshots
+        // Zoradené podľa popularity — sorted by popularity
+        private static readonly int[] CuratedAppIds = new[]
+        {
+            // AAA aktuálne — current AAA
+            2322010,  // Black Myth: Wukong
+            1091500,  // Cyberpunk 2077
+            1172470,  // Apex Legends
+            1245620,  // Elden Ring
+            1086940,  // Baldur's Gate 3
+            2358720,  // Black Flag Resynced (AC Black Flag)
+            3240220,  // GTA V Enhanced
+            1551360,  // Forza Horizon 5
+            1850570,  // Hogwarts Legacy
+            1716740,  // STALKER 2
+            2767030,  // Marvel Rivals
+            3228840,  // Beiman (Dynasty Warriors Origins)
+            2369390,  // Snowrunner (MudRunner 2)
+            1174180,  // Red Dead Redemption 2
+            1623730,  // Palworld
+            990080,   // Hogwarts Legacy (Steam)
+            1063730,  // New World
+            2311740,  // Warhammer 40K Space Marine 2
+            2358720,  // Assassin's Creed Shadows
+            1817070,  // Marvel's Spider-Man Remastered
+ 
+            // Evergreen populárne — evergreen popular
+            730,      // CS2
+            570,      // Dota 2
+            578080,   // PUBG
+            1222670,  // The Sims 4
+            252490,   // Rust
+            346110,   // ARK: Survival Evolved
+            381210,   // Dead by Daylight
+            1382330,  // Fortnite
+            813780,   // AOE2 DE
+            1145360,  // Hades
+            814380,   // Sekiro
+            1237970,  // Titanfall 2
+            374320,   // Dark Souls 3
+            292030,   // Witcher 3
+            367520,   // Hollow Knight
+            1449850,  // Yu-Gi-Oh Master Duel
+            271590,   // GTA V (original)
+            1446780,  // Monster Hunter Rise
+            2050650,  // Resident Evil 4 Remake
+            1938090,  // Call of Duty HQ
+        };
+
+        // ─── 18+ FILTER ───────────────────────────────────────────────────
+
         private static readonly string[] AdultKeywords = new[]
         {
-            "hentai", "nude", "naked", "erotic", "xxx", "porn", "sex", "lewd",
-            "nsfw", "18+", "adult", "fuck", "futa", "cumming", "horny"
+            "hentai", "nude", "naked", "erotic", "xxx", "porn",
+            "lewd", "nsfw", "18+", "adult", "fuck", "futa",
+            "cumming", "horny", "🔞", "ecchi"
         };
 
         private static bool HasAdultName(string name)
@@ -30,13 +81,8 @@ namespace SteamProxyBackend.Controllers
             return AdultKeywords.Any(k => lower.Contains(k));
         }
 
-        // Správny 18+ check cez content_descriptors — len sexual/nudity, nie violence
-        // Proper 18+ check via content_descriptors — sexual/nudity only, not violence
-        // ID 1 = Some Nudity or Sexual Content
-        // ID 3 = Adult Only Sexual Content  
-        // ID 4 = Frequent Nudity or Sexual Content
-        // ID 2 = Frequent Violence (CoD) — prechádza / passes
-        // ID 5 = General Mature Content (CoD) — prechádza / passes
+        // IDs: 1=Nudity/Sexual, 3=Adult Only Sexual, 4=Frequent Nudity/Sexual
+        // CoD ID 2=Violence, ID 5=Mature — prechádza / passes
         private static bool HasExplicitContent(JToken? data)
         {
             if (data == null) return false;
@@ -179,18 +225,14 @@ namespace SteamProxyBackend.Controllers
                 if (gameData == null)
                     return NotFound(new { Message = "Game not found." });
 
-                // Meno check — rýchly filter pred content_descriptors
-                // Name check — quick filter before content_descriptors
                 string name = gameData["name"]?.Value<string>() ?? "";
-                if (HasAdultName(name))
-                    return StatusCode(451, new { Message = "Content filtered." });
 
-                // Content descriptors check
-                if (HasExplicitContent(gameData))
+                if (HasAdultName(name) || HasExplicitContent(gameData))
                     return StatusCode(451, new { Message = "Content filtered." });
 
                 bool isFree = gameData["is_free"]?.Value<bool>() ?? false;
-                string price = isFree ? "Free" : gameData["price_overview"]?["final_formatted"]?.Value<string>() ?? "N/A";
+                string price = isFree ? "Free"
+                    : gameData["price_overview"]?["final_formatted"]?.Value<string>() ?? "N/A";
 
                 var genres = gameData["genres"]?
                     .Select(g => g["description"]?.Value<string>() ?? "")
@@ -202,6 +244,11 @@ namespace SteamProxyBackend.Controllers
                     .Where(s => !string.IsNullOrEmpty(s))
                     .ToList() ?? new List<string>();
 
+                int discountPercent = gameData["price_overview"]?["discount_percent"]?.Value<int>() ?? 0;
+                string originalPrice = discountPercent > 0
+                    ? gameData["price_overview"]?["initial_formatted"]?.Value<string>() ?? ""
+                    : "";
+
                 return Ok(new
                 {
                     AppId = appId,
@@ -209,6 +256,8 @@ namespace SteamProxyBackend.Controllers
                     Description = gameData["short_description"]?.Value<string>() ?? "",
                     HeaderImageUrl = gameData["header_image"]?.Value<string>() ?? "",
                     Price = price,
+                    OriginalPrice = originalPrice,
+                    DiscountPercent = discountPercent,
                     Genres = genres,
                     Screenshots = screenshots,
                     SteamStoreUrl = $"https://store.steampowered.com/app/{appId}"
@@ -217,61 +266,38 @@ namespace SteamProxyBackend.Controllers
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── FEATURED — používa specials sekciu ───────────────────────────
-        // Uses specials section — contains well-known games like Cyberpunk, GTA V, Rust
-        // Filtruje 18+ cez meno — name-based 18+ filter
+        // ─── FEATURED — kurátorský zoznam + shuffle ───────────────────────
+        // Curated popular games list + daily shuffle so it feels fresh
+        // Fallback na specials ak kurátor zlyhá — fallback to specials if curated fails
 
         [HttpGet("store/featured")]
-        public async Task<IActionResult> GetFeatured()
+        public async Task<IActionResult> GetFeatured([FromQuery] int count = 12)
         {
             try
             {
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
-                var url = "https://store.steampowered.com/api/featuredcategories/?cc=us&l=en";
-                var response = await _http.GetStringAsync(url);
-                var json = JObject.Parse(response);
+                // Denný shuffle — rovnaká seed každý deň = rovnaké poradie celý deň
+                // Daily shuffle — same seed each day = same order all day
+                var daySeed = int.Parse(DateTime.UtcNow.ToString("yyyyMMdd"));
+                var rng = new Random(daySeed);
+                var shuffled = CuratedAppIds.OrderBy(_ => rng.Next()).ToArray();
 
-                // specials = Featured & Recommended hry — zľavy na známe hry
-                // specials = Featured & Recommended games — discounts on well-known games
-                var items = json["specials"]?["items"];
-
-                if (items == null) return Ok(new { Games = new List<object>() });
-
-                var result = new List<object>();
-                foreach (var item in items)
+                // Vráť AppID zoznam — apka si sama načíta detaily
+                // Return AppID list — app loads details itself
+                var result = shuffled.Take(count).Select(id => new
                 {
-                    string name = item["name"]?.Value<string>() ?? "";
-
-                    // Preskočiť 18+ podľa mena — skip adult content by name
-                    if (HasAdultName(name)) continue;
-
-                    int finalPrice = item["final_price"]?.Value<int>() ?? 0;
-                    int origPrice = item["original_price"]?.Value<int>() ?? 0;
-                    int discount = item["discount_percent"]?.Value<int>() ?? 0;
-
-                    string price = finalPrice == 0 ? "Free"
-                        : $"${finalPrice / 100.0:F2}";
-                    string originalPriceStr = origPrice == 0 ? "" : $"${origPrice / 100.0:F2}";
-
-                    result.Add(new
-                    {
-                        AppId = item["id"]?.Value<int>() ?? 0,
-                        Name = name,
-                        HeaderImageUrl = item["header_image"]?.Value<string>() ?? "",
-                        Price = price,
-                        OriginalPrice = originalPriceStr,
-                        DiscountPercent = discount
-                    });
-                }
+                    AppId = id,
+                    HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{id}/header.jpg"
+                }).ToList();
 
                 return Ok(new { Games = result });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ─── NEW TRENDING — s name filtrom ────────────────────────────────
+        // ─── NEW TRENDING ─────────────────────────────────────────────────
 
         [HttpGet("store/newtrending")]
         public async Task<IActionResult> GetNewTrending([FromQuery] int page = 0)
@@ -354,8 +380,6 @@ namespace SteamProxyBackend.Controllers
             foreach (var item in items)
             {
                 string name = item["name"]?.Value<string>() ?? "";
-
-                // Preskočiť 18+ — skip adult
                 if (filterAdult && HasAdultName(name)) continue;
 
                 if (count < skip) { count++; continue; }

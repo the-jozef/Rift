@@ -47,13 +47,13 @@
                     </Grid>
 
                     <Grid Grid.Row="1"
-                          Margin="60,40,0,0">
+                          Margin="60,15,0,0">
                         
                         <TextBlock Style="{StaticResource Rift_Register_Textblock_Create}" />
                     </Grid>
 
                     <Grid Grid.Row="2"
-                          Margin="80,15,0,0">
+                          Margin="80,10,0,0">
 
                         <StackPanel Style="{StaticResource Rift_Register_StackPanel_Layout}">
 
@@ -69,12 +69,12 @@
                                          x:Name="PasswordBox"
                                          PasswordChanged="PasswordBox_PasswordChanged" />
 
+                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Layout_Email}" />
+
+                            <TextBox Style="{StaticResource Rift_Register_TextBox_Layout_Email}" />
+
                             <TextBlock Text="{Binding ErrorMessage}"
-                                       Foreground="#FF6B6B"
-                                       FontSize="11"
-                                       Margin="2,6,0,0"
-                                       MaxHeight="64"
-                                       Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                       Style="{StaticResource Rift_Register_TextBlock_Layout_ErrorMessage}"/>
 
                             <Button Style="{StaticResource Rift_Register_Button_Layout_SignUp}"
                                     Command="{Binding RegisterCommand}" />
@@ -100,7 +100,7 @@
                     </Grid>
 
                     <Grid Grid.Row="1"
-                          Margin="0,55,0,0">
+                          Margin="0,65,0,0">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

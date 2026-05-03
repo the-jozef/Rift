@@ -2011,7 +2011,7 @@
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="0,5,0,0" />
+                Value="0,2,0,0" />
         <Setter Property="Background"
                 Value="#2F3138" />
         <Setter Property="Foreground"
@@ -2054,7 +2054,7 @@
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="0,15,0,0" />
+                Value="0,10,0,0" />
         <Setter Property="Foreground"
                 Value="#AAAAAA" />
         <Setter Property="FontSize"
@@ -2076,7 +2076,7 @@
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Margin"
-                Value="0,5,0,0" />
+                Value="0,2,0,0" />
         <Setter Property="Background"
                 Value="#2F3138" />
         <Setter Property="BorderBrush"
@@ -2116,6 +2116,105 @@
         </Setter>
     </Style>
 
+    <!-- Textblock for Title_email -->
+    <Style x:Key="Rift_Register_TextBlock_Layout_Email"
+           TargetType="TextBlock">
+
+        <Setter Property="Text"
+                Value="EMAIL" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="Margin"
+                Value="0,10,0,0" />
+        <Setter Property="Foreground"
+                Value="#AAAAAA" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontFamily"
+                Value="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+    </Style>
+
+    <!-- TextBox for sign up Email -->
+    <Style x:Key="Rift_Register_TextBox_Layout_Email"
+           TargetType="TextBox">
+
+        <Setter Property="Width"
+                Value="250" />
+        <Setter Property="Height"
+                Value="35" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="Margin"
+                Value="0,2,0,0" />
+        <Setter Property="Background"
+                Value="#2F3138" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}">
+                        <Grid>
+                            <TextBlock x:Name="placeholder"
+                                       Text="example@email.com"
+                                       Foreground="#A3A5AD"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       VerticalAlignment="Center"
+                                       Margin="10,0,0,0"
+                                       IsHitTestVisible="False"
+                                       Visibility="Collapsed" />
+
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="10,0,0,0"
+                                          VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Text"
+                                 Value="">
+                            <Setter TargetName="placeholder"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                        </Trigger>
+                        
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="#393C44" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TextBlock for ErrorMessage -->
+    <Style x:Key="Rift_Register_TextBlock_Layout_ErrorMessage"
+           TargetType="TextBlock">
+        
+        
+        <Setter Property="Foreground"
+                Value="#FF6B6B" />
+        <Setter Property="FontSize"
+                Value="11" />
+        <Setter Property="Margin"
+                Value="2,6,0,0" />
+        <Setter Property="MaxHeight"
+                Value="64" />
+        <Setter Property="Visibility"
+                Value="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Style>
+
     <!-- Button for Sign up -->
     <Style x:Key="Rift_Register_Button_Layout_SignUp"
            TargetType="Button">
@@ -2129,7 +2228,7 @@
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Margin"
-                Value="30,22,0,0" />
+                Value="30,10,0,0" />
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
         <Setter Property="Foreground"
