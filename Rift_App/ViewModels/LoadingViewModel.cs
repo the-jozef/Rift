@@ -5,18 +5,21 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Rift_App.Models;
 using Rift_App.Services;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace Rift_App.ViewModels
 {
     public partial class LoadingViewModel : ObservableObject
     {
-        // ─── MODE 1: Startup — volá App.xaml.cs ──────────────────────────
-        // Called by App.xaml.cs on startup
+        // ─── MODE 1: Startup ──────────────────────────────────────────────
 
         public async Task StartupAsync()
         {
             try
             {
+                // Inicializuj tag slovník na pozadí — initialize tag dictionary in background
+                _ = TagService.InitAsync();
+
                 await ApiService.InitDeviceAsync();
 
                 var session = await ApiService.GetSessionAsync();
@@ -42,8 +45,7 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── MODE 2: Po prihlásení — volá ViewNavigator ───────────────────
-        // Called by ViewNavigator after login/register
+        // ─── MODE 2: Po prihlásení ────────────────────────────────────────
 
         public async Task LoadSteamDataAsync()
         {
@@ -57,17 +59,43 @@ namespace Rift_App.ViewModels
 
                 if (!string.IsNullOrEmpty(steamId))
                 {
-                    var p = ApiService.GetPlayerInfoAsync(steamId);
-                    var l = ApiService.GetLibraryAsync(steamId);
-                    var w = ApiService.GetWishlistAsync(steamId);
+                    // Skús player info z cache — try player info from cache
+                    var cacheKey = string.Format(LocalCacheService.KeyPlayer, steamId);
+                    playerInfo = await LocalCacheService.LoadAsync<PlayerInfo>(
+                        cacheKey, LocalCacheService.AccountTTL);
 
-                    await Task.WhenAll(p, l, w);
+                    if (playerInfo == null)
+                    {
+                        playerInfo = await ApiService.GetPlayerInfoAsync(steamId);
+                        if (playerInfo != null)
+                            await LocalCacheService.SaveAsync(cacheKey, playerInfo);
+                    }
 
-                    playerInfo = p.Result;
-                    library = l.Result;
-                    wishlist = w.Result;
+                    // Library — cache + live
+                    var libKey = string.Format(LocalCacheService.KeyLibrary, steamId);
+                    library = await LocalCacheService.LoadAsync<List<GameModel>>(
+                        libKey, LocalCacheService.LibraryTTL) ?? new List<GameModel>();
 
-                    // Ulož avatar URL do SessionManager — store avatar URL
+                    if (library.Count == 0)
+                    {
+                        library = await ApiService.GetLibraryAsync(steamId);
+                        if (library.Count > 0)
+                            await LocalCacheService.SaveAsync(libKey, library);
+                    }
+
+                    // Wishlist — cache + live
+                    var wishKey = string.Format(LocalCacheService.KeyWishlist, steamId);
+                    wishlist = await LocalCacheService.LoadAsync<List<GameModel>>(
+                        wishKey, LocalCacheService.WishlistTTL) ?? new List<GameModel>();
+
+                    if (wishlist.Count == 0)
+                    {
+                        wishlist = await ApiService.GetWishlistAsync(steamId);
+                        if (wishlist.Count > 0)
+                            await LocalCacheService.SaveAsync(wishKey, wishlist);
+                    }
+
+                    // Ulož avatar — save avatar
                     if (playerInfo != null)
                         SessionManager.SetAvatar(playerInfo.AvatarUrl);
                 }

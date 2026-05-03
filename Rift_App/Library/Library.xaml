@@ -325,7 +325,6 @@
                                                                         </Setter>
                                                                     </Style>
                                                                 </ProgressBar.Style>
-
                                                             </ProgressBar>
                                                         </StackPanel>
                                                     </StackPanel>

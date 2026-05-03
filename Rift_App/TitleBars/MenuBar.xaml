@@ -197,7 +197,7 @@
                                                      WindowChrome.IsHitTestVisibleInChrome="True">
 
                                 <materialDesign:PopupBox.ToggleContent>
-                                    <TextBlock Text="NICKNAME"
+                                    <TextBlock Text="{Binding Username}"
                                                Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" />
 
                                 </materialDesign:PopupBox.ToggleContent>

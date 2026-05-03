@@ -28,6 +28,7 @@
 	<ItemGroup>
 		<None Remove="appsettings.json" />
 		<None Remove="Videos\Background_animation.mp4" />
+		<None Remove="Videos\Steam_advertisiment.mp4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,6 +37,9 @@
 		</Content>
 		<Content Include="Videos\Background_animation.mp4">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Videos\Steam_advertisiment.mp4">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
