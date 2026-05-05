@@ -24,6 +24,19 @@ namespace SteamProxyBackend.Data
             modelBuilder.Entity<Device>().ToTable("Devices")
                 .HasIndex(d => d.DeviceToken).IsUnique();
 
+            // ← PRIDANÉ:
+            modelBuilder.Entity<Device>()
+                .HasMany(d => d.DeviceAccounts)
+                .WithOne()
+                .HasForeignKey(da => da.DeviceToken)
+                .HasPrincipalKey(d => d.DeviceToken);
+
+            modelBuilder.Entity<Device>()
+                .HasMany(d => d.LoginHistories)
+                .WithOne()
+                .HasForeignKey(lh => lh.DeviceToken)
+                .HasPrincipalKey(d => d.DeviceToken);
+
             modelBuilder.Entity<DeviceAccount>().ToTable("DeviceAccounts")
                 .HasIndex(da => new { da.DeviceToken, da.UserId }).IsUnique();
 
