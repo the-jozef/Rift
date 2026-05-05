@@ -144,13 +144,14 @@
                         <Grid Grid.Column="0"
                               Margin="30,0,0,0">
 
-                            <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}"
+                            <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}"                                               
                                                      WindowChrome.IsHitTestVisibleInChrome="True">
 
                                 <materialDesign:PopupBox.ToggleContent>
+                                    
                                     <TextBlock Text="STORE"
                                                Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" />
-
+                                    
                                 </materialDesign:PopupBox.ToggleContent>
 
                                 <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
@@ -262,7 +263,9 @@
                                         <Border Style="{StaticResource Rift_MenuBar_Border_PopupBox_Account}">
 
                                             <StackPanel Orientation="Horizontal">
+                                                
                                                 <StackPanel>
+                                                    
                                                     <Image Stretch="UniformToFill"
                                                            RenderOptions.BitmapScalingMode="HighQuality"
                                                            Source="{Binding AvatarUrl}"

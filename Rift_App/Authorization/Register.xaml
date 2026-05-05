@@ -74,7 +74,8 @@
                             <TextBox Style="{StaticResource Rift_Register_TextBox_Layout_Email}" />
 
                             <TextBlock Text="{Binding ErrorMessage}"
-                                       Style="{StaticResource Rift_Register_TextBlock_Layout_ErrorMessage}"/>
+                                       Style="{StaticResource Rift_Register_TextBlock_Layout_ErrorMessage}"
+                                       Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                             <Button Style="{StaticResource Rift_Register_Button_Layout_SignUp}"
                                     Command="{Binding RegisterCommand}" />

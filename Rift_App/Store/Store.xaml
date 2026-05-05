@@ -940,7 +940,7 @@
                                 <MediaElement VerticalAlignment="Top"
                                               Width="Auto"
                                               Height="300"
-                                              Source="\Videos\Steam_advertisiment.mp4"
+                                              Source="Videos\Steam_advertisiment.mp4"
                                               LoadedBehavior="Play"
                                               UnloadedBehavior="Manual"
                                               Stretch="UniformToFill"

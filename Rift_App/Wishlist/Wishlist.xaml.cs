@@ -32,17 +32,10 @@ namespace Rift_App.Wishlist
         private async void Wishlist_Loaded(object sender, RoutedEventArgs e)
         {
             if (!SessionManager.IsLoggedIn)
-            {
-                ShowGuestMessage();
+            {             
                 return;
             }
             await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
-        }
-
-        private void ShowGuestMessage()
-        {
-           // if (GuestPanel != null) GuestPanel.Visibility = Visibility.Visible;
-           // if (GamesPanel != null) GamesPanel.Visibility = Visibility.Collapsed;
         }
 
         private void GameItem_Click(object sender, RoutedEventArgs e)

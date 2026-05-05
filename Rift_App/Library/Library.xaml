@@ -7,7 +7,7 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.Library"
              mc:Ignorable="d"
-             d:Height="1000"
+             d:Height="1500"
              d:Width="1200">
 
     <Grid>
@@ -25,100 +25,153 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Grid x:Name="GuestPanel"
-                      Visibility="Collapsed">
-                    <TextBlock Text="You are browsing as a guest. Sign in to see your games." />
-                </Grid>
-                
                 <Grid Grid.Row="1"
                       Grid.Column="0">
+
                     <ScrollViewer Background="#22272E"
                                   x:Name="MyScrollViewer"
                                   Width="Auto">
+                        <Grid>
 
-                        <StackPanel>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                            <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Top"
+                            <Grid Grid.Row="0">
+
+                                <Border BorderBrush="Transparent"
                                         HorizontalAlignment="Stretch"
-                                        Height="30">
-                                <StackPanel.Background>
-                                    <LinearGradientBrush EndPoint="1,0"
-                                                         StartPoint="0,0"
-                                                         Opacity="0.1">
-                                        <GradientStop Color="#6F88B0"
-                                                      Offset="0.361" />
-                                        <GradientStop Color="Transparent"
-                                                      Offset="0.95" />
-                                    </LinearGradientBrush>
-                                </StackPanel.Background>
+                                        VerticalAlignment="Top"
+                                        Padding="5">
 
-                                <materialIcons:MaterialIcon Kind="HorizontalLine"
-                                                            Foreground="#A7BDD1"
-                                                            Height="1.5"
-                                                            Width="20" />
+                                    <Border.Background>
+                                        <LinearGradientBrush EndPoint="1,0"
+                                                             StartPoint="0,0"
+                                                             Opacity="0.2">
+                                            <GradientStop Color="#6F88B0"
+                                                          Offset="0.361" />
+                                            <GradientStop Color="Transparent"
+                                                          Offset="0.95" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
 
-                                <TextBlock  Text="ALL"
-                                            FontSize="14"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                            Foreground="#A7BDD1" />
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="10,0,0,0">
 
-                                <TextBlock Text="(60/61)"
-                                           FontSize="13"
-                                           VerticalAlignment="Center"
-                                           FontWeight="SemiBold"
-                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                           Foreground="#525762"
-                                           Margin="5,0,0,0" />
-                            </StackPanel>
+                                        <materialIcons:MaterialIcon Kind="HorizontalLine"
+                                                                    Foreground="#A7BDD1"
+                                                                    Height="20"
+                                                                    Width="20" />
 
-                            <Grid>
+                                        <TextBlock  Text="ALL"
+                                                    FontSize="14"
+                                                    VerticalAlignment="Center"
+                                                    FontWeight="SemiBold"
+                                                    FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                    Foreground="#A7BDD1" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="60" />
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Row="0"
-                                            x:Name="GamesPanel">
-                                    <ItemsControl ItemsSource="{Binding Games}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
+                                <Grid Grid.Row="0"
+                                      Margin="0,8,0,0">
 
-                                                <Button Background="Transparent"
-                                                        BorderBrush="Transparent"
-                                                        Height="23">
-                                                    <StackPanel Orientation="Horizontal"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Center"
-                                                                Width="235"
-                                                                Height="22"
-                                                                Margin="0">
-                                                        <Image Height="20"
-                                                               Width="20"
-                                                               Margin="5,0,0,0"
-                                                               Source="{Binding IconPath}"
-                                                               Stretch="UniformToFill"
-                                                               VerticalAlignment="Bottom" />
-                                                        <TextBlock Text="{Binding Name}"
-                                                                   Foreground="#9197A5"
-                                                                   FontSize="15"
-                                                                   FontWeight="SemiBold"
-                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                                   Margin="6,0,0,0" />
+                                    <StackPanel x:Name="GamesPanel">
+
+                                        <ItemsControl ItemsSource="{Binding Games}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Vertical">
+
+                                                        <StackPanel Margin="0,2,0,0">
+
+                                                            <RadioButton GroupName="Games"
+                                                                         Height="25">
+
+                                                                <RadioButton.Style>
+                                                                    <Style TargetType="RadioButton">
+                                                                        <Setter Property="Background"
+                                                                                Value="Transparent" />
+                                                                        <Setter Property="Template">
+                                                                            <Setter.Value>
+                                                                                <ControlTemplate TargetType="RadioButton">
+                                                                                    <Border x:Name="Root"
+                                                                                            Background="Transparent">
+                                                                                        <Grid Width="253.2">
+
+                                                                                            <StackPanel Orientation="Horizontal"
+                                                                                                        Margin="30,0,0,0">
+
+                                                                                                <Image Height="20"
+                                                                                                       Width="20"
+                                                                                                       Source="{Binding IconPath}"
+                                                                                                       Stretch="UniformToFill" />
+
+                                                                                                <TextBlock x:Name="Text"
+                                                                                                           Text="{Binding Name}"
+                                                                                                           Foreground="#ACB1BF"
+                                                                                                           VerticalAlignment="Center"
+                                                                                                           FontSize="13"
+                                                                                                           FontWeight="SemiBold"
+                                                                                                           Margin="3,0,0,0" />
+                                                                                            </StackPanel>
+                                                                                        </Grid>
+                                                                                    </Border>
+                                                                                    <ControlTemplate.Triggers>
+                                                                                        <Trigger Property="IsMouseOver"
+                                                                                                 Value="True">
+                                                                                            <Setter TargetName="Root"
+                                                                                                    Property="Background">
+                                                                                                <Setter.Value>
+                                                                                                    <SolidColorBrush Color="#344159"
+                                                                                                                     Opacity="0.5" />
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+
+                                                                                            <Setter TargetName="Text"
+                                                                                                    Property="TextBlock.Foreground"
+                                                                                                    Value="#B7BCC9" />
+
+                                                                                            <Setter TargetName="Text"
+                                                                                                    Property="TextBlock.FontWeight"
+                                                                                                    Value="Bold" />
+                                                                                        </Trigger>
+                                                                                        <Trigger Property="IsChecked"
+                                                                                                 Value="True">
+                                                                                            <Setter TargetName="Root"
+                                                                                                    Property="Background"
+                                                                                                    Value="#344159" />
+
+                                                                                            <Setter TargetName="Text"
+                                                                                                    Property="TextBlock.Foreground"
+                                                                                                    Value="#26B7FF" />
+                                                                                        </Trigger>
+                                                                                    </ControlTemplate.Triggers>
+                                                                                </ControlTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </RadioButton.Style>
+                                                            </RadioButton>
+                                                        </StackPanel>
                                                     </StackPanel>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Grid>
                             </Grid>
-                        </StackPanel>
+                        </Grid>
                     </ScrollViewer>
                 </Grid>
-
-
 
                 <ScrollViewer Background="#22272E"
                               x:Name="MyScrollViewer2"
@@ -126,121 +179,117 @@
                               Grid.Row="1"
                               Grid.Column="1">
                     <Grid>
+
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="55" />
                         </Grid.RowDefinitions>
 
-                        <StackPanel VerticalAlignment="Top"
-                                    Grid.Row="0">
+                        <Grid Grid.Row="0">
 
                             <Image Source="/Image/Red.png"
                                    Stretch="UniformToFill"
                                    Height="310" />
-                        </StackPanel>
+                        </Grid>
 
-                        <Border BorderBrush="Green"
-                                BorderThickness="1"
-                                Height="1.5"
-                                Grid.Row="1">
-                        </Border>
+                        <Grid Grid.Row="1">
 
-                        <Grid Grid.Row="2">
-                            <Grid.Background>
-                                <LinearGradientBrush EndPoint="0,1"
-                                                     StartPoint="0,0"
-                                                     Opacity="0.7">
+                            <Border>
 
-                                    <GradientStop Color="#474A54"
-                                                  Offset="0" />
-                                    <GradientStop Color="#22262E"
-                                                  Offset="0.846" />
-                                </LinearGradientBrush>
-                            </Grid.Background>
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0,1"
+                                                         StartPoint="0,0"
+                                                         Opacity="0.7">
+                                        <GradientStop Color="#474A54"
+                                                      Offset="0" />
+                                        <GradientStop Color="#22262E"
+                                                      Offset="0.846" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="40" />
-                            </Grid.RowDefinitions>
+                                <Grid>
 
-                            <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                                    <Grid Grid.Row="0">
 
+                                        <Border BorderBrush="#A6A6A6"
+                                                BorderThickness="1">
+                                        </Border>
+                                    </Grid>
 
-                                <StackPanel VerticalAlignment="Top"
-                                            Height="Auto">
+                                    <Grid Grid.Row="1">
 
-                                    <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Left"
-                                                Width="Auto"
-                                                Height="Auto">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                        <Button BorderBrush="Transparent"
-                                                Width="165"
-                                                Height="50"
-                                                Margin="20,10,0,0">
+                                        <StackPanel VerticalAlignment="Top"
+                                                    Orientation="Horizontal"
+                                                    HorizontalAlignment="Left">
 
-                                            <Button.Background>
-                                                <LinearGradientBrush StartPoint="0,0"
-                                                                     EndPoint="1,0">
+                                            <Button BorderBrush="Transparent"
+                                                    Padding="0"
+                                                    Width="165"
+                                                    Height="50"
+                                                    Margin="20,10,0,0">
 
-                                                    <GradientStop Color="#49D136"
-                                                                  Offset="0.341" />
+                                                <Button.Background>
+                                                    <LinearGradientBrush StartPoint="0,0"
+                                                                         EndPoint="1,0">
 
-                                                    <GradientStop Color="#3CB031"
-                                                                  Offset="1" />
+                                                        <GradientStop Color="#49D136"
+                                                                      Offset="0.341" />
 
-                                                </LinearGradientBrush>
+                                                        <GradientStop Color="#3CB031"
+                                                                      Offset="1" />
 
-                                            </Button.Background>
+                                                    </LinearGradientBrush>
 
-                                            <StackPanel Orientation="Horizontal">
+                                                </Button.Background>
 
-                                                <materialIcons:MaterialIcon Kind="Play"
-                                                                            Margin="0,0,11,0"
-                                                                            Foreground="White"
-                                                                            Opacity="0.75"
-                                                                            Height="17"
-                                                                            Width="17" />
+                                                <StackPanel Orientation="Horizontal">
 
-                                                <TextBlock Text="PLAY"
-                                                           HorizontalAlignment="Center"
-                                                           Margin="0,0,2,0"
-                                                           Foreground="White"
-                                                           FontSize="22"
-                                                           FontWeight="Regular"
-                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                    <materialIcons:MaterialIcon Kind="Play"
+                                                                                Foreground="White"
+                                                                                Opacity="0.75"
+                                                                                Height="30"
+                                                                                Width="30" />
 
+                                                    <TextBlock Text="PLAY"
+                                                               HorizontalAlignment="Center"
+                                                               Margin="6,0,2,0"
+                                                               Foreground="White"
+                                                               FontSize="23"
+                                                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+
+                                                </StackPanel>
+                                            </Button>
+
+                                            <StackPanel Orientation="Vertical"
+                                                        Margin="25,17,0,0">
+
+                                                <TextBlock  Text="LAST PLAYED"
+                                                            Foreground="#B6BBBF"
+                                                            FontSize="14"
+                                                            FontFamily="Arial" />
+
+                                                <TextBlock  Text="Mar 21"
+                                                            Margin="2,3,0,0"
+                                                            FontSize="13.2"
+                                                            FontWeight="Medium"
+                                                            Foreground="#92969C"
+                                                            FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
                                             </StackPanel>
-                                        </Button>
 
-                                        <StackPanel Orientation="Vertical"
-                                                    Margin="25,17,0,0">
-
-                                            <TextBlock  Text="LAST PLAYED"
-                                                        Foreground="#B6BBBF"
-                                                        FontSize="14"
-                                                        FontFamily="Arial" />
-
-                                            <TextBlock  Text="Mar 21"
-                                                        Margin="2,3,0,0"
-                                                        FontSize="13.2"
-                                                        FontWeight="Medium"
-                                                        Foreground="#92969C"
-                                                        FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-                                        </StackPanel>
-
-                                        <StackPanel Orientation="Horizontal"
-                                                    Margin="35,17,0,0">
-
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="35,17,0,0">
 
                                                 <materialIcons:MaterialIcon Kind="ClockOutline"
                                                                             Width="25"
@@ -249,117 +298,100 @@
                                                                             Opacity="0.6"
                                                                             Foreground="#B6BBBF" />
 
+                                                <StackPanel Orientation="Vertical"
+                                                            Margin="10,0,0,0">
+
+                                                    <TextBlock Text="PLAY TIME"
+                                                               FontSize="14"
+                                                               FontFamily="Arial"
+                                                               Foreground="#B6BBBF" />
+
+                                                    <TextBlock Text="28.6 hours"
+                                                               Margin="2,3,0,0"
+                                                               FontSize="13.2"
+                                                               Foreground="#92969C"
+                                                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                </StackPanel>
                                             </StackPanel>
-                                            <StackPanel Orientation="Vertical"
-                                                        Margin="10,0,0,0">
 
-                                                <TextBlock Text="PLAY TIME"
-                                                           FontSize="14"
-                                                           FontFamily="Arial"
-                                                           Foreground="#B6BBBF" />
+                                            <StackPanel Margin="18,16,0,0"
+                                                        Orientation="Horizontal">
 
-                                                <TextBlock Text="28.6 hours"
-                                                           Margin="2,3,0,0"
-                                                           FontSize="13.2"
-                                                           FontWeight="Medium"
-                                                           Foreground="#92969C"
-                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-                                            </StackPanel>
-                                        </StackPanel>
+                                                <materialIcons:MaterialIcon Kind="MedalOutline"
+                                                                            Width="25"
+                                                                            Height="25"
+                                                                            Opacity="0.6"
+                                                                            Margin="0,4,0,0"
+                                                                            Foreground="#B6BBBF" />
 
-                                        <StackPanel Margin="18,7,0,0">
+                                                <StackPanel Orientation="Vertical"
+                                                            Margin="10,0,0,0">
 
-                                            <Button Background="Transparent"
-                                                    BorderBrush="Transparent"
-                                                    Height="55">
+                                                    <TextBlock Text="ACHIEVEMENTS"
+                                                               FontSize="14"
+                                                               FontFamily="Arial"
+                                                               Foreground="#B6BBBF" />
 
-                                                <StackPanel Orientation="Horizontal">
-                                                    <materialIcons:MaterialIcon Kind="MedalOutline"
-                                                                                Width="25"
-                                                                                Height="25"
-                                                                                Opacity="0.6"
-                                                                                Margin="0,4,0,0"
-                                                                                Foreground="#B6BBBF" />
+                                                    <StackPanel Orientation="Horizontal">
 
-                                                    <StackPanel Orientation="Vertical"
-                                                                Margin="10,0,0,0">
+                                                        <TextBlock Text="22/57"
+                                                                   Margin="1,2,0,0"
+                                                                   FontSize="13.2"
+                                                                   Foreground="#92969C"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
 
-                                                        <TextBlock Text="ACHIEVEMENTS"
-                                                                   FontSize="14"
-                                                                   FontFamily="Arial"
-                                                                   Foreground="#B6BBBF" />
+                                                        <ProgressBar HorizontalAlignment="Right"
+                                                                     Width="80"
+                                                                     Height="4.5"
+                                                                     Margin="6,4,0,0"
+                                                                     Foreground="#2D73FF"
+                                                                     Maximum="57"
+                                                                     Value="22">
 
-                                                        <StackPanel Orientation="Horizontal">
-
-                                                            <TextBlock Text="22/57"
-                                                                       Margin="1,2,0,0"
-                                                                       FontSize="13.2"
-                                                                       FontWeight="Medium"
-                                                                       Foreground="#92969C"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-
-                                                            <ProgressBar HorizontalAlignment="Right"
-                                                                         Width="80"
-                                                                         Height="4.5"
-                                                                         Margin="6,4,0,0"
-                                                                         Foreground="#2D73FF"
-                                                                         Maximum="57"
-                                                                         Value="22">
-                                                                <ProgressBar.Style>
-                                                                    <Style TargetType="ProgressBar">
-                                                                        <Setter Property="Template">
-                                                                            <Setter.Value>
-                                                                                <ControlTemplate TargetType="ProgressBar">
-                                                                                    <Border Background="Black"
-                                                                                            CornerRadius="2"
-                                                                                            ClipToBounds="True">
-                                                                                        <Grid x:Name="PART_Track">
-                                                                                            <Border x:Name="PART_Indicator"
-                                                                                                    Background="{TemplateBinding Foreground}"
-                                                                                                    CornerRadius="2"
-                                                                                                    HorizontalAlignment="Left" />
-                                                                                        </Grid>
-                                                                                    </Border>
-                                                                                </ControlTemplate>
-                                                                            </Setter.Value>
-                                                                        </Setter>
-                                                                    </Style>
-                                                                </ProgressBar.Style>
-                                                            </ProgressBar>
-                                                        </StackPanel>
+                                                            <ProgressBar.Style>
+                                                                <Style TargetType="ProgressBar">
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="ProgressBar">
+                                                                                <Border Background="Black"
+                                                                                        CornerRadius="2"
+                                                                                        ClipToBounds="True">
+                                                                                    <Grid x:Name="PART_Track">
+                                                                                        <Border x:Name="PART_Indicator"
+                                                                                                Background="{TemplateBinding Foreground}"
+                                                                                                CornerRadius="2"
+                                                                                                HorizontalAlignment="Left" />
+                                                                                    </Grid>
+                                                                                </Border>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </ProgressBar.Style>
+                                                        </ProgressBar>
                                                     </StackPanel>
                                                 </StackPanel>
-                                            </Button>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
 
-                                <Grid Grid.Column="1">
+                                        <Grid Grid.Column="1">
 
-                                    <StackPanel>
+                                            <StackPanel HorizontalAlignment="Right"
+                                                        Margin="0,17,10,0">
 
-                                        <StackPanel HorizontalAlignment="Right"
-                                                    Margin="0,17,10,0">
+                                                <Border CornerRadius="2">
 
-                                            <Border BorderBrush="Transparent"
-                                                    CornerRadius="2"
-                                                    Padding="1"
-                                                    VerticalAlignment="Bottom">
-
-                                                <Border.Background>
-                                                    <SolidColorBrush Color="#747A7C"
-                                                                     Opacity="0.3" />
-                                                </Border.Background>
-
-                                                <StackPanel>
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="#747A7C"
+                                                                         Opacity="0.3" />
+                                                    </Border.Background>
 
                                                     <Button Background="Transparent"
                                                             BorderBrush="Transparent"
-                                                            Width="Auto"
-                                                            Height="Auto"
                                                             Foreground="#B9BABD">
 
                                                         <StackPanel Orientation="Horizontal">
+
                                                             <materialIcons:MaterialIcon Kind="StorefrontOutline"
                                                                                         Margin="0,0,6,0"
                                                                                         Height="17"
@@ -371,467 +403,382 @@
                                                                        FontFamily="Arial" />
                                                         </StackPanel>
                                                     </Button>
-                                                </StackPanel>
-                                            </Border>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Grid>
-                            </Grid>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
 
-                            <Grid Grid.Row="2">
+                                    <Grid Grid.Row="2"
+                                          Margin="0,20,20,0">
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="40" />
-                                    <ColumnDefinition Width="415" />
-                                </Grid.ColumnDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="415" />
+                                        </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="22" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid Grid.Column="1">
-
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="80" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="60" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="60" />
-                                        </Grid.RowDefinitions>
-
-                                        <Grid Grid.Row="1">
+                                        <Grid Grid.Column="0"
+                                              Margin="20,0,0,0">
 
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
 
+                                            <Grid Grid.Row="0"
+                                                  Margin="0,80,0,0">
 
-                                            <StackPanel Grid.Row="0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
 
-                                                <DockPanel>
+                                                <Grid Grid.Row="0">
 
-                                                    <TextBlock Text="March 16"
-                                                               Foreground="#87898C"
-                                                               FontSize="17"
-                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+                                                    <DockPanel>
 
-                                                    <Border Grid.Column="1"
-                                                            Margin="5,-3,0,0"
-                                                            Height="0.5"
-                                                            CornerRadius="0.5"
-                                                            VerticalAlignment="Center">
-                                                        <Border.Background>
-                                                            <LinearGradientBrush EndPoint="0,0"
-                                                                                 StartPoint="1,0">
-                                                                <GradientStop Color="Transparent"
-                                                                              Offset="0.957" />
-                                                                <GradientStop Color="#87898C"
-                                                                              Offset="0" />
-                                                            </LinearGradientBrush>
-                                                        </Border.Background>
-                                                    </Border>
+                                                        <TextBlock Text="March 16"
+                                                                   Foreground="#87898C"
+                                                                   FontSize="17"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
 
-                                                </DockPanel>
-                                            </StackPanel>
-
-                                            <StackPanel HorizontalAlignment="Left"
-                                                        Orientation="Horizontal"
-                                                        Grid.Row="1"
-                                                        Margin="5,8,0,0">
-
-                                                <Border Height="26"
-                                                        Width="27"
-                                                        CornerRadius="2">
-                                                    <Border.Background>
-                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                    Stretch="UniformToFill" />
-                                                    </Border.Background>
-
-                                                </Border>
-
-                                                <StackPanel Orientation="Horizontal"
-                                                            Margin="10,4,0,0">
-
-                                                    <TextBlock Text="Guest_test_2"
-                                                               Margin="0,0,0,0"
-                                                               Foreground="#67c1f5"
-                                                               FontSize="16"
-                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                               FontWeight="Medium" />
-
-                                                    <TextBlock Text="achieved"
-                                                               Margin="4,2,0,0"
-                                                               Foreground="#87898C"
-                                                               FontSize="14"
-                                                               FontWeight="Medium"
-                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-                                                </StackPanel>
-                                            </StackPanel>
-
-                                            <Border Grid.Row="2"
-                                                    Background="#1F2429"
-                                                    Margin="20,15,0,0"
-                                                    Padding="15,10,0,10">
-
-                                                <StackPanel Orientation="Horizontal">
-
-                                                    <Border x:Name="GlowBorder"
-                                                            CornerRadius="2">
-                                                        <Border.Effect>
-                                                            <DropShadowEffect Color="Gold"
-                                                                              BlurRadius="80"
-                                                                              ShadowDepth="0"
-                                                                              Opacity="0.8" />
-                                                        </Border.Effect>
-
-                                                        <Border BorderThickness="0.2"
-                                                                CornerRadius="2"
-                                                                Width="43"
-                                                                Height="43">
-                                                            <Border.BorderBrush>
-                                                                <LinearGradientBrush StartPoint="0,0"
-                                                                                     EndPoint="1,1"
-                                                                                     x:Name="GradientBrush">
-                                                                    <GradientStop Color="Goldenrod"
-                                                                                  Offset="0.0" />
-                                                                    <GradientStop Color="Yellow"
-                                                                                  Offset="0.5" />
-                                                                    <GradientStop Color="DarkGoldenrod"
-                                                                                  Offset="1.0" />
-                                                                </LinearGradientBrush>
-                                                            </Border.BorderBrush>
+                                                        <Border Margin="5,-3,0,0"
+                                                                Height="0.5"
+                                                                CornerRadius="0.5"
+                                                                VerticalAlignment="Center">
 
                                                             <Border.Background>
-                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                <LinearGradientBrush EndPoint="0,0"
+                                                                                     StartPoint="1,0">
+                                                                    <GradientStop Color="Transparent"
+                                                                                  Offset="0.957" />
+                                                                    <GradientStop Color="#87898C"
+                                                                                  Offset="0" />
+                                                                </LinearGradientBrush>
+                                                            </Border.Background>
+                                                        </Border>
+                                                    </DockPanel>
+                                                </Grid>
+
+                                                <Grid Grid.Row="1"
+                                                      Margin="5,8,0,0">
+
+                                                    <StackPanel HorizontalAlignment="Left"
+                                                                Orientation="Horizontal">
+
+                                                        <Border Height="26"
+                                                                Width="27"
+                                                                CornerRadius="2">
+
+                                                            <Border.Background>
+                                                                <ImageBrush ImageSource="{Binding AvatarUrl}"
                                                                             Stretch="UniformToFill" />
                                                             </Border.Background>
                                                         </Border>
-                                                    </Border>
 
-                                                    <StackPanel Orientation="Vertical"
-                                                                Margin="10,0,0,0">
-                                                        <!-- Achievement unlocked Achievemnt name -->
-                                                        <TextBlock Text="Bloody Trail"
-                                                                   Foreground="White"
-                                                                   Margin="0,8,0,0"
-                                                                   FontSize="15"
+                                                        <Rectangle Fill="#6DCFF6"
+                                                                   Height="26"
+                                                                   VerticalAlignment="Top"
+                                                                   Width="1.5" />
+
+                                                        <TextBlock Text="{Binding Username}"
+                                                                   Margin="10,4,0,0"
+                                                                   Foreground="#67c1f5"
+                                                                   FontSize="16"
                                                                    FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
 
-                                                        <TextBlock Text="Complete Memory Sequence 8."
-                                                                   Margin="1,0,0,0"
-                                                                   Foreground="#B1B1B5"
-                                                                   FontSize="13"
+                                                        <TextBlock Text="achieved"
+                                                                   Margin="4,6,0,0"
+                                                                   Foreground="#87898C"
+                                                                   FontSize="14"
                                                                    FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
                                                     </StackPanel>
-                                                </StackPanel>
-                                            </Border>
+                                                </Grid>
+
+                                                <Grid Grid.Row="2"
+                                                      Margin="20,15,0,0">
+
+                                                    <Border Background="#1F2429"
+                                                            Padding="15,10,0,10">
+
+                                                        <StackPanel Orientation="Horizontal">
+
+                                                            <Border x:Name="GlowBorder"
+                                                                    CornerRadius="2">
+
+                                                                <Border.Effect>
+                                                                    <DropShadowEffect Color="Gold"
+                                                                                      BlurRadius="80"
+                                                                                      ShadowDepth="0"
+                                                                                      Opacity="0.8" />
+                                                                </Border.Effect>
+
+                                                                <Border CornerRadius="2"
+                                                                        Width="43"
+                                                                        Height="43">
+
+                                                                    <Border.Background>
+                                                                        <ImageBrush ImageSource="/Image/Red.png"
+                                                                                    Stretch="UniformToFill" />
+                                                                    </Border.Background>
+                                                                </Border>
+                                                            </Border>
+
+                                                            <StackPanel Orientation="Vertical"
+                                                                        Margin="10,0,0,0">
+
+                                                                <TextBlock Text="Bloody Trail"
+                                                                           Foreground="White"
+                                                                           Margin="0,8,0,0"
+                                                                           FontSize="15"
+                                                                           FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+
+                                                                <TextBlock Text="Complete Memory Sequence 8."
+                                                                           Margin="1,0,0,0"
+                                                                           Foreground="#B1B1B5"
+                                                                           FontSize="13"
+                                                                           FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1"
+                                                  Margin="0,60,0,0">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0">
+                                                    <DockPanel>
+
+                                                        <TextBlock Text="March 16"
+                                                                   Foreground="#87898C"
+                                                                   FontSize="17"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+
+                                                        <Border Margin="5,-3,0,0"
+                                                                Height="0.5"
+                                                                CornerRadius="0.5"
+                                                                VerticalAlignment="Center">
+
+                                                            <Border.Background>
+                                                                <LinearGradientBrush EndPoint="0,0"
+                                                                                     StartPoint="1,0">
+                                                                    <GradientStop Color="Transparent"
+                                                                                  Offset="0.957" />
+                                                                    <GradientStop Color="#87898C"
+                                                                                  Offset="0" />
+                                                                </LinearGradientBrush>
+                                                            </Border.Background>
+                                                        </Border>
+                                                    </DockPanel>
+                                                </Grid>
+
+                                                <Grid Grid.Row="1"
+                                                      Margin="5,8,0,0">
+
+                                                    <StackPanel HorizontalAlignment="Left"
+                                                                Orientation="Horizontal">
+
+                                                        <Border Height="26"
+                                                                Width="27"
+                                                                CornerRadius="2">
+
+                                                            <Border.Background>
+                                                                <ImageBrush ImageSource="{Binding AvatarUrl}"
+                                                                            Stretch="UniformToFill" />
+                                                            </Border.Background>
+                                                        </Border>
+
+                                                        <Rectangle Fill="#6DCFF6"
+                                                                   Height="26"
+                                                                   VerticalAlignment="Top"
+                                                                   Width="1.5" />
+
+                                                        <TextBlock Text="{Binding Username}"
+                                                                   Margin="10,4,0,0"
+                                                                   Foreground="#67c1f5"
+                                                                   FontSize="16"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+
+                                                        <TextBlock Text="achieved"
+                                                                   Margin="4,6,0,0"
+                                                                   Foreground="#87898C"
+                                                                   FontSize="14"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Grid Grid.Row="2"
+                                                      Margin="20,15,0,0">
+
+                                                    <Border Background="#1F2429"
+                                                            Padding="15,10,0,10">
+
+                                                        <StackPanel Orientation="Vertical">
+
+                                                            <StackPanel Orientation="Horizontal">
+
+                                                                <Border CornerRadius="2"
+                                                                        Width="43"
+                                                                        Height="43">
+
+                                                                    <Border.Effect>
+                                                                        <DropShadowEffect Color="Gold"
+                                                                                          BlurRadius="80"
+                                                                                          ShadowDepth="0"
+                                                                                          Opacity="0.8" />
+                                                                    </Border.Effect>
+
+                                                                    <Border.Background>
+                                                                        <ImageBrush ImageSource="/Image/Red.png"
+                                                                                    Stretch="UniformToFill" />
+                                                                    </Border.Background>
+                                                                </Border>
+
+                                                                <StackPanel Orientation="Vertical"
+                                                                            Margin="10,0,0,0">
+
+                                                                    <TextBlock Text="Bloody Trail"
+                                                                               Foreground="White"
+                                                                               Margin="0,8,0,0"
+                                                                               FontSize="15"
+                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+
+                                                                    <TextBlock Text="Complete Memory Sequence 8."
+                                                                               Margin="1,0,0,0"
+                                                                               Foreground="#B1B1B5"
+                                                                               FontSize="13"
+                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        Margin="0,10,0,0">
+
+                                                                <Border CornerRadius="2"
+                                                                        Width="43"
+                                                                        Height="43">
+
+                                                                    <Border.Effect>
+                                                                        <DropShadowEffect Color="Gold"
+                                                                                          BlurRadius="80"
+                                                                                          ShadowDepth="0"
+                                                                                          Opacity="0.8" />
+                                                                    </Border.Effect>
+
+                                                                    <Border.Background>
+                                                                        <ImageBrush ImageSource="/Image/Red.png"
+                                                                                    Stretch="UniformToFill" />
+                                                                    </Border.Background>
+                                                                </Border>
+
+                                                                <StackPanel Orientation="Vertical"
+                                                                            Margin="10,0,0,0">
+
+                                                                    <TextBlock Text="Bloody Trail"
+                                                                               Foreground="White"
+                                                                               Margin="0,8,0,0"
+                                                                               FontSize="15"
+                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+
+                                                                    <TextBlock Text="Complete Memory Sequence 8."
+                                                                               Margin="1,0,0,0"
+                                                                               Foreground="#B1B1B5"
+                                                                               FontSize="13"
+                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        Margin="0,10,0,0">
+
+                                                                <Border CornerRadius="2"
+                                                                        Width="43"
+                                                                        Height="43">
+
+                                                                    <Border.Effect>
+                                                                        <DropShadowEffect Color="Gold"
+                                                                                          BlurRadius="80"
+                                                                                          ShadowDepth="0"
+                                                                                          Opacity="0.8" />
+                                                                    </Border.Effect>
+
+                                                                    <Border.Background>
+                                                                        <ImageBrush ImageSource="/Image/Red.png"
+                                                                                    Stretch="UniformToFill" />
+                                                                    </Border.Background>
+                                                                </Border>
+
+                                                                <StackPanel Orientation="Vertical"
+                                                                            Margin="10,0,0,0">
+
+                                                                    <TextBlock Text="Bloody Trail"
+                                                                               Foreground="White"
+                                                                               Margin="0,8,0,0"
+                                                                               FontSize="15"
+                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+
+                                                                    <TextBlock Text="Complete Memory Sequence 8."
+                                                                               Margin="1,0,0,0"
+                                                                               Foreground="#B1B1B5"
+                                                                               FontSize="13"
+                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
 
-                                        <Grid Grid.Row="3">
+                                        <Grid Grid.Column="2"
+                                              Margin="0,30,0,0">
 
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-
-
-                                            <StackPanel Grid.Row="0">
-
-                                                <DockPanel>
-
-                                                    <TextBlock Text="March 16"
-                                                               Foreground="#87898C"
-                                                               FontSize="17"
-                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                    <Border Grid.Column="1"
-                                                            Margin="5,-3,0,0"
-                                                            Height="0.5"
-                                                            CornerRadius="0.5"
-                                                            VerticalAlignment="Center">
-                                                        <Border.Background>
-                                                            <LinearGradientBrush EndPoint="0,0"
-                                                                                 StartPoint="1,0">
-                                                                <GradientStop Color="Transparent"
-                                                                              Offset="0.957" />
-                                                                <GradientStop Color="#87898C"
-                                                                              Offset="0" />
-                                                            </LinearGradientBrush>
-                                                        </Border.Background>
-                                                    </Border>
-                                                </DockPanel>
-                                            </StackPanel>
-
-                                            <StackPanel HorizontalAlignment="Left"
-                                                        Orientation="Horizontal"
-                                                        Grid.Row="1"
-                                                        Margin="5,8,0,0">
-
-                                                <Border Height="26"
-                                                        Width="27"
-                                                        CornerRadius="2">
-                                                    <Border.Background>
-                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                    Stretch="UniformToFill" />
-                                                    </Border.Background>
-
-                                                </Border>
-
-                                                <StackPanel Orientation="Horizontal"
-                                                            Margin="10,4,0,0">
-
-                                                    <TextBlock Text="Guest_test_2"
-                                                               Margin="0,0,0,0"
-                                                               Foreground="#67c1f5"
-                                                               FontSize="16"
-                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                               FontWeight="Medium" />
-
-                                                    <TextBlock Text="achieved"
-                                                               Margin="4,2,0,0"
-                                                               Foreground="#87898C"
-                                                               FontSize="14"
-                                                               FontWeight="Medium"
-                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-                                                </StackPanel>
-                                            </StackPanel>
-
-                                            <Border Grid.Row="2"
-                                                    Background="#1F2429"
-                                                    Margin="20,15,0,0"
-                                                    Padding="15,10,0,10">
-
-                                                <StackPanel Orientation="Vertical">
-
-                                                    <StackPanel Orientation="Horizontal">
-
-                                                        <Border CornerRadius="2">
-                                                            <Border.Effect>
-                                                                <DropShadowEffect Color="Gold"
-                                                                                  BlurRadius="80"
-                                                                                  ShadowDepth="0"
-                                                                                  Opacity="0.8" />
-                                                            </Border.Effect>
-
-                                                            <Border BorderThickness="0.2"
-                                                                    CornerRadius="2"
-                                                                    Width="43"
-                                                                    Height="43">
-                                                                <Border.BorderBrush>
-                                                                    <LinearGradientBrush StartPoint="0,0"
-                                                                                         EndPoint="1,1">
-                                                                        <GradientStop Color="Goldenrod"
-                                                                                      Offset="0.0" />
-                                                                        <GradientStop Color="Yellow"
-                                                                                      Offset="0.5" />
-                                                                        <GradientStop Color="DarkGoldenrod"
-                                                                                      Offset="1.0" />
-                                                                    </LinearGradientBrush>
-                                                                </Border.BorderBrush>
-
-                                                                <Border.Background>
-                                                                    <ImageBrush ImageSource="/Image/Red.png"
-                                                                                Stretch="UniformToFill" />
-                                                                </Border.Background>
-                                                            </Border>
-                                                        </Border>
-
-                                                        <StackPanel Orientation="Vertical"
-                                                                    Margin="10,0,0,0">
-                                                            <!-- Achievement unlocked Achievemnt name -->
-                                                            <TextBlock Text="Bloody Trail"
-                                                                       Foreground="White"
-                                                                       Margin="0,8,0,0"
-                                                                       FontSize="15"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                            <TextBlock Text="Complete Memory Sequence 8."
-                                                                       Margin="1,0,0,0"
-                                                                       Foreground="#B1B1B5"
-                                                                       FontSize="13"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                        </StackPanel>
-                                                    </StackPanel>
-
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="0,10,0,0">
-
-                                                        <Border CornerRadius="2">
-                                                            <Border.Effect>
-                                                                <DropShadowEffect Color="Gold"
-                                                                                  BlurRadius="80"
-                                                                                  ShadowDepth="0"
-                                                                                  Opacity="0.8" />
-                                                            </Border.Effect>
-
-                                                            <Border BorderThickness="0.2"
-                                                                    CornerRadius="2"
-                                                                    Width="43"
-                                                                    Height="43">
-                                                                <Border.BorderBrush>
-                                                                    <LinearGradientBrush StartPoint="0,0"
-                                                                                         EndPoint="1,1">
-                                                                        <GradientStop Color="Goldenrod"
-                                                                                      Offset="0.0" />
-                                                                        <GradientStop Color="Yellow"
-                                                                                      Offset="0.5" />
-                                                                        <GradientStop Color="DarkGoldenrod"
-                                                                                      Offset="1.0" />
-                                                                    </LinearGradientBrush>
-                                                                </Border.BorderBrush>
-
-                                                                <Border.Background>
-                                                                    <ImageBrush ImageSource="/Image/Red.png"
-                                                                                Stretch="UniformToFill" />
-                                                                </Border.Background>
-                                                            </Border>
-                                                        </Border>
-
-                                                        <StackPanel Orientation="Vertical"
-                                                                    Margin="10,0,0,0">
-                                                            <!-- Achievement unlocked Achievemnt name -->
-                                                            <TextBlock Text="Bloody Trail"
-                                                                       Foreground="White"
-                                                                       Margin="0,8,0,0"
-                                                                       FontSize="15"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                            <TextBlock Text="Complete Memory Sequence 8."
-                                                                       Margin="1,0,0,0"
-                                                                       Foreground="#B1B1B5"
-                                                                       FontSize="13"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                        </StackPanel>
-                                                    </StackPanel>
-
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="0,10,0,0">
-
-                                                        <Border CornerRadius="2">
-                                                            <Border.Effect>
-                                                                <DropShadowEffect Color="Gold"
-                                                                                  BlurRadius="80"
-                                                                                  ShadowDepth="0"
-                                                                                  Opacity="0.8" />
-                                                            </Border.Effect>
-
-                                                            <Border BorderThickness="0.2"
-                                                                    CornerRadius="2"
-                                                                    Width="43"
-                                                                    Height="43">
-                                                                <Border.BorderBrush>
-                                                                    <LinearGradientBrush StartPoint="0,0"
-                                                                                         EndPoint="1,1">
-                                                                        <GradientStop Color="Goldenrod"
-                                                                                      Offset="0.0" />
-                                                                        <GradientStop Color="Yellow"
-                                                                                      Offset="0.5" />
-                                                                        <GradientStop Color="DarkGoldenrod"
-                                                                                      Offset="1.0" />
-                                                                    </LinearGradientBrush>
-                                                                </Border.BorderBrush>
-
-                                                                <Border.Background>
-                                                                    <ImageBrush ImageSource="/Image/Red.png"
-                                                                                Stretch="UniformToFill" />
-                                                                </Border.Background>
-                                                            </Border>
-                                                        </Border>
-
-                                                        <StackPanel Orientation="Vertical"
-                                                                    Margin="10,0,0,0">
-                                                            <!-- Achievement unlocked Achievemnt name -->
-                                                            <TextBlock Text="Bloody Trail"
-                                                                       Foreground="White"
-                                                                       Margin="0,8,0,0"
-                                                                       FontSize="15"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                            <TextBlock Text="Complete Memory Sequence 8."
-                                                                       Margin="1,0,0,0"
-                                                                       Foreground="#B1B1B5"
-                                                                       FontSize="13"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
-                                                        </StackPanel>
-                                                    </StackPanel>
-                                                </StackPanel>
-                                            </Border>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid Grid.Column="2">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="20" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid Grid.Column="0">
-
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="30" />
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="25" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-
-                                        <Grid Grid.Row="1">
-
-                                            <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
 
-                                            <StackPanel Grid.Row="0">
+                                            <Grid Grid.Row="0">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Left"
-                                                            Margin="5,0,0,3">
-
-                                                    <TextBlock Text="ACHIEVEMENTS"
-                                                               Foreground="#99A1A8"
-                                                               FontFamily="Bold"
-                                                               FontWeight="Medium"
-                                                               FontSize="16" />
-
-                                                </StackPanel>
-                                            </StackPanel>
+                                                <TextBlock Text="ACHIEVEMENTS"
+                                                           Foreground="#AFB8BD"
+                                                           FontFamily="Bold"
+                                                           HorizontalAlignment="Left"
+                                                           Margin="5,0,0,5"
+                                                           FontWeight="Medium"
+                                                           FontSize="17" />
+                                            </Grid>
 
                                             <Grid Grid.Row="1">
 
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
 
                                                 <Grid Grid.Row="0">
 
-                                                    <Border Padding="5"
-                                                            Height="60">
+                                                    <Border Padding="5">
+
                                                         <Border.Background>
                                                             <LinearGradientBrush EndPoint="0,0"
                                                                                  StartPoint="1,0">
-                                                                <GradientStop Color="#2A2F36" />
+                                                                <GradientStop Color="#2A2F36"
+                                                                              Offset="0.537" />
                                                                 <GradientStop Color="#363A42"
                                                                               Offset="1" />
                                                             </LinearGradientBrush>
                                                         </Border.Background>
 
-                                                        <StackPanel>
+                                                        <StackPanel Orientation="Vertical">
 
                                                             <StackPanel Orientation="Horizontal"
                                                                         Margin="8,7,0,0">
@@ -852,10 +799,11 @@
                                                             <DockPanel>
 
                                                                 <ProgressBar Height="8"
-                                                                             Margin="8,7,10,0"
+                                                                             Margin="8,7,10,5"
                                                                              Foreground="#2D73FF"
                                                                              Maximum="57"
                                                                              Value="22">
+
                                                                     <ProgressBar.Style>
                                                                         <Style TargetType="ProgressBar">
                                                                             <Setter Property="Template">
@@ -895,22 +843,22 @@
                                                             </LinearGradientBrush>
                                                         </Border.Background>
 
-                                                        <Grid>
+                                                        <Grid Margin="12,12,0,0">
 
                                                             <Grid.RowDefinitions>
-                                                                <RowDefinition Height="*" />
-                                                                <RowDefinition Height="30" />
-                                                                <RowDefinition Height="*" />
-                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="Auto" />
                                                             </Grid.RowDefinitions>
 
                                                             <Grid Grid.Row="0">
 
-                                                                <StackPanel Margin="12,12,0,0">
+                                                                <StackPanel Orientation="Vertical">
 
                                                                     <StackPanel Orientation="Horizontal">
 
-                                                                        <Border CornerRadius="2">
+                                                                        <Border CornerRadius="2"
+                                                                                Width="48"
+                                                                                Height="48">
 
                                                                             <Border.Effect>
                                                                                 <DropShadowEffect Color="Gold"
@@ -919,27 +867,10 @@
                                                                                                   Opacity="0.8" />
                                                                             </Border.Effect>
 
-                                                                            <Border BorderThickness="0.2"
-                                                                                    CornerRadius="2"
-                                                                                    Width="48"
-                                                                                    Height="48">
-                                                                                <Border.BorderBrush>
-                                                                                    <LinearGradientBrush StartPoint="0,0"
-                                                                                                         EndPoint="1,1">
-                                                                                        <GradientStop Color="Goldenrod"
-                                                                                                      Offset="0.0" />
-                                                                                        <GradientStop Color="Yellow"
-                                                                                                      Offset="0.5" />
-                                                                                        <GradientStop Color="DarkGoldenrod"
-                                                                                                      Offset="1.0" />
-                                                                                    </LinearGradientBrush>
-                                                                                </Border.BorderBrush>
-
-                                                                                <Border.Background>
-                                                                                    <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                Stretch="UniformToFill" />
-                                                                                </Border.Background>
-                                                                            </Border>
+                                                                            <Border.Background>
+                                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                                            Stretch="UniformToFill" />
+                                                                            </Border.Background>
                                                                         </Border>
 
                                                                         <StackPanel Orientation="Vertical"
@@ -956,202 +887,124 @@
                                                                                        Foreground="#B1B1B5"
                                                                                        FontSize="13"
                                                                                        FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans" />
-
                                                                         </StackPanel>
                                                                     </StackPanel>
 
-                                                                    <StackPanel Orientation="Vertical">
+                                                                    <StackPanel Orientation="Horizontal"
+                                                                                Margin="0,8,0,0">
 
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                                    Margin="0,8,0,0">
+                                                                        <Border CornerRadius="2"
+                                                                                Width="48"
+                                                                                Height="48">
 
-                                                                            <Border CornerRadius="2">
+                                                                            <Border.Effect>
+                                                                                <DropShadowEffect Color="Gold"
+                                                                                                  BlurRadius="80"
+                                                                                                  ShadowDepth="0"
+                                                                                                  Opacity="0.8" />
+                                                                            </Border.Effect>
 
-                                                                                <Border.Effect>
-                                                                                    <DropShadowEffect Color="Gold"
-                                                                                                      BlurRadius="80"
-                                                                                                      ShadowDepth="0"
-                                                                                                      Opacity="0.8" />
-                                                                                </Border.Effect>
+                                                                            <Border.Background>
+                                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                                            Stretch="UniformToFill" />
+                                                                            </Border.Background>
+                                                                        </Border>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
-                                                                                    <Border.BorderBrush>
-                                                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                                                             EndPoint="1,1">
-                                                                                            <GradientStop Color="Goldenrod"
-                                                                                                          Offset="0.0" />
-                                                                                            <GradientStop Color="Yellow"
-                                                                                                          Offset="0.5" />
-                                                                                            <GradientStop Color="DarkGoldenrod"
-                                                                                                          Offset="1.0" />
-                                                                                        </LinearGradientBrush>
-                                                                                    </Border.BorderBrush>
+                                                                        <Border CornerRadius="2"
+                                                                                Width="48"
+                                                                                Height="48"
+                                                                                Margin="8,0,0,0">
 
-                                                                                    <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
-                                                                                    </Border.Background>
-                                                                                </Border>
-                                                                            </Border>
+                                                                            <Border.Effect>
+                                                                                <DropShadowEffect Color="Gold"
+                                                                                                  BlurRadius="80"
+                                                                                                  ShadowDepth="0"
+                                                                                                  Opacity="0.8" />
+                                                                            </Border.Effect>
 
-                                                                            <Border CornerRadius="2"
-                                                                                    Margin="8,0,0,0">
+                                                                            <Border.Background>
+                                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                                            Stretch="UniformToFill" />
+                                                                            </Border.Background>
+                                                                        </Border>
 
-                                                                                <Border.Effect>
-                                                                                    <DropShadowEffect Color="Gold"
-                                                                                                      BlurRadius="80"
-                                                                                                      ShadowDepth="0"
-                                                                                                      Opacity="0.8" />
-                                                                                </Border.Effect>
+                                                                        <Border CornerRadius="2"
+                                                                                Width="48"
+                                                                                Height="48"
+                                                                                Margin="8,0,0,0">
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
-                                                                                    <Border.BorderBrush>
-                                                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                                                             EndPoint="1,1">
-                                                                                            <GradientStop Color="Goldenrod"
-                                                                                                          Offset="0.0" />
-                                                                                            <GradientStop Color="Yellow"
-                                                                                                          Offset="0.5" />
-                                                                                            <GradientStop Color="DarkGoldenrod"
-                                                                                                          Offset="1.0" />
-                                                                                        </LinearGradientBrush>
-                                                                                    </Border.BorderBrush>
+                                                                            <Border.Effect>
+                                                                                <DropShadowEffect Color="Gold"
+                                                                                                  BlurRadius="80"
+                                                                                                  ShadowDepth="0"
+                                                                                                  Opacity="0.8" />
+                                                                            </Border.Effect>
 
-                                                                                    <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
-                                                                                    </Border.Background>
-                                                                                </Border>
-                                                                            </Border>
+                                                                            <Border.Background>
+                                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                                            Stretch="UniformToFill" />
+                                                                            </Border.Background>
+                                                                        </Border>
 
-                                                                            <Border CornerRadius="2"
-                                                                                    Margin="8,0,0,0">
+                                                                        <Border CornerRadius="2"
+                                                                                Width="48"
+                                                                                Height="48"
+                                                                                Margin="8,0,0,0">
 
-                                                                                <Border.Effect>
-                                                                                    <DropShadowEffect Color="Gold"
-                                                                                                      BlurRadius="80"
-                                                                                                      ShadowDepth="0"
-                                                                                                      Opacity="0.8" />
-                                                                                </Border.Effect>
+                                                                            <Border.Effect>
+                                                                                <DropShadowEffect Color="Gold"
+                                                                                                  BlurRadius="80"
+                                                                                                  ShadowDepth="0"
+                                                                                                  Opacity="0.8" />
+                                                                            </Border.Effect>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
-                                                                                    <Border.BorderBrush>
-                                                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                                                             EndPoint="1,1">
-                                                                                            <GradientStop Color="Goldenrod"
-                                                                                                          Offset="0.0" />
-                                                                                            <GradientStop Color="Yellow"
-                                                                                                          Offset="0.5" />
-                                                                                            <GradientStop Color="DarkGoldenrod"
-                                                                                                          Offset="1.0" />
-                                                                                        </LinearGradientBrush>
-                                                                                    </Border.BorderBrush>
+                                                                            <Border.Background>
+                                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                                            Stretch="UniformToFill" />
+                                                                            </Border.Background>
+                                                                        </Border>
 
-                                                                                    <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
-                                                                                    </Border.Background>
-                                                                                </Border>
-                                                                            </Border>
+                                                                        <Border CornerRadius="2"
+                                                                                Width="48"
+                                                                                Height="48"
+                                                                                Margin="8,0,0,0">
 
-                                                                            <Border CornerRadius="2"
-                                                                                    Margin="8,0,0,0">
+                                                                            <Border.Effect>
+                                                                                <DropShadowEffect Color="Gold"
+                                                                                                  BlurRadius="80"
+                                                                                                  ShadowDepth="0"
+                                                                                                  Opacity="0.8" />
+                                                                            </Border.Effect>
 
-                                                                                <Border.Effect>
-                                                                                    <DropShadowEffect Color="Gold"
-                                                                                                      BlurRadius="80"
-                                                                                                      ShadowDepth="0"
-                                                                                                      Opacity="0.8" />
-                                                                                </Border.Effect>
+                                                                            <Border.Background>
+                                                                                <ImageBrush ImageSource="/Image/Red.png"
+                                                                                            Stretch="UniformToFill" />
+                                                                            </Border.Background>
+                                                                        </Border>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
-                                                                                    <Border.BorderBrush>
-                                                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                                                             EndPoint="1,1">
-                                                                                            <GradientStop Color="Goldenrod"
-                                                                                                          Offset="0.0" />
-                                                                                            <GradientStop Color="Yellow"
-                                                                                                          Offset="0.5" />
-                                                                                            <GradientStop Color="DarkGoldenrod"
-                                                                                                          Offset="1.0" />
-                                                                                        </LinearGradientBrush>
-                                                                                    </Border.BorderBrush>
+                                                                        <Button Background="#282E33"
+                                                                                BorderBrush="Transparent"
+                                                                                Width="52"
+                                                                                Height="48"
+                                                                                Padding="0"
+                                                                                Margin="8,0,0,0"
+                                                                                Foreground="#D4D4D4">
 
-                                                                                    <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
-                                                                                    </Border.Background>
-                                                                                </Border>
-                                                                            </Border>
+                                                                            <StackPanel Orientation="Horizontal"
+                                                                                        Margin="0,4,0,0">
 
-                                                                            <Border CornerRadius="2"
-                                                                                    Margin="8,0,0,0">
+                                                                                <TextBlock Text="+"
+                                                                                           FontFamily="Arial"
+                                                                                           FontWeight="SemiBold"
+                                                                                           FontSize="16"
+                                                                                           Margin="0,2,1,0" />
 
-                                                                                <Border.Effect>
-                                                                                    <DropShadowEffect Color="Gold"
-                                                                                                      BlurRadius="80"
-                                                                                                      ShadowDepth="0"
-                                                                                                      Opacity="0.8" />
-                                                                                </Border.Effect>
-
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
-                                                                                    <Border.BorderBrush>
-                                                                                        <LinearGradientBrush StartPoint="0,0"
-                                                                                                             EndPoint="1,1">
-                                                                                            <GradientStop Color="Goldenrod"
-                                                                                                          Offset="0.0" />
-                                                                                            <GradientStop Color="Yellow"
-                                                                                                          Offset="0.5" />
-                                                                                            <GradientStop Color="DarkGoldenrod"
-                                                                                                          Offset="1.0" />
-                                                                                        </LinearGradientBrush>
-                                                                                    </Border.BorderBrush>
-
-                                                                                    <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
-                                                                                    </Border.Background>
-                                                                                </Border>
-                                                                            </Border>
-
-                                                                            <Button Background="#282E33"
-                                                                                    BorderBrush="Transparent"
-                                                                                    Width="52"
-                                                                                    Height="48"
-                                                                                    Padding="0"
-                                                                                    Margin="8,0,0,0"
-                                                                                    Foreground="#D4D4D4">
-                                                                                <StackPanel Orientation="Horizontal"
-                                                                                            Margin="0,4,0,0">
-
-                                                                                    <TextBlock Text="+"
-                                                                                               FontFamily="Arial"
-                                                                                               FontWeight="SemiBold"
-                                                                                               FontSize="16"
-                                                                                               Margin="0,2,1,0" />
-
-                                                                                    <TextBlock Text="16"
-                                                                                               FontFamily="Arial"
-                                                                                               FontWeight="SemiBold"
-                                                                                               FontSize="17" />
-                                                                                </StackPanel>
-                                                                            </Button>
-                                                                        </StackPanel>
+                                                                                <TextBlock Text="16"
+                                                                                           FontFamily="Arial"
+                                                                                           FontWeight="SemiBold"
+                                                                                           FontSize="17" />
+                                                                            </StackPanel>
+                                                                        </Button>
                                                                     </StackPanel>
 
                                                                     <DockPanel Margin="0,15,0,0"
@@ -1165,20 +1018,19 @@
                                                                         </Border>
                                                                     </DockPanel>
 
-                                                                    <StackPanel Margin="2,4,0,0">
+                                                                    <StackPanel Margin="0,4,0,0">
 
-                                                                        <StackPanel>
-
-                                                                            <TextBlock Text="Locked Achievements"
-                                                                                       Foreground="#C0C1C4"
-                                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                                       FontSize="13.4" />
-                                                                        </StackPanel>
+                                                                        <TextBlock Text="Locked Achievements"
+                                                                                   Foreground="#C0C1C4"
+                                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                                                   FontSize="13.4" />
 
                                                                         <StackPanel Orientation="Horizontal"
                                                                                     Margin="0,5,0,0">
 
-                                                                            <Border CornerRadius="2">
+                                                                            <Border CornerRadius="2"
+                                                                                    Width="48"
+                                                                                    Height="48">
 
                                                                                 <Border.Effect>
                                                                                     <DropShadowEffect Color="Gold"
@@ -1187,34 +1039,29 @@
                                                                                                       Opacity="0.8" />
                                                                                 </Border.Effect>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
+                                                                                <Border.Background>
+                                                                                    <ImageBrush ImageSource="/Image/Red.png"
+                                                                                                Stretch="UniformToFill" />
+                                                                                </Border.Background>
+
+                                                                                <Border CornerRadius="2"
+                                                                                        Margin="-0.2">
 
                                                                                     <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
+                                                                                        <SolidColorBrush Color="#292727"
+                                                                                                         Opacity="0.9" />
                                                                                     </Border.Background>
 
-
-                                                                                    <Border CornerRadius="2"
-                                                                                            Margin="-0.2">
-
-                                                                                        <Border.Background>
-                                                                                            <SolidColorBrush Color="#292727"
-                                                                                                             Opacity="0.9" />
-                                                                                        </Border.Background>
-
-                                                                                        <materialIcons:MaterialIcon Kind="Lock"
-                                                                                                                    Foreground="#C9C7C7"
-                                                                                                                    Height="20"
-                                                                                                                    Width="20" />
-                                                                                    </Border>
+                                                                                    <materialIcons:MaterialIcon Kind="Lock"
+                                                                                                                Foreground="#C9C7C7"
+                                                                                                                Height="20"
+                                                                                                                Width="20" />
                                                                                 </Border>
                                                                             </Border>
 
                                                                             <Border CornerRadius="2"
+                                                                                    Width="48"
+                                                                                    Height="48"
                                                                                     Margin="8,0,0,0">
 
                                                                                 <Border.Effect>
@@ -1224,34 +1071,29 @@
                                                                                                       Opacity="0.8" />
                                                                                 </Border.Effect>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
+                                                                                <Border.Background>
+                                                                                    <ImageBrush ImageSource="/Image/Red.png"
+                                                                                                Stretch="UniformToFill" />
+                                                                                </Border.Background>
+
+                                                                                <Border CornerRadius="2"
+                                                                                        Margin="-0.2">
 
                                                                                     <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
+                                                                                        <SolidColorBrush Color="#292727"
+                                                                                                         Opacity="0.9" />
                                                                                     </Border.Background>
 
-
-                                                                                    <Border CornerRadius="2"
-                                                                                            Margin="-0.2">
-
-                                                                                        <Border.Background>
-                                                                                            <SolidColorBrush Color="#292727"
-                                                                                                             Opacity="0.9" />
-                                                                                        </Border.Background>
-
-                                                                                        <materialIcons:MaterialIcon Kind="Lock"
-                                                                                                                    Foreground="#C9C7C7"
-                                                                                                                    Height="20"
-                                                                                                                    Width="20" />
-                                                                                    </Border>
+                                                                                    <materialIcons:MaterialIcon Kind="Lock"
+                                                                                                                Foreground="#C9C7C7"
+                                                                                                                Height="20"
+                                                                                                                Width="20" />
                                                                                 </Border>
                                                                             </Border>
 
                                                                             <Border CornerRadius="2"
+                                                                                    Width="48"
+                                                                                    Height="48"
                                                                                     Margin="8,0,0,0">
 
                                                                                 <Border.Effect>
@@ -1261,34 +1103,29 @@
                                                                                                       Opacity="0.8" />
                                                                                 </Border.Effect>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
+                                                                                <Border.Background>
+                                                                                    <ImageBrush ImageSource="/Image/Red.png"
+                                                                                                Stretch="UniformToFill" />
+                                                                                </Border.Background>
+
+                                                                                <Border CornerRadius="2"
+                                                                                        Margin="-0.2">
 
                                                                                     <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
+                                                                                        <SolidColorBrush Color="#292727"
+                                                                                                         Opacity="0.9" />
                                                                                     </Border.Background>
 
-
-                                                                                    <Border CornerRadius="2"
-                                                                                            Margin="-0.2">
-
-                                                                                        <Border.Background>
-                                                                                            <SolidColorBrush Color="#292727"
-                                                                                                             Opacity="0.9" />
-                                                                                        </Border.Background>
-
-                                                                                        <materialIcons:MaterialIcon Kind="Lock"
-                                                                                                                    Foreground="#C9C7C7"
-                                                                                                                    Height="20"
-                                                                                                                    Width="20" />
-                                                                                    </Border>
+                                                                                    <materialIcons:MaterialIcon Kind="Lock"
+                                                                                                                Foreground="#C9C7C7"
+                                                                                                                Height="20"
+                                                                                                                Width="20" />
                                                                                 </Border>
                                                                             </Border>
 
                                                                             <Border CornerRadius="2"
+                                                                                    Width="48"
+                                                                                    Height="48"
                                                                                     Margin="8,0,0,0">
 
                                                                                 <Border.Effect>
@@ -1298,34 +1135,29 @@
                                                                                                       Opacity="0.8" />
                                                                                 </Border.Effect>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
+                                                                                <Border.Background>
+                                                                                    <ImageBrush ImageSource="/Image/Red.png"
+                                                                                                Stretch="UniformToFill" />
+                                                                                </Border.Background>
+
+                                                                                <Border CornerRadius="2"
+                                                                                        Margin="-0.2">
 
                                                                                     <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
+                                                                                        <SolidColorBrush Color="#292727"
+                                                                                                         Opacity="0.9" />
                                                                                     </Border.Background>
 
-
-                                                                                    <Border CornerRadius="2"
-                                                                                            Margin="-0.2">
-
-                                                                                        <Border.Background>
-                                                                                            <SolidColorBrush Color="#292727"
-                                                                                                             Opacity="0.9" />
-                                                                                        </Border.Background>
-
-                                                                                        <materialIcons:MaterialIcon Kind="Lock"
-                                                                                                                    Foreground="#C9C7C7"
-                                                                                                                    Height="20"
-                                                                                                                    Width="20" />
-                                                                                    </Border>
+                                                                                    <materialIcons:MaterialIcon Kind="Lock"
+                                                                                                                Foreground="#C9C7C7"
+                                                                                                                Height="20"
+                                                                                                                Width="20" />
                                                                                 </Border>
                                                                             </Border>
 
                                                                             <Border CornerRadius="2"
+                                                                                    Width="48"
+                                                                                    Height="48"
                                                                                     Margin="8,0,0,0">
 
                                                                                 <Border.Effect>
@@ -1335,30 +1167,23 @@
                                                                                                       Opacity="0.8" />
                                                                                 </Border.Effect>
 
-                                                                                <Border BorderThickness="0.2"
-                                                                                        CornerRadius="2"
-                                                                                        Width="48"
-                                                                                        Height="48">
+                                                                                <Border.Background>
+                                                                                    <ImageBrush ImageSource="/Image/Red.png"
+                                                                                                Stretch="UniformToFill" />
+                                                                                </Border.Background>
+
+                                                                                <Border CornerRadius="2"
+                                                                                        Margin="-0.2">
 
                                                                                     <Border.Background>
-                                                                                        <ImageBrush ImageSource="/Image/Red.png"
-                                                                                                    Stretch="UniformToFill" />
+                                                                                        <SolidColorBrush Color="#292727"
+                                                                                                         Opacity="0.9" />
                                                                                     </Border.Background>
 
-
-                                                                                    <Border CornerRadius="2"
-                                                                                            Margin="-0.2">
-
-                                                                                        <Border.Background>
-                                                                                            <SolidColorBrush Color="#292727"
-                                                                                                             Opacity="0.9" />
-                                                                                        </Border.Background>
-
-                                                                                        <materialIcons:MaterialIcon Kind="Lock"
-                                                                                                                    Foreground="#C9C7C7"
-                                                                                                                    Height="20"
-                                                                                                                    Width="20" />
-                                                                                    </Border>
+                                                                                    <materialIcons:MaterialIcon Kind="Lock"
+                                                                                                                Foreground="#C9C7C7"
+                                                                                                                Height="20"
+                                                                                                                Width="20" />
                                                                                 </Border>
                                                                             </Border>
 
@@ -1369,6 +1194,7 @@
                                                                                     Padding="0"
                                                                                     Margin="8,0,0,0"
                                                                                     Foreground="#D4D4D4">
+
                                                                                 <StackPanel Orientation="Horizontal"
                                                                                             Margin="0,4,0,0">
 
@@ -1389,7 +1215,8 @@
                                                                 </StackPanel>
                                                             </Grid>
 
-                                                            <Grid Grid.Row="2">
+                                                            <Grid Grid.Row="1"
+                                                                  Margin="0,30,0,8">
 
                                                                 <StackPanel HorizontalAlignment="Right"
                                                                             VerticalAlignment="Bottom"
@@ -1400,7 +1227,6 @@
 
                                                                         <TextBlock Text="View Achievements"
                                                                                    FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                                   FontWeight="Regular"
                                                                                    FontSize="13"
                                                                                    Foreground="#818A91" />
                                                                     </Button>
@@ -1413,7 +1239,7 @@
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
+                            </Border>
                         </Grid>
                     </Grid>
                 </ScrollViewer>

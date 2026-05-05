@@ -2211,8 +2211,6 @@
                 Value="2,6,0,0" />
         <Setter Property="MaxHeight"
                 Value="64" />
-        <Setter Property="Visibility"
-                Value="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Style>
 
     <!-- Button for Sign up -->
