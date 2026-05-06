@@ -18,19 +18,25 @@ namespace Rift_App.ViewModels
 {
     public partial class LibraryViewModel : ObservableObject
     {
-        // All games — source list
         public ObservableCollection<GameModel> Games { get; } = new();
-
-        // Filtered games shown in UI
         public ObservableCollection<GameModel> FilteredGames { get; } = new();
 
         [ObservableProperty] private bool _isLoading = false;
         [ObservableProperty] private string _searchText = string.Empty;
         [ObservableProperty] private int _totalGames = 0;
 
+        // Fired when user clicks a game — Library.xaml.cs forwards to GameDetailPanel
         public event Action<GameModel>? OnGameSelected;
 
-        // ─── LOAD ─────────────────────────────────────────────────────────
+        // ─── SELECT GAME ──────────────────────────────────────────────────
+
+        [RelayCommand]
+        private void SelectGame(GameModel game)
+        {
+            if (game != null) OnGameSelected?.Invoke(game);
+        }
+
+        // ─── LOAD — disk cache first ──────────────────────────────────────
 
         [RelayCommand]
         public async Task LoadLibraryAsync()
@@ -55,16 +61,13 @@ namespace Rift_App.ViewModels
                     return;
                 }
 
-                // 2. First run — fetch everything from API
+                // 2. First run — fetch from API and download all icons
                 var games = await ApiService.GetLibraryAsync(SessionManager.SteamId64);
                 if (games.Count == 0) return;
 
                 var sorted = games.OrderByDescending(g => g.PlaytimeMinutes).ToList();
-
-                // Download all icons to disk
                 await LibraryCacheService.DownloadAllIconsAsync(sorted);
                 await LibraryCacheService.SaveAsync(sorted);
-
                 PopulateGames(sorted);
             }
             catch (Exception ex)
@@ -78,8 +81,7 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── BACKGROUND SYNC ──────────────────────────────────────────────
-        // Runs after UI is shown — adds new games, removes deleted ones
+        // ─── BACKGROUND SYNC — adds new, removes deleted games ────────────
 
         private async Task SyncInBackgroundAsync()
         {
@@ -92,10 +94,8 @@ namespace Rift_App.ViewModels
 
                 var cached = Games.ToList();
                 var (synced, changed) = await LibraryCacheService.SyncAsync(cached, fresh);
-
                 if (!changed) return;
 
-                // Restore icon paths for all games (including newly added ones)
                 RestoreIconPaths(synced);
 
                 Application.Current.Dispatcher.Invoke(() =>
@@ -106,7 +106,6 @@ namespace Rift_App.ViewModels
                 });
 
                 await LibraryCacheService.SaveAsync(synced);
-                Debug.WriteLine("[Library] Sync complete — cache updated.");
             }
             catch (Exception ex)
             {
@@ -116,7 +115,6 @@ namespace Rift_App.ViewModels
 
         // ─── HELPERS ──────────────────────────────────────────────────────
 
-        /// <summary>Sets IconPath for each game using the local icon folder.</summary>
         private static void RestoreIconPaths(List<GameModel> games)
         {
             foreach (var game in games)
@@ -145,14 +143,6 @@ namespace Rift_App.ViewModels
                 ? Games
                 : Games.Where(g => g.Name.Contains(value, StringComparison.OrdinalIgnoreCase));
             foreach (var game in filtered) FilteredGames.Add(game);
-        }
-
-        // ─── SELECT ───────────────────────────────────────────────────────
-
-        [RelayCommand]
-        private void SelectGame(GameModel game)
-        {
-            if (game != null) OnGameSelected?.Invoke(game);
         }
     }
 }
