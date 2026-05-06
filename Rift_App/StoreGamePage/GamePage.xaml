@@ -6,11 +6,12 @@
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.StoreGamePage"
-             mc:Ignorable="d" >
+             mc:Ignorable="d" 
+             d:Height="2600"
+             d:Width="1500">
 
     <Grid>
-        <Border Grid.Row="0"
-                CornerRadius="0,0,7.5,7.5">
+        <Border CornerRadius="0,0,7.5,7.5">
 
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           VerticalAlignment="Stretch"
@@ -18,395 +19,351 @@
                 <Grid>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="640" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0"
+                          Background="#1B2838">
 
-                        <Border Background="#1B2838">
+                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="165" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                            <Grid>
+                            <Grid Grid.Column="1">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0"
+                                  Margin="1,35,0,0">
+
+                                <TextBlock Text="Crimson Desert"
+                                           FontFamily="Bold"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           FontSize="30"
+                                           Foreground="#EBEBEB" />
+                            </Grid>
+
+                            <Grid Grid.Row="1"
+                                  Margin="0,12,0,0"
+                                  Background="#1B2838"
+                                  Height="560">
+
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="165" />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="1">
+                                <Grid Grid.Column="0">
 
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="35" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <StackPanel Grid.Row="1">
+                                    <Grid Grid.Row="0">
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Bottom"
-                                                    Margin="1,0,0,12">
+                                        <Image Source="/Image/Red.png"
+                                               Stretch="UniformToFill"
+                                               HorizontalAlignment="Stretch"
+                                               Height="460"
+                                               Width="810" />
+                                    </Grid>
 
-                                            <TextBlock Text="Crimson Desert"
-                                                       FontFamily="Bold"
-                                                       FontSize="30"
-                                                       Foreground="#EBEBEB" />
+                                    <Grid Grid.Row="1">
 
-                                        </StackPanel>
-                                    </StackPanel>
+                                        <Border HorizontalAlignment="Stretch"
+                                                ClipToBounds="True">
 
-                                    <Grid Grid.Row="2"
-                                          Background="#1B2838"                           
-                                          Height="560">
-                                        
-                                     
+                                            <ScrollViewer Style="{StaticResource SteamScrollViewerStyle}"
+                                                          HorizontalScrollBarVisibility="Auto"
+                                                          VerticalScrollBarVisibility="Disabled"
+                                                          x:Name="MediaScroll"
+                                                          Width="810"
+                                                          Margin="0,5,0,5">
 
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Left">
 
-                                        <Grid Grid.Column="0">
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65" 
+                                                           Margin="4,0,0,0"/>
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="110"
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
+                                                </StackPanel>
+                                            </ScrollViewer>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid Grid.Column="1">
+
+                                    <Border Background="#171D26"
+                                            VerticalAlignment="Stretch">
+
+                                        <Grid Margin="18,0,0,0">
 
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
+                                               <RowDefinition Height="Auto" />
+                                               <RowDefinition Height="Auto" />
+                                               <RowDefinition Height="Auto" />
+                                               <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
 
                                             <Grid Grid.Row="0">
-
+                                                
                                                 <Image Source="/Image/Red.png"
                                                        Stretch="UniformToFill"
-                                                       HorizontalAlignment="Stretch"
-                                                       Height="460"
-                                                       Width="810" />
+                                                       Width="370"
+                                                       Height="185" />
                                             </Grid>
 
-                                            <Grid Grid.Row="1">
-
-                                                <Border HorizontalAlignment="Stretch"
-                                                        ClipToBounds="True">
-
-                                                    <Border.Background>
-                                                        <SolidColorBrush Color="#1B2838"
-                                                                         Opacity="0.85" />
-                                                    </Border.Background>
-
-                                                    <ScrollViewer Style="{StaticResource SteamScrollViewerStyle}"
-                                                                  HorizontalScrollBarVisibility="Auto"
-                                                                  VerticalScrollBarVisibility="Disabled"
-                                                                  x:Name="MediaScroll"                                                             
-                                                                  Width="810">
-
-                                                        <StackPanel Orientation="Horizontal"
-                                                                    Margin="0,5,0,5"
-                                                                    HorizontalAlignment="Left">
-
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="110"
-                                                                   Height="65"
-                                                                   Margin="4,0,0,0" />
-                                                        </StackPanel>
-                                                    </ScrollViewer>
-                                                </Border>
+                                            <Grid Grid.Row="1"
+                                                  Margin="0,18,0,0">
+                                                
+                                                <TextBlock Text="Crimson Desert is an open-world action-adventure set on the continent of Pywel. Join Kliff on his journey to rebuild the Greymane faction and to save the land from a looming threat. From vast wilderness and cities to ruins and the mysterious Abyss, forge your path through battles and discovery."
+                                                           TextWrapping="WrapWithOverflow"
+                                                           FontSize="14.5"
+                                                           FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                           Foreground="#C8D4DB"
+                                                           Width="368" />
                                             </Grid>
-                                        </Grid>
-
-                                        <Grid Grid.Column="1">
-
-                                            <Border Background="#171D26"
-                                                    BorderBrush="Transparent"
-                                                    VerticalAlignment="Stretch">
-
-                                                <Grid>
+                                               
+                                                <Grid Grid.Row="2">
 
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="18" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="35" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Grid Grid.Column="1">
+                                                    <Grid Grid.Column="0">
 
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto" />
                                                             <RowDefinition Height="Auto" />
                                                             <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+
+                                                    <Grid Grid.Row="0"
+                                                          Margin="0,25,0,0">
+                                                        
+                                                        <TextBlock Text="REVIEWS:"
+                                                                   FontSize="12"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                                   Foreground="#91969E" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="1"
+                                                          Margin="0,15,0,0" >
+                                                        
+                                                        <TextBlock Text="RELEASE DATE:"
+                                                                   FontSize="12"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                                   Foreground="#91969E"/>
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="2"
+                                                          Margin="0,20,0,0">
+                                                        
+                                                        <StackPanel Orientation="Vertical" >
+
+                                                            <TextBlock Text="DEVELOPER:"
+                                                                       FontSize="12"
+                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                                       Foreground="#91969E" />
+
+                                                            <TextBlock Text="PUBLISHER:"
+                                                                       FontSize="12"
+                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                                       Foreground="#91969E"
+                                                                       Margin="0,5,0,0" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="2">
+
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
                                                             <RowDefinition Height="Auto" />
                                                         </Grid.RowDefinitions>
 
-                                                        <StackPanel Grid.Row="0">
+                                                    <Grid Grid.Row="0"
+                                                          Margin="0,25,0,0">
+                                                        
+                                                        <StackPanel Orientation="Horizontal" >
 
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="370"
-                                                                   Height="185" />
+                                                            <TextBlock Text="Very Positive"
+                                                                       FontSize="13.5"
+                                                                       Foreground="#95D1F3"
+                                                                       FontFamily="Arial" />
+
+
+                                                            <TextBlock Text="(47,125)"
+                                                                       FontSize="13"
+                                                                       Foreground="#959DA6"
+                                                                       Margin="4,-1,0,0" />
                                                         </StackPanel>
+                                                    </Grid>
 
-                                                        <StackPanel Grid.Row="1"
-                                                                    Margin="0,18,0,0">
+                                                    <Grid Grid.Row="1"
+                                                          Margin="0,15,0,0">
 
-                                                            <TextBlock Text="Crimson Desert is an open-world action-adventure set on the continent of Pywel. Join Kliff on his journey to rebuild the Greymane faction and to save the land from a looming threat. From vast wilderness and cities to ruins and the mysterious Abyss, forge your path through battles and discovery."
-                                                                       TextWrapping="WrapWithOverflow"
-                                                                       FontSize="14.5"
-                                                                       FontWeight="Medium"
-                                                                       FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                       Foreground="#C8D4DB"
-                                                                       Width="368"
-                                                                       Height="Auto" />
+                                                        <TextBlock Text="19 Mar, 2026"
+                                                                   FontSize="13.5"
+                                                                   FontFamily="Arial"
+                                                                   Foreground="#959DA6" />
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="2"
+                                                          Margin="0,20,0,0">
+                                                        
+                                                        <StackPanel Orientation="Vertical" >
+
+                                                            <TextBlock Text="Pearl Abyss"
+                                                                       FontSize="13.5"
+                                                                       Foreground="#95D1F3"
+                                                                       FontFamily="Arial" />
+
+                                                            <TextBlock Text="Pearl Abyss"
+                                                                       FontSize="13.5"
+                                                                       Foreground="#95D1F3"
+                                                                       FontFamily="Arial"
+                                                                       Margin="0,5,0,0" />
                                                         </StackPanel>
-
-                                                        <Grid Grid.Row="2">
-
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="35" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
-
-                                                            <Grid Grid.Column="0">
-
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="Auto" />
-                                                                    <RowDefinition Height="Auto" />
-                                                                    <RowDefinition Height="Auto" />
-                                                                </Grid.RowDefinitions>
-
-                                                                <StackPanel Grid.Row="0">
-
-                                                                    <TextBlock Text="ENGLISH REVIEWS:"
-                                                                               FontSize="12"
-                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                               Foreground="#91969E"
-                                                                               Margin="0,25,0,0" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Grid.Row="1">
-
-                                                                    <TextBlock Text="RELEASE DATE:"
-                                                                               FontSize="12"
-                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                               Foreground="#91969E"
-                                                                               Margin="0,15,0,0" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Grid.Row="2"
-                                                                            Orientation="Vertical"
-                                                                            HorizontalAlignment="Left"
-                                                                            Margin="0,20,0,0">
-
-                                                                    <TextBlock Text="DEVELOPER:"
-                                                                               FontSize="12"
-                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                               Foreground="#91969E" />
-
-                                                                    <TextBlock Text="PUBLISHER:"
-                                                                               FontSize="12"
-                                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                               Foreground="#91969E"
-                                                                               Margin="0,5,0,0" />
-                                                                </StackPanel>
-                                                            </Grid>
-
-                                                            <Grid Grid.Column="2">
-
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="Auto" />
-                                                                    <RowDefinition Height="Auto" />
-                                                                    <RowDefinition Height="Auto" />
-                                                                </Grid.RowDefinitions>
-
-                                                                <StackPanel Grid.Row="0"
-                                                                            Orientation="Horizontal"
-                                                                            Margin="0,24,0,0">
-
-                                                                    <TextBlock Text="Very Positive"
-                                                                               FontSize="13.5"
-                                                                               Foreground="#95D1F3"
-                                                                               FontFamily="Arial" />
-
-
-                                                                    <TextBlock Text="(47,125)"
-                                                                               FontSize="13"
-                                                                               Foreground="#959DA6"
-                                                                               Margin="4,-1,0,0" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Grid.Row="1"
-                                                                            Margin="0,13,0,0">
-
-                                                                    <TextBlock Text="19 Mar, 2026"
-                                                                               FontSize="13.5"
-                                                                               FontFamily="Arial"
-                                                                               Foreground="#959DA6" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Grid.Row="2"
-                                                                            Orientation="Vertical"
-                                                                            Margin="0,18,0,0">
-
-                                                                    <TextBlock Text="Pearl Abyss"
-                                                                               FontSize="13.5"
-                                                                               Foreground="#95D1F3"
-                                                                               FontFamily="Arial" />
-
-                                                                    <TextBlock Text="Pearl Abyss"
-                                                                               FontSize="13.5"
-                                                                               Foreground="#95D1F3"
-                                                                               FontFamily="Arial"
-                                                                               Margin="0,5,0,0" />
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Grid>
-
-                                                        <Grid Grid.Row="3">
-
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="60" />
-                                                                <RowDefinition Height="Auto" />
-                                                            </Grid.RowDefinitions>
-
-                                                            <StackPanel Grid.Row="0"
-                                                                        HorizontalAlignment="Left"
-                                                                        VerticalAlignment="Bottom">
-
-                                                                <TextBlock Text="Popular user-defined tags for this product:"
-                                                                           FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                           Foreground="#7D818A"
-                                                                           FontSize="12.5" />
-                                                            </StackPanel>
-
-                                                            <StackPanel Orientation="Horizontal"
-                                                                        Grid.Row="1"
-                                                                        VerticalAlignment="Bottom"
-                                                                        HorizontalAlignment="Left"
-                                                                        Margin="0,4,0,0">
-
-                                                                <StackPanel Orientation="Vertical"
-                                                                            HorizontalAlignment="Left"
-                                                                            Background="#2D4557"
-                                                                            Margin="0,0,0,0"
-                                                                            Height="Auto"
-                                                                            Width="Auto">
-
-                                                                    <TextBlock Text="FPS"
-                                                                               FontSize="13"
-                                                                               Width="Auto"
-                                                                               Height="Auto"
-                                                                               TextAlignment="Center"
-                                                                               Foreground="#67C1F5"
-                                                                               Margin="5,-1,5,1" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Orientation="Vertical"
-                                                                            HorizontalAlignment="Left"
-                                                                            Background="#2D4557"
-                                                                            Margin="2,0,0,0"
-                                                                            Height="Auto"
-                                                                            Width="Auto">
-
-                                                                    <TextBlock Text="Realistic"
-                                                                               FontSize="13"
-                                                                               Width="Auto"
-                                                                               Height="Auto"
-                                                                               TextAlignment="Center"
-                                                                               Foreground="#67C1F5"
-                                                                               Margin="5,-1,5,1" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Orientation="Vertical"
-                                                                            HorizontalAlignment="Left"
-                                                                            Background="#2D4557"
-                                                                            Margin="2,0,0,0"
-                                                                            Height="Auto"
-                                                                            Width="Auto">
-
-                                                                    <TextBlock Text="Gun Customization"
-                                                                               FontSize="13"
-                                                                               Width="Auto"
-                                                                               Height="Auto"
-                                                                               TextAlignment="Center"
-                                                                               Foreground="#67C1F5"
-                                                                               Margin="5,-1,5,1" />
-                                                                </StackPanel>
-
-                                                                <StackPanel Orientation="Vertical"
-                                                                            HorizontalAlignment="Left"
-                                                                            Background="#2D4557"
-                                                                            Height="Auto"
-                                                                            Margin="2,0,0,0"
-                                                                            Width="Auto">
-
-                                                                    <TextBlock Text="Tactical"
-                                                                               FontSize="13"
-                                                                               Width="Auto"
-                                                                               Height="Auto"
-                                                                               TextAlignment="Center"
-                                                                               Foreground="#67C1F5"
-                                                                               Margin="5,-1,5,1" />
-                                                                </StackPanel>
-                                                            </StackPanel>
-                                                        </Grid>
+                                                    </Grid>
                                                     </Grid>
                                                 </Grid>
-                                            </Border>
-                                        </Grid>
-                                    </Grid>
+
+                                                <Grid Grid.Row="3">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0"
+                                                      Margin="0,40,0,0">
+                                                    
+                                                        <TextBlock Text="Popular user-defined tags for this product:"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                                   Foreground="#7D818A"
+                                                                   HorizontalAlignment="Left"
+                                                                   FontSize="12.5" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="1"
+                                                      Margin="0,4,0,0">
+                                                    
+                                                    <StackPanel Orientation="Horizontal"
+                                                                HorizontalAlignment="Left" >
+
+                                                        <Border  Background="#2D4557"
+                                                                 HorizontalAlignment="Left"
+                                                                 Padding="4,0,4,0"
+                                                                 Margin="2,0,0,0">
+
+                                                            <TextBlock Text="FPS"
+                                                                       FontSize="13"
+                                                                       TextAlignment="Center"
+                                                                       Foreground="#67C1F5"/>
+                                                        </Border>
+
+                                                        <Border  Background="#2D4557"
+                                                                 HorizontalAlignment="Left"
+                                                                 Padding="4,0,4,0"
+                                                                 Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Realistic"
+                                                                       FontSize="13"
+                                                                       TextAlignment="Center"
+                                                                       Foreground="#67C1F5" />
+                                                        </Border>
+
+                                                        <Border  Background="#2D4557"
+                                                                 HorizontalAlignment="Left"
+                                                                 Padding="4,0,4,0"
+                                                                 Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Gun Customization"
+                                                                       FontSize="13"
+                                                                       TextAlignment="Center"
+                                                                       Foreground="#67C1F5" />
+                                                        </Border>
+
+                                                        <Border  Background="#2D4557"
+                                                                 HorizontalAlignment="Left"
+                                                                 Padding="4,0,4,0"
+                                                                 Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Tactical"
+                                                                       FontSize="13"
+                                                                       TextAlignment="Center"
+                                                                       Foreground="#67C1F5" />
+                                                        </Border>                                                       
+                                                    </StackPanel>
+                                                </Grid>
+                                                </Grid>
+                                            </Grid>
+                                    </Border>
                                 </Grid>
-                            </Grid>
-                        </Border>
+                            </Grid>            
+                       </Grid>                        
                     </Grid>
 
                     <Grid Grid.Row="1">
+                        <Grid.Background>
+                            <LinearGradientBrush EndPoint="0.5,1"
+                                                 StartPoint="0.5,0">
+                                <GradientStop Color="#1E2E40"
+                                              Offset="0.251" />
+                                <GradientStop Color="#1E2E40"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Grid.Background>
                         
-                        <Border>
-                            <Border.Background>
-                                <LinearGradientBrush EndPoint="0.5,1"
-                                                     StartPoint="0.5,0">
-                                    <GradientStop Color="#1E2E40"
-                                                  Offset="0.251" />
-                                    <GradientStop Color="#1E2E40"
-                                                  Offset="1" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-
-                            <Grid>
-
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -1445,9 +1402,7 @@
                                             </Border>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                            </Grid>
-                        </Border>
+                                </Grid>                          
                     </Grid>
                 </Grid>
             </ScrollViewer>
