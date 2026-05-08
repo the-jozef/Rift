@@ -12,6 +12,7 @@
 
 		<!-- Swagger -->
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
+		<PackageReference Include="Steamworks.NET" Version="2024.8.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
 
 		<!-- PostgreSQL + EF Core -->

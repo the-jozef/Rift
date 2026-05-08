@@ -6,7 +6,7 @@
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.StoreGamePage"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:Height="3000"
              d:Width="1500">
 
@@ -26,12 +26,12 @@
                     <Grid Grid.Row="0"
                           Background="#1B2838">
 
-                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="165" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="165" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                            <Grid Grid.Column="1">
+                        <Grid Grid.Column="1">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -93,8 +93,8 @@
                                                     <Image Source="/Image/Red.png"
                                                            Stretch="UniformToFill"
                                                            Width="110"
-                                                           Height="65" 
-                                                           Margin="4,0,0,0"/>
+                                                           Height="65"
+                                                           Margin="4,0,0,0" />
                                                     <Image Source="/Image/Red.png"
                                                            Stretch="UniformToFill"
                                                            Width="110"
@@ -144,14 +144,14 @@
                                         <Grid Margin="18,0,0,0">
 
                                             <Grid.RowDefinitions>
-                                               <RowDefinition Height="Auto" />
-                                               <RowDefinition Height="Auto" />
-                                               <RowDefinition Height="Auto" />
-                                               <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
 
                                             <Grid Grid.Row="0">
-                                                
+
                                                 <Image Source="/Image/Red.png"
                                                        Stretch="UniformToFill"
                                                        Width="370"
@@ -160,7 +160,7 @@
 
                                             <Grid Grid.Row="1"
                                                   Margin="0,18,0,0">
-                                                
+
                                                 <TextBlock Text="Crimson Desert is an open-world action-adventure set on the continent of Pywel. Join Kliff on his journey to rebuild the Greymane faction and to save the land from a looming threat. From vast wilderness and cities to ruins and the mysterious Abyss, forge your path through battles and discovery."
                                                            TextWrapping="WrapWithOverflow"
                                                            FontSize="14.5"
@@ -168,26 +168,26 @@
                                                            Foreground="#C8D4DB"
                                                            Width="368" />
                                             </Grid>
-                                               
-                                                <Grid Grid.Row="2">
 
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="35" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
+                                            <Grid Grid.Row="2">
 
-                                                    <Grid Grid.Column="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="35" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
 
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="Auto" />
-                                                        </Grid.RowDefinitions>
+                                                <Grid Grid.Column="0">
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
 
                                                     <Grid Grid.Row="0"
                                                           Margin="0,25,0,0">
-                                                        
+
                                                         <TextBlock Text="REVIEWS:"
                                                                    FontSize="12"
                                                                    FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
@@ -195,18 +195,18 @@
                                                     </Grid>
 
                                                     <Grid Grid.Row="1"
-                                                          Margin="0,15,0,0" >
-                                                        
+                                                          Margin="0,15,0,0">
+
                                                         <TextBlock Text="RELEASE DATE:"
                                                                    FontSize="12"
                                                                    FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                   Foreground="#91969E"/>
+                                                                   Foreground="#91969E" />
                                                     </Grid>
 
                                                     <Grid Grid.Row="2"
                                                           Margin="0,20,0,0">
-                                                        
-                                                        <StackPanel Orientation="Vertical" >
+
+                                                        <StackPanel Orientation="Vertical">
 
                                                             <TextBlock Text="DEVELOPER:"
                                                                        FontSize="12"
@@ -220,20 +220,20 @@
                                                                        Margin="0,5,0,0" />
                                                         </StackPanel>
                                                     </Grid>
-                                                    </Grid>
+                                                </Grid>
 
-                                                    <Grid Grid.Column="2">
+                                                <Grid Grid.Column="2">
 
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="Auto" />
-                                                            <RowDefinition Height="Auto" />
-                                                        </Grid.RowDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
 
                                                     <Grid Grid.Row="0"
                                                           Margin="0,25,0,0">
-                                                        
-                                                        <StackPanel Orientation="Horizontal" >
+
+                                                        <StackPanel Orientation="Horizontal">
 
                                                             <TextBlock Text="Very Positive"
                                                                        FontSize="13.5"
@@ -259,8 +259,8 @@
 
                                                     <Grid Grid.Row="2"
                                                           Margin="0,20,0,0">
-                                                        
-                                                        <StackPanel Orientation="Vertical" >
+
+                                                        <StackPanel Orientation="Vertical">
 
                                                             <TextBlock Text="Pearl Abyss"
                                                                        FontSize="13.5"
@@ -274,31 +274,31 @@
                                                                        Margin="0,5,0,0" />
                                                         </StackPanel>
                                                     </Grid>
-                                                    </Grid>
                                                 </Grid>
+                                            </Grid>
 
-                                                <Grid Grid.Row="3">
+                                            <Grid Grid.Row="3">
 
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="Auto" />
-                                                    </Grid.RowDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
 
                                                 <Grid Grid.Row="0"
                                                       Margin="0,40,0,0">
-                                                    
-                                                        <TextBlock Text="Popular user-defined tags for this product:"
-                                                                   FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
-                                                                   Foreground="#7D818A"
-                                                                   HorizontalAlignment="Left"
-                                                                   FontSize="12.5" />
+
+                                                    <TextBlock Text="Popular user-defined tags for this product:"
+                                                               FontFamily="/Resources/Noto/NotoSans-Bold.ttf#Noto Sans"
+                                                               Foreground="#7D818A"
+                                                               HorizontalAlignment="Left"
+                                                               FontSize="12.5" />
                                                 </Grid>
 
                                                 <Grid Grid.Row="1"
                                                       Margin="0,4,0,0">
-                                                    
+
                                                     <StackPanel Orientation="Horizontal"
-                                                                HorizontalAlignment="Left" >
+                                                                HorizontalAlignment="Left">
 
                                                         <Border  Background="#2D4557"
                                                                  HorizontalAlignment="Left"
@@ -308,7 +308,7 @@
                                                             <TextBlock Text="FPS"
                                                                        FontSize="13"
                                                                        TextAlignment="Center"
-                                                                       Foreground="#67C1F5"/>
+                                                                       Foreground="#67C1F5" />
                                                         </Border>
 
                                                         <Border  Background="#2D4557"
@@ -342,19 +342,19 @@
                                                                        FontSize="13"
                                                                        TextAlignment="Center"
                                                                        Foreground="#67C1F5" />
-                                                        </Border>                                                       
+                                                        </Border>
                                                     </StackPanel>
                                                 </Grid>
-                                                </Grid>
                                             </Grid>
+                                        </Grid>
                                     </Border>
                                 </Grid>
-                            </Grid>            
-                       </Grid>                        
+                            </Grid>
+                        </Grid>
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        
+
                         <Grid.Background>
                             <LinearGradientBrush EndPoint="0.5,1"
                                                  StartPoint="0.5,0">
@@ -364,62 +364,62 @@
                                               Offset="1" />
                             </LinearGradientBrush>
                         </Grid.Background>
-                        
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
 
-                                <Grid Grid.Row="0"
-                                      Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="165" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="0"
+                              Margin="0,10,0,0">
 
-                                    <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="165" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                                            <Button Background="#2F5069"
-                                                    BorderBrush="Transparent">
+                            <Grid Grid.Column="1">
 
-                                                <Button.Effect>
-                                                    <DropShadowEffect Color="White"
-                                                                      BlurRadius="70"
-                                                                      ShadowDepth="0"
-                                                                      Opacity="0.2" />
-                                                </Button.Effect>
+                                <Button Background="#2F5069"
+                                        BorderBrush="Transparent">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            Margin="-4,0,0,0">
+                                    <Button.Effect>
+                                        <DropShadowEffect Color="White"
+                                                          BlurRadius="70"
+                                                          ShadowDepth="0"
+                                                          Opacity="0.2" />
+                                    </Button.Effect>
 
-                                                    <materialIcons:MaterialIcon Kind="SquareOutline"
-                                                                                Foreground="#5AB3E8"
-                                                                                Width="18"
-                                                                                Height="18" />
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="-4,0,0,0">
 
-                                                    <TextBlock Text="Add to Wishlist"
-                                                               Foreground="#5AB3E8"
-                                                               FontSize="16"
-                                                               Margin="5,0,0,0" />
-                                                </StackPanel>
-                                            </Button>
-                                    </Grid>
-                                </Grid>
+                                        <materialIcons:MaterialIcon Kind="SquareOutline"
+                                                                    Foreground="#5AB3E8"
+                                                                    Width="18"
+                                                                    Height="18" />
 
-                                <Grid Grid.Row="1"
-                                      Margin="0,50,0,0">
+                                        <TextBlock Text="Add to Wishlist"
+                                                   Foreground="#5AB3E8"
+                                                   FontSize="16"
+                                                   Margin="5,0,0,0" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Grid>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="165" />
-                                        <ColumnDefinition Width="740" />
-                                        <ColumnDefinition Width="40" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="136" />
-                                    </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="1"
+                              Margin="0,50,0,0">
 
-                                    <Grid Grid.Column="1">
-                                   
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="165" />
+                                <ColumnDefinition Width="740" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="136" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="1">
+
                                 <StackPanel Orientation="Vertical">
 
                                     <Grid Margin="1,0,0,0">
@@ -447,7 +447,7 @@
                                     <Grid Margin="0,5,0,0">
 
                                         <Border CornerRadius="8">
-                                            
+
                                             <Border.Background>
                                                 <LinearGradientBrush>
                                                     <GradientStop Color="#2F4152"
@@ -542,7 +542,7 @@
                                     <Grid Margin="0,25,0,0">
 
                                         <Border CornerRadius="8">
-                                            
+
                                             <Border.Background>
                                                 <LinearGradientBrush>
                                                     <GradientStop Color="#2F4152"
@@ -568,9 +568,9 @@
 
                                                     <Grid Grid.Row="0"
                                                           Margin="15,15,0,0">
-                                                        
+
                                                         <StackPanel Orientation="Vertical"
-                                                                    HorizontalAlignment="Left" >
+                                                                    HorizontalAlignment="Left">
 
                                                             <TextBlock Text="Buy Crimson Desert Deluxe Edition"
                                                                        FontSize="22"
@@ -582,13 +582,13 @@
                                                                        Margin="2,0,0,0">
                         
                                                             <Run Text="Includes 2 items:"
-                                                                Foreground="#92D43B" />
+                                                                 Foreground="#92D43B" />
                                                             <Run Text="Crimson Desert, Crimson Desert - Deluxe Pack"
-                                                                Foreground="#BABABA" />
+                                                                 Foreground="#BABABA" />
                                                             </TextBlock>
                                                         </StackPanel>
                                                     </Grid>
-                                                    
+
                                                     <Border Grid.Row="1"
                                                             Background="#171E21"
                                                             Padding="3"
@@ -852,7 +852,7 @@
                                     <Grid>
 
                                         <StackPanel Orientation="Vertical">
-                                            
+
                                             <Grid Margin="0,10,0,0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Center">
@@ -861,7 +861,7 @@
                                                            Foreground="#BABABA"
                                                            TextWrapping="WrapWithOverflow"
                                                            TextAlignment="Center"
-                                                           Width="540"/>
+                                                           Width="540" />
                                             </Grid>
 
                                             <Grid Margin="0,10,0,0">
@@ -879,7 +879,7 @@
                                                            Foreground="#BABABA"
                                                            TextWrapping="WrapWithOverflow"
                                                            TextAlignment="Center"
-                                                           Width="540"/>
+                                                           Width="540" />
                                             </Grid>
 
                                             <Grid Margin="0,5,0,0"
@@ -1004,362 +1004,362 @@
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
-                                </StackPanel>                                                                                                                   
-                                    </Grid>
+                                </StackPanel>
+                            </Grid>
 
-                                    <Grid Grid.Column="3"
-                                          Margin="0,5,0,0">
+                            <Grid Grid.Column="3"
+                                  Margin="0,5,0,0">
 
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                                        <Grid Grid.Row="0">
+                                <Grid Grid.Row="0">
 
-                                            <Border Background="#0A0F14">
+                                    <Border Background="#0A0F14">
 
-                                                <StackPanel>
+                                        <StackPanel>
 
-                                                    <TextBlock Text="Is this game relevant to you?"
-                                                               Foreground="White"
-                                                               FontSize="18"
-                                                               HorizontalAlignment="Left"
-                                                               Margin="5,5,5,5" />
+                                            <TextBlock Text="Is this game relevant to you?"
+                                                       Foreground="White"
+                                                       FontSize="18"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5,5,5,5" />
 
-                                                    <Border Background="#0B131A" >
+                                            <Border Background="#0B131A">
 
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto" />
-                                                                <RowDefinition Height="15" />
-                                                            </Grid.RowDefinitions>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="15" />
+                                                    </Grid.RowDefinitions>
 
-                                                            <Grid Grid.Row="0">
-                                                                <StackPanel Orientation="Vertical">
+                                                    <Grid Grid.Row="0">
+                                                        <StackPanel Orientation="Vertical">
 
-                                                                    <StackPanel Orientation="Horizontal"
-                                                                                Margin="10,10,0,0"
-                                                                                HorizontalAlignment="Left">
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        Margin="10,10,0,0"
+                                                                        HorizontalAlignment="Left">
 
-                                                                        <materialIcons:MaterialIcon Kind="Check"
-                                                                                                    Height="15"
-                                                                                                    Width="15"
-                                                                                                    Foreground="#86A614" />
+                                                                <materialIcons:MaterialIcon Kind="Check"
+                                                                                            Height="15"
+                                                                                            Width="15"
+                                                                                            Foreground="#86A614" />
 
-                                                                        <TextBlock FontSize="15"
-                                                                                   Margin="5,0,0,0">
+                                                                <TextBlock FontSize="15"
+                                                                           Margin="5,0,0,0">
                                                                         
                                                                     <Run Text="User reviews:"
-                                                                            Foreground="#ADADAD" />
+                                                                         Foreground="#ADADAD" />
                                                                         
                                                                      <Run Text="Very Positive"
-                                                                            Foreground="#5298BF" />
+                                                                          Foreground="#5298BF" />
 
-                                                                        </TextBlock>
-                                                                    </StackPanel>
+                                                                </TextBlock>
+                                                            </StackPanel>
 
-                                                                    <Border Height="1.5"
-                                                                            Margin="30,5,15,0"
-                                                                            Background="#273747" />
+                                                            <Border Height="1.5"
+                                                                    Margin="30,5,15,0"
+                                                                    Background="#273747" />
 
-                                                                    <StackPanel Orientation="Horizontal"
-                                                                                Margin="10,10,0,0"
-                                                                                HorizontalAlignment="Left">
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        Margin="10,10,0,0"
+                                                                        HorizontalAlignment="Left">
 
-                                                                        <materialIcons:MaterialIcon Kind="Check"
-                                                                                                    Height="15"
-                                                                                                    Width="15"
-                                                                                                    Foreground="#86A614" />
+                                                                <materialIcons:MaterialIcon Kind="Check"
+                                                                                            Height="15"
+                                                                                            Width="15"
+                                                                                            Foreground="#86A614" />
 
-                                                                        <TextBlock  Foreground="#ADADAD"
-                                                                                    Margin="5,0,0,0"
-                                                                                    FontSize="15"
-                                                                                    Text="In the Top Sellers" />
-                                                                    </StackPanel>
+                                                                <TextBlock  Foreground="#ADADAD"
+                                                                            Margin="5,0,0,0"
+                                                                            FontSize="15"
+                                                                            Text="In the Top Sellers" />
+                                                            </StackPanel>
 
-                                                                    <Border Height="1.5"
-                                                                            Margin="30,5,15,0"
-                                                                            Background="#273747" />
+                                                            <Border Height="1.5"
+                                                                    Margin="30,5,15,0"
+                                                                    Background="#273747" />
 
-                                                                    <StackPanel Orientation="Horizontal"
-                                                                                Margin="10,10,0,0"
-                                                                                HorizontalAlignment="Left">
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        Margin="10,10,0,0"
+                                                                        HorizontalAlignment="Left">
 
-                                                                        <materialIcons:MaterialIcon Kind="Check"
-                                                                                                    Height="15"
-                                                                                                    Width="15"
-                                                                                                    Foreground="#86A614" />
+                                                                <materialIcons:MaterialIcon Kind="Check"
+                                                                                            Height="15"
+                                                                                            Width="15"
+                                                                                            Foreground="#86A614" />
 
-                                                                        <TextBlock FontSize="15"
-                                                                                   Margin="5,0,0,0">
+                                                                <TextBlock FontSize="15"
+                                                                           Margin="5,0,0,0">
                                                                         <Run Text="User reviews:"
                                                                              Foreground="#ADADAD" />
                                                                         
                                                                         <Run Text="Very Positive"
                                                                              Foreground="#5298BF" />
 
-                                                                        </TextBlock>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Border>
-                                                </StackPanel>
-                                            </Border>
-                                        </Grid>
-
-                                        <Grid Grid.Row="1"
-                                              Margin="0,10,0,0">
-
-                                            <Border Background="#0B131A" >
-
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="25" />
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="25" />
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <Grid Grid.Column="1">
-
-                                                        <StackPanel Orientation="Vertical"
-                                                                    Margin="0,10,0,15">
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="Account"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="Single-player"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="NewReleases"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="Achievements"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="Cloud"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="Steam cloud"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="Hdr"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="HDR available"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="AccountGroup"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="Family sharing"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="Accessibility"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="Accessibility Features"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <StackPanel Margin="3,5,0,0">
-                                                                <TextBlock Text="Full Controller Support" 
-                                                                           FontSize="12"
-                                                                           Foreground="#8F98A0"/>
+                                                                </TextBlock>
                                                             </StackPanel>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="GamepadVariant"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B">
-
-                                                                        <TextBlock Text="Xbox Controllers"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
-
-                                                            <Border Background="#06090D"
-                                                                    Margin="0,5,0,0">
-
-                                                                <DockPanel>
-
-                                                                    <materialIcons:MaterialIcon Kind="Controller"
-                                                                                                Foreground="White"
-                                                                                                Width="13"
-                                                                                                Height="13"
-                                                                                                Margin="8,0,8,0" />
-
-                                                                    <Border Background="#0D273B" >
-
-                                                                        <TextBlock Text="Dual Sense Controllers"
-                                                                                   Margin="5,0,5,0"
-                                                                                   FontSize="14"
-                                                                                   Foreground="#43AEF0" />
-                                                                    </Border>
-                                                                </DockPanel>
-                                                            </Border>
                                                         </StackPanel>
                                                     </Grid>
                                                 </Grid>
                                             </Border>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Grid Grid.Row="1"
+                                      Margin="0,10,0,0">
+
+                                    <Border Background="#0B131A">
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="25" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="25" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid Grid.Column="1">
+
+                                                <StackPanel Orientation="Vertical"
+                                                            Margin="0,10,0,15">
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="Account"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Single-player"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="NewReleases"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Achievements"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="Cloud"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Steam cloud"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="Hdr"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="HDR available"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="AccountGroup"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Family sharing"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="Accessibility"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Accessibility Features"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <StackPanel Margin="3,5,0,0">
+                                                        <TextBlock Text="Full Controller Support"
+                                                                   FontSize="12"
+                                                                   Foreground="#8F98A0" />
+                                                    </StackPanel>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="GamepadVariant"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Xbox Controllers"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+
+                                                    <Border Background="#06090D"
+                                                            Margin="0,5,0,0">
+
+                                                        <DockPanel>
+
+                                                            <materialIcons:MaterialIcon Kind="Controller"
+                                                                                        Foreground="White"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        Margin="8,0,8,0" />
+
+                                                            <Border Background="#0D273B">
+
+                                                                <TextBlock Text="Dual Sense Controllers"
+                                                                           Margin="5,0,5,0"
+                                                                           FontSize="14"
+                                                                           Foreground="#43AEF0" />
+                                                            </Border>
+                                                        </DockPanel>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Grid>
                                         </Grid>
+                                    </Border>
+                                </Grid>
 
-                                        <Grid Grid.Row="2"
-                                              Margin="0,20,0,0">
+                                <Grid Grid.Row="2"
+                                      Margin="0,20,0,0">
 
-                                            <Border Background="#0C1219">
+                                    <Border Background="#0C1219">
 
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="Auto" />
-                                                    </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
 
-                                                    <Grid Grid.Row="0">
+                                            <Grid Grid.Row="0">
 
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="Auto" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
 
-                                                        <Grid Grid.Column="0"
-                                                              Margin="15,15,0,0">
+                                                <Grid Grid.Column="0"
+                                                      Margin="15,15,0,0">
 
-                                                            <Image Source="/Image/Red.png"
-                                                                   Stretch="UniformToFill"
-                                                                   Width="50"
-                                                                   Height="60" />
-                                                        </Grid>
-
-                                                        <Grid Grid.Column="1"
-                                                              Margin="10,15,0,0">
-
-                                                            <StackPanel Orientation="Vertical"
-                                                                        TextElement.Foreground="#AFBCC7"
-                                                                        TextElement.FontSize="11">
-
-                                                                <TextBlock Text="Violence" />
-
-                                                                <TextBlock Text="Bad language" />
-
-                                                            </StackPanel>
-                                                        </Grid>
-                                                    </Grid>
-
-                                                    <Grid Grid.Row="1"
-                                                          Margin="15,5,0,5">
-
-                                                        <TextBlock Text="Age rating for: PEGI"
-                                                                   Foreground="#AFBCC7"
-                                                                   FontSize="11"/>
-                                                    </Grid>
+                                                    <Image Source="/Image/Red.png"
+                                                           Stretch="UniformToFill"
+                                                           Width="50"
+                                                           Height="60" />
                                                 </Grid>
-                                            </Border>
+
+                                                <Grid Grid.Column="1"
+                                                      Margin="10,15,0,0">
+
+                                                    <StackPanel Orientation="Vertical"
+                                                                TextElement.Foreground="#AFBCC7"
+                                                                TextElement.FontSize="11">
+
+                                                        <TextBlock Text="Violence" />
+
+                                                        <TextBlock Text="Bad language" />
+
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1"
+                                                  Margin="15,5,0,5">
+
+                                                <TextBlock Text="Age rating for: PEGI"
+                                                           Foreground="#AFBCC7"
+                                                           FontSize="11" />
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Grid>                          
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </ScrollViewer>

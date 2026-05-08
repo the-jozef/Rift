@@ -11,7 +11,6 @@
              d:Width="1200">
 
     <Grid>
-        
         <TextBlock Text="Select a game from the list"
                    Foreground="#555B63"
                    FontSize="15"
@@ -21,25 +20,27 @@
 
 
         <ScrollViewer Background="#22272E"
-               x:Name="MyScrollViewer2"
-               VerticalScrollBarVisibility="Auto"
-               Visibility="{Binding HasGame, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      x:Name="MyScrollViewer2"
+                      VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding HasGame, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="420" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="55" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0"
-                      Height="510">
-                    
+                <Grid Grid.Row="0">
+
                     <Rectangle Fill="#1A1E24" />
 
                     <Image Source="{Binding HeroImage}"
-                           Stretch="UniformToFill" />
+                           Stretch="Uniform"
+                           MinWidth="1300"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top" />
                 </Grid>
 
                 <Grid Grid.Row="1">
@@ -48,12 +49,12 @@
 
                         <Border.Background>
                             <LinearGradientBrush EndPoint="0,1"
-                                          StartPoint="0,0"
-                                          Opacity="0.7">
+                                                 StartPoint="0,0"
+                                                 Opacity="0.7">
                                 <GradientStop Color="#474A54"
-                                       Offset="0" />
+                                              Offset="0" />
                                 <GradientStop Color="#22262E"
-                                       Offset="0.846" />
+                                              Offset="0.846" />
                             </LinearGradientBrush>
                         </Border.Background>
 
@@ -66,8 +67,11 @@
 
                             <Grid Grid.Row="0">
 
-                                <Border BorderBrush="#A6A6A6"
-                                 BorderThickness="1">
+                                <Border Background="#A6A6A6"
+                                        Height="3"
+                                        VerticalAlignment="Top"
+                                        Margin="0,-1,0,0"
+                                        Opacity="0.2">
                                 </Border>
                             </Grid>
 
@@ -78,208 +82,256 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel VerticalAlignment="Top"
-                                     Orientation="Horizontal"
-                                     HorizontalAlignment="Left">
+                                <Grid Grid.Column="0"
+                                      VerticalAlignment="Top"
+                                      HorizontalAlignment="Left"
+                                      Margin="15,13,0,0">
 
-                                    <Button BorderBrush="Transparent"
-                                     Padding="0"
-                                     Width="165"
-                                     Height="50"
-                                     Margin="20,10,0,0"
-                                            Command="{Binding LaunchOrInstallCommand}">
+                                    <StackPanel Orientation="Horizontal">
 
-                                        <Button.Background>
-                                            <LinearGradientBrush StartPoint="0,0"
-                                                          EndPoint="1,0">
-
-                                                <GradientStop Color="#49D136"
-                                                       Offset="0.341" />
-
-                                                <GradientStop Color="#3CB031"
-                                                       Offset="1" />
-
-                                            </LinearGradientBrush>
-                                        </Button.Background>
-
-                                        <StackPanel Orientation="Horizontal">
-
-                                            <materialIcons:MaterialIcon Kind="Play"
-                                                                 Foreground="White"
-                                                                 Opacity="0.75"
-                                                                 Height="30"
-                                                                 Width="30" />
-
-                                            <TextBlock Text="PLAY"
-                                                HorizontalAlignment="Center"
-                                                Margin="6,0,2,0"
-                                                Foreground="White"
-                                                FontSize="23"
-                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-
-                                        </StackPanel>
-                                    </Button>
-
-                                    <Border CornerRadius="3"
-                                            Padding="6,2"
-                                            Margin="8,18,0,0"
-                                            VerticalAlignment="Center"
-                                            Visibility="{Binding NeedsUpdate, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0"
-                                                                 EndPoint="1,0">
-
-                                                <GradientStop Color="#318FDE"
-                                                              Offset="0.341" />
-
-                                                <GradientStop Color="#245FD0"
-                                                              Offset="1" />
-
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-
-                                        <TextBlock Text="Update available"
-                                               Foreground="White"
-                                               FontWeight="Medium"
-                                               FontSize="11" />
-                                    </Border>
-
-                                    <StackPanel Orientation="Vertical"
-                                         Margin="25,17,0,0">
-
-                                        <TextBlock  Text="LAST PLAYED"
-                                             Foreground="#B6BBBF"
-                                             FontSize="14"
-                                             FontFamily="Arial" />
-
-                                        <TextBlock Text="{Binding Detail.LastPlayedDisplay}"
-                                             Margin="2,3,0,0"
-                                             FontSize="13.2"
-                                             Foreground="#92969C"
-                                             FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal"
-                                         Margin="35,17,0,0">
-
-                                        <materialIcons:MaterialIcon Kind="ClockOutline"
-                                                             Width="25"
-                                                             Height="25"
-                                                             Margin="0,-10,0,0"
-                                                             Opacity="0.6"
-                                                             Foreground="#B6BBBF" />
-
-                                        <StackPanel Orientation="Vertical"
-                                             Margin="10,0,0,0">
-
-                                            <TextBlock Text="PLAY TIME"
-                                                FontSize="14"
-                                                FontFamily="Arial"
-                                                Foreground="#B6BBBF" />
-
-                                            <TextBlock Text="{Binding Game.PlaytimeDisplay}"
-                                                Margin="2,3,0,0"
-                                                FontSize="13.2"
-                                                Foreground="#92969C"
-                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-                                        </StackPanel>
-                                    </StackPanel>
-
-                                    <StackPanel Margin="18,16,0,0"
-                                         Orientation="Horizontal">
-
-                                        <materialIcons:MaterialIcon Kind="MedalOutline"
-                                                             Width="25"
-                                                             Height="25"
-                                                             Opacity="0.6"
-                                                             Margin="0,4,0,0"
-                                                             Foreground="#B6BBBF" />
-
-                                        <StackPanel Orientation="Vertical"
-                                             Margin="10,0,0,0">
-
-                                            <TextBlock Text="ACHIEVEMENTS"
-                                                FontSize="14"
-                                                FontFamily="Arial"
-                                                Foreground="#B6BBBF" />
-
-                                            <StackPanel Orientation="Horizontal">
-
-                                                <TextBlock Margin="1,2,0,0"
-                                                    FontSize="13.2"
-                                                    Foreground="#92969C"
-                                                    FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans">
+                                        <Button BorderBrush="Transparent"
+                                                Padding="0"
+                                                Width="165"
+                                                Height="48"
+                                                Command="{Binding LaunchOrInstallCommand}">
+                                            
+                                            <Button.Style>
+                                                <Style TargetType="Button">
                                                     
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="{}{0}/{1}">
-                                                            <Binding Path="Detail.AchievementsUnlocked" />
-                                                            <Binding Path="Detail.AchievementsTotal" />
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                 EndPoint="1,0">
+                                                                <GradientStop Color="#46C734"
+                                                                              Offset="0.251" />
+                                                                <GradientStop Color="#3CB031"
+                                                                              Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
 
-                                                <ProgressBar HorizontalAlignment="Right"
-                                                      Width="80"
-                                                      Height="4.5"
-                                                      Margin="6,4,0,0"
-                                                      Foreground="#2D73FF"
-                                                      Maximum="{Binding Detail.AchievementsTotal}"
-                                                         Value="{Binding Detail.AchievementsUnlocked}">
-                                                    
-                                                    <ProgressBar.Style>
-                                                        <Style TargetType="ProgressBar">
-                                                            <Setter Property="Template">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding NeedsUpdate}"
+                                                                     Value="True">
+                                                            
+                                                            <Setter Property="Background">
                                                                 <Setter.Value>
-                                                                    <ControlTemplate TargetType="ProgressBar">
-                                                                        <Border Background="Black"
-                                                                         CornerRadius="2"
-                                                                         ClipToBounds="True">
-                                                                            <Grid x:Name="PART_Track">
-                                                                                <Border x:Name="PART_Indicator"
-                                                                                 Background="{TemplateBinding Foreground}"
-                                                                                 CornerRadius="2"
-                                                                                 HorizontalAlignment="Left" />
-                                                                            </Grid>
-                                                                        </Border>
-                                                                    </ControlTemplate>
+                                                                    <LinearGradientBrush StartPoint="0,0"
+                                                                                         EndPoint="1,0">
+                                                                        <GradientStop Color="#318FDE"
+                                                                                      Offset="0.341" />
+                                                                        <GradientStop Color="#245FD0"
+                                                                                      Offset="1" />
+                                                                    </LinearGradientBrush>
                                                                 </Setter.Value>
                                                             </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                
+                                                <materialIcons:MaterialIcon Foreground="White"
+                                                                            Opacity="0.75">
+                                                    
+                                                    <materialIcons:MaterialIcon.Style>
+                                                        <Style TargetType="{x:Type materialIcons:MaterialIcon}">
+                                                            
+                                                            <Setter Property="Kind"
+                                                                    Value="Play" />
+                                                            <Setter Property="Height"
+                                                                    Value="30" />
+                                                            <Setter Property="Width"
+                                                                    Value="30" />
+                                                            <Setter Property="Margin"
+                                                                    Value="-4,0,0,0" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding NeedsUpdate}"
+                                                                             Value="True">
+                                                                    <Setter Property="Kind"
+                                                                            Value="Sync" />
+                                                                    <Setter Property="Height"
+                                                                            Value="21" />
+                                                                    <Setter Property="Width"
+                                                                            Value="21" />
+                                                                    <Setter Property="Margin"
+                                                                            Value="-4,4,0,0" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
                                                         </Style>
-                                                    </ProgressBar.Style>
-                                                </ProgressBar>
+                                                    </materialIcons:MaterialIcon.Style>
+                                                </materialIcons:MaterialIcon>
+
+                                                <TextBlock Margin="4,3.7,2,0"
+                                                           Foreground="White"
+                                                           FontSize="21"
+                                                           FontFamily="Arial">
+                                                    
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text"
+                                                                    Value="PLAY" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding NeedsUpdate}"
+                                                                             Value="True">
+                                                                    
+                                                                    <Setter Property="Text"
+                                                                            Value="UPDATE" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Button>
+
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0,5,0,0">
+
+                                            <StackPanel Orientation="Vertical"
+                                                        Margin="25,0,0,0">
+
+                                                <TextBlock  Text="LAST PLAYED"
+                                                            Foreground="#B6BBBF"
+                                                            FontSize="14"
+                                                            FontFamily="Arial" />
+
+                                                <TextBlock Text="{Binding Detail.LastPlayedDisplay}"
+                                                           Margin="2,3,0,0"
+                                                           FontSize="13.2"
+                                                           FontWeight="Medium"
+                                                           Opacity="0.7"
+                                                           Foreground="#92969C"
+                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="35,0,0,0">
+
+                                                <materialIcons:MaterialIcon Kind="ClockOutline"
+                                                                            Width="28"
+                                                                            Height="28"
+                                                                            Margin="0,-10,0,0"
+                                                                            Opacity="0.6"
+                                                                            Foreground="#B6BBBF" />
+
+                                                <StackPanel Orientation="Vertical"
+                                                            Margin="8,0,0,0">
+
+                                                    <TextBlock Text="PLAY TIME"
+                                                               FontSize="14"
+                                                               FontFamily="Arial"
+                                                               Foreground="#B6BBBF" />
+
+                                                    <TextBlock Text="{Binding Game.PlaytimeDisplay}"
+                                                               Margin="2,3,0,0"
+                                                               FontSize="13.2"
+                                                               FontWeight="Medium"
+                                                               Opacity="0.7"
+                                                               Foreground="#92969C"
+                                                               FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <StackPanel Margin="18,0,0,0"
+                                                        Orientation="Horizontal">
+
+                                                <materialIcons:MaterialIcon Kind="MedalOutline"
+                                                                            Width="30"
+                                                                            Height="30"
+                                                                            Opacity="0.6"
+                                                                            Margin="0,-10,0,0"
+                                                                            Foreground="#B6BBBF" />
+
+                                                <StackPanel Orientation="Vertical"
+                                                            Margin="10,0,0,0">
+
+                                                    <TextBlock Text="ACHIEVEMENTS"
+                                                               FontSize="14"
+                                                               FontFamily="Arial"
+                                                               Foreground="#B6BBBF" />
+
+                                                    <StackPanel Orientation="Horizontal">
+
+                                                        <TextBlock Margin="2,2,0,0"
+                                                                   FontSize="13.2"
+                                                                   FontWeight="Medium"
+                                                                   Opacity="0.7"
+                                                                   Foreground="#92969C"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans">
+
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0}/{1}">
+                                                                    <Binding Path="Detail.AchievementsUnlocked" />
+                                                                    <Binding Path="Detail.AchievementsTotal" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+
+                                                        <ProgressBar HorizontalAlignment="Right"
+                                                                     Width="90"
+                                                                     Height="4.5"
+                                                                     Margin="6,4,0,0"
+                                                                     Foreground="#2D73FF"
+                                                                     Maximum="{Binding Detail.AchievementsTotal}"
+                                                                     Value="{Binding Detail.AchievementsUnlocked}">
+
+                                                            <ProgressBar.Style>
+                                                                <Style TargetType="ProgressBar">
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="ProgressBar">
+                                                                                <Border Background="Black"
+                                                                                        CornerRadius="2"
+                                                                                        ClipToBounds="True">
+                                                                                    <Grid x:Name="PART_Track">
+                                                                                        <Border x:Name="PART_Indicator"
+                                                                                                Background="{TemplateBinding Foreground}"
+                                                                                                CornerRadius="2"
+                                                                                                HorizontalAlignment="Left" />
+                                                                                    </Grid>
+                                                                                </Border>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </ProgressBar.Style>
+                                                        </ProgressBar>
+                                                    </StackPanel>
+                                                </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
+                                </Grid>
 
                                 <Grid Grid.Column="1"
                                       HorizontalAlignment="Right"
-                                         Margin="0,17,10,0">
+                                      Margin="0,17,25,13">
 
                                     <Border CornerRadius="2">
 
                                         <Border.Background>
                                             <SolidColorBrush Color="#747A7C"
-                                                          Opacity="0.3" />
+                                                             Opacity="0.3" />
                                         </Border.Background>
 
                                         <Button Background="Transparent"
-                                             BorderBrush="Transparent"
-                                             Foreground="#B9BABD"
+                                                BorderBrush="Transparent"
+                                                Foreground="#B9BABD"
                                                 Command="{Binding OpenStoreCommand}">
 
                                             <StackPanel Orientation="Horizontal">
 
                                                 <materialIcons:MaterialIcon Kind="StorefrontOutline"
-                                                                         Margin="0,0,6,0"
-                                                                         Height="17"
-                                                                         Width="17" />
+                                                                            Height="17"
+                                                                            Width="17" />
 
                                                 <TextBlock Text="Store Page"
-                                                        FontSize="14"
-                                                        VerticalAlignment="Center"
-                                                        FontFamily="Arial" />
+                                                           FontSize="14"
+                                                           Margin="5,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           FontFamily="Arial" />
                                             </StackPanel>
                                         </Button>
                                     </Border>
@@ -290,7 +342,7 @@
                 </Grid>
 
                 <Grid Grid.Row="2"
-                      Margin="0,20,20,0">
+                      Margin="0,40,20,0">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -298,68 +350,108 @@
                         <ColumnDefinition Width="415" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0" Margin="20,0,0,0">
+                    <StackPanel Grid.Column="0"
+                                Margin="20,0,0,0">
+
                         <ItemsControl ItemsSource="{Binding RecentActivity}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,0,0,30">
 
-                                        <!-- Date header -->
                                         <DockPanel>
                                             <TextBlock Text="{Binding DateLabel}"
-                                                       Foreground="#87898C" FontSize="17"
-                                                       FontWeight="Bold" />
-                                            <Border Margin="5,-3,0,0" Height="0.5"
-                                                    CornerRadius="0.5" VerticalAlignment="Center">
+                                                       Foreground="#87898C"
+                                                       FontSize="16"
+                                                       FontWeight="Medium" />
+
+
+                                            <Border Margin="5,1.5,0,0"
+                                                    Height="0.5"
+                                                    CornerRadius="0.5"
+                                                    VerticalAlignment="Center">
+
                                                 <Border.Background>
-                                                    <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
-                                                        <GradientStop Color="#87898C" Offset="0" />
-                                                        <GradientStop Color="Transparent" Offset="0.957" />
+                                                    <LinearGradientBrush StartPoint="1,0"
+                                                                         EndPoint="0,0">
+                                                        <GradientStop Color="#87898C"
+                                                                      Offset="0" />
+                                                        <GradientStop Color="Transparent"
+                                                                      Offset="0.999" />
                                                     </LinearGradientBrush>
                                                 </Border.Background>
                                             </Border>
                                         </DockPanel>
 
-                                        <!-- "Username achieved" row -->
-                                        <StackPanel Orientation="Horizontal" Margin="5,8,0,0">
-                                            <Border Height="26" Width="27" CornerRadius="2">
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="5,10,0,0">
+
+                                            <Border Height="30"
+                                                    Width="31"
+                                                    CornerRadius="2">
+
                                                 <Border.Background>
                                                     <ImageBrush ImageSource="{Binding DataContext.CurrentAvatarUrl,
                                                         RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                 Stretch="UniformToFill" />
                                                 </Border.Background>
                                             </Border>
-                                            <Rectangle Fill="#6DCFF6" Height="26" Width="1.5" />
+
+                                            <Rectangle Fill="#6DCFF6"
+                                                       Height="29"
+                                                       Width="1.5" />
+
                                             <TextBlock Text="{Binding DataContext.CurrentUsername,
                                                 RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                       Margin="10,4,0,0" Foreground="#67c1f5"
-                                                       FontSize="16" FontWeight="Bold" />
-                                            <TextBlock Text="achieved" Margin="4,6,0,0"
-                                                       Foreground="#87898C" FontSize="14" FontWeight="Bold" />
+                                                       Margin="10,0,0,1"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="#67c1f5"
+                                                       FontSize="17" />
+
+                                            <TextBlock Text="achieved"
+                                                       Margin="5,1,0,0"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="#87898C"
+                                                       FontSize="15" />
                                         </StackPanel>
 
-                                        <!-- Achievement cards for this date -->
-                                        <Border Background="#1F2429" Padding="15,10,15,10" Margin="20,10,0,0">
+                                        <Border Background="#1F2429"
+                                                Padding="15,10,15,5"
+                                                Margin="15,10,0,0">
+
                                             <ItemsControl ItemsSource="{Binding Items}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                                            <Border CornerRadius="2" Width="43" Height="43">
+
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="0,0,0,10">
+
+                                                            <Border CornerRadius="2"
+                                                                    Width="43"
+                                                                    Height="43"
+                                                                    ClipToBounds="True">
+
                                                                 <Border.Effect>
-                                                                    <DropShadowEffect Color="Gold" BlurRadius="80"
-                                                                                      ShadowDepth="0" Opacity="0.8" />
+                                                                    <DropShadowEffect Color="Gold"
+                                                                                      BlurRadius="70"
+                                                                                      ShadowDepth="0"
+                                                                                      Opacity="0.6" />
                                                                 </Border.Effect>
-                                                                <Border.Background>
-                                                                    <ImageBrush ImageSource="{Binding IconImage.Bitmap}"
-                                                                                Stretch="UniformToFill" />
-                                                                </Border.Background>
+
+                                                                <Image Source="{Binding IconImage.Bitmap}"
+                                                                       Stretch="UniformToFill" />
                                                             </Border>
-                                                            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+
+                                                            <StackPanel Orientation="Vertical"
+                                                                        Margin="12,0,0,0">
+
                                                                 <TextBlock Text="{Binding Name}"
-                                                                           Foreground="White" FontSize="15"
-                                                                           FontWeight="Bold" Margin="0,4,0,0" />
+                                                                           Foreground="White"
+                                                                           FontSize="15"
+                                                                           Margin="0,3,0,0" />
+
                                                                 <TextBlock Text="{Binding Description}"
-                                                                           Foreground="#B1B1B5" FontSize="13" />
+                                                                           Foreground="#B1B1B5"
+                                                                           FontSize="13" />
                                                             </StackPanel>
                                                         </StackPanel>
                                                     </DataTemplate>
@@ -373,22 +465,21 @@
                     </StackPanel>
 
                     <Grid Grid.Column="2"
-                           Margin="0,30,0,0">
+                          Margin="0,30,0,0">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0">
+                        <Grid Grid.Row="0"
+                              Margin="3,0,0,5">
 
                             <TextBlock Text="ACHIEVEMENTS"
                                        Foreground="#AFB8BD"
-                                       FontFamily="Bold"
-                                       HorizontalAlignment="Left"
-                                       Margin="5,0,0,5"
+                                       FontFamily="Arial"
                                        FontWeight="Medium"
-                                       FontSize="17" />
+                                       FontSize="15" />
                         </Grid>
 
                         <Grid Grid.Row="1">
@@ -402,16 +493,16 @@
 
                                 <Border.Background>
                                     <LinearGradientBrush EndPoint="0.5,1"
-                                       StartPoint="0.5,0">
+                                                         StartPoint="0.5,0">
                                         <GradientStop Color="#333840"
-                                    Offset="0.547" />
+                                                      Offset="0.547" />
                                         <GradientStop Color="#43484F"
-                                    Offset="1" />
+                                                      Offset="1" />
                                     </LinearGradientBrush>
                                 </Border.Background>
 
-                                <Grid Margin="12,12,0,0">
-                                    
+                                <Grid>
+
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -421,44 +512,59 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <Border Grid.Row="0" >
-                                        
+                                    <Border Grid.Row="0">
+
                                         <Border.Background>
-                                            <LinearGradientBrush StartPoint="1,0" EndPoint="0,0">
-                                                <GradientStop Color="#2A2F36" Offset="0.537" />
-                                                <GradientStop Color="#363A42" Offset="1" />
+                                            <LinearGradientBrush StartPoint="1,0"
+                                                                 EndPoint="0,0">
+                                                <GradientStop Color="#2A2F36"
+                                                              Offset="0.537" />
+                                                <GradientStop Color="#363A42"
+                                                              Offset="1" />
                                             </LinearGradientBrush>
                                         </Border.Background>
-                                        
-                                        <StackPanel>
-                                            <StackPanel Orientation="Horizontal" Margin="8,7,0,0">
-                                                <TextBlock Foreground="#D4D4D4" FontWeight="Medium" FontSize="13.4">
+
+                                        <StackPanel Margin="10,12,0,15">
+
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <TextBlock Foreground="#D4D4D4"
+                                                           FontWeight="Medium"
+                                                           FontSize="13.3">
+
                                                     <TextBlock.Text>
-                                                        <MultiBinding StringFormat="You've unlocked {0}/{1}">
+                                                        <MultiBinding StringFormat="You've unlocked  {0}/{1}">
                                                             <Binding Path="Detail.AchievementsUnlocked" />
                                                             <Binding Path="Detail.AchievementsTotal" />
                                                         </MultiBinding>
                                                     </TextBlock.Text>
                                                 </TextBlock>
+
                                                 <TextBlock Text="{Binding Detail.AchievementsPercentDisplay}"
-                                                       Margin="5,0,0,0" Foreground="#848B91" FontSize="13.4" />
+                                                           Margin="6,0,0,0"
+                                                           Foreground="#848B91"
+                                                           FontSize="13.4" />
                                             </StackPanel>
-                                            
-                                            <ProgressBar Height="8" Margin="8,7,10,5"
-                                                     Foreground="#2D73FF"
-                                                     Maximum="{Binding Detail.AchievementsTotal}"
-                                                     Value="{Binding Detail.AchievementsUnlocked}">
+
+                                            <ProgressBar Height="8"
+                                                         Margin="5,8,25,0"
+                                                         Foreground="#2D73FF"
+                                                         Maximum="{Binding Detail.AchievementsTotal}"
+                                                         Value="{Binding Detail.AchievementsUnlocked}">
+
                                                 <ProgressBar.Style>
                                                     <Style TargetType="ProgressBar">
                                                         <Setter Property="Template">
                                                             <Setter.Value>
                                                                 <ControlTemplate TargetType="ProgressBar">
-                                                                    <Border Background="Black" CornerRadius="2" ClipToBounds="True">
+                                                                    <Border Background="Black"
+                                                                            CornerRadius="2"
+                                                                            ClipToBounds="True">
                                                                         <Grid x:Name="PART_Track">
                                                                             <Border x:Name="PART_Indicator"
-                                                                                Background="{TemplateBinding Foreground}"
-                                                                                CornerRadius="2"
-                                                                                HorizontalAlignment="Left" />
+                                                                                    Background="{TemplateBinding Foreground}"
+                                                                                    CornerRadius="2"
+                                                                                    HorizontalAlignment="Left" />
                                                                         </Grid>
                                                                     </Border>
                                                                 </ControlTemplate>
@@ -469,26 +575,45 @@
                                             </ProgressBar>
                                         </StackPanel>
                                     </Border>
-                                  
-                                    <StackPanel Grid.Row="1" Margin="0,8,12,0">
+
+                                    <StackPanel Grid.Row="1"
+                                                Margin="0,8,12,0">
+
                                         <ItemsControl ItemsSource="{Binding UnlockedPreview}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                                        <Border CornerRadius="2" Width="48" Height="48">
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,0,0,10">
+
+                                                        <Border CornerRadius="2"
+                                                                Width="48"
+                                                                Height="48"
+                                                                ClipToBounds="True">
+
                                                             <Border.Effect>
-                                                                <DropShadowEffect Color="Gold" BlurRadius="80" ShadowDepth="0" Opacity="0.8" />
+                                                                <DropShadowEffect Color="Gold"
+                                                                                  BlurRadius="70"
+                                                                                  ShadowDepth="0"
+                                                                                  Opacity="0.5" />
                                                             </Border.Effect>
-                                                            <Border.Background>
-                                                                <ImageBrush ImageSource="{Binding IconImage.Bitmap}" Stretch="UniformToFill" />
-                                                            </Border.Background>
+                                                           
+                                                            <Image Source="{Binding IconImage.Bitmap}"
+                                                                   Stretch="UniformToFill" />
                                                         </Border>
-                                                        <!-- Show name + desc only for first item -->
-                                                        <StackPanel Orientation="Vertical" Margin="10,0,0,0"
-                                                                Visibility="{Binding IsFirst, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                            <TextBlock Text="{Binding Name}" Foreground="White"
-                                                                   FontSize="15" FontWeight="Bold" Margin="0,7,0,0" />
-                                                            <TextBlock Text="{Binding Description}" Foreground="#B1B1B5" FontSize="13" />
+
+                                                        <StackPanel Orientation="Vertical"
+                                                                    Margin="12,0,0,0"
+                                                                    Visibility="{Binding IsFirst, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                                            <TextBlock Text="{Binding Name}"
+                                                                       Foreground="White"
+                                                                       FontSize="15"
+                                                                       Margin="0,4,0,0" />
+
+                                                            <TextBlock Text="{Binding Description}"
+                                                                       Foreground="#B1B1B5"
+                                                                       FontSize="13" />
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -500,49 +625,89 @@
                                             </ItemsControl.ItemsPanel>
                                         </ItemsControl>
 
-                                        <!-- +N more unlocked -->
-                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0"
-                                                Visibility="{Binding HasUnlockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <Button Background="#282E33" BorderBrush="Transparent"
-                                                Width="52" Height="48" Padding="0" Foreground="#D4D4D4">
-                                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                                    <TextBlock Text="+" FontWeight="SemiBold" FontSize="16" Margin="0,2,1,0" />
-                                                    <TextBlock Text="{Binding UnlockedRemaining}" FontWeight="SemiBold" FontSize="17" />
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="15,4,0,0"
+                                                    Visibility="{Binding HasUnlockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                            <Button Background="#282E33"
+                                                    BorderBrush="Transparent"
+                                                    Width="52"
+                                                    Height="48"
+                                                    Padding="0"
+                                                    Foreground="#D4D4D4">
+
+                                                <StackPanel Orientation="Horizontal"
+                                                            Margin="-2,2,0,0">
+
+                                                    <TextBlock Text="+"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="16" />
+
+                                                    <TextBlock Text="{Binding UnlockedRemaining}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="17"
+                                                               Margin="1,0,0,0" />
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Divider -->
-                                    <Border Grid.Row="2" Height="1" Background="#6E6F73"
-                                        Margin="0,12,12,0" CornerRadius="0.5" />
+                                    <Border Grid.Row="2"
+                                            Height="1"
+                                            Background="#6E6F73"
+                                            Margin="16,12,12,0"
+                                            CornerRadius="0.5" />
 
-                                    <!-- Locked header -->
-                                    <TextBlock Grid.Row="3" Text="Locked Achievements"
-                                           Foreground="#C0C1C4" FontSize="13.4"
-                                           Margin="0,8,0,0" />
+                                    <TextBlock Grid.Row="3"
+                                               Text="Locked Achievements"
+                                               Foreground="#C0C1C4"
+                                               FontSize="13.4"
+                                               Margin="15,10,0,0" />
 
-                                    <!-- Locked icons row -->
-                                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,5,12,0">
+                                    <StackPanel Grid.Row="4"
+                                                Orientation="Horizontal"
+                                                Margin="15,5,12,0">
+
                                         <ItemsControl ItemsSource="{Binding LockedPreview}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border CornerRadius="2" Width="48" Height="48" Margin="0,0,8,0">
+
+                                                    <Border CornerRadius="2"
+                                                            Width="48"
+                                                            Height="48"
+                                                            Margin="0,0,8,0"
+                                                            ClipToBounds="True">
+
                                                         <Border.Effect>
-                                                            <DropShadowEffect Color="Gold" BlurRadius="80" ShadowDepth="0" Opacity="0.8" />
+                                                            <DropShadowEffect Color="Gold"
+                                                                              BlurRadius="70"
+                                                                              ShadowDepth="0"
+                                                                              Opacity="0.5" />
                                                         </Border.Effect>
+
                                                         <Border.Background>
-                                                            <ImageBrush ImageSource="{Binding IconImage.Bitmap}" Stretch="UniformToFill" />
+                                                            <ImageBrush ImageSource="{Binding IconImage.Bitmap}"
+                                                                        Stretch="UniformToFill" />
                                                         </Border.Background>
-                                                        <!-- Lock overlay -->
-                                                        <Border CornerRadius="2" Margin="-0.2">
-                                                            <Border.Background>
-                                                                <SolidColorBrush Color="#292727" Opacity="0.9" />
-                                                            </Border.Background>
-                                                            <materialIcons:MaterialIcon Kind="Lock"
-                                                                                    Foreground="#C9C7C7"
-                                                                                    Height="20" Width="20" />
-                                                        </Border>
+
+                                                        <Grid>
+                                                            <Image Source="{Binding IconImage.Bitmap}"
+                                                                   Stretch="UniformToFill" />
+
+                                                            <Border CornerRadius="2"
+                                                                    Margin="-0.2">
+
+                                                                <Border.Background>
+                                                                    <SolidColorBrush Color="#292727"
+                                                                                     Opacity="0.8" />
+                                                                </Border.Background>
+
+                                                                <materialIcons:MaterialIcon Kind="Lock"
+                                                                                            Foreground="#C9C7C7"
+                                                                                            Height="20"
+                                                                                            Width="20" />
+                                                            </Border>
+                                                        </Grid>
                                                     </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
@@ -553,23 +718,41 @@
                                             </ItemsControl.ItemsPanel>
                                         </ItemsControl>
 
-                                        <!-- +N more locked -->
-                                        <Button Background="#282E33" BorderBrush="Transparent"
-                                            Width="52" Height="48" Padding="0" Foreground="#D4D4D4"
-                                            Visibility="{Binding HasLockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                                <TextBlock Text="+" FontWeight="SemiBold" FontSize="16" Margin="0,1,1,0" />
-                                                <TextBlock Text="{Binding LockedRemaining}" FontWeight="SemiBold" FontSize="17" />
+                                        <Button Background="#282E33"
+                                                BorderBrush="Transparent"
+                                                Width="52"
+                                                Height="48"
+                                                Padding="0"
+                                                Foreground="#D4D4D4"
+                                                Visibility="{Binding HasLockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="-2,2,0,0">
+
+                                                <TextBlock Text="+"
+                                                           FontWeight="SemiBold"
+                                                           FontSize="16" />
+
+                                                <TextBlock Text="{Binding LockedRemaining}"
+                                                           FontWeight="SemiBold"
+                                                           FontSize="17"
+                                                           Margin="1,0,0,0" />
                                             </StackPanel>
                                         </Button>
                                     </StackPanel>
 
-                                    <!-- View Achievements link -->
-                                    <StackPanel Grid.Row="5" HorizontalAlignment="Right"
-                                            Margin="0,20,5,8">
-                                        <Button Background="Transparent" BorderBrush="Transparent"
-                                            Command="{Binding OpenStoreCommand}">
-                                            <TextBlock Text="View Achievements" Foreground="#818A91" FontSize="13" />
+                                    <StackPanel Grid.Row="5"
+                                                HorizontalAlignment="Right"
+                                                Margin="0,20,20,8">
+
+                                        <Button Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                Padding="0"
+                                                Command="{Binding OpenStoreCommand}">
+
+                                            <TextBlock Text="View Achievements"
+                                                       Foreground="#818A91"
+                                                       FontSize="13" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Rift_App.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,6 +32,57 @@ namespace Rift_App.Services
             return _cache?.TryGetValue(appId, out var info) == true
                 ? info
                 : new InstallInfo(false, false);
+        }
+        public static List<GameModel> GetAllGames()
+        {
+            RefreshIfNeeded();
+
+            if (_cache == null) return new List<GameModel>();
+
+            var steamPath = GetSteamPath();
+            var libraryPaths = steamPath != null
+                ? GetLibraryPaths(steamPath)
+                : new List<string>();
+
+            // Build a quick lookup: appId → steamappsPath so we can read the acf for name/installdir
+            var result = new List<GameModel>();
+
+            foreach (var steamappsPath in libraryPaths)
+            {
+                if (!Directory.Exists(steamappsPath)) continue;
+
+                foreach (var acf in Directory.GetFiles(steamappsPath, "appmanifest_*.acf"))
+                {
+                    try
+                    {
+                        var content = File.ReadAllText(acf);
+                        var appId = ParseAcfInt(content, "appid");
+                        var flags = ParseAcfInt(content, "StateFlags");
+
+                        if (appId <= 0) continue;
+
+                        // Only include actually installed games
+                        if (flags != 4 && flags != 6) continue;
+
+                        var name = ParseAcfString(content, "name");
+                        var installDir = ParseAcfString(content, "installdir");
+
+                        result.Add(new GameModel
+                        {
+                            AppId = appId,
+                            Name = !string.IsNullOrEmpty(name) ? name : $"App {appId}",
+                            InstallDir = installDir ?? string.Empty,
+                            HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                            IconUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/capsule_sm_120.jpg",
+                            PlaytimeMinutes = 0
+                        });
+                    }
+                    catch { }
+                }
+            }
+
+            Debug.WriteLine($"[SteamInstall] GetAllGames: {result.Count} installed games");
+            return result;
         }
 
         // ─── PRIVATE ──────────────────────────────────────────────────────
@@ -133,6 +185,11 @@ namespace Rift_App.Services
         {
             var match = Regex.Match(content, $@"""{key}""\s+""(\d+)""");
             return match.Success && int.TryParse(match.Groups[1].Value, out int val) ? val : 0;
+        }
+        private static string? ParseAcfString(string content, string key)
+        {
+            var match = Regex.Match(content, $@"""{key}""\s+""([^""]*)""");
+            return match.Success ? match.Groups[1].Value : null;
         }
     }
 }

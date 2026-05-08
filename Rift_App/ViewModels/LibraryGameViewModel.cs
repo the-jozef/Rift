@@ -16,13 +16,6 @@ namespace Rift_App.ViewModels
 {
     public partial class LibraryGameViewModel : ObservableObject
     {
-        private static readonly HttpClient _http = new HttpClient
-        {
-            Timeout = TimeSpan.FromSeconds(60)
-        };
-
-        private const string BaseUrl = "https://rift-hupv.onrender.com";
-
         // ─── PROPERTIES ───────────────────────────────────────────────────
 
         [ObservableProperty] private GameModel? _game;
@@ -64,43 +57,45 @@ namespace Rift_App.ViewModels
 
             try
             {
-                // 1. Install status — reads local .acf files, no API call
+                // 1. Install status — reads local .acf files
                 var info = SteamInstallService.GetInfo(game.AppId);
                 IsInstalled = info.IsInstalled;
                 NeedsUpdate = info.NeedsUpdate;
                 OnPropertyChanged(nameof(ButtonText));
 
-                // 2. Hero image — disk first, download if missing
+                // 2. Hero image — local disk first
                 var heroPath = await GameDetailCacheService.EnsureHeroImageAsync(game.AppId);
                 HeroImage = LoadBitmapFromPath(heroPath);
 
-                // 3. Detail — 24h disk cache
+                // 3. Detail — 24h cache first
                 var cached = await GameDetailCacheService.LoadAsync(game.AppId);
                 if (cached != null)
                 {
+                    RestoreLocalIconPaths(cached);
                     Detail = cached;
                     BuildPreviews();
                     IsLoading = false;
 
-                    // Quietly refresh if cache older than 20h
+                    // Background refresh if cache older than 20h
                     if (DateTime.UtcNow - cached.CachedAt > TimeSpan.FromHours(20))
                         _ = RefreshInBackgroundAsync(game.AppId);
 
                     return;
                 }
 
-                // 4. Cache miss — fetch from backend
-                var fresh = await FetchDetailAsync(game.AppId);
+                // 4. No cache — load from Steamworks
+                var fresh = await LoadFromSteamworksAsync(game.AppId);
                 if (fresh != null)
                 {
                     fresh.AppId = game.AppId;
+                    RestoreLocalIconPaths(fresh);
                     await GameDetailCacheService.SaveAsync(fresh);
                     Detail = fresh;
                     BuildPreviews();
                 }
                 else
                 {
-                    Debug.WriteLine($"[LibraryGame] No detail returned for {game.AppId}");
+                    Debug.WriteLine($"[LibraryGame] No data for {game.AppId}");
                 }
             }
             catch (Exception ex)
@@ -131,6 +126,46 @@ namespace Rift_App.ViewModels
             if (Game != null) OpenUri($"steam://store/{Game.AppId}");
         }
 
+        // ─── STEAMWORKS LOAD ──────────────────────────────────────────────
+
+        private static async Task<GameDetailModel?> LoadFromSteamworksAsync(int appId)
+        {
+            // Použi server API namiesto Steamworks reinit
+            var steamId = SessionManager.SteamId64;
+            if (string.IsNullOrEmpty(steamId))
+            {
+                Debug.WriteLine($"[LibraryGame] No SteamId64 in session");
+                return null;
+            }
+
+            var detail = await ApiService.GetAchievementsAsync(appId, steamId);
+            Debug.WriteLine($"[LibraryGame] API loaded {detail?.Achievements?.Count} achievements for {appId}");
+            return detail;
+        }
+
+        private async Task RefreshInBackgroundAsync(int appId)
+        {
+            try
+            {
+                var fresh = await LoadFromSteamworksAsync(appId);
+                if (fresh == null) return;
+
+                fresh.AppId = appId;
+                RestoreLocalIconPaths(fresh);
+                await GameDetailCacheService.SaveAsync(fresh);
+
+                if (Game?.AppId == appId)
+                {
+                    Detail = fresh;
+                    BuildPreviews();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[LibraryGame] Background refresh error: {ex.Message}");
+            }
+        }
+
         // ─── BUILD PREVIEWS ───────────────────────────────────────────────
 
         private void BuildPreviews()
@@ -144,9 +179,8 @@ namespace Rift_App.ViewModels
             var unlocked = Detail.Achievements.Where(a => a.Unlocked).ToList();
             var locked = Detail.Achievements.Where(a => !a.Unlocked).ToList();
 
-            Debug.WriteLine($"[LibraryGame] Unlocked: {unlocked.Count}, Locked: {locked.Count}");
+            Debug.WriteLine($"[LibraryGame] Preview — unlocked: {unlocked.Count}, locked: {locked.Count}");
 
-            // Mark first unlocked so XAML shows Name + Description only for it
             bool isFirst = true;
             foreach (var a in unlocked.Take(5))
             {
@@ -165,7 +199,7 @@ namespace Rift_App.ViewModels
             OnPropertyChanged(nameof(HasUnlockedRemaining));
             OnPropertyChanged(nameof(HasLockedRemaining));
 
-            // Group unlocked by unlock date — newest first, max 3 groups
+            // Group by unlock date — newest first, max 3 groups
             var groups = unlocked
                 .Where(a => a.UnlockTime.HasValue)
                 .OrderByDescending(a => a.UnlockTime)
@@ -180,48 +214,17 @@ namespace Rift_App.ViewModels
             foreach (var group in groups) RecentActivity.Add(group);
         }
 
-        // ─── FETCH FROM BACKEND ───────────────────────────────────────────
+        // ─── LOCAL ICON PATHS ─────────────────────────────────────────────
+        // Sets LocalIconPath + LocalIconGrayPath on each achievement
+        // so IconImage binding loads from disk instead of network
 
-        private async Task<GameDetailModel?> FetchDetailAsync(int appId)
+        private static void RestoreLocalIconPaths(GameDetailModel detail)
         {
-            try
+            foreach (var a in detail.Achievements)
             {
-                var url = $"{BaseUrl}/api/gamedetail/{SessionManager.SteamId64}/{appId}";
-                Debug.WriteLine($"[LibraryGame] Fetching: {url}");
-
-                var json = await _http.GetStringAsync(url);
-                Debug.WriteLine($"[LibraryGame] Response length: {json.Length}");
-
-                var result = JsonConvert.DeserializeObject<GameDetailModel>(json);
-                Debug.WriteLine($"[LibraryGame] Deserialized — LastPlayed: {result?.LastPlayed}, Achievements: {result?.Achievements?.Count}");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[LibraryGame] Fetch error: {ex.Message}");
-                return null;
-            }
-        }
-
-        private async Task RefreshInBackgroundAsync(int appId)
-        {
-            try
-            {
-                var fresh = await FetchDetailAsync(appId);
-                if (fresh == null) return;
-
-                fresh.AppId = appId;
-                await GameDetailCacheService.SaveAsync(fresh);
-
-                if (Game?.AppId == appId)
-                {
-                    Detail = fresh;
-                    BuildPreviews();
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[LibraryGame] Background refresh error: {ex.Message}");
+                a.LocalIconPath = SteamworksService.GetLocalIconPath(detail.AppId, a.ApiName, gray: false);
+                a.LocalIconGrayPath = SteamworksService.GetLocalIconPath(detail.AppId, a.ApiName, gray: true);
+                a.ResetIconImage(); // Force reload with new paths
             }
         }
 

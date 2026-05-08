@@ -24,6 +24,7 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isLoading = false;
         [ObservableProperty] private string _searchText = string.Empty;
         [ObservableProperty] private int _totalGames = 0;
+        [ObservableProperty] private int _installedCount = 0;
 
         // Fired when user clicks a game — Library.xaml.cs forwards to GameDetailPanel
         public event Action<GameModel>? OnGameSelected;
@@ -36,7 +37,7 @@ namespace Rift_App.ViewModels
             if (game != null) OnGameSelected?.Invoke(game);
         }
 
-        // ─── LOAD — disk cache first ──────────────────────────────────────
+        // ─── LOAD ─────────────────────────────────────────────────────────
 
         [RelayCommand]
         public async Task LoadLibraryAsync()
@@ -47,27 +48,38 @@ namespace Rift_App.ViewModels
 
             try
             {
-                // 1. Load from disk cache — instant startup
+                // 1. Load from disk cache first — instant startup
                 var cached = await LibraryCacheService.LoadAsync();
 
                 if (cached != null && cached.Count > 0)
                 {
                     RestoreIconPaths(cached);
+                    CheckInstallStatus(cached);
                     PopulateGames(cached);
                     IsLoading = false;
 
-                    // Check for added/removed games in background
+                    // Background sync to check for new/removed games
                     _ = SyncInBackgroundAsync();
                     return;
                 }
 
-                // 2. First run — fetch from API and download all icons
-                var games = await ApiService.GetLibraryAsync(SessionManager.SteamId64);
-                if (games.Count == 0) return;
+                // 2. First run — get games directly from local Steam install
+                var games = SteamInstallService.GetAllGames();
+                if (games.Count == 0)
+                {
+                    Debug.WriteLine("[Library] No games found from SteamInstallService");
+                    return;
+                }
+
+                Debug.WriteLine($"[Library] Found {games.Count} games from Steam");
 
                 var sorted = games.OrderByDescending(g => g.PlaytimeMinutes).ToList();
+                CheckInstallStatus(sorted);
+
+                // Download icons to disk
                 await LibraryCacheService.DownloadAllIconsAsync(sorted);
                 await LibraryCacheService.SaveAsync(sorted);
+
                 PopulateGames(sorted);
             }
             catch (Exception ex)
@@ -81,7 +93,8 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── BACKGROUND SYNC — adds new, removes deleted games ────────────
+        // ─── BACKGROUND SYNC ──────────────────────────────────────────────
+        // Runs after UI is shown — adds new games, removes deleted ones
 
         private async Task SyncInBackgroundAsync()
         {
@@ -89,7 +102,8 @@ namespace Rift_App.ViewModels
             {
                 await Task.Delay(3000);
 
-                var fresh = await ApiService.GetLibraryAsync(SessionManager.SteamId64);
+                // Get fresh list from local Steam install
+                var fresh = SteamInstallService.GetAllGames();
                 if (fresh.Count == 0) return;
 
                 var cached = Games.ToList();
@@ -97,6 +111,7 @@ namespace Rift_App.ViewModels
                 if (!changed) return;
 
                 RestoreIconPaths(synced);
+                CheckInstallStatus(synced);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -106,10 +121,29 @@ namespace Rift_App.ViewModels
                 });
 
                 await LibraryCacheService.SaveAsync(synced);
+                Debug.WriteLine("[Library] Sync complete.");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Library] Sync error: {ex.Message}");
+            }
+        }
+
+        // ─── INSTALL STATUS ───────────────────────────────────────────────
+        // Uses Steamworks if initialized, falls back to .acf file reader
+
+        private static void CheckInstallStatus(List<GameModel> games)
+        {
+            foreach (var game in games)
+            {
+                InstallInfo info;
+
+                if (SteamworksService.IsInitialized)
+                    info = SteamworksService.GetInstallInfo(game.AppId);
+                else
+                    info = SteamInstallService.GetInfo(game.AppId);
+
+                game.IsInstalled = info.IsInstalled;
             }
         }
 
@@ -126,12 +160,20 @@ namespace Rift_App.ViewModels
 
         private void PopulateGames(List<GameModel> games)
         {
-            foreach (var game in games.OrderByDescending(g => g.PlaytimeMinutes))
+            // Installed first, then uninstalled — both sorted by playtime
+            var sorted = games
+                .OrderByDescending(g => g.IsInstalled)
+                .ThenByDescending(g => g.PlaytimeMinutes)
+                .ToList();
+
+            foreach (var game in sorted)
             {
                 Games.Add(game);
                 FilteredGames.Add(game);
             }
+
             TotalGames = Games.Count;
+            InstalledCount = Games.Count(g => g.IsInstalled);
         }
 
         // ─── SEARCH ───────────────────────────────────────────────────────
@@ -139,10 +181,10 @@ namespace Rift_App.ViewModels
         partial void OnSearchTextChanged(string value)
         {
             FilteredGames.Clear();
-            var filtered = string.IsNullOrWhiteSpace(value)
+            var source = string.IsNullOrWhiteSpace(value)
                 ? Games
                 : Games.Where(g => g.Name.Contains(value, StringComparison.OrdinalIgnoreCase));
-            foreach (var game in filtered) FilteredGames.Add(game);
+            foreach (var game in source) FilteredGames.Add(game);
         }
     }
 }

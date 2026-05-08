@@ -67,8 +67,8 @@ namespace Rift_App.Services
         // Returns (updated list, wasChanged)
 
         public static async Task<(List<GameModel> Games, bool Changed)> SyncAsync(
-            List<GameModel> cached,
-            List<GameModel> fresh)
+    List<GameModel> cached,
+    List<GameModel> freshInstalled)
         {
             bool changed = false;
             var result = new List<GameModel>(cached);
@@ -77,10 +77,10 @@ namespace Rift_App.Services
             foreach (var g in cached) cachedById[g.AppId] = g;
 
             var freshById = new Dictionary<int, GameModel>();
-            foreach (var g in fresh) freshById[g.AppId] = g;
+            foreach (var g in freshInstalled) freshById[g.AppId] = g;
 
             // New games — in fresh but not in cache
-            foreach (var freshGame in fresh)
+            foreach (var freshGame in freshInstalled)
             {
                 if (cachedById.ContainsKey(freshGame.AppId)) continue;
 
@@ -90,27 +90,15 @@ namespace Rift_App.Services
                 changed = true;
             }
 
-            // Removed games — in cache but not in fresh
-            var toRemove = new List<GameModel>();
+            // Update install status — don't remove games, just update IsInstalled
             foreach (var cachedGame in cached)
             {
-                if (freshById.ContainsKey(cachedGame.AppId)) continue;
-
-                Debug.WriteLine($"[LibraryCache] Removed game: {cachedGame.Name}");
-                DeleteIcon(cachedGame.AppId);
-                toRemove.Add(cachedGame);
-                changed = true;
-            }
-            foreach (var r in toRemove) result.Remove(r);
-
-            // Updated playtime
-            foreach (var cachedGame in cached)
-            {
-                if (!freshById.TryGetValue(cachedGame.AppId, out var freshGame)) continue;
-                if (cachedGame.PlaytimeMinutes == freshGame.PlaytimeMinutes) continue;
-
-                cachedGame.PlaytimeMinutes = freshGame.PlaytimeMinutes;
-                changed = true;
+                bool nowInstalled = freshById.ContainsKey(cachedGame.AppId);
+                if (cachedGame.IsInstalled != nowInstalled)
+                {
+                    cachedGame.IsInstalled = nowInstalled;
+                    changed = true;
+                }
             }
 
             return (result, changed);

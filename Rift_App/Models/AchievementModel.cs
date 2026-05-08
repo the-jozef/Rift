@@ -17,20 +17,40 @@ namespace Rift_App.Models
         public bool Unlocked { get; set; }
         public DateTime? UnlockTime { get; set; }
 
-        // Set at runtime by LibraryGameViewModel.BuildPreviews()
-        // Used in XAML to show Name + Description only for the first item in the unlocked row
         [Newtonsoft.Json.JsonIgnore]
         public bool IsFirst { get; set; }
 
         public string UnlockTimeDisplay =>
             UnlockTime.HasValue ? UnlockTime.Value.ToString("MMM d, yyyy") : string.Empty;
 
-        // Shows the colored icon if unlocked, gray icon if locked
+        [Newtonsoft.Json.JsonIgnore]
+        public string? LocalIconPath { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string? LocalIconGrayPath { get; set; }
+
         [Newtonsoft.Json.JsonIgnore]
         private GameImageViewModel? _iconImage;
 
         [Newtonsoft.Json.JsonIgnore]
-        public GameImageViewModel IconImage =>
-            _iconImage ??= new GameImageViewModel(Unlocked ? IconUrl : IconGrayUrl);
+        public GameImageViewModel IconImage
+        {
+            get
+            {
+                if (_iconImage != null) return _iconImage;
+
+                // Use local path if exists, otherwise fall back to URL
+                var source = Unlocked
+                    ? (!string.IsNullOrEmpty(LocalIconPath) ? LocalIconPath : IconUrl)
+                    : (!string.IsNullOrEmpty(LocalIconGrayPath) ? LocalIconGrayPath : IconGrayUrl);
+
+                _iconImage = new GameImageViewModel(source ?? string.Empty);
+                return _iconImage;
+            }
+        }
+
+        // Call this to reset icon so it reloads with new paths
+      
+        public void ResetIconImage() => _iconImage = null;
     }
 }

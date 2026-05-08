@@ -154,6 +154,34 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
+        public static async Task<GameDetailModel?> GetAchievementsAsync(int appId, string steamId64)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}");
+
+                var data = JsonConvert.DeserializeObject<AchievementsResponse>(response);
+                if (data == null) return null;
+
+                return new GameDetailModel
+                {
+                    AppId = appId,
+                    Achievements = data.Achievements ?? new List<AchievementModel>(),
+                    AchievementsTotal = data.Total,
+                    AchievementsUnlocked = data.Unlocked
+                };
+            }
+            catch { return null; }
+        }
+
+        private class AchievementsResponse
+        {
+            public List<AchievementModel>? Achievements { get; set; }
+            public int Total { get; set; }
+            public int Unlocked { get; set; }
+        }
+
         public static async Task<List<GameModel>> GetWishlistAsync(string steamId64)
         {
             try

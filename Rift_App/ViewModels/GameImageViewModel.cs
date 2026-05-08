@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Rift_App.Services;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Rift_App.Services;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -42,7 +43,9 @@ namespace Rift_App.ViewModels
         private async Task LoadAsync()
         {
             if (string.IsNullOrEmpty(Url)) return;
+            Debug.WriteLine($"[ImageVM] Loading: {Url}");
             Bitmap = await ImageCacheService.GetAsync(Url);
+            Debug.WriteLine($"[ImageVM] Result: {(Bitmap != null ? "OK" : "NULL")} for {Url}");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
