@@ -35,29 +35,33 @@ namespace Rift_App.Services
         {
             if (string.IsNullOrEmpty(url)) return null;
 
-            // 1. Memory cache — fastest
-            if (_memCache.TryGetValue(url, out var cached))
-                return cached;
+            // Memory cache
+            if (_memCache.TryGetValue(url, out var cached)) return cached;
 
             var semaphore = _locks.GetOrAdd(url, _ => new SemaphoreSlim(1, 1));
             await semaphore.WaitAsync();
 
             try
             {
-                if (_memCache.TryGetValue(url, out cached))
-                    return cached;
+                if (_memCache.TryGetValue(url, out cached)) return cached;
 
-                // 2. Disk cache — fast, no network needed
-                var diskPath = GetDiskPath(url);
-                if (File.Exists(diskPath))
+                BitmapImage? image;
+
+                // Lokálny súbor — načítaj priamo z disku
+                if (url.StartsWith("C:\\") || url.StartsWith("/") || File.Exists(url))
                 {
-                    var bmp = LoadFromDisk(diskPath);
-                    _memCache[url] = bmp;
-                    return bmp;
+                    image = LoadFromDisk(url);
+                }
+                else
+                {
+                    // Disk cache pre URL
+                    var diskPath = GetDiskPath(url);
+                    if (File.Exists(diskPath))
+                        image = LoadFromDisk(diskPath);
+                    else
+                        image = await DownloadAsync(url, diskPath);
                 }
 
-                // 3. Download and save to disk
-                var image = await DownloadAsync(url, diskPath);
                 _memCache[url] = image;
                 return image;
             }

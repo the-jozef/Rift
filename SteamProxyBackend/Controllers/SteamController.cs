@@ -181,77 +181,84 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                if (IsRateLimited(GetClientIp()))
-                    return StatusCode(429, new { Message = "Too many requests. Please wait." });
-
-                // 1. Získaj schema — názvy, popis a ikony achievementov
+                // Schema — ikony + názvy (vždy funguje)
                 var schemaUrl = $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={_steamApiKey}&appid={appId}&l=en";
-                var schemaResponse = await _http.GetStringAsync(schemaUrl);
-                var schemaData = JObject.Parse(schemaResponse);
+                var schemaJson = await _http.GetStringAsync(schemaUrl);
+                var schemaData = JObject.Parse(schemaJson);
+                var schemaAchs = schemaData["game"]?["availableGameStats"]?["achievements"];
 
-                var schemaAchievements = schemaData["game"]?["availableGameStats"]?["achievements"];
-                if (schemaAchievements == null)
-                    return Ok(new { Achievements = new List<object>(), Total = 0, Unlocked = 0 });
-
-                // Vytvor lookup: apiName -> ikony
                 var iconLookup = new Dictionary<string, (string icon, string iconGray)>();
-                foreach (var a in schemaAchievements)
+                if (schemaAchs != null)
                 {
-                    var name = a["name"]?.Value<string>() ?? "";
-                    var icon = a["icon"]?.Value<string>() ?? "";
-                    var iconGray = a["icongray"]?.Value<string>() ?? "";
-                    iconLookup[name] = (icon, iconGray);
+                    foreach (var a in schemaAchs)
+                    {
+                        var name = a["name"]?.Value<string>() ?? "";
+                        iconLookup[name] = (
+                            a["icon"]?.Value<string>() ?? "",
+                            a["icongray"]?.Value<string>() ?? ""
+                        );
+                    }
                 }
 
-                // 2. Získaj unlock status pre konkrétneho hráča
+                // Player stats — unlock status
+                // Funguje aj pre private profil s vlastníckym API kľúčom
                 var statsUrl = $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key={_steamApiKey}&appid={appId}&steamid={steamId}&l=en";
-                var statsResponse = await _http.GetStringAsync(statsUrl);
-                var statsData = JObject.Parse(statsResponse);
 
-                var playerAchievements = statsData["playerstats"]?["achievements"];
-                if (playerAchievements == null)
-                    return Ok(new { Achievements = new List<object>(), Total = 0, Unlocked = 0 });
-
-                var result = new List<object>();
+                List<object> result = new();
                 int unlocked = 0;
 
-                foreach (var a in playerAchievements)
+                try
                 {
-                    var apiName = a["apiname"]?.Value<string>() ?? "";
-                    var achieved = a["achieved"]?.Value<int>() == 1;
-                    var unlockTime = a["unlocktime"]?.Value<long>() ?? 0;
-                    var displayName = a["name"]?.Value<string>() ?? "";
-                    var description = a["description"]?.Value<string>() ?? "";
+                    var statsJson = await _http.GetStringAsync(statsUrl);
+                    var statsData = JObject.Parse(statsJson);
+                    var playerAchs = statsData["playerstats"]?["achievements"];
 
-                    if (achieved) unlocked++;
-
-                    iconLookup.TryGetValue(apiName, out var icons);
-
-                    result.Add(new
+                    if (playerAchs != null)
                     {
-                        ApiName = apiName,
-                        Name = displayName,
-                        Description = description,
-                        IconUrl = icons.icon ?? "",
-                        IconGrayUrl = icons.iconGray ?? "",
-                        Unlocked = achieved,
-                        UnlockTime = unlockTime > 0
-                            ? DateTimeOffset.FromUnixTimeSeconds(unlockTime).UtcDateTime
-                            : (DateTime?)null
-                    });
+                        foreach (var a in playerAchs)
+                        {
+                            var apiName = a["apiname"]?.Value<string>() ?? "";
+                            var achieved = a["achieved"]?.Value<int>() == 1;
+                            var unlockTime = a["unlocktime"]?.Value<long>() ?? 0;
+                            if (achieved) unlocked++;
+
+                            iconLookup.TryGetValue(apiName, out var icons);
+
+                            result.Add(new
+                            {
+                                ApiName = apiName,
+                                Name = a["name"]?.Value<string>() ?? "",
+                                Description = a["description"]?.Value<string>() ?? "",
+                                IconUrl = icons.icon ?? "",
+                                IconGrayUrl = icons.iconGray ?? "",
+                                Unlocked = achieved,
+                                UnlockTime = unlockTime > 0
+                                    ? DateTimeOffset.FromUnixTimeSeconds(unlockTime).UtcDateTime
+                                    : (DateTime?)null
+                            });
+                        }
+                    }
+                }
+                catch
+                {
+                    // Private profil alebo hra bez achievementov
+                    // Vráť len schema bez unlock statusu
+                    foreach (var kvp in iconLookup)
+                    {
+                        result.Add(new
+                        {
+                            ApiName = kvp.Key,
+                            Name = "",
+                            Description = "",
+                            IconUrl = kvp.Value.icon,
+                            IconGrayUrl = kvp.Value.iconGray,
+                            Unlocked = false,
+                            UnlockTime = (DateTime?)null
+                        });
+                    }
                 }
 
-                return Ok(new
-                {
-                    Achievements = result,
-                    Total = result.Count,
-                    Unlocked = unlocked
-                });
-            }
-            catch (HttpRequestException ex) when (ex.Message.Contains("400"))
-            {
-                // Hra nemá achievementy
-                return Ok(new { Achievements = new List<object>(), Total = 0, Unlocked = 0 });
+                return Ok(new { Achievements = result, Total = result.Count, Unlocked = unlocked });
             }
             catch (Exception ex)
             {

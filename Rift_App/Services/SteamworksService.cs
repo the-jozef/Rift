@@ -141,63 +141,71 @@ namespace Rift_App.Services
         {
             try
             {
-                // 1. Získaj schema z API — názvy, popis, ikony
-                var schema = await GetSchemaFromApiAsync(appId);
+                var steamId = SessionManager.SteamId64;
+                if (string.IsNullOrEmpty(steamId)) return null;
 
-                // 2. Získaj unlock status lokálne zo Steamworks
-                // Toto funguje aj pre private profil
-                var unlockStatus = GetUnlockStatusFromSteamworks(appId);
+                var detail = await ApiService.GetAchievementsAsync(appId, steamId);
+                if (detail == null) return null;
 
-                // 3. Spoj schema + unlock status
-                var achievements = new List<AchievementModel>();
-                int unlocked = 0;
+                // Stiahni ikony na disk
+                await DownloadAchievementIconsAsync(appId, detail.Achievements);
 
-                foreach (var s in schema)
-                {
-                    unlockStatus.TryGetValue(s.ApiName, out var status);
-                    bool achieved = status.achieved;
-                    uint unlockTime = status.unlockTime;
-
-                    if (achieved) unlocked++;
-
-                    achievements.Add(new AchievementModel
-                    {
-                        ApiName = s.ApiName,
-                        Name = s.DisplayName,
-                        Description = s.Description,
-                        IconUrl = s.IconUrl,
-                        IconGrayUrl = s.IconGrayUrl,
-                        Unlocked = achieved,
-                        UnlockTime = unlockTime > 0
-                            ? DateTimeOffset.FromUnixTimeSeconds(unlockTime).UtcDateTime
-                            : null
-                    });
-                }
-
-                // 4. Stiahni ikony na disk
-                await DownloadAchievementIconsAsync(appId, achievements);
-
-                // 5. Nastav lokálne cesty
-                foreach (var a in achievements)
+                foreach (var a in detail.Achievements)
                 {
                     a.LocalIconPath = GetLocalIconPath(appId, a.ApiName, gray: false);
                     a.LocalIconGrayPath = GetLocalIconPath(appId, a.ApiName, gray: true);
                     a.ResetIconImage();
                 }
 
-                return new GameDetailModel
-                {
-                    AppId = appId,
-                    Achievements = achievements,
-                    AchievementsTotal = achievements.Count,
-                    AchievementsUnlocked = unlocked
-                };
+                detail.LastPlayed = GetLastPlayed(appId);
+                return detail;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Steamworks] GetAchievements error: {ex.Message}");
                 return null;
             }
+        }
+
+        private static DateTime? GetLastPlayed(int appId)
+        {
+            try
+            {
+                if (!_initialized) return null;
+                var steamPath = Microsoft.Win32.Registry.LocalMachine
+                    .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
+                    ?.GetValue("InstallPath") as string;
+                if (string.IsNullOrEmpty(steamPath)) return null;
+
+                var accountId = SteamUser.GetSteamID().GetAccountID().m_AccountID;
+                var localConfig = Path.Combine(steamPath, "userdata",
+                    accountId.ToString(), "config", "localconfig.vdf");
+
+                if (!File.Exists(localConfig)) return null;
+
+                var content = File.ReadAllText(localConfig);
+
+                // Nájdi apps sekciu
+                var appsSection = FindVdfSection(content, "apps");
+                if (string.IsNullOrEmpty(appsSection)) return null;
+
+                // Nájdi sekciu pre konkrétny appId
+                var appSection = FindVdfSection(appsSection, appId.ToString());
+                if (string.IsNullOrEmpty(appSection)) return null;
+
+                // Parsuj LastPlayed
+                var match = System.Text.RegularExpressions.Regex.Match(
+                    appSection, @"""LastPlayed""\s+""(\d+)""");
+                if (!match.Success) return null;
+
+                if (long.TryParse(match.Groups[1].Value, out long timestamp) && timestamp > 0)
+                    return DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Steamworks] GetLastPlayed error: {ex.Message}");
+            }
+            return null;
         }
 
         // ─── SCHEMA FROM API ──────────────────────────────────────────────
@@ -243,22 +251,20 @@ namespace Rift_App.Services
 
             try
             {
-                // Načítaj stats pre hru priamo z lokálneho Steam cache
-                bool statsOk = SteamUserStats.RequestCurrentStats();
-                if (!statsOk) return result;
-
-                // RunCallbacks aby Steam spracoval request
+                SteamAPI.RunCallbacks();
+                SteamUserStats.RequestCurrentStats();
+                Thread.Sleep(500);
                 SteamAPI.RunCallbacks();
 
                 uint achCount = SteamUserStats.GetNumAchievements();
+                Debug.WriteLine($"[Steamworks] GetNumAchievements: {achCount}");
+
                 for (uint i = 0; i < achCount; i++)
                 {
                     var apiName = SteamUserStats.GetAchievementName(i);
                     SteamUserStats.GetAchievementAndUnlockTime(apiName, out bool achieved, out uint unlockTime);
                     result[apiName] = (achieved, unlockTime);
                 }
-
-                Debug.WriteLine($"[Steamworks] Local unlock status: {result.Count} achievements for {appId}");
             }
             catch (Exception ex)
             {
@@ -266,6 +272,102 @@ namespace Rift_App.Services
             }
 
             return result;
+        }
+
+        private static string FindVdfSection(string content, string key)
+        {
+            // Hľadaj presne "key" s úvodzovkami
+            var searchKey = $"\"{key}\"";
+            int idx = 0;
+
+            while (idx < content.Length)
+            {
+                var found = content.IndexOf(searchKey, idx, StringComparison.OrdinalIgnoreCase);
+                if (found < 0) return string.Empty;
+
+                // Skontroluj že je to samostatný kľúč — pred ním musí byť whitespace alebo začiatok
+                int afterKey = found + searchKey.Length;
+
+                // Preskočí whitespace
+                int j = afterKey;
+                while (j < content.Length && (content[j] == ' ' || content[j] == '\t' || content[j] == '\r' || content[j] == '\n')) j++;
+
+                // Ďalší znak musí byť { — inak to nie je sekcia ale value
+                if (j < content.Length && content[j] == '{')
+                {
+                    int braceStart = j;
+                    int depth = 1;
+                    int i = braceStart + 1;
+                    while (i < content.Length && depth > 0)
+                    {
+                        if (content[i] == '{') depth++;
+                        else if (content[i] == '}') depth--;
+                        i++;
+                    }
+                    return depth == 0 ? content.Substring(braceStart + 1, i - braceStart - 2) : string.Empty;
+                }
+
+                // Nie je to sekcia — hľadaj ďalej
+                idx = found + 1;
+            }
+
+            return string.Empty;
+        }
+
+        private static Dictionary<string, (bool achieved, uint unlockTime)> ParseUserGameStats(string filePath)
+        {
+            var result = new Dictionary<string, (bool, uint)>();
+
+            try
+            {
+                var bytes = File.ReadAllBytes(filePath);
+                // Steam .bin súbor obsahuje achievement názvy a ich stav
+                // Formát: hľadáme null-terminated strings s hodnotami
+                var text = System.Text.Encoding.UTF8.GetString(bytes);
+
+                // Hľadaj achievement API names — sú to ASCII stringy
+                // Followed by unlock byte (1=unlocked) a timestamp
+                int i = 0;
+                while (i < bytes.Length - 8)
+                {
+                    // Nájdi začiatok stringu (printable ASCII)
+                    if (bytes[i] >= 0x20 && bytes[i] < 0x7F)
+                    {
+                        // Čítaj string do null byte
+                        int start = i;
+                        while (i < bytes.Length && bytes[i] != 0) i++;
+
+                        if (i - start >= 3 && i - start <= 64)
+                        {
+                            var name = System.Text.Encoding.ASCII.GetString(bytes, start, i - start);
+
+                            // Skontroluj či vyzerá ako achievement API name
+                            if (IsValidAchievementName(name) && i + 5 < bytes.Length)
+                            {
+                                bool achieved = bytes[i + 1] == 1;
+                                uint unlockTime = 0;
+                                if (achieved && i + 5 < bytes.Length)
+                                    unlockTime = BitConverter.ToUInt32(bytes, i + 2);
+
+                                result[name] = (achieved, unlockTime);
+                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Steamworks] ParseStats error: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        private static bool IsValidAchievementName(string name)
+        {
+            if (name.Length < 3 || name.Length > 64) return false;
+            return name.All(c => char.IsLetterOrDigit(c) || c == '_' || c == '-');
         }
 
         // ─── INSTALL STATUS ───────────────────────────────────────────────

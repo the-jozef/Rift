@@ -159,20 +159,10 @@ namespace Rift_App.Services
         {
             try
             {
-                var url = $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}";
-                Debug.WriteLine($"[API] Calling: {url}");
-
-                var response = await _http.GetStringAsync(url);
-                Debug.WriteLine($"[API] Response: {response.Substring(0, Math.Min(200, response.Length))}");
-
-                var data = JsonConvert.DeserializeObject<AchievementsResponse>(response);
-                if (data == null)
-                {
-                    Debug.WriteLine($"[API] Deserialization returned null");
-                    return null;
-                }
-
-                Debug.WriteLine($"[API] Achievements count: {data.Achievements?.Count}, Total: {data.Total}");
+                var json = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}");
+                var data = JsonConvert.DeserializeObject<AchievementsResponse>(json);
+                if (data == null) return null;
 
                 return new GameDetailModel
                 {
