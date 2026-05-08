@@ -99,12 +99,12 @@ namespace Rift_App.Services
 
             // 4. Initialize Steamworks — retry a few times in case Steam is still starting up
             bool init = false;
-            for (int attempt = 1; attempt <= 6; attempt++)
+            for (int attempt = 1; attempt <= 100; attempt++)
             {
                 init = SteamworksService.Initialize();
                 if (init) break;
    
-                await Task.Delay(10000);
+                await Task.Delay(5000);
             }
 
             if (!init)

@@ -32,8 +32,8 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="60" />
                             </Grid.RowDefinitions>
 
                             <Grid Row="0"
@@ -43,13 +43,13 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top" >
 
-                                    <Border BorderBrush="#3B778F"
-                                            BorderThickness="1.5">
+                                    <Border BorderBrush="#6DCFF6"
+                                            BorderThickness="1.5"
+                                            Width="40"
+                                            Height="40">
 
                                         <Image Source="/Image/Red.png"
-                                               Stretch="UniformToFill"
-                                               Width="40"
-                                               Height="40" />
+                                               Stretch="UniformToFill" />
                                     </Border>
 
                                     <TextBlock Text="DYNAMO'S WISHLIST"
@@ -61,13 +61,10 @@
                                 </StackPanel>
                             </Grid>
 
-                            <Grid Grid.Row="1" />
-
-                            <Grid Grid.Row="2"
-                                  Margin="0,10,0,0">
+                            <Grid Grid.Row="1"
+                                  Margin="0,15,0,0">
 
                                 <DockPanel>
-
                                     <Border BorderBrush="#45505E"
                                             BorderThickness="1"
                                             CornerRadius="0.5"/>
@@ -75,719 +72,715 @@
                                 </DockPanel>
                             </Grid>
 
-                            <Grid Grid.Row="3"
-                                  Margin="0,10,0,0" >
+                            <Grid Grid.Row="2"
+                                  Margin="0,5,0,0" >
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Vertical">
 
+                                    <Border Margin="0,10,0,0"
+                                            CornerRadius="4"
+                                            Padding="3">
 
-                                <Border Grid.Row="0"
-                                        Margin="0,10,0,0"
-                                        CornerRadius="4"
-                                        Padding="3">
+                                        <Border.Background>
+                                            <LinearGradientBrush>
+                                                <GradientStop Color="#33404D" />
+                                                <GradientStop Color="#374554"
+                                                              Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
 
-                                    <Border.Background>
-                                        <LinearGradientBrush>
-                                            <GradientStop Color="#33404D" />
-                                            <GradientStop Color="#374554"
-                                                          Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
+                                        <Grid Margin="5">
 
-                                    <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
+                                            <Grid Grid.Column="0">
 
-                                        <Grid Grid.Column="0">
-
-                                            <Image Grid.Column="0"
-                                                   HorizontalAlignment="Left"
-                                                   Stretch="UniformToFill"
-                                                   Source="/Image/Red.png"
-                                                   Height="95"
-                                                   Width="160" />
-                                        </Grid>
-
-                                        <Grid Grid.Column="1"
-                                              Margin="10,0,0,0">
-
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid Row="0">
-                                                <TextBlock Text="Crimson Desert"
-                                                           Foreground="White"
-                                                           FontSize="18"
-                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                <Image Stretch="UniformToFill"
+                                                       Source="/Image/Red.png"
+                                                       Height="95"
+                                                       Width="160" />
                                             </Grid>
 
-                                            <Grid Grid.Row="1"
-                                                  Margin="0,3,0,0">
+                                            <Grid Grid.Column="1"
+                                                  Margin="10,0,0,0">
 
-                                                <StackPanel Orientation="Horizontal">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
 
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1">
-
-                                                        <TextBlock Text="Open World"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="Action"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="RPG"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="Adventure"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
-
-                                            <Grid Grid.Row="2"
-                                                  Margin="0,10,0,0">
-
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <Grid Grid.Column="0">
-
-                                                    <StackPanel Orientation="Vertical"
-                                                                TextElement.FontSize="8"
-                                                                TextElement.Foreground="#959BA6">
-
-                                                        <TextBlock Text="ENGLISH REVIEWS:" />
-
-                                                        <TextBlock Text="RELEASE DATE:"
-                                                                   Margin="0,2,0,0" />
-                                                    </StackPanel>
-                                                </Grid>
-
-                                                <Grid Grid.Column="1">
-
-                                                    <StackPanel Orientation="Vertical"
-                                                                TextElement.FontSize="8">
-
-                                                        <TextBlock Text="VERY POSITIVE"
-                                                                   Foreground="#5DA5D0" />
-
-                                                        <TextBlock Text="3/19/2026"
-                                                                   Margin="0,2,0,0"
-                                                                   Foreground="#959BA6" />
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Grid>
-
-                                            <Grid Grid.Row="3"
-                                                  Margin="0,2,0,0">
-
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#DBDBDB"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="15"
-                                                                            Width="15" />
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid Grid.Column="2">
-
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid Grid.Row="0">
-
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
-
-                                                    <TextBlock Text="Added on 2/10/2026"
-                                                               Foreground="#959BA6"
-                                                               FontSize="8"
-                                                               VerticalAlignment="Center"
+                                                <Grid Row="0">
+                                                    <TextBlock Text="Crimson Desert"
+                                                               Foreground="White"
+                                                               FontSize="18"
                                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                </Grid>
 
-                                                    <Border CornerRadius="1"
-                                                            Margin="5,0,0,0">
+                                                <Grid Grid.Row="1"
+                                                      Margin="0,3,0,0">
 
-                                                        <Border.Background>
-                                                            <SolidColorBrush Color="#586879"
-                                                                             Opacity="0.7" />
-                                                        </Border.Background>
+                                                    <StackPanel Orientation="Horizontal">
 
-                                                        <Button Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Height="13"
-                                                                Width="40"
-                                                                Padding="0"
-                                                                MinHeight="0"
-                                                                MinWidth="0">
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1">
 
-                                                            <TextBlock Text="remove"
+                                                            <TextBlock Text="Open World"
                                                                        FontSize="8"
-                                                                       HorizontalAlignment="Center"
-                                                                       Foreground="#A9AFB6" />
-                                                        </Button>
-                                                    </Border>
-                                                </StackPanel>
+                                                                       Foreground="#788694" />
+                                                        </Border>
+
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Action"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
+
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
+
+                                                            <TextBlock Text="RPG"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
+
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Adventure"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Grid Grid.Row="2"
+                                                      Margin="0,10,0,0">
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid Grid.Column="0">
+
+                                                        <StackPanel Orientation="Vertical"
+                                                                    TextElement.FontSize="8"
+                                                                    TextElement.Foreground="#959BA6">
+
+                                                            <TextBlock Text="ENGLISH REVIEWS:" />
+
+                                                            <TextBlock Text="RELEASE DATE:"
+                                                                       Margin="0,2,0,0" />
+                                                        </StackPanel>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="1">
+
+                                                        <StackPanel Orientation="Vertical"
+                                                                    TextElement.FontSize="8">
+
+                                                            <TextBlock Text="VERY POSITIVE"
+                                                                       Foreground="#5DA5D0" />
+
+                                                            <TextBlock Text="3/19/2026"
+                                                                       Margin="0,2,0,0"
+                                                                       Foreground="#959BA6" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Row="3"
+                                                      Margin="0,2,0,0">
+
+                                                    <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                Foreground="#DBDBDB"
+                                                                                HorizontalAlignment="Left"
+                                                                                Height="15"
+                                                                                Width="15" />
+                                                </Grid>
                                             </Grid>
 
-                                            <Grid Grid.Row="1">
+                                            <Grid Grid.Column="2">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
 
-                                                    <Border Background="#27313B"
-                                                            CornerRadius="2"
-                                                            Height="30">
+                                                <Grid Grid.Row="0">
 
-                                                        <Grid>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom">
 
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="Added on 2/10/2026"
+                                                                   Foreground="#959BA6"
+                                                                   FontSize="8"
+                                                                   VerticalAlignment="Center"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
 
-                                                            <Border Grid.Column="0"
-                                                                    Padding="3"
-                                                                    Background="#4c6b22"
-                                                                    Margin="1.5"
-                                                                    CornerRadius="1">
+                                                        <Border CornerRadius="1"
+                                                                Margin="5,0,0,0">
 
-                                                                <TextBlock Text="-75%"
-                                                                           TextAlignment="Center"
-                                                                           FontSize="20"
-                                                                           Foreground="#a4d007"
-                                                                           FontWeight="Bold"
-                                                                           VerticalAlignment="Center" />
-                                                            </Border>
-                                                            <StackPanel Orientation="Vertical"
-                                                                        Grid.Column="1"
-                                                                        Margin="6,0,6,0">
+                                                            <Border.Background>
+                                                                <SolidColorBrush Color="#586879"
+                                                                                 Opacity="0.7" />
+                                                            </Border.Background>
 
-                                                                <TextBlock Text="12,99€"
-                                                                           FontSize="10"
-                                                                           FontWeight="SemiBold"
-                                                                           Foreground="#91999E"
-                                                                           HorizontalAlignment="Right"
-                                                                           TextDecorations="Strikethrough"
-                                                                           VerticalAlignment="Center" />
+                                                            <Button Background="Transparent"
+                                                                    BorderBrush="Transparent"
+                                                                    Height="13"
+                                                                    Width="40"
+                                                                    Padding="0">
 
-                                                                <TextBlock Text="4,99€"
-                                                                           FontSize="13"
-                                                                           FontWeight="SemiBold"
-                                                                           Foreground="#D8E0E6"
+                                                                <TextBlock Text="remove"
+                                                                           FontSize="8"
                                                                            HorizontalAlignment="Center"
-                                                                           VerticalAlignment="Center" />
-                                                            </StackPanel>
-                                                            <Border Grid.Column="2"
-                                                                    Background="#6BA220"
-                                                                    CornerRadius="1"
-                                                                    Width="Auto"
-                                                                    Margin="0,4,4,4">
+                                                                           Foreground="#A9AFB6" />
+                                                            </Button>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
 
-                                                                <Button Padding="6"
-                                                                        MinHeight="0"
-                                                                        MinWidth="0"
-                                                                        Height="23">
+                                                <Grid Grid.Row="1">
 
-                                                                    <TextBlock Text="Add to Cart"
-                                                                               Foreground="#D1CFCF"
-                                                                               FontSize="12"
+                                                    <StackPanel Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom">
+
+                                                        <Border Background="#27313B"
+                                                                CornerRadius="2"
+                                                                Height="30">
+
+                                                            <Grid>
+
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <Border Grid.Column="0"
+                                                                        Padding="3"
+                                                                        Background="#4c6b22"
+                                                                        Margin="1.5"
+                                                                        CornerRadius="1">
+
+                                                                    <TextBlock Text="-75%"
+                                                                               TextAlignment="Center"
+                                                                               FontSize="20"
+                                                                               Foreground="#a4d007"
+                                                                               FontWeight="Bold"
+                                                                               VerticalAlignment="Center" />
+                                                                </Border>
+                                                                <StackPanel Orientation="Vertical"
+                                                                            Grid.Column="1"
+                                                                            Margin="6,0,6,0">
+
+                                                                    <TextBlock Text="12,99€"
+                                                                               FontSize="10"
+                                                                               FontWeight="SemiBold"
+                                                                               Foreground="#91999E"
+                                                                               HorizontalAlignment="Right"
+                                                                               TextDecorations="Strikethrough"
+                                                                               VerticalAlignment="Center" />
+
+                                                                    <TextBlock Text="4,99€"
+                                                                               FontSize="13"
+                                                                               FontWeight="SemiBold"
+                                                                               Foreground="#D8E0E6"
                                                                                HorizontalAlignment="Center"
                                                                                VerticalAlignment="Center" />
-                                                                </Button>
-                                                            </Border>
-                                                        </Grid>
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
+                                                                </StackPanel>
+                                                                <Border Grid.Column="2"
+                                                                        CornerRadius="1"
+                                                                        Width="Auto"
+                                                                        Margin="0,4,4,4">
 
-                                <Border Grid.Row="1"
-                                        Margin="0,10,0,0"
-                                        CornerRadius="4"
-                                        Padding="3">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                             EndPoint="1,0">
+                                                                            <GradientStop Color="#46C734"
+                                                                                          Offset="0.251" />
+                                                                            <GradientStop Color="#3CB031"
+                                                                                          Offset="1" />
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
 
-                                    <Border.Background>
-                                        <LinearGradientBrush>
-                                            <GradientStop Color="#33404D" />
-                                            <GradientStop Color="#374554"
-                                                          Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
 
-                                    <Grid Margin="5">
+                                                                    <Button Padding="6"
+                                                                            Background="Transparent"
+                                                                            BorderBrush="Transparent"
+                                                                            Height="23">
 
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Grid Grid.Column="0">
-
-                                            <Image Grid.Column="0"
-                                                   HorizontalAlignment="Left"
-                                                   Stretch="UniformToFill"
-                                                   Source="/Image/Red.png"
-                                                   Height="95"
-                                                   Width="160" />
-                                        </Grid>
-
-                                        <Grid Grid.Column="1"
-                                              Margin="10,0,0,0">
-
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid Row="0">
-                                                <TextBlock Text="Crimson Desert"
-                                                           Foreground="White"
-                                                           FontSize="18"
-                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-                                            </Grid>
-
-                                            <Grid Grid.Row="1"
-                                                  Margin="0,3,0,0">
-
-                                                <StackPanel Orientation="Horizontal">
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1">
-
-                                                        <TextBlock Text="Open World"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="Action"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="RPG"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="Adventure"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
-
-                                            <Grid Grid.Row="2"
-                                                  Margin="0,10,0,0">
-
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <Grid Grid.Column="0">
-
-                                                    <StackPanel Orientation="Vertical"
-                                                                TextElement.FontSize="8"
-                                                                TextElement.Foreground="#959BA6">
-
-                                                        <TextBlock Text="ENGLISH REVIEWS:" />
-
-                                                        <TextBlock Text="RELEASE DATE:"
-                                                                   Margin="0,2,0,0" />
-                                                    </StackPanel>
-                                                </Grid>
-
-                                                <Grid Grid.Column="1">
-
-                                                    <StackPanel Orientation="Vertical"
-                                                                TextElement.FontSize="8">
-
-                                                        <TextBlock Text="VERY POSITIVE"
-                                                                   Foreground="#5DA5D0" />
-
-                                                        <TextBlock Text="3/19/2026"
-                                                                   Margin="0,2,0,0"
-                                                                   Foreground="#959BA6" />
+                                                                        <TextBlock Text="Add to Cart"
+                                                                                   Foreground="#D1CFCF"
+                                                                                   FontSize="12"
+                                                                                   HorizontalAlignment="Center"
+                                                                                   VerticalAlignment="Center" />
+                                                                    </Button>
+                                                                </Border>
+                                                            </Grid>
+                                                        </Border>
                                                     </StackPanel>
                                                 </Grid>
                                             </Grid>
-
-                                            <Grid Grid.Row="3"
-                                                  Margin="0,2,0,0">
-
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#DBDBDB"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="15"
-                                                                            Width="15" />
-                                            </Grid>
                                         </Grid>
+                                    </Border>
 
-                                        <Grid Grid.Column="2">
+                                    <Border Grid.Row="1"
+                                            Margin="0,10,0,0"
+                                            CornerRadius="4"
+                                            Padding="3">
 
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
+                                        <Border.Background>
+                                            <LinearGradientBrush>
+                                                <GradientStop Color="#33404D" />
+                                                <GradientStop Color="#374554"
+                                                              Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
 
-                                            <Grid Grid.Row="0">
+                                        <Grid Margin="5">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                                    <TextBlock Text="Added on 2/10/2026"
-                                                               Foreground="#959BA6"
-                                                               FontSize="8"
-                                                               VerticalAlignment="Center"
+                                            <Grid Grid.Column="0">
+
+                                                <Image Grid.Column="0"
+                                                       HorizontalAlignment="Left"
+                                                       Stretch="UniformToFill"
+                                                       Source="/Image/Red.png"
+                                                       Height="95"
+                                                       Width="160" />
+                                            </Grid>
+
+                                            <Grid Grid.Column="1"
+                                                  Margin="10,0,0,0">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Row="0">
+                                                    <TextBlock Text="Crimson Desert"
+                                                               Foreground="White"
+                                                               FontSize="18"
                                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                </Grid>
 
-                                                    <Border CornerRadius="1"
-                                                            Margin="5,0,0,0">
+                                                <Grid Grid.Row="1"
+                                                      Margin="0,3,0,0">
 
-                                                        <Border.Background>
-                                                            <SolidColorBrush Color="#586879"
-                                                                             Opacity="0.7" />
-                                                        </Border.Background>
+                                                    <StackPanel Orientation="Horizontal">
 
-                                                        <Button Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Height="13"
-                                                                Width="40"
-                                                                Padding="0"
-                                                                MinHeight="0"
-                                                                MinWidth="0">
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1">
 
-                                                            <TextBlock Text="remove"
+                                                            <TextBlock Text="Open World"
                                                                        FontSize="8"
-                                                                       HorizontalAlignment="Center"
-                                                                       Foreground="#A9AFB6" />
-                                                        </Button>
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
+                                                                       Foreground="#788694" />
+                                                        </Border>
 
-                                            <Grid Grid.Row="1">
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
+                                                            <TextBlock Text="Action"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
 
-                                                    <Border Background="#27313B"
-                                                            CornerRadius="2"
-                                                            Height="30">
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
 
-                                                        <Grid>
+                                                            <TextBlock Text="RPG"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
 
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
 
-                                                            <StackPanel Grid.Column="1"
-                                                                        Margin="6,0,6,0"
-                                                                        VerticalAlignment="Center">
-
-                                                                <TextBlock Text="64,99€"
-                                                                           FontSize="14"
-                                                                           FontWeight="SemiBold"
-                                                                           Foreground="#D8E0E6" />
-                                                            </StackPanel>
-                                                            <Border Grid.Column="2"
-                                                                    Background="#6BA220"
-                                                                    CornerRadius="1"
-                                                                    Width="Auto"
-                                                                    Margin="0,4,4,4">
-
-                                                                <Button Padding="6"
-                                                                        MinHeight="0"
-                                                                        MinWidth="0"
-                                                                        Height="23">
-
-                                                                    <TextBlock Text="Add to Cart"
-                                                                               FontSize="12"
-                                                                               Foreground="#D1CFCF"
-                                                                               HorizontalAlignment="Center"
-                                                                               VerticalAlignment="Center" />
-                                                                </Button>
-                                                            </Border>
-                                                        </Grid>
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-
-                                <Border Grid.Row="2"
-                                        Margin="0,10,0,0"
-                                        CornerRadius="4"
-                                        Padding="3">
-
-                                    <Border.Background>
-                                        <LinearGradientBrush>
-                                            <GradientStop Color="#33404D" />
-                                            <GradientStop Color="#374554"
-                                                          Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-
-                                    <Grid Margin="5">
-
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Grid Grid.Column="0">
-
-                                            <Image Grid.Column="0"
-                                                   HorizontalAlignment="Left"
-                                                   Stretch="UniformToFill"
-                                                   Source="/Image/Red.png"
-                                                   Height="95"
-                                                   Width="160" />
-                                        </Grid>
-
-                                        <Grid Grid.Column="1"
-                                              Margin="10,0,0,0">
-
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid Row="0">
-                                                <TextBlock Text="Crimson Desert"
-                                                           Foreground="White"
-                                                           FontSize="18"
-                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
-                                            </Grid>
-
-                                            <Grid Grid.Row="1"
-                                                  Margin="0,3,0,0">
-
-                                                <StackPanel Orientation="Horizontal">
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1">
-
-                                                        <TextBlock Text="Open World"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="Action"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="RPG"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-
-                                                    <Border BorderBrush="#677785"
-                                                            BorderThickness="0.5"
-                                                            CornerRadius="1"
-                                                            Padding="1"
-                                                            Margin="2,0,0,0">
-
-                                                        <TextBlock Text="Adventure"
-                                                                   FontSize="8"
-                                                                   Foreground="#788694" />
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
-
-                                            <Grid Grid.Row="2"
-                                                  Margin="0,10,0,0">
-
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <Grid Grid.Column="0">
-
-                                                    <StackPanel Orientation="Vertical"
-                                                                TextElement.FontSize="8"
-                                                                TextElement.Foreground="#959BA6">
-
-                                                        <TextBlock Text="ENGLISH REVIEWS:" />
-
-                                                        <TextBlock Text="RELEASE DATE:"
-                                                                   Margin="0,2,0,0" />
+                                                            <TextBlock Text="Adventure"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
                                                     </StackPanel>
                                                 </Grid>
 
-                                                <Grid Grid.Column="1">
+                                                <Grid Grid.Row="2"
+                                                      Margin="0,10,0,0">
 
-                                                    <StackPanel Orientation="Vertical"
-                                                                TextElement.FontSize="8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
 
-                                                        <TextBlock Text="NO USER REVIEWS"
-                                                                   Foreground="#959BA6" />
+                                                    <Grid Grid.Column="0">
 
-                                                        <TextBlock Text="COMING SOON"
-                                                                   Margin="0,2,0,0"
-                                                                   Foreground="#959BA6" />
-                                                    </StackPanel>
+                                                        <StackPanel Orientation="Vertical"
+                                                                    TextElement.FontSize="8"
+                                                                    TextElement.Foreground="#959BA6">
+
+                                                            <TextBlock Text="ENGLISH REVIEWS:" />
+
+                                                            <TextBlock Text="RELEASE DATE:"
+                                                                       Margin="0,2,0,0" />
+                                                        </StackPanel>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="1">
+
+                                                        <StackPanel Orientation="Vertical"
+                                                                    TextElement.FontSize="8">
+
+                                                            <TextBlock Text="VERY POSITIVE"
+                                                                       Foreground="#5DA5D0" />
+
+                                                            <TextBlock Text="3/19/2026"
+                                                                       Margin="0,2,0,0"
+                                                                       Foreground="#959BA6" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Row="3"
+                                                      Margin="0,2,0,0">
+
+                                                    <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                Foreground="#DBDBDB"
+                                                                                HorizontalAlignment="Left"
+                                                                                Height="15"
+                                                                                Width="15" />
                                                 </Grid>
                                             </Grid>
 
-                                            <Grid Grid.Row="3"
-                                                  Margin="0,2,0,0">
+                                            <Grid Grid.Column="2">
 
-                                                <materialIcons:MaterialIcon Kind="Microsoft"
-                                                                            Foreground="#DBDBDB"
-                                                                            HorizontalAlignment="Left"
-                                                                            Height="15"
-                                                                            Width="15" />
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0">
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom">
+
+                                                        <TextBlock Text="Added on 2/10/2026"
+                                                                   Foreground="#959BA6"
+                                                                   FontSize="8"
+                                                                   VerticalAlignment="Center"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+
+                                                        <Border CornerRadius="1"
+                                                                Margin="5,0,0,0">
+
+                                                            <Border.Background>
+                                                                <SolidColorBrush Color="#586879"
+                                                                                 Opacity="0.7" />
+                                                            </Border.Background>
+
+                                                            <Button Background="Transparent"
+                                                                    BorderBrush="Transparent"
+                                                                    Height="13"
+                                                                    Width="40"
+                                                                    Padding="0"
+                                                                    MinHeight="0"
+                                                                    MinWidth="0">
+
+                                                                <TextBlock Text="remove"
+                                                                           FontSize="8"
+                                                                           HorizontalAlignment="Center"
+                                                                           Foreground="#A9AFB6" />
+                                                            </Button>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Grid Grid.Row="1">
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom">
+
+                                                        <Border Background="#27313B"
+                                                                CornerRadius="2"
+                                                                Height="30">
+
+                                                            <Grid>
+
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <StackPanel Grid.Column="1"
+                                                                            Margin="6,0,6,0"
+                                                                            VerticalAlignment="Center">
+
+                                                                    <TextBlock Text="64,99€"
+                                                                               FontSize="14"
+                                                                               FontWeight="SemiBold"
+                                                                               Foreground="#D8E0E6" />
+                                                                </StackPanel>
+                                                                <Border Grid.Column="2"
+                                                                        Background="#6BA220"
+                                                                        CornerRadius="1"
+                                                                        Width="Auto"
+                                                                        Margin="0,4,4,4">
+
+                                                                    <Button Padding="6"
+                                                                            MinHeight="0"
+                                                                            MinWidth="0"
+                                                                            Height="23">
+
+                                                                        <TextBlock Text="Add to Cart"
+                                                                                   FontSize="12"
+                                                                                   Foreground="#D1CFCF"
+                                                                                   HorizontalAlignment="Center"
+                                                                                   VerticalAlignment="Center" />
+                                                                    </Button>
+                                                                </Border>
+                                                            </Grid>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
                                             </Grid>
                                         </Grid>
+                                    </Border>
 
-                                        <Grid Grid.Column="2">
+                                    <Border Grid.Row="2"
+                                            Margin="0,10,0,0"
+                                            CornerRadius="4"
+                                            Padding="3">
 
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="*" />
-                                            </Grid.RowDefinitions>
+                                        <Border.Background>
+                                            <LinearGradientBrush>
+                                                <GradientStop Color="#33404D" />
+                                                <GradientStop Color="#374554"
+                                                              Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
 
-                                            <Grid Grid.Row="0">
+                                        <Grid Margin="5">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Bottom">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                                    <TextBlock Text="Added on 2/10/2026"
-                                                               Foreground="#959BA6"
-                                                               FontSize="8"
-                                                               VerticalAlignment="Center"
+                                            <Grid Grid.Column="0">
+
+                                                <Image Grid.Column="0"
+                                                       HorizontalAlignment="Left"
+                                                       Stretch="UniformToFill"
+                                                       Source="/Image/Red.png"
+                                                       Height="95"
+                                                       Width="160" />
+                                            </Grid>
+
+                                            <Grid Grid.Column="1"
+                                                  Margin="10,0,0,0">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Row="0">
+                                                    <TextBlock Text="Crimson Desert"
+                                                               Foreground="White"
+                                                               FontSize="18"
                                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                </Grid>
 
-                                                    <Border CornerRadius="1"
-                                                            Margin="5,0,0,0">
+                                                <Grid Grid.Row="1"
+                                                      Margin="0,3,0,0">
 
-                                                        <Border.Background>
-                                                            <SolidColorBrush Color="#586879"
-                                                                             Opacity="0.7" />
-                                                        </Border.Background>
+                                                    <StackPanel Orientation="Horizontal">
 
-                                                        <Button Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Height="13"
-                                                                Width="40"
-                                                                Padding="0"
-                                                                MinHeight="0"
-                                                                MinWidth="0">
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1">
 
-                                                            <TextBlock Text="remove"
+                                                            <TextBlock Text="Open World"
                                                                        FontSize="8"
-                                                                       HorizontalAlignment="Center"
-                                                                       Foreground="#A9AFB6" />
-                                                        </Button>
-                                                    </Border>
-                                                </StackPanel>
+                                                                       Foreground="#788694" />
+                                                        </Border>
+
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Action"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
+
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
+
+                                                            <TextBlock Text="RPG"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
+
+                                                        <Border BorderBrush="#677785"
+                                                                BorderThickness="0.5"
+                                                                CornerRadius="1"
+                                                                Padding="1"
+                                                                Margin="2,0,0,0">
+
+                                                            <TextBlock Text="Adventure"
+                                                                       FontSize="8"
+                                                                       Foreground="#788694" />
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Grid Grid.Row="2"
+                                                      Margin="0,10,0,0">
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid Grid.Column="0">
+
+                                                        <StackPanel Orientation="Vertical"
+                                                                    TextElement.FontSize="8"
+                                                                    TextElement.Foreground="#959BA6">
+
+                                                            <TextBlock Text="ENGLISH REVIEWS:" />
+
+                                                            <TextBlock Text="RELEASE DATE:"
+                                                                       Margin="0,2,0,0" />
+                                                        </StackPanel>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="1">
+
+                                                        <StackPanel Orientation="Vertical"
+                                                                    TextElement.FontSize="8">
+
+                                                            <TextBlock Text="NO USER REVIEWS"
+                                                                       Foreground="#959BA6" />
+
+                                                            <TextBlock Text="COMING SOON"
+                                                                       Margin="0,2,0,0"
+                                                                       Foreground="#959BA6" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid Grid.Row="3"
+                                                      Margin="0,2,0,0">
+
+                                                    <materialIcons:MaterialIcon Kind="Microsoft"
+                                                                                Foreground="#DBDBDB"
+                                                                                HorizontalAlignment="Left"
+                                                                                Height="15"
+                                                                                Width="15" />
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid Grid.Column="2">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0">
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom">
+
+                                                        <TextBlock Text="Added on 2/10/2026"
+                                                                   Foreground="#959BA6"
+                                                                   FontSize="8"
+                                                                   VerticalAlignment="Center"
+                                                                   FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+
+                                                        <Border CornerRadius="1"
+                                                                Margin="5,0,0,0">
+
+                                                            <Border.Background>
+                                                                <SolidColorBrush Color="#586879"
+                                                                                 Opacity="0.7" />
+                                                            </Border.Background>
+
+                                                            <Button Background="Transparent"
+                                                                    BorderBrush="Transparent"
+                                                                    Height="13"
+                                                                    Width="40"
+                                                                    Padding="0"
+                                                                    MinHeight="0"
+                                                                    MinWidth="0">
+
+                                                                <TextBlock Text="remove"
+                                                                           FontSize="8"
+                                                                           HorizontalAlignment="Center"
+                                                                           Foreground="#A9AFB6" />
+                                                            </Button>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
                                             </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Border>
+                                    </Border>
+                                </StackPanel>
                             </Grid>
                         </Grid>
                     </Grid>

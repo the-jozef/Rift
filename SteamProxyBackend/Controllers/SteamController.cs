@@ -259,6 +259,63 @@ namespace SteamProxyBackend.Controllers
             }
         }
 
+        [HttpGet("schema/{appId}")]
+        public async Task<IActionResult> GetGameSchema(int appId)
+        {
+            try
+            {
+                var url = $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={_steamApiKey}&appid={appId}&l=en";
+                var response = await _http.GetStringAsync(url);
+                var data = JObject.Parse(response);
+
+                var achievements = data["game"]?["availableGameStats"]?["achievements"];
+                if (achievements == null)
+                    return Ok(new { Achievements = new List<object>() });
+
+                var result = achievements.Select(a => new
+                {
+                    ApiName = a["name"]?.Value<string>() ?? "",
+                    DisplayName = a["displayName"]?.Value<string>() ?? "",
+                    Description = a["description"]?.Value<string>() ?? "",
+                    IconUrl = a["icon"]?.Value<string>() ?? "",
+                    IconGrayUrl = a["icongray"]?.Value<string>() ?? ""
+                }).ToList();
+
+                return Ok(new { Achievements = result });
+            }
+            catch { return Ok(new { Achievements = new List<object>() }); }
+        }
+
+        // ─── PLAYER ACHIEVEMENTS — unlock status (vyžaduje public profil) ─────
+        [HttpGet("playerstats/{appId}/{steamId}")]
+        public async Task<IActionResult> GetPlayerStats(int appId, string steamId)
+        {
+            try
+            {
+                var url = $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key={_steamApiKey}&appid={appId}&steamid={steamId}&l=en";
+                var response = await _http.GetStringAsync(url);
+                var data = JObject.Parse(response);
+
+                var achievements = data["playerstats"]?["achievements"];
+                if (achievements == null)
+                    return Ok(new { Achievements = new List<object>() });
+
+                var result = achievements.Select(a => new
+                {
+                    ApiName = a["apiname"]?.Value<string>() ?? "",
+                    Achieved = a["achieved"]?.Value<int>() == 1,
+                    UnlockTime = a["unlocktime"]?.Value<long>() ?? 0
+                }).ToList();
+
+                return Ok(new { Achievements = result });
+            }
+            catch
+            {
+                // Private profile — vráť prázdny zoznam bez chyby
+                return Ok(new { Achievements = new List<object>() });
+            }
+        }
+
         // ─── WISHLIST ─────────────────────────────────────────────────────
 
         [HttpGet("wishlist/{steamId}")]

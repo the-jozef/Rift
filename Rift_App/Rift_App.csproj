@@ -85,4 +85,14 @@
 	  </None>
 	</ItemGroup>
 
+	<Target Name="CopySteamWorker" AfterTargets="Build">
+		<Copy SourceFiles="$(SolutionDir)SteamWorker\bin\$(Configuration)\net10.0\SteamWorker.exe"
+			  DestinationFolder="$(OutputPath)SteamWorker\" />
+		<Copy SourceFiles="$(ProjectDir)steam_api64.dll"
+			  DestinationFolder="$(OutputPath)SteamWorker\" />
+		<WriteLinesToFile File="$(OutputPath)SteamWorker\steam_appid.txt"
+						  Lines="480"
+						  Overwrite="true" />
+	</Target>
+
 </Project>

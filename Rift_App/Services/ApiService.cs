@@ -2,6 +2,7 @@
 using Rift_App.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -158,11 +159,20 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync(
-                    $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}");
+                var url = $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}";
+                Debug.WriteLine($"[API] Calling: {url}");
+
+                var response = await _http.GetStringAsync(url);
+                Debug.WriteLine($"[API] Response: {response.Substring(0, Math.Min(200, response.Length))}");
 
                 var data = JsonConvert.DeserializeObject<AchievementsResponse>(response);
-                if (data == null) return null;
+                if (data == null)
+                {
+                    Debug.WriteLine($"[API] Deserialization returned null");
+                    return null;
+                }
+
+                Debug.WriteLine($"[API] Achievements count: {data.Achievements?.Count}, Total: {data.Total}");
 
                 return new GameDetailModel
                 {
@@ -172,7 +182,11 @@ namespace Rift_App.Services
                     AchievementsUnlocked = data.Unlocked
                 };
             }
-            catch { return null; }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[API] GetAchievements error: {ex.Message}");
+                return null;
+            }
         }
 
         private class AchievementsResponse

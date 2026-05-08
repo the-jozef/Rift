@@ -130,16 +130,14 @@ namespace Rift_App.ViewModels
 
         private static async Task<GameDetailModel?> LoadFromSteamworksAsync(int appId)
         {
-            // Použi server API namiesto Steamworks reinit
-            var steamId = SessionManager.SteamId64;
-            if (string.IsNullOrEmpty(steamId))
+            if (!SteamworksService.IsInitialized)
             {
-                Debug.WriteLine($"[LibraryGame] No SteamId64 in session");
+                Debug.WriteLine($"[LibraryGame] Steamworks not initialized for {appId}");
                 return null;
             }
 
-            var detail = await ApiService.GetAchievementsAsync(appId, steamId);
-            Debug.WriteLine($"[LibraryGame] API loaded {detail?.Achievements?.Count} achievements for {appId}");
+            var detail = await SteamworksService.GetAchievementsForAppAsync(appId);
+            Debug.WriteLine($"[LibraryGame] Steamworks loaded {detail?.Achievements?.Count} achievements for {appId}");
             return detail;
         }
 
