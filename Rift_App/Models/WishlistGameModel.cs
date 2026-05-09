@@ -27,6 +27,7 @@ namespace Rift_App.Models
         public string ReleaseDateDisplay { get; set; } = string.Empty;
         public bool IsReleased { get; set; }
         public bool IsEarlyAccess { get; set; }
+        public bool IsDlc { get; set; }
 
         // Platform
         public bool PlatformWindows { get; set; } = true;

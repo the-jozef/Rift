@@ -660,6 +660,7 @@ namespace SteamProxyBackend.Controllers
                         Price = price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
+                        IsDlc = data["type"]?.Value<string>()?.ToLower() == "dlc", 
                         IsFree = isFree
                     });
 
