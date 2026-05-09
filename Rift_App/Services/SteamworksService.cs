@@ -208,6 +208,53 @@ namespace Rift_App.Services
             return null;
         }
 
+        public static Dictionary<int, int> GetPlaytimeMinutes()
+        {
+            var result = new Dictionary<int, int>();
+            try
+            {
+                if (!_initialized) return result;
+
+                var steamPath = Microsoft.Win32.Registry.LocalMachine
+                    .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
+                    ?.GetValue("InstallPath") as string;
+                if (string.IsNullOrEmpty(steamPath)) return result;
+
+                var accountId = SteamUser.GetSteamID().GetAccountID().m_AccountID;
+                var localConfig = Path.Combine(steamPath, "userdata",
+                    accountId.ToString(), "config", "localconfig.vdf");
+
+                if (!File.Exists(localConfig)) return result;
+
+                var content = File.ReadAllText(localConfig);
+                var appsSection = FindVdfSection(content, "apps");
+                if (string.IsNullOrEmpty(appsSection)) return result;
+
+                // Parsuj každú hru
+                var appRegex = new System.Text.RegularExpressions.Regex(
+                    @"""(\d+)""\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}",
+                    System.Text.RegularExpressions.RegexOptions.Singleline);
+
+                foreach (System.Text.RegularExpressions.Match m in appRegex.Matches(appsSection))
+                {
+                    if (!int.TryParse(m.Groups[1].Value, out int appId)) continue;
+
+                    var playtimeMatch = System.Text.RegularExpressions.Regex.Match(
+                        m.Groups[2].Value, @"""Playtime""\s+""(\d+)""");
+
+                    if (playtimeMatch.Success && int.TryParse(playtimeMatch.Groups[1].Value, out int minutes))
+                        result[appId] = minutes;
+                }
+
+                Debug.WriteLine($"[Steamworks] Playtime loaded for {result.Count} games");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Steamworks] GetPlaytime error: {ex.Message}");
+            }
+            return result;
+        }
+
         // ─── SCHEMA FROM API ──────────────────────────────────────────────
 
         private record SchemaEntry(string ApiName, string DisplayName, string Description, string IconUrl, string IconGrayUrl);

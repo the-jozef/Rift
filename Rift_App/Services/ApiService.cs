@@ -162,8 +162,10 @@ namespace Rift_App.Services
                 var json = await _http.GetStringAsync(
                     $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}");
                 var data = JsonConvert.DeserializeObject<AchievementsResponse>(json);
+               
                 if (data == null) return null;
 
+                Debug.WriteLine($"[API] Achievements: {data.Total}, Unlocked: {data.Unlocked}");
                 return new GameDetailModel
                 {
                     AppId = appId,
@@ -194,6 +196,39 @@ namespace Rift_App.Services
                 return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
             }
             catch { return new List<GameModel>(); }
+        }
+
+
+        public static async Task<List<WishlistGameModel>> GetWishlistDetailedAsync(string steamId64)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/wishlist/{steamId64}");
+                return FromJson<WishlistGamesResponse>(response)?.Games ?? new List<WishlistGameModel>();
+            }
+            catch { return new List<WishlistGameModel>(); }
+        }
+
+        public static async Task<bool> RemoveFromWishlistAsync(string steamId64, int appId)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post,
+                    $"{BaseUrl}/api/steam/wishlist/remove/{steamId64}/{appId}");
+
+                // Steam session nie je dostupná v Rift — ticho zlyháme
+                // Remove sa vykoná iba lokálne; Steam sa syncuje prirodzene pri ďalšom otvorení
+                var response = await _http.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch { return false; }
+        }
+
+        // ─── Response type (pridaj nižšie do sekcie RESPONSE TYPES) ──────────────────
+
+        public class WishlistGamesResponse
+        {
+            public List<WishlistGameModel> Games { get; set; } = new();
         }
 
         public static async Task<GameModel?> GetGameDetailsAsync(int appId)

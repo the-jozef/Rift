@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Concurrent;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace SteamProxyBackend.Controllers
 {
@@ -333,27 +334,189 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
-                var url = $"https://api.steampowered.com/IWishlistService/GetWishlist/v1/?key={_steamApiKey}&steamid={steamId}";
-                var response = await _http.GetStringAsync(url);
-                var data = JsonConvert.DeserializeObject<dynamic>(response);
-                var items = data?.response?.items;
+                var url = $"https://store.steampowered.com/wishlist/profiles/{steamId}/wishlistdata/?p=0";
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Accept-Language", "en-US,en;q=0.9");
+                request.Headers.Add("User-Agent", "Mozilla/5.0");
 
-                if (items == null) return Ok(new { Games = new List<object>() });
+                var response = await _http.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
+                    return StatusCode((int)response.StatusCode, new { Message = "Steam wishlist unavailable." });
+
+                var json = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                if (json == null || !json.HasValues)
+                    return Ok(new { Games = new List<object>() });
 
                 var result = new List<object>();
-                foreach (var item in items)
+
+                foreach (var prop in json.Properties())
                 {
-                    int appId = (int)item.appid;
-                    result.Add(new
+                    try
                     {
-                        AppId = appId,
-                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
-                    });
+                        if (!int.TryParse(prop.Name, out int appId)) continue;
+                        var item = prop.Value;
+
+                        var name = item["name"]?.Value<string>() ?? "";
+                        if (HasAdultName(name)) continue;
+
+                        // ─── Tags ────────────────────────────────────────────────
+                        var tags = item["tags"] is JObject tagsObj
+                            ? tagsObj.Properties().Select(t => t.Value.Value<string>() ?? "")
+                                      .Where(t => !string.IsNullOrEmpty(t))
+                                      .Take(5)
+                                      .ToList()
+                            : new List<string>();
+
+                        // ─── Reviews ─────────────────────────────────────────────
+                        var reviewDesc = item["review_desc"]?.Value<string>() ?? "";
+                        var reviewCss = item["review_css"]?.Value<string>() ?? "";
+
+                        // ─── Release date ─────────────────────────────────────────
+                        long releaseDateUnix = item["release_date"]?.Value<long>() ?? 0;
+                        bool isReleased = item["is_released"]?.Value<bool>() ?? false;
+                        bool isEarlyAccess = item["early_access"]?.Value<bool>() ?? false;
+                        string releaseDateDisplay;
+
+                        if (!isReleased)
+                        {
+                            releaseDateDisplay = "Coming Soon";
+                        }
+                        else if (releaseDateUnix > 0)
+                        {
+                            releaseDateDisplay = DateTimeOffset.FromUnixTimeSeconds(releaseDateUnix)
+                                .LocalDateTime.ToString("M/d/yyyy");
+                        }
+                        else
+                        {
+                            // Fallback: string dátum zo Steam
+                            releaseDateDisplay = item["release_string"]?.Value<string>() ?? "";
+                        }
+
+                        // ─── Date added ───────────────────────────────────────────
+                        long dateAdded = item["date_added"]?.Value<long>() ?? 0;
+
+                        // ─── Platforms ────────────────────────────────────────────
+                        var platforms = item["platforms_available"];
+                        bool win = platforms?["windows"]?.Value<bool>() ?? true;
+                        bool mac = platforms?["mac"]?.Value<bool>() ?? false;
+
+                        // ─── Pricing ──────────────────────────────────────────────
+                        string price = "N/A";
+                        string origPrice = "";
+                        int discount = 0;
+                        bool isFree = item["is_free_game"]?.Value<bool>() ?? false;
+
+                        if (isFree)
+                        {
+                            price = "Free";
+                        }
+                        else if (isReleased)
+                        {
+                            var subs = item["subs"] as JArray;
+                            var firstSub = subs?.FirstOrDefault();
+                            if (firstSub != null)
+                            {
+                                int finalCents = firstSub["price"]?.Value<int>() ?? 0;
+                                int discountPct = firstSub["discount_pct"]?.Value<int>() ?? 0;
+                                discount = discountPct;
+
+                                price = finalCents == 0 ? "Free" : $"${finalCents / 100.0:F2}";
+
+                                if (discountPct > 0)
+                                {
+                                    int origCents = (int)(finalCents / (1 - discountPct / 100.0));
+                                    origPrice = $"${origCents / 100.0:F2}";
+                                }
+                            }
+                        }
+
+                        if (HasAdultName(name)) continue;
+
+                        result.Add(new
+                        {
+                            AppId = appId,
+                            Name = name,
+                            HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                            Tags = tags,
+                            ReviewDesc = reviewDesc,
+                            ReviewCss = reviewCss,
+                            ReleaseDateUnix = releaseDateUnix,
+                            ReleaseDateDisplay = releaseDateDisplay,
+                            IsReleased = isReleased,
+                            IsEarlyAccess = isEarlyAccess,
+                            DateAddedUnix = dateAdded,
+                            PlatformWindows = win,
+                            PlatformMac = mac,
+                            Price = price,
+                            OriginalPrice = origPrice,
+                            DiscountPercent = discount,
+                            IsFree = isFree
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[Wishlist] Item parse error: {ex.Message}");
+                    }
                 }
+
+                // Zoradenie: vydané od najnovšie pridaných → nevydané na konci
+                result = result
+                    .Cast<dynamic>()
+                    .OrderBy(g => !(bool)g.IsReleased)
+                    .ThenByDescending(g => (long)g.DateAddedUnix)
+                    .Cast<object>()
+                    .ToList();
 
                 return Ok(new { Games = result });
             }
-            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
+        // ─── WISHLIST REMOVE ──────────────────────────────────────────────────────────
+        // Vyžaduje Steam session cookies — funguje len pre prihláseného usera
+        // Ak zlyhá (private / nesprávny token), vráti 401
+
+        [HttpPost("wishlist/remove/{steamId}/{appId}")]
+        public async Task<IActionResult> RemoveFromWishlist(string steamId, int appId)
+        {
+            try
+            {
+                // sessionid cookie musí prísť od klienta v hlavičke X-Steam-Session
+                var sessionId = Request.Headers["X-Steam-Session"].FirstOrDefault();
+                if (string.IsNullOrEmpty(sessionId))
+                    return Unauthorized(new { Success = false, Message = "No Steam session." });
+
+                var content = new FormUrlEncodedContent(new[]
+                {
+            new KeyValuePair<string, string>("sessionid", sessionId),
+            new KeyValuePair<string, string>("appid",     appId.ToString())
+        });
+
+                var req = new HttpRequestMessage(HttpMethod.Post,
+                    $"https://store.steampowered.com/api/removefromwishlist")
+                {
+                    Content = content
+                };
+                req.Headers.Add("Cookie", $"sessionid={sessionId}");
+                req.Headers.Add("Referer", $"https://store.steampowered.com/app/{appId}");
+
+                var response = await _http.SendAsync(req);
+                var body = JObject.Parse(await response.Content.ReadAsStringAsync());
+                bool ok = body["success"]?.Value<bool>() ?? false;
+
+                return ok
+                    ? Ok(new { Success = true })
+                    : StatusCode(401, new { Success = false, Message = "Steam remove failed — profile may be private." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Success = false, Message = ex.Message });
+            }
         }
 
         // ─── GAME DETAILS — s 18+ filtrom ─────────────────────────────────

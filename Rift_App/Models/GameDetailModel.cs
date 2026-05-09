@@ -27,7 +27,7 @@ namespace Rift_App.Models
         // ─── DISPLAY HELPERS ──────────────────────────────────────────────
 
         public string LastPlayedDisplay =>
-            LastPlayed.HasValue ? LastPlayed.Value.ToString("MMM d") : "Unknown";
+         LastPlayed.HasValue ? LastPlayed.Value.ToString("MMM d, yyyy") : "Never";
 
         public int AchievementsPercent =>
             AchievementsTotal > 0

@@ -26,22 +26,13 @@ namespace Rift_App.Wishlist
         {
             InitializeComponent();
             DataContext = _viewModel;
-            Loaded += Wishlist_Loaded;
-        }
-
-        private async void Wishlist_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!SessionManager.IsLoggedIn)
-            {             
-                return;
-            }
-            await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
-        }
-
-        private void GameItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.DataContext is GameModel game)
-                _viewModel.SelectGameCommand.Execute(game);
+            _viewModel.OnGameSelected += game =>
+                (Application.Current.MainWindow as MainWindow)?.ViewModel.ShowGamePage(game);
+            Loaded += async (_, _) =>
+            {
+                if (SessionManager.IsLoggedIn)
+                    await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
+            };
         }
     }
 }

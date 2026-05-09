@@ -65,10 +65,13 @@ namespace Rift_App.ViewModels
 
                 // 2. First run — get games directly from local Steam install
                 var games = SteamInstallService.GetAllGames();
-                if (games.Count == 0)
+                if (games.Count == 0) return;
+
+                var playtime = SteamworksService.GetPlaytimeMinutes();
+                foreach (var game in games)
                 {
-                    Debug.WriteLine("[Library] No games found from SteamInstallService");
-                    return;
+                    if (playtime.TryGetValue(game.AppId, out int minutes))
+                        game.PlaytimeMinutes = minutes;
                 }
 
                 Debug.WriteLine($"[Library] Found {games.Count} games from Steam");
