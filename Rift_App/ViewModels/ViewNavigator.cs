@@ -94,7 +94,7 @@ namespace Rift_App.ViewModels
         /// Called by LoadingWindow when all data is ready.
         /// Navigates to last known location.
         /// </summary>
-        public void ShowMain(PlayerInfo? playerInfo, List<GameModel> library, List<GameModel> wishlist, string lastLocation)
+        public void ShowMain(PlayerInfo? playerInfo, string lastLocation)
         {
             try
             {

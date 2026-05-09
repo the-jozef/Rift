@@ -9,19 +9,19 @@ using System.IO;
 namespace Rift_App.Services
 {
     /// <summary>
-    /// Každá hra má vlastný JSON súbor — AppData\RiftApp\wishlist_games\{appId}.json
-    /// Žiadne TTL — updatuje sa len keď sa zmení cena alebo reviews (sync v pozadí)
+    /// Každá hra má vlastný JSON súbor.
+    /// Cesta: AppData\RiftApp\wishlist\games\{appId}.json
     /// </summary>
     public static class WishlistGameCacheService
     {
         private static readonly string Folder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "wishlist_games");
+            "RiftApp", "wishlist", "games");
 
         private static string FilePath(int appId) =>
             Path.Combine(Folder, $"{appId}.json");
 
-        // ─── LOAD SINGLE ──────────────────────────────────────────────────
+        // ─── LOAD ─────────────────────────────────────────────────────────
 
         public static async Task<WishlistGameModel?> LoadAsync(int appId)
         {
@@ -35,7 +35,7 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
-        // ─── SAVE SINGLE ──────────────────────────────────────────────────
+        // ─── SAVE ─────────────────────────────────────────────────────────
 
         public static async Task SaveAsync(WishlistGameModel game)
         {
@@ -51,7 +51,7 @@ namespace Rift_App.Services
             }
         }
 
-        // ─── DELETE SINGLE ────────────────────────────────────────────────
+        // ─── DELETE ───────────────────────────────────────────────────────
 
         public static void Delete(int appId)
         {

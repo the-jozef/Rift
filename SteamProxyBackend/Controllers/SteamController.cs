@@ -749,6 +749,22 @@ namespace SteamProxyBackend.Controllers
             }
         }
 
+        [HttpGet("wishlist/detail/{appId}")]
+        public async Task<IActionResult> GetWishlistGameDetail(int appId)
+        {
+            try
+            {
+                var result = await FetchAppDetailsAsync(appId, 0);
+                if (result == null)
+                    return NotFound(new { Message = "Game not found." });
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
         // ─── GAME DETAILS — s 18+ filtrom ─────────────────────────────────
 
         [HttpGet("game/{appId}")]
@@ -943,6 +959,46 @@ namespace SteamProxyBackend.Controllers
             }
 
             return result;
+        }
+
+        public class WishlistBatchRequest
+        {
+            public List<int> AppIds { get; set; } = new();
+        }
+
+        [HttpPost("wishlist/batch")]
+        public async Task<IActionResult> GetWishlistBatch([FromBody] WishlistBatchRequest request)
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests." });
+
+                if (request?.AppIds == null || !request.AppIds.Any())
+                    return Ok(new { Games = new List<object>() });
+
+                // dateAdded = 0 — frontend si nastaví správnu hodnotu sám
+                var dateAddedLookup = request.AppIds.ToDictionary(id => id, _ => 0L);
+                var result = new List<object>();
+                const int batchSize = 10;
+
+                for (int i = 0; i < request.AppIds.Count; i += batchSize)
+                {
+                    var batch = request.AppIds.Skip(i).Take(batchSize).ToList();
+                    var batchResults = await FetchBatchAppDetailsAsync(batch, dateAddedLookup);
+                    result.AddRange(batchResults);
+
+                    // 600ms medzi batchmi — ochrana Steam rate limitu
+                    if (i + batchSize < request.AppIds.Count)
+                        await Task.Delay(600);
+                }
+
+                return Ok(new { Games = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
     }
 }

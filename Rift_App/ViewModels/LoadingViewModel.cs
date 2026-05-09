@@ -44,14 +44,9 @@ namespace Rift_App.ViewModels
                 ViewNavigator.Instance?.ShowAuth();
             }
         }
-
-        // ─── MODE 2: Po prihlásení ────────────────────────────────────────
-
         public async Task LoadSteamDataAsync()
         {
             PlayerInfo? playerInfo = null;
-            var library = new List<GameModel>();
-            var wishlist = new List<GameModel>();
 
             try
             {
@@ -71,50 +66,6 @@ namespace Rift_App.ViewModels
                             await LocalCacheService.SaveAsync(cacheKey, playerInfo);
                     }
 
-                    // ── Library — cache first ──────────────────────────────
-                    var libKey = string.Format(LocalCacheService.KeyLibrary, steamId);
-                    library = await LocalCacheService.LoadAsync<List<GameModel>>(
-                        libKey, LocalCacheService.LibraryTTL) ?? new List<GameModel>();
-
-                    if (library.Count == 0)
-                    {
-                        library = await ApiService.GetLibraryAsync(steamId);
-                        if (library.Count > 0)
-                            await LocalCacheService.SaveAsync(libKey, library);
-                    }
-
-                    // ── Wishlist — skontroluj WishlistCacheService ─────────
-                    // Ak cache existuje → okamžité, inak spusti preload v pozadí
-                    var wishlistCached = await WishlistCacheService.LoadAsync(steamId);
-
-                    if (wishlistCached == null || wishlistCached.Count == 0)
-                    {
-                        // Prvé spustenie — spusti detailný fetch v pozadí
-                        // WishlistViewModel si ho vyzdvihne z cache keď dobeží
-                        _ = Task.Run(async () =>
-                        {
-                            try
-                            {
-                                Debug.WriteLine("[Loading] Wishlist preload started...");
-                                var detailed = await ApiService.GetWishlistDetailedAsync(steamId);
-                                if (detailed != null && detailed.Count > 0)
-                                {
-                                    await WishlistCacheService.SaveAsync(steamId, detailed);
-                                    Debug.WriteLine($"[Loading] Wishlist preload done: {detailed.Count} games");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Debug.WriteLine($"[Loading] Wishlist preload error: {ex.Message}");
-                            }
-                        });
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"[Loading] Wishlist cache exists: {wishlistCached.Count} games");
-                    }
-
-                    // ── Avatar ────────────────────────────────────────────
                     if (playerInfo != null)
                         SessionManager.SetAvatar(playerInfo.AvatarUrl);
                 }
@@ -127,12 +78,7 @@ namespace Rift_App.ViewModels
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    try
-                    {
-                        ViewNavigator.Instance?.ShowMain(
-                            playerInfo, library, wishlist,
-                            SessionManager.LastLocation);
-                    }
+                    try { ViewNavigator.Instance?.ShowMain(playerInfo, SessionManager.LastLocation); }
                     catch { }
                 });
             }

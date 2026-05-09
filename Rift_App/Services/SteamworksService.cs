@@ -128,11 +128,6 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
-        // ─── LIBRARY ──────────────────────────────────────────────────────
-
-        public static List<GameModel> GetLibrary() =>
-            SteamInstallService.GetAllGames();
-
         // ─── ACHIEVEMENTS ─────────────────────────────────────────────────
         // Schema (názvy + ikony) z API — funguje vždy
         // Unlock status z Steamworks lokálne — funguje vždy bez ohľadu na privacy
@@ -288,39 +283,6 @@ namespace Rift_App.Services
             }
         }
 
-        // ─── UNLOCK STATUS FROM STEAMWORKS ────────────────────────────────
-        // Číta priamo z lokálneho Steam cache — funguje pre private profil
-
-        private static Dictionary<string, (bool achieved, uint unlockTime)> GetUnlockStatusFromSteamworks(int appId)
-        {
-            var result = new Dictionary<string, (bool, uint)>();
-            if (!_initialized) return result;
-
-            try
-            {
-                SteamAPI.RunCallbacks();
-                SteamUserStats.RequestCurrentStats();
-                Thread.Sleep(500);
-                SteamAPI.RunCallbacks();
-
-                uint achCount = SteamUserStats.GetNumAchievements();
-                Debug.WriteLine($"[Steamworks] GetNumAchievements: {achCount}");
-
-                for (uint i = 0; i < achCount; i++)
-                {
-                    var apiName = SteamUserStats.GetAchievementName(i);
-                    SteamUserStats.GetAchievementAndUnlockTime(apiName, out bool achieved, out uint unlockTime);
-                    result[apiName] = (achieved, unlockTime);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Steamworks] UnlockStatus error: {ex.Message}");
-            }
-
-            return result;
-        }
-
         private static string FindVdfSection(string content, string key)
         {
             // Hľadaj presne "key" s úvodzovkami
@@ -359,62 +321,6 @@ namespace Rift_App.Services
             }
 
             return string.Empty;
-        }
-
-        private static Dictionary<string, (bool achieved, uint unlockTime)> ParseUserGameStats(string filePath)
-        {
-            var result = new Dictionary<string, (bool, uint)>();
-
-            try
-            {
-                var bytes = File.ReadAllBytes(filePath);
-                // Steam .bin súbor obsahuje achievement názvy a ich stav
-                // Formát: hľadáme null-terminated strings s hodnotami
-                var text = System.Text.Encoding.UTF8.GetString(bytes);
-
-                // Hľadaj achievement API names — sú to ASCII stringy
-                // Followed by unlock byte (1=unlocked) a timestamp
-                int i = 0;
-                while (i < bytes.Length - 8)
-                {
-                    // Nájdi začiatok stringu (printable ASCII)
-                    if (bytes[i] >= 0x20 && bytes[i] < 0x7F)
-                    {
-                        // Čítaj string do null byte
-                        int start = i;
-                        while (i < bytes.Length && bytes[i] != 0) i++;
-
-                        if (i - start >= 3 && i - start <= 64)
-                        {
-                            var name = System.Text.Encoding.ASCII.GetString(bytes, start, i - start);
-
-                            // Skontroluj či vyzerá ako achievement API name
-                            if (IsValidAchievementName(name) && i + 5 < bytes.Length)
-                            {
-                                bool achieved = bytes[i + 1] == 1;
-                                uint unlockTime = 0;
-                                if (achieved && i + 5 < bytes.Length)
-                                    unlockTime = BitConverter.ToUInt32(bytes, i + 2);
-
-                                result[name] = (achieved, unlockTime);
-                            }
-                        }
-                    }
-                    i++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Steamworks] ParseStats error: {ex.Message}");
-            }
-
-            return result;
-        }
-
-        private static bool IsValidAchievementName(string name)
-        {
-            if (name.Length < 3 || name.Length > 64) return false;
-            return name.All(c => char.IsLetterOrDigit(c) || c == '_' || c == '-');
         }
 
         // ─── INSTALL STATUS ───────────────────────────────────────────────

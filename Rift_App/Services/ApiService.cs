@@ -20,11 +20,6 @@ namespace Rift_App.Services
             Timeout = TimeSpan.FromSeconds(90)  
         };
 
-        private static readonly HttpClient _wishlistHttp = new HttpClient
-        {
-            Timeout = TimeSpan.FromMinutes(30)
-        };
-
         private static StringContent ToJson(object obj) =>
             new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
 
@@ -193,17 +188,6 @@ namespace Rift_App.Services
             public int Unlocked { get; set; }
         }
 
-        public static async Task<List<GameModel>> GetWishlistAsync(string steamId64)
-        {
-            try
-            {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/wishlist/{steamId64}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
-            }
-            catch { return new List<GameModel>(); }
-        }
-
-
         public static async Task<List<WishlistGameModel>> GetWishlistDetailedAsync(string steamId64)
         {
             try
@@ -221,18 +205,6 @@ namespace Rift_App.Services
             }
         }
 
-
-        public static async Task<bool> RemoveFromWishlistAsync(string steamId64, int appId)
-        {
-            try
-            {
-                var response = await _http.PostAsync(
-                    $"{BaseUrl}/api/steam/wishlist/remove/{steamId64}/{appId}", null);
-                return response.IsSuccessStatusCode;
-            }
-            catch { return false; }
-        }
-
         public static async Task<List<WishlistItemRef>> GetWishlistIdsAsync(string steamId64)
         {
             try
@@ -248,63 +220,32 @@ namespace Rift_App.Services
                 return new List<WishlistItemRef>();
             }
         }
-
-
-        public static async Task<WishlistGameModel?> GetWishlistGameDetailAsync(int appId, long dateAdded)
+        public static async Task<List<WishlistGameModel>> GetWishlistBatchAsync(List<int> appIds)
         {
             try
             {
-                var response = await _wishlistHttp.GetStringAsync(
-                    $"{BaseUrl}/api/steam/game/{appId}");
-
-                var game = FromJson<GameModel>(response);
-                if (game == null) return null;
-
-                // Zisti release info priamo zo Steam store API cez backend
-                // game.Price == "N/A" a game.Genres prázdne = hra ešte nevydaná
-                bool isReleased = game.Price != "N/A" || game.IsFree
-                                  || game.Price?.Equals("Free", StringComparison.OrdinalIgnoreCase) == true;
-
-                // Skús načítať release dátum — zavolaj appdetails cez backend
-                var releaseInfo = await GetWishlistReleaseInfoAsync(appId);
-
-                return new WishlistGameModel
-                {
-                    AppId = appId,
-                    Name = game.Name,
-                    HeaderImageUrl = game.HeaderImageUrl,
-                    Tags = game.Genres,
-                    DateAddedUnix = dateAdded,
-                    Price = game.Price,
-                    OriginalPrice = game.OriginalPrice,
-                    DiscountPercent = game.DiscountPercent,
-                    IsFree = game.IsFree,
-                    IsReleased = releaseInfo?.IsReleased ?? isReleased,
-                    ReleaseDateDisplay = releaseInfo?.ReleaseDateDisplay ?? string.Empty,
-                    ReleaseDateUnix = releaseInfo?.ReleaseDateUnix ?? 0,
-                    IsEarlyAccess = releaseInfo?.IsEarlyAccess ?? false,
-                    ReviewDesc = releaseInfo?.ReviewDesc ?? string.Empty,
-                    ReviewCss = releaseInfo?.ReviewCss ?? string.Empty,
-                    PlatformWindows = releaseInfo?.PlatformWindows ?? true,
-                    PlatformMac = releaseInfo?.PlatformMac ?? false
-                };
+                var body = ToJson(new { AppIds = appIds });
+                var response = await _http.PostAsync($"{BaseUrl}/api/steam/wishlist/batch", body);
+                var json = await response.Content.ReadAsStringAsync();
+                return FromJson<WishlistGamesResponse>(json)?.Games
+                       ?? new List<WishlistGameModel>();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[API] GetWishlistGameDetail error {appId}: {ex.Message}");
-                return null;
+                Debug.WriteLine($"[API] GetWishlistBatch error: {ex.Message}");
+                return new List<WishlistGameModel>();
             }
         }
 
-        private static async Task<WishlistGameModel?> GetWishlistReleaseInfoAsync(int appId)
+        public static async Task<bool> RemoveFromWishlistAsync(string steamId64, int appId)
         {
             try
             {
-                var response = await _wishlistHttp.GetStringAsync(
-                    $"{BaseUrl}/api/steam/wishlist/detail/{appId}");
-                return FromJson<WishlistGameModel>(response);
+                var response = await _http.PostAsync(
+                    $"{BaseUrl}/api/steam/wishlist/remove/{steamId64}/{appId}", null);
+                return response.IsSuccessStatusCode;
             }
-            catch { return null; }
+            catch { return false; }
         }
 
         // ─── Response type (pridaj nižšie do sekcie RESPONSE TYPES) ──────────────────

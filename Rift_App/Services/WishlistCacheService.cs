@@ -74,61 +74,6 @@ namespace Rift_App.Services
             }
         }
 
-        // ─── SYNC ─────────────────────────────────────────────────────────
-        // Compares cached vs fresh Steam data.
-        // Adds new games, removes deleted ones, updates prices/reviews.
-        // DateAddedUnix is preserved from cache for games that already existed.
-
-        public static Task<(List<WishlistGameModel> Games, bool Changed)> SyncAsync(
-            List<WishlistGameModel> cached,
-            List<WishlistGameModel> fresh)
-        {
-            bool changed = false;
-            var result = new List<WishlistGameModel>(cached);
-
-            var cachedById = cached.ToDictionary(g => g.AppId);
-            var freshById = fresh.ToDictionary(g => g.AppId);
-
-            // Add new games (in Steam but not in cache)
-            foreach (var g in fresh.Where(g => !cachedById.ContainsKey(g.AppId)))
-            {
-                result.Add(g);
-                changed = true;
-                Debug.WriteLine($"[WishlistCache] New game: {g.Name}");
-            }
-
-            // Remove games no longer on wishlist
-            var toRemove = result.Where(g => !freshById.ContainsKey(g.AppId)).ToList();
-            foreach (var g in toRemove)
-            {
-                result.Remove(g);
-                changed = true;
-                Debug.WriteLine($"[WishlistCache] Removed game: {g.Name}");
-            }
-
-            // Update price / review data for existing games
-            foreach (var game in result)
-            {
-                if (!freshById.TryGetValue(game.AppId, out var freshGame)) continue;
-
-                if (game.Price == freshGame.Price &&
-                    game.DiscountPercent == freshGame.DiscountPercent &&
-                    game.ReviewDesc == freshGame.ReviewDesc) continue;
-
-                game.Price = freshGame.Price;
-                game.OriginalPrice = freshGame.OriginalPrice;
-                game.DiscountPercent = freshGame.DiscountPercent;
-                game.ReviewDesc = freshGame.ReviewDesc;
-                game.ReviewCss = freshGame.ReviewCss;
-                game.IsReleased = freshGame.IsReleased;
-                game.ReleaseDateDisplay = freshGame.ReleaseDateDisplay;
-                changed = true;
-                Debug.WriteLine($"[WishlistCache] Updated: {game.Name}");
-            }
-
-            return Task.FromResult((result, changed));
-        }
-
         // ─── HELPER ───────────────────────────────────────────────────────
 
         private static void EnsureFolder()
