@@ -102,7 +102,7 @@
                                             VerticalAlignment="Center"
                                             Margin="0,40,0,0">
                                     
-                                    <TextBlock Text="Your wishlist is empty."
+                                    <TextBlock Text="Loading..."
                                                Foreground="#959BA6"
                                                FontSize="13"
                                                HorizontalAlignment="Center" />

@@ -543,6 +543,38 @@ namespace SteamProxyBackend.Controllers
             }
         }
 
+        [HttpGet("wishlist/{steamId}/ids")]
+        public async Task<IActionResult> GetWishlistIds(string steamId)
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests. Please wait." });
+
+                var url = $"https://api.steampowered.com/IWishlistService/GetWishlist/v1/?key={_steamApiKey}&steamid={steamId}";
+                var response = await _http.GetStringAsync(url);
+                var json = JObject.Parse(response);
+
+                var items = json["response"]?["items"] as JArray;
+                if (items == null || !items.Any())
+                    return Ok(new { Items = new List<object>() });
+
+                var result = items.Select(item => new
+                {
+                    AppId = item["appid"]?.Value<int>() ?? 0,
+                    DateAdded = item["date_added"]?.Value<long>() ?? 0
+                })
+                .Where(x => x.AppId > 0)
+                .ToList();
+
+                return Ok(new { Items = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
         // ─── WISHLIST REMOVE ──────────────────────────────────────────────────────────
         // Vyžaduje Steam session cookies — funguje len pre prihláseného usera
         // Ak zlyhá (private / nesprávny token), vráti 401

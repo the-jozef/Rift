@@ -24,13 +24,14 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isEmpty = false;
         [ObservableProperty] private string _loadingMessage = "Loading wishlist...";
 
-        public string Username => SessionManager.Username;
+        public string WishlistTitle =>
+            string.IsNullOrEmpty(SessionManager.Username)
+                ? "MY WISHLIST"
+                : $"{SessionManager.Username.ToUpper()}'S WISHLIST";
 
         public event Action<GameModel>? OnGameSelected;
 
         // ─── LOAD ─────────────────────────────────────────────────────────
-        // 1. Zobraz cache okamžite
-        // 2. Sync v pozadí (pridané / odobrané / ceny)
 
         [RelayCommand]
         public async Task LoadWishlistAsync()
@@ -38,70 +39,121 @@ namespace Rift_App.ViewModels
             IsLoading = true;
             Games.Clear();
             IsEmpty = false;
+            LoadingMessage = "Loading wishlist...";
 
             try
             {
                 var steamId = SessionManager.SteamId64;
 
-                // 1. Cache — okamžité zobrazenie
-                var cached = await WishlistCacheService.LoadAsync(steamId);
-
-                if (cached != null && cached.Count > 0)
-                {
-                    Populate(cached);
-                    IsLoading = false;
-
-                    // 2. Sync v pozadí
-                    _ = SyncInBackgroundAsync(steamId, cached);
-                    return;
-                }
-
-                // 3. Prvé spustenie — načítaj zo Steam
-                var fresh = await ApiService.GetWishlistDetailedAsync(steamId);
-
-                if (fresh == null || fresh.Count == 0)
+                // 1. Získaj ID zoznam zo Steam (rýchlo — 1 request)
+                var refs = await ApiService.GetWishlistIdsAsync(steamId);
+                if (refs == null || refs.Count == 0)
                 {
                     IsEmpty = true;
-                    TotalGames = 0;
                     return;
                 }
 
-                Populate(fresh);
-                await WishlistCacheService.SaveAsync(steamId, fresh);
+                // Zoraď: vydané od najnovšie pridaných → nevydané na konci
+                // (nevieme ešte či sú vydané, tak zoradíme podľa DateAdded)
+                refs = refs.OrderByDescending(r => r.DateAdded).ToList();
+
+                TotalGames = refs.Count;
+                IsLoading = false;
+
+                // 2. Pre každú hru: cache → okamžite zobraziť, inak fetchni
+                var toFetch = new List<WishlistItemRef>();
+
+                foreach (var r in refs)
+                {
+                    var cached = await WishlistGameCacheService.LoadAsync(r.AppId);
+                    if (cached != null)
+                    {
+                        // Zachovaj DateAdded z ID listu (autoritatívny zdroj)
+                        cached.DateAddedUnix = r.DateAdded;
+                        InsertSorted(cached);
+                    }
+                    else
+                    {
+                        toFetch.Add(r);
+                    }
+                }
+
+                // 3. Fetch chýbajúcich hier — progresívne pridávaj do UI
+                if (toFetch.Count > 0)
+                {
+                    LoadingMessage = $"Fetching {toFetch.Count} new games...";
+
+                    for (int i = 0; i < toFetch.Count; i++)
+                    {
+                        var r = toFetch[i];
+                        LoadingMessage = $"Fetching game {i + 1} of {toFetch.Count}...";
+
+                        var game = await ApiService.GetWishlistGameDetailAsync(r.AppId, r.DateAdded);
+                        if (game != null)
+                        {
+                            await WishlistGameCacheService.SaveAsync(game);
+                            Application.Current.Dispatcher.Invoke(() => InsertSorted(game));
+                        }
+
+                        // Delay medzi requestmi — ochrana proti rate limitu
+                        if (i < toFetch.Count - 1)
+                            await Task.Delay(1500);
+                    }
+                }
+
+                IsEmpty = Games.Count == 0;
+
+                // 4. Sync v pozadí — skontroluj pridané/odobrané hry
+                _ = SyncInBackgroundAsync(steamId, refs);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Wishlist] Load error: {ex.Message}");
-                IsEmpty = true;
-            }
-            finally
-            {
-                IsLoading = false;
+                IsEmpty = Games.Count == 0;
             }
         }
 
         // ─── BACKGROUND SYNC ──────────────────────────────────────────────
+        // Beží po načítaní — kontroluje len nové/odobrané hry
 
-        private async Task SyncInBackgroundAsync(string steamId, List<WishlistGameModel> cached)
+        private async Task SyncInBackgroundAsync(string steamId, List<WishlistItemRef> currentRefs)
         {
             try
             {
-                await Task.Delay(2000);
+                await Task.Delay(5000);
 
-                var fresh = await ApiService.GetWishlistDetailedAsync(steamId);
-                if (fresh == null || fresh.Count == 0) return;
+                var freshRefs = await ApiService.GetWishlistIdsAsync(steamId);
+                if (freshRefs == null) return;
 
-                var (synced, changed) = await WishlistCacheService.SyncAsync(cached, fresh);
-                if (!changed) return;
+                var currentIds = currentRefs.Select(r => r.AppId).ToHashSet();
+                var freshIds = freshRefs.Select(r => r.AppId).ToHashSet();
 
-                Application.Current.Dispatcher.Invoke(() =>
+                // Odobrané hry
+                foreach (var removed in currentIds.Except(freshIds))
                 {
-                    Games.Clear();
-                    Populate(synced);
-                });
+                    WishlistGameCacheService.Delete(removed);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var g = Games.FirstOrDefault(x => x.AppId == removed);
+                        if (g != null) { Games.Remove(g); TotalGames = Games.Count; }
+                    });
+                    Debug.WriteLine($"[Wishlist] Removed: {removed}");
+                }
 
-                await WishlistCacheService.SaveAsync(steamId, synced);
-                Debug.WriteLine("[Wishlist] Sync complete.");
+                // Nové hry
+                foreach (var r in freshRefs.Where(r => !currentIds.Contains(r.AppId)))
+                {
+                    var game = await ApiService.GetWishlistGameDetailAsync(r.AppId, r.DateAdded);
+                    if (game == null) continue;
+                    await WishlistGameCacheService.SaveAsync(game);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        InsertSorted(game);
+                        TotalGames = Games.Count;
+                    });
+                    Debug.WriteLine($"[Wishlist] Added: {game.Name}");
+                    await Task.Delay(1500);
+                }
             }
             catch (Exception ex)
             {
@@ -116,23 +168,12 @@ namespace Rift_App.ViewModels
         {
             if (game == null) return;
 
-            // Okamžite odober z UI
             Games.Remove(game);
             TotalGames = Games.Count;
             IsEmpty = Games.Count == 0;
 
-            try
-            {
-                // Odober z local cache
-                await WishlistCacheService.RemoveAsync(SessionManager.SteamId64, game.AppId);
-
-                // Pokus o remove zo Steam (môže zlyhať pre private profily — ignorujeme)
-                await ApiService.RemoveFromWishlistAsync(SessionManager.SteamId64, game.AppId);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Wishlist] Remove error: {ex.Message}");
-            }
+            WishlistGameCacheService.Delete(game.AppId);
+            await ApiService.RemoveFromWishlistAsync(SessionManager.SteamId64, game.AppId);
         }
 
         // ─── SELECT ───────────────────────────────────────────────────────
@@ -163,19 +204,36 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── HELPER ───────────────────────────────────────────────────────
+        // ─── HELPER: vloží hru na správné miesto (vydané → nevydané na konci) ──
 
-        private void Populate(List<WishlistGameModel> games)
+        private void InsertSorted(WishlistGameModel game)
         {
-            // Vydané: od najnovšie pridaných → nevydané na konci
-            var sorted = games
-                .OrderBy(g => !g.IsReleased)
-                .ThenByDescending(g => g.DateAddedUnix)
-                .ToList();
+            // Nájdi správnu pozíciu:
+            // vydané hry: zoradené od najnovšie pridaných (DateAddedUnix DESC)
+            // nevydané: vždy na konci
+            int index = 0;
 
-            foreach (var g in sorted) Games.Add(g);
+            if (!game.IsReleased)
+            {
+                // Daj na koniec
+                index = Games.Count;
+            }
+            else
+            {
+                // Nájdi prvú nevydanú hru alebo hru s menším DateAddedUnix
+                index = Games.Count;
+                for (int i = 0; i < Games.Count; i++)
+                {
+                    if (!Games[i].IsReleased || Games[i].DateAddedUnix < game.DateAddedUnix)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            Games.Insert(index, game);
             TotalGames = Games.Count;
-            IsEmpty = Games.Count == 0;
         }
     }
 }

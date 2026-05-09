@@ -6,6 +6,7 @@ using Rift_App.Models;
 using Rift_App.Services;
 using System.Windows;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Rift_App.ViewModels
 {
@@ -17,7 +18,6 @@ namespace Rift_App.ViewModels
         {
             try
             {
-                // Inicializuj tag slovník na pozadí — initialize tag dictionary in background
                 _ = TagService.InitAsync();
 
                 await ApiService.InitDeviceAsync();
@@ -59,7 +59,7 @@ namespace Rift_App.ViewModels
 
                 if (!string.IsNullOrEmpty(steamId))
                 {
-                    // Skús player info z cache — try player info from cache
+                    // ── Player info — cache first ──────────────────────────
                     var cacheKey = string.Format(LocalCacheService.KeyPlayer, steamId);
                     playerInfo = await LocalCacheService.LoadAsync<PlayerInfo>(
                         cacheKey, LocalCacheService.AccountTTL);
@@ -71,7 +71,7 @@ namespace Rift_App.ViewModels
                             await LocalCacheService.SaveAsync(cacheKey, playerInfo);
                     }
 
-                    // Library — cache + live
+                    // ── Library — cache first ──────────────────────────────
                     var libKey = string.Format(LocalCacheService.KeyLibrary, steamId);
                     library = await LocalCacheService.LoadAsync<List<GameModel>>(
                         libKey, LocalCacheService.LibraryTTL) ?? new List<GameModel>();
@@ -83,24 +83,46 @@ namespace Rift_App.ViewModels
                             await LocalCacheService.SaveAsync(libKey, library);
                     }
 
-                    // Wishlist — cache + live
-                    var wishKey = string.Format(LocalCacheService.KeyWishlist, steamId);
-                    wishlist = await LocalCacheService.LoadAsync<List<GameModel>>(
-                        wishKey, LocalCacheService.WishlistTTL) ?? new List<GameModel>();
+                    // ── Wishlist — skontroluj WishlistCacheService ─────────
+                    // Ak cache existuje → okamžité, inak spusti preload v pozadí
+                    var wishlistCached = await WishlistCacheService.LoadAsync(steamId);
 
-                    if (wishlist.Count == 0)
+                    if (wishlistCached == null || wishlistCached.Count == 0)
                     {
-                        wishlist = await ApiService.GetWishlistAsync(steamId);
-                        if (wishlist.Count > 0)
-                            await LocalCacheService.SaveAsync(wishKey, wishlist);
+                        // Prvé spustenie — spusti detailný fetch v pozadí
+                        // WishlistViewModel si ho vyzdvihne z cache keď dobeží
+                        _ = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                Debug.WriteLine("[Loading] Wishlist preload started...");
+                                var detailed = await ApiService.GetWishlistDetailedAsync(steamId);
+                                if (detailed != null && detailed.Count > 0)
+                                {
+                                    await WishlistCacheService.SaveAsync(steamId, detailed);
+                                    Debug.WriteLine($"[Loading] Wishlist preload done: {detailed.Count} games");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine($"[Loading] Wishlist preload error: {ex.Message}");
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[Loading] Wishlist cache exists: {wishlistCached.Count} games");
                     }
 
-                    // Ulož avatar — save avatar
+                    // ── Avatar ────────────────────────────────────────────
                     if (playerInfo != null)
                         SessionManager.SetAvatar(playerInfo.AvatarUrl);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Loading] LoadSteamData error: {ex.Message}");
+            }
             finally
             {
                 Application.Current.Dispatcher.Invoke(() =>
