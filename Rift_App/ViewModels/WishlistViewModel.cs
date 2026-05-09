@@ -60,7 +60,7 @@ namespace Rift_App.ViewModels
                 TotalGames = refs.Count;
                 IsLoading = false;
 
-                // 2. Pre každú hru: cache → okamžite zobraziť, inak fetchni
+                // 2. Najprv zobraz čo máme v cache — okamžite
                 var toFetch = new List<WishlistItemRef>();
 
                 foreach (var r in refs)
@@ -68,7 +68,6 @@ namespace Rift_App.ViewModels
                     var cached = await WishlistGameCacheService.LoadAsync(r.AppId);
                     if (cached != null)
                     {
-                        // Zachovaj DateAdded z ID listu (autoritatívny zdroj)
                         cached.DateAddedUnix = r.DateAdded;
                         InsertSorted(cached);
                     }
@@ -78,26 +77,21 @@ namespace Rift_App.ViewModels
                     }
                 }
 
-                // 3. Fetch chýbajúcich hier — progresívne pridávaj do UI
+                // 3. Fetch chýbajúcich — batch (všetky naraz cez backend)
                 if (toFetch.Count > 0)
                 {
                     LoadingMessage = $"Fetching {toFetch.Count} new games...";
 
-                    for (int i = 0; i < toFetch.Count; i++)
+                    var fetchedGames = await ApiService.GetWishlistDetailedAsync(steamId);
+
+                    foreach (var game in fetchedGames)
                     {
-                        var r = toFetch[i];
-                        LoadingMessage = $"Fetching game {i + 1} of {toFetch.Count}...";
+                        // Nastav dateAdded z ID listu
+                        var refItem = toFetch.FirstOrDefault(r => r.AppId == game.AppId);
+                        if (refItem != null) game.DateAddedUnix = refItem.DateAdded;
 
-                        var game = await ApiService.GetWishlistGameDetailAsync(r.AppId, r.DateAdded);
-                        if (game != null)
-                        {
-                            await WishlistGameCacheService.SaveAsync(game);
-                            Application.Current.Dispatcher.Invoke(() => InsertSorted(game));
-                        }
-
-                        // Delay medzi requestmi — ochrana proti rate limitu
-                        if (i < toFetch.Count - 1)
-                            await Task.Delay(1500);
+                        await WishlistGameCacheService.SaveAsync(game);
+                        InsertSorted(game);
                     }
                 }
 

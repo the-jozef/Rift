@@ -203,20 +203,20 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
+
         public static async Task<List<WishlistGameModel>> GetWishlistDetailedAsync(string steamId64)
         {
             try
             {
-                var response = await _wishlistHttp.GetStringAsync(
+                // Normálny timeout — backend je teraz rýchly (batch requesty)
+                var response = await _http.GetStringAsync(
                     $"{BaseUrl}/api/steam/wishlist/{steamId64}");
-
-                Debug.WriteLine($"[API] Wishlist raw: {response[..Math.Min(200, response.Length)]}");
                 return FromJson<WishlistGamesResponse>(response)?.Games
                        ?? new List<WishlistGameModel>();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[API] GetWishlist error: {ex.Message}");
+                Debug.WriteLine($"[API] GetWishlistDetailed error: {ex.Message}");
                 return new List<WishlistGameModel>();
             }
         }

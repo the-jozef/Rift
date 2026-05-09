@@ -326,6 +326,7 @@ namespace SteamProxyBackend.Controllers
 
         // ─── WISHLIST ─────────────────────────────────────────────────────
 
+
         [HttpGet("wishlist/{steamId}")]
         public async Task<IActionResult> GetWishlist(string steamId)
         {
@@ -334,52 +335,39 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
-                // ─── KROK 1: Získaj AppID zoznam + date_added cez API key ─────────
-                // Funguje pre akékoľvek privacy nastavenie
+                // ─── 1. Získaj ID zoznam ───────────────────────────────────────────
                 var listUrl = $"https://api.steampowered.com/IWishlistService/GetWishlist/v1/?key={_steamApiKey}&steamid={steamId}";
-                var listResponse = await _http.GetStringAsync(listUrl);
-                var listJson = JObject.Parse(listResponse);
-
+                var listJson = JObject.Parse(await _http.GetStringAsync(listUrl));
                 var items = listJson["response"]?["items"] as JArray;
+
                 if (items == null || !items.Any())
                     return Ok(new { Games = new List<object>() });
 
-                // ─── KROK 2: Načítaj detaily pre každú hru ────────────────────────
-                // appdetails: max ~200 requestov/5min → dávame 1500ms delay
-                // Po prvom načítaní je všetko v lokálnom cache — ďalšie načítania sú okamžité
+                // Vytvor lookup: appId → dateAdded
+                var dateAddedLookup = items
+                    .Where(i => (i["appid"]?.Value<int>() ?? 0) > 0)
+                    .ToDictionary(
+                        i => i["appid"]!.Value<int>(),
+                        i => i["date_added"]?.Value<long>() ?? 0);
 
+                var appIds = dateAddedLookup.Keys.ToList();
+
+                // ─── 2. Batch appdetails — 10 hier per request ────────────────────
                 var result = new List<object>();
-                int batchSize = 5;
-                int processed = 0;
+                int batchSize = 10;
 
-                foreach (var item in items)
+                for (int i = 0; i < appIds.Count; i += batchSize)
                 {
-                    try
-                    {
-                        int appId = item["appid"]?.Value<int>() ?? 0;
-                        long dateAdded = item["date_added"]?.Value<long>() ?? 0;
+                    var batch = appIds.Skip(i).Take(batchSize).ToList();
+                    var batchResults = await FetchBatchAppDetailsAsync(batch, dateAddedLookup);
+                    result.AddRange(batchResults);
 
-                        if (appId <= 0) continue;
-
-                        // Delay medzi requestmi — ochrana proti rate limitu
-                        if (processed > 0 && processed % batchSize == 0)
-                            await Task.Delay(2000);
-                        else if (processed > 0)
-                            await Task.Delay(1200);
-
-                        var details = await FetchAppDetailsAsync(appId, dateAdded);
-                        if (details != null)
-                            result.Add(details);
-
-                        processed++;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"[Wishlist] Item error: {ex.Message}");
-                    }
+                    // Malý delay medzi batchmi — ochrana rate limitu
+                    if (i + batchSize < appIds.Count)
+                        await Task.Delay(500);
                 }
 
-                // Zoradenie: vydané od najnovšie pridaných → nevydané na konci
+                // ─── 3. Zoraď: vydané od najnovšie pridaných → nevydané na konci ──
                 result = result
                     .Cast<dynamic>()
                     .OrderBy(g => !(bool)g.IsReleased)
@@ -541,6 +529,150 @@ namespace SteamProxyBackend.Controllers
                 Debug.WriteLine($"[Wishlist] FetchAppDetails error {appId}: {ex.Message}");
                 return null;
             }
+        }
+
+
+        private async Task<List<object>> FetchBatchAppDetailsAsync(
+            List<int> appIds,
+            Dictionary<int, long> dateAddedLookup)
+        {
+            var result = new List<object>();
+
+            try
+            {
+                var joined = string.Join(",", appIds);
+                var url = $"https://store.steampowered.com/api/appdetails?appids={joined}&cc=us&l=en";
+                var response = await _http.GetStringAsync(url);
+                var json = JObject.Parse(response);
+
+                foreach (var appId in appIds)
+                {
+                    try
+                    {
+                        var data = json[appId.ToString()]?["data"];
+                        if (data == null) continue;
+
+                        string name = data["name"]?.Value<string>() ?? "";
+                        if (HasAdultName(name) || HasExplicitContent(data)) continue;
+
+                        // Tags — categories first, fallback to genres
+                        var tags = (data["categories"] as JArray)?
+                            .Select(c => c["description"]?.Value<string>() ?? "")
+                            .Where(t => !string.IsNullOrEmpty(t))
+                            .Take(5)
+                            .ToList() ?? new List<string>();
+
+                        if (!tags.Any())
+                            tags = (data["genres"] as JArray)?
+                                .Select(g => g["description"]?.Value<string>() ?? "")
+                                .Where(t => !string.IsNullOrEmpty(t))
+                                .Take(5)
+                                .ToList() ?? new List<string>();
+
+                        // Reviews
+                        string reviewDesc = "", reviewCss = "";
+                        var reviewData = data["reviews"]?.Value<string>() ?? "";
+
+                        // Skús metacritic ako fallback
+                        int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
+                        if (meta > 0)
+                        {
+                            (reviewDesc, reviewCss) = meta switch
+                            {
+                                >= 90 => ("Overwhelmingly Positive", "overwhelmingPositive"),
+                                >= 75 => ("Very Positive", "positive"),
+                                >= 60 => ("Mostly Positive", "positive"),
+                                >= 40 => ("Mixed", "mixed"),
+                                _ => ("Mostly Negative", "negative")
+                            };
+                        }
+
+                        if (string.IsNullOrEmpty(reviewDesc))
+                            reviewDesc = "No Reviews";
+
+                        // Release date
+                        bool isReleased = !(data["release_date"]?["coming_soon"]?.Value<bool>() ?? false);
+                        string releaseStr = data["release_date"]?["date"]?.Value<string>() ?? "";
+                        bool isEarlyAccess = data["early_access"]?.Value<bool>() ?? false;
+
+                        long releaseDateUnix = 0;
+                        string releaseDateDisplay;
+
+                        if (!isReleased)
+                        {
+                            releaseDateDisplay = string.IsNullOrEmpty(releaseStr) ? "Coming Soon" : releaseStr;
+                        }
+                        else if (DateTime.TryParse(releaseStr, out var dt))
+                        {
+                            releaseDateUnix = new DateTimeOffset(dt).ToUnixTimeSeconds();
+                            releaseDateDisplay = dt.ToString("M/d/yyyy");
+                        }
+                        else
+                        {
+                            releaseDateDisplay = releaseStr;
+                        }
+
+                        // Platforms
+                        bool win = data["platforms"]?["windows"]?.Value<bool>() ?? true;
+                        bool mac = data["platforms"]?["mac"]?.Value<bool>() ?? false;
+
+                        // Pricing
+                        bool isFree = data["is_free"]?.Value<bool>() ?? false;
+                        string price = "N/A", origPrice = "";
+                        int discount = 0;
+
+                        if (isFree)
+                        {
+                            price = "Free";
+                        }
+                        else if (isReleased)
+                        {
+                            var po = data["price_overview"];
+                            if (po != null)
+                            {
+                                price = po["final_formatted"]?.Value<string>() ?? "N/A";
+                                discount = po["discount_percent"]?.Value<int>() ?? 0;
+                                if (discount > 0)
+                                    origPrice = po["initial_formatted"]?.Value<string>() ?? "";
+                            }
+                        }
+
+                        long dateAdded = dateAddedLookup.TryGetValue(appId, out var da) ? da : 0;
+
+                        result.Add(new
+                        {
+                            AppId = appId,
+                            Name = name,
+                            HeaderImageUrl = data["header_image"]?.Value<string>()
+                                                 ?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                            Tags = tags,
+                            ReviewDesc = reviewDesc,
+                            ReviewCss = reviewCss,
+                            ReleaseDateUnix = releaseDateUnix,
+                            ReleaseDateDisplay = releaseDateDisplay,
+                            IsReleased = isReleased,
+                            IsEarlyAccess = isEarlyAccess,
+                            DateAddedUnix = dateAdded,
+                            PlatformWindows = win,
+                            PlatformMac = mac,
+                            Price = price,
+                            OriginalPrice = origPrice,
+                            DiscountPercent = discount,
+                            IsFree = isFree
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[Wishlist] Parse error {appId}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Wishlist] Batch error: {ex.Message}");
+            }
+
+            return result;
         }
 
         [HttpGet("wishlist/{steamId}/ids")]
