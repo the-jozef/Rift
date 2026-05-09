@@ -22,13 +22,9 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isLoading = false;
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private bool _isEmpty = false;
+        [ObservableProperty] private string _loadingMessage = "Loading wishlist...";
 
         public string Username => SessionManager.Username;
-
-        public string WishlistTitle =>
-            string.IsNullOrEmpty(SessionManager.Username)
-                ? "MY WISHLIST"
-                : $"{SessionManager.Username.ToUpper()}'S WISHLIST";
 
         public event Action<GameModel>? OnGameSelected;
 

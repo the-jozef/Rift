@@ -90,7 +90,8 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Margin="0,40,0,0">
-                                    <TextBlock Text="Loading wishlist..."
+
+                                    <TextBlock Text="{Binding LoadingMessage}"
                                                Foreground="#959BA6"
                                                FontSize="13"
                                                HorizontalAlignment="Center" />
@@ -100,6 +101,7 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Margin="0,40,0,0">
+                                    
                                     <TextBlock Text="Your wishlist is empty."
                                                Foreground="#959BA6"
                                                FontSize="13"

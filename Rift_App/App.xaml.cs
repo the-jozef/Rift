@@ -41,7 +41,7 @@ namespace Rift_App
                 SteamworksService.Shutdown();
 
                 // Close Steam only if Rift launched it
-                SteamworksService.CloseSteamIfWeLaunchedIt();
+               // SteamworksService.CloseSteamIfWeLaunchedIt();
             }
             catch { }
 

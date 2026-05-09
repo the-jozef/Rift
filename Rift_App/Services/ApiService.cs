@@ -17,7 +17,12 @@ namespace Rift_App.Services
 
         private static readonly HttpClient _http = new HttpClient
         {
-            Timeout = TimeSpan.FromSeconds(90)
+            Timeout = TimeSpan.FromSeconds(90)  
+        };
+
+        private static readonly HttpClient _wishlistHttp = new HttpClient
+        {
+            Timeout = TimeSpan.FromMinutes(10)
         };
 
         private static StringContent ToJson(object obj) =>
@@ -198,15 +203,22 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-
         public static async Task<List<WishlistGameModel>> GetWishlistDetailedAsync(string steamId64)
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/wishlist/{steamId64}");
-                return FromJson<WishlistGamesResponse>(response)?.Games ?? new List<WishlistGameModel>();
+                var response = await _wishlistHttp.GetStringAsync(
+                    $"{BaseUrl}/api/steam/wishlist/{steamId64}");
+
+                Debug.WriteLine($"[API] Wishlist raw: {response[..Math.Min(200, response.Length)]}");
+                return FromJson<WishlistGamesResponse>(response)?.Games
+                       ?? new List<WishlistGameModel>();
             }
-            catch { return new List<WishlistGameModel>(); }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[API] GetWishlist error: {ex.Message}");
+                return new List<WishlistGameModel>();
+            }
         }
 
         public static async Task<bool> RemoveFromWishlistAsync(string steamId64, int appId)
