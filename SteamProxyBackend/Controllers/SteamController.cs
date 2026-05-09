@@ -971,34 +971,35 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                if (IsRateLimited(GetClientIp()))
-                    return StatusCode(429, new { Message = "Too many requests." });
-
                 if (request?.AppIds == null || !request.AppIds.Any())
                     return Ok(new { Games = new List<object>() });
 
-                // dateAdded = 0 — frontend si nastaví správnu hodnotu sám
-                var dateAddedLookup = request.AppIds.ToDictionary(id => id, _ => 0L);
+                var dummy = request.AppIds.ToDictionary(id => id, _ => 0L);
                 var result = new List<object>();
                 const int batchSize = 10;
 
                 for (int i = 0; i < request.AppIds.Count; i += batchSize)
                 {
                     var batch = request.AppIds.Skip(i).Take(batchSize).ToList();
-                    var batchResults = await FetchBatchAppDetailsAsync(batch, dateAddedLookup);
-                    result.AddRange(batchResults);
+                    var fetched = await FetchBatchAppDetailsAsync(batch, dummy);
+                    result.AddRange(fetched);
 
-                    // 600ms medzi batchmi — ochrana Steam rate limitu
                     if (i + batchSize < request.AppIds.Count)
                         await Task.Delay(600);
                 }
 
+                Console.WriteLine($"[Batch] Returned {result.Count} games");
                 return Ok(new { Games = result });
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[Batch] Error: {ex.Message}");
                 return StatusCode(500, new { Message = ex.Message });
             }
         }
+    }
+    public class WishlistBatchRequest
+    {
+        public List<int> AppIds { get; set; } = new();
     }
 }

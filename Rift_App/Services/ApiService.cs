@@ -188,31 +188,20 @@ namespace Rift_App.Services
             public int Unlocked { get; set; }
         }
 
-        public static async Task<List<WishlistGameModel>> GetWishlistDetailedAsync(string steamId64)
-        {
-            try
-            {
-                // Normálny timeout — backend je teraz rýchly (batch requesty)
-                var response = await _http.GetStringAsync(
-                    $"{BaseUrl}/api/steam/wishlist/{steamId64}");
-                return FromJson<WishlistGamesResponse>(response)?.Games
-                       ?? new List<WishlistGameModel>();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[API] GetWishlistDetailed error: {ex.Message}");
-                return new List<WishlistGameModel>();
-            }
-        }
+
+        // ─── WISHLIST ─────────────────────────────────────────────────────────
 
         public static async Task<List<WishlistItemRef>> GetWishlistIdsAsync(string steamId64)
         {
             try
             {
+                Debug.WriteLine($"[API] GetWishlistIds: {steamId64}");
                 var response = await _http.GetStringAsync(
                     $"{BaseUrl}/api/steam/wishlist/{steamId64}/ids");
-                return FromJson<WishlistIdsResponse>(response)?.Items
-                       ?? new List<WishlistItemRef>();
+                var result = FromJson<WishlistIdsResponse>(response)?.Items
+                             ?? new List<WishlistItemRef>();
+                Debug.WriteLine($"[API] GetWishlistIds: {result.Count} items");
+                return result;
             }
             catch (Exception ex)
             {
@@ -220,15 +209,21 @@ namespace Rift_App.Services
                 return new List<WishlistItemRef>();
             }
         }
+
         public static async Task<List<WishlistGameModel>> GetWishlistBatchAsync(List<int> appIds)
         {
             try
             {
+                Debug.WriteLine($"[API] GetWishlistBatch: {appIds.Count} ids");
                 var body = ToJson(new { AppIds = appIds });
-                var response = await _http.PostAsync($"{BaseUrl}/api/steam/wishlist/batch", body);
+                var response = await _http.PostAsync(
+                    $"{BaseUrl}/api/steam/wishlist/batch", body);
                 var json = await response.Content.ReadAsStringAsync();
-                return FromJson<WishlistGamesResponse>(json)?.Games
-                       ?? new List<WishlistGameModel>();
+                Debug.WriteLine($"[API] GetWishlistBatch response: {json.Length} chars");
+                var result = FromJson<WishlistGamesResponse>(json)?.Games
+                             ?? new List<WishlistGameModel>();
+                Debug.WriteLine($"[API] GetWishlistBatch parsed: {result.Count} games");
+                return result;
             }
             catch (Exception ex)
             {

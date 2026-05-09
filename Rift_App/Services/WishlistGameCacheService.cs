@@ -9,8 +9,7 @@ using System.IO;
 namespace Rift_App.Services
 {
     /// <summary>
-    /// Každá hra má vlastný JSON súbor.
-    /// Cesta: AppData\RiftApp\wishlist\games\{appId}.json
+    /// AppData\RiftApp\wishlist\games\{appId}.json
     /// </summary>
     public static class WishlistGameCacheService
     {
@@ -21,8 +20,6 @@ namespace Rift_App.Services
         private static string FilePath(int appId) =>
             Path.Combine(Folder, $"{appId}.json");
 
-        // ─── LOAD ─────────────────────────────────────────────────────────
-
         public static async Task<WishlistGameModel?> LoadAsync(int appId)
         {
             try
@@ -30,12 +27,16 @@ namespace Rift_App.Services
                 var path = FilePath(appId);
                 if (!File.Exists(path)) return null;
                 var json = await File.ReadAllTextAsync(path);
-                return JsonConvert.DeserializeObject<WishlistGameModel>(json);
+                var result = JsonConvert.DeserializeObject<WishlistGameModel>(json);
+                Debug.WriteLine($"[WishlistCache] Loaded: {result?.Name} ({appId})");
+                return result;
             }
-            catch { return null; }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[WishlistCache] Load error {appId}: {ex.Message}");
+                return null;
+            }
         }
-
-        // ─── SAVE ─────────────────────────────────────────────────────────
 
         public static async Task SaveAsync(WishlistGameModel game)
         {
@@ -44,14 +45,13 @@ namespace Rift_App.Services
                 EnsureFolder();
                 var json = JsonConvert.SerializeObject(game, Formatting.None);
                 await File.WriteAllTextAsync(FilePath(game.AppId), json);
+                Debug.WriteLine($"[WishlistCache] Saved: {game.Name} ({game.AppId})");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[WishlistGameCache] Save error {game.AppId}: {ex.Message}");
+                Debug.WriteLine($"[WishlistCache] Save error {game.AppId}: {ex.Message}");
             }
         }
-
-        // ─── DELETE ───────────────────────────────────────────────────────
 
         public static void Delete(int appId)
         {
@@ -59,19 +59,20 @@ namespace Rift_App.Services
             {
                 var path = FilePath(appId);
                 if (File.Exists(path)) File.Delete(path);
+                Debug.WriteLine($"[WishlistCache] Deleted: {appId}");
             }
             catch { }
         }
 
-        // ─── EXISTS ───────────────────────────────────────────────────────
-
         public static bool Exists(int appId) => File.Exists(FilePath(appId));
-
-        // ─── HELPER ───────────────────────────────────────────────────────
 
         private static void EnsureFolder()
         {
-            if (!Directory.Exists(Folder)) Directory.CreateDirectory(Folder);
+            if (!Directory.Exists(Folder))
+            {
+                Directory.CreateDirectory(Folder);
+                Debug.WriteLine($"[WishlistCache] Created folder: {Folder}");
+            }
         }
     }
 }
