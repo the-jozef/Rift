@@ -267,9 +267,9 @@ namespace Rift_App.ViewModels
             int GetGroup(WishlistGameModel g) => (g.IsDlc, g.IsReleased, g.IsPreOrder, g.DiscountPercent > 0) switch
             {
                 (false, true, _, true) => 0,  // vydaná hra v akcii
-                (false, true, _, false) => 1,  // vydaná hra
-                (true, true, _, _) => 2,  // vydané DLC
-                (false, false, true, _) => 3,  // pre-order hra
+                (false, false, true, _) => 1,  // pre-order hra
+                (false, true, _, false) => 2,  // vydaná hra
+                (true, true, _, _) => 3,  // vydané DLC
                 (false, false, false, _) => 4,  // nevydaná hra
                 (true, false, _, _) => 5,  // nevydané DLC
             };

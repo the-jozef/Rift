@@ -74,18 +74,18 @@ namespace Rift_App.Models
             {
                 var hex = ReviewCss switch
                 {
-                    "overwhelmingPositive" => "#66C0F4",
+                    "veryPositive" => "#66C0F4",
                     "positive" => "#5DA5D0",
+                    "mostlyPositive" => "#5DA5D0",
                     "mixed" => "#C6B21E",
+                    "mostlyNegative" => "#C83C3C",
                     "negative" => "#C83C3C",
-                    "overwhelminglyNegative" => "#C83C3C",
                     _ => "#959BA6"
                 };
                 return new System.Windows.Media.SolidColorBrush(
                     (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(hex));
             }
-        }
-
+        }     
         // ─── IMAGE VM ─────────────────────────────────────────────────────
 
         [JsonIgnore]

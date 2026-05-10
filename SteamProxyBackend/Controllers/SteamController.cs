@@ -531,6 +531,38 @@ namespace SteamProxyBackend.Controllers
             }
         }
 
+        private async Task<(string desc, string css)> FetchReviewsAsync(int appId)
+        {
+            try
+            {
+                var url = $"https://store.steampowered.com/appreviews/{appId}?json=1&language=all&review_type=all&purchase_type=all";
+                var response = await _http.GetStringAsync(url);
+                var json = JObject.Parse(response);
+
+                var summary = json["query_summary"];
+                if (summary == null) return ("No Reviews", "");
+
+                int pos = summary["total_positive"]?.Value<int>() ?? 0;
+                int total = summary["total_reviews"]?.Value<int>() ?? 0;
+                if (total == 0) return ("No Reviews", "");
+
+                double pct = (double)pos / total * 100;
+                return pct switch
+                {
+                    >= 95 => ("Overwhelmingly Positive", "overwhelmingPositive"),
+                    >= 80 => ("Very Positive", "positive"),
+                    >= 70 => ("Mostly Positive", "positive"),
+                    >= 40 => ("Mixed", "mixed"),
+                    >= 20 => ("Mostly Negative", "negative"),
+                    _ => ("Overwhelmingly Negative", "overwhelminglyNegative")
+                };
+            }
+            catch
+            {
+                return ("No Reviews", "");
+            }
+        }
+
         private async Task<List<object>> FetchBatchAppDetailsAsync(List<int> appIds,Dictionary<int, long> dateAddedLookup)
         {
             var result = new List<object>();
@@ -590,6 +622,7 @@ namespace SteamProxyBackend.Controllers
                             _ => ("", "")
                         };
                     }
+
                     if (string.IsNullOrEmpty(reviewDesc))
                     {
                         var scoreDesc = data["review_score_desc"]?.Value<string>() ?? "";
@@ -607,6 +640,7 @@ namespace SteamProxyBackend.Controllers
                             };
                         }
                     }
+
                     if (string.IsNullOrEmpty(reviewDesc))
                     {
                         int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
@@ -621,6 +655,9 @@ namespace SteamProxyBackend.Controllers
                             _ => ("No Reviews", "")
                         };
                     }
+                    if (string.IsNullOrEmpty(reviewDesc))
+                        (reviewDesc, reviewCss) = await FetchReviewsAsync(appId);
+
                     if (string.IsNullOrEmpty(reviewDesc))
                         reviewDesc = "No Reviews";
 
