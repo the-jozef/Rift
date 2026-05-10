@@ -535,34 +535,63 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                var url = $"https://store.steampowered.com/appreviews/{appId}?json=1&language=all&review_type=all&purchase_type=all";
+                var url = $"https://store.steampowered.com/appreviews/{appId}?json=1&language=all&review_type=all&purchase_type=all&num_per_page=0";
                 var response = await _http.GetStringAsync(url);
                 var json = JObject.Parse(response);
 
+                Console.WriteLine($"[Reviews] {appId}: {json["query_summary"]}");
+
                 var summary = json["query_summary"];
-                if (summary == null) return ("No Reviews", "");
+                if (summary == null)
+                {
+                    Console.WriteLine($"[Reviews] {appId}: query_summary is null");
+                    return ("No Reviews", "");
+                }
 
                 int pos = summary["total_positive"]?.Value<int>() ?? 0;
                 int total = summary["total_reviews"]?.Value<int>() ?? 0;
+
+                Console.WriteLine($"[Reviews] {appId}: pos={pos}, total={total}");
+
                 if (total == 0) return ("No Reviews", "");
 
+                // Použi review_score_desc priamo zo summary — najspoľahlivejší
+                var descFromSummary = summary["review_score_desc"]?.Value<string>() ?? "";
+                Console.WriteLine($"[Reviews] {appId}: desc={descFromSummary}");
+
+
+                if (!string.IsNullOrEmpty(descFromSummary) && descFromSummary != "No user reviews")
+                {
+                    return descFromSummary switch
+                    {
+                        "Very Positive" => ("Very Positive", "veryPositive"),
+                        "Positive" => ("Positive", "positive"),
+                        "Mostly Positive" => ("Mostly Positive", "mostlyPositive"),
+                        "Mixed" => ("Mixed", "mixed"),
+                        "Mostly Negative" => ("Mostly Negative", "mostlyNegative"),
+                        "Very Negative" => ("Very Negative", "veryNegative"),
+                        _ => ("No Reviews", "")
+                    };
+                }
+
+                // Fallback — vypočítaj z percent
                 double pct = (double)pos / total * 100;
                 return pct switch
                 {
-                    >= 95 => ("Overwhelmingly Positive", "overwhelmingPositive"),
-                    >= 80 => ("Very Positive", "positive"),
-                    >= 70 => ("Mostly Positive", "positive"),
+                    >= 90 => ("Very Positive", "veryPositive"),
+                    >= 75 => ("Positive", "positive"),
+                    >= 60 => ("Mostly Positive", "mostlyPositive"),
                     >= 40 => ("Mixed", "mixed"),
-                    >= 20 => ("Mostly Negative", "negative"),
-                    _ => ("Overwhelmingly Negative", "overwhelminglyNegative")
+                    >= 20 => ("Mostly Negative", "mostlyNegative"),
+                    _     => ("Negative", "negative"),
                 };
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"[Reviews] {appId} error: {ex.Message}");
                 return ("No Reviews", "");
             }
         }
-
         private async Task<List<object>> FetchBatchAppDetailsAsync(List<int> appIds,Dictionary<int, long> dateAddedLookup)
         {
             var result = new List<object>();
