@@ -264,13 +264,14 @@ namespace Rift_App.ViewModels
 
         private void InsertSorted(WishlistGameModel game)
         {
-            int GetGroup(WishlistGameModel g) => (g.IsDlc, g.IsReleased, g.DiscountPercent > 0) switch
+            int GetGroup(WishlistGameModel g) => (g.IsDlc, g.IsReleased, g.IsPreOrder, g.DiscountPercent > 0) switch
             {
-                (false, true, true) => 0,  // vydaná hra / pre-order v akcii
-                (false, true, false) => 1,  // vydaná hra / pre-order
-                (true, true, _) => 2,  // vydané DLC
-                (false, false, _) => 3,  // nevydaná hra
-                (true, false, _) => 4,  // nevydané DLC
+                (false, true, _, true) => 0,  // vydaná hra v akcii
+                (false, true, _, false) => 1,  // vydaná hra
+                (true, true, _, _) => 2,  // vydané DLC
+                (false, false, true, _) => 3,  // pre-order hra
+                (false, false, false, _) => 4,  // nevydaná hra
+                (true, false, _, _) => 5,  // nevydané DLC
             };
 
             decimal GetPrice(WishlistGameModel g)

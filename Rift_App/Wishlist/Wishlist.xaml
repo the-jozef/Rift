@@ -204,14 +204,15 @@
 
                                                                 <Grid Grid.Column="1" Margin="50,-1.7,0,0">
 
-                                                                    <StackPanel Orientation="Vertical" TextElement.FontSize="12.5">
+                                                                    <StackPanel Orientation="Vertical"
+                                                                                TextElement.FontSize="12.5">
 
-                                                                        <TextBlock Foreground="{Binding ReviewBrush}" Text="{Binding ReviewDesc}" />
+                                                                        <TextBlock Foreground="{Binding ReviewBrush}"
+                                                                                   Text="{Binding ReviewDesc}" />
 
-                                                                        <TextBlock
-                                                                            Margin="0,2,0,0"
-                                                                            Foreground="#959BA6"
-                                                                            Text="{Binding ReleaseDateDisplay}" />
+                                                                        <TextBlock Margin="0,2,0,0"
+                                                                                   Foreground="#959BA6"
+                                                                                   Text="{Binding ReleaseDateDisplay}" />
                                                                     </StackPanel>
                                                                 </Grid>
                                                             </Grid>
@@ -326,21 +327,29 @@
 
                                                                             <StackPanel Margin="8,0,8,0"
                                                                                         VerticalAlignment="Bottom"
-                                                                                        Orientation="Vertical">
+                                                                                        Orientation="Vertical"
+                                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                                                                 <TextBlock HorizontalAlignment="Right"
                                                                                            FontFamily="Arial"
                                                                                            FontSize="12"
                                                                                            Foreground="#91999E"
                                                                                            Text="{Binding OriginalPrice}"
-                                                                                           TextDecorations="Strikethrough"
-                                                                                           Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                                                           TextDecorations="Strikethrough" />
 
                                                                                 <TextBlock FontSize="16.5"
                                                                                            FontWeight="SemiBold"
                                                                                            Foreground="#D8E0E6"
                                                                                            Text="{Binding Price}" />
                                                                             </StackPanel>
+
+                                                                            <TextBlock Margin="8,0,8,0"
+                                                                                       FontSize="16.5"
+                                                                                       FontWeight="SemiBold"
+                                                                                       Foreground="#D8E0E6"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Text="{Binding Price}"
+                                                                                       Visibility="{Binding HasDiscount, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
                                                                         </Grid>
 
                                                                         <Grid Grid.Column="2">
@@ -368,8 +377,22 @@
                                                                                     <TextBlock HorizontalAlignment="Center"
                                                                                                VerticalAlignment="Center"
                                                                                                FontSize="15"
-                                                                                               Foreground="#E8FFCF"
-                                                                                               Text="Add to Cart" />
+                                                                                               Foreground="#E8FFCF">
+
+                                                                                        <TextBlock.Style>
+                                                                                            <Style TargetType="TextBlock">
+                                                                                                <Setter Property="Text"
+                                                                                                        Value="Add to Cart" />
+                                                                                                <Style.Triggers>
+                                                                                                    <DataTrigger Binding="{Binding IsPreOrder}"
+                                                                                                                 Value="True">
+                                                                                                        <Setter Property="Text"
+                                                                                                                Value="Pre-order" />
+                                                                                                    </DataTrigger>
+                                                                                                </Style.Triggers>
+                                                                                            </Style>
+                                                                                        </TextBlock.Style>
+                                                                                    </TextBlock>
                                                                                 </Button>
                                                                             </Border>
                                                                         </Grid>

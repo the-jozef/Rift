@@ -431,12 +431,12 @@ namespace SteamProxyBackend.Controllers
                         double pct = (double)pos / total * 100;
                         (reviewDesc, reviewCss) = pct switch
                         {
-                            >= 95 => ("Overwhelmingly Positive", "overwhelmingPositive"),
-                            >= 80 => ("Very Positive", "positive"),
-                            >= 70 => ("Mostly Positive", "positive"),
+                            >= 95 => ("Very Positive", "verypositive"),
+                            >= 80 => ("Positive", "positive"),
+                            >= 70 => ("Mostly Positive", "mostlypositive"),
                             >= 40 => ("Mixed", "mixed"),
-                            >= 20 => ("Mostly Negative", "negative"),
-                            _ => ("Overwhelmingly Negative", "overwhelminglyNegative")
+                            >= 20 => ("Mostly Negative", "mostlynegative"),
+                            _ => ("Negative", "negative")
                         };
                     }
                 }
@@ -574,38 +574,59 @@ namespace SteamProxyBackend.Controllers
 
                     // ─── 2. REVIEWS ───────────────────────────────────────────────────────────
                     string reviewDesc = "", reviewCss = "";
-                    var scoreDesc = data["review_score_desc"]?.Value<string>() ?? "";
 
-                    if (!string.IsNullOrEmpty(scoreDesc) && scoreDesc != "No user reviews")
+                    int reviewScore = data["review_score"]?.Value<int>() ?? -1;
+                    if (reviewScore >= 0)
                     {
-                        (reviewDesc, reviewCss) = scoreDesc switch
+                        (reviewDesc, reviewCss) = reviewScore switch
                         {
-                            "Overwhelmingly Positive" => ("Overwhelmingly Positive", "overwhelmingPositive"),
-                            "Very Positive" => ("Very Positive", "positive"),
-                            "Mostly Positive" => ("Mostly Positive", "positive"),
-                            "Mixed" => ("Mixed", "mixed"),
-                            "Mostly Negative" => ("Mostly Negative", "negative"),
-                            "Overwhelmingly Negative" => ("Overwhelmingly Negative", "overwhelminglyNegative"),
-                            _ => ("No Reviews", "")
+                            9 => ("Very Positive", "veryPositive"),
+                            8 => ("Positive", "positive"),
+                            7 => ("Mostly Positive", "mostlyPositive"),
+                            5 => ("Mixed", "mixed"),
+                            4 => ("Mostly Negative", "mostlyNegative"),
+                            3 => ("Negative", "negative"),
+                            1 => ("Very Negative", "veryNegative"),
+                            _ => ("", "")
                         };
                     }
-                    else
+                    if (string.IsNullOrEmpty(reviewDesc))
+                    {
+                        var scoreDesc = data["review_score_desc"]?.Value<string>() ?? "";
+                        if (!string.IsNullOrEmpty(scoreDesc) && scoreDesc != "No user reviews")
+                        {
+                            (reviewDesc, reviewCss) = scoreDesc switch
+                            {
+                                "Very Positive" => ("Very Positive", "veryPositive"),
+                                "Positive" => ("Positive", "positive"),
+                                "Mostly Positive" => ("Mostly Positive", "mostlyPositive"),
+                                "Mixed" => ("Mixed", "mixed"),
+                                "Mostly Negative" => ("Mostly Negative", "mostlyNegative"),
+                                "Very Negative" => ("Very Negative", "veryNegative"),
+                                _ => ("", "")
+                            };
+                        }
+                    }
+                    if (string.IsNullOrEmpty(reviewDesc))
                     {
                         int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
                         (reviewDesc, reviewCss) = meta switch
                         {
-                            >= 90 => ("Overwhelmingly Positive", "overwhelmingPositive"),
-                            >= 75 => ("Very Positive", "positive"),
-                            >= 60 => ("Mostly Positive", "positive"),
+                            >= 90 => ("Very Positive", "veryPositive"),
+                            >= 75 => ("Positive", "positive"),
+                            >= 60 => ("Mostly Positive", "mostlyPositive"),
                             >= 40 => ("Mixed", "mixed"),
-                            > 0 => ("Mostly Negative", "negative"),
+                            >= 20 => ("Mostly Negative", "mostlyNegative"),
+                            >   0 => ("Negative", "negative"),
                             _ => ("No Reviews", "")
                         };
                     }
+                    if (string.IsNullOrEmpty(reviewDesc))
+                        reviewDesc = "No Reviews";
 
-                    // ─── Release date ──────────────────────────────────────────────────────────
+                    // ─── 3. Release date ──────────────────────────────────────────────────────────
                     bool isReleased = !(data["release_date"]?["coming_soon"]?.Value<bool>() ?? false);
-                    bool isPreOrder = !isReleased && data["price_overview"] != null; 
+                    bool isPreOrder = !isReleased && data["price_overview"] != null;
                     string releaseStr = data["release_date"]?["date"]?.Value<string>() ?? "";
 
                     long releaseDateUnix = 0;
@@ -613,7 +634,6 @@ namespace SteamProxyBackend.Controllers
 
                     if (!isReleased)
                         releaseDateDisplay = string.IsNullOrEmpty(releaseStr) ? "Coming Soon" : releaseStr;
-
                     else if (DateTime.TryParse(releaseStr, out var dt))
                     {
                         releaseDateUnix = new DateTimeOffset(dt).ToUnixTimeSeconds();
@@ -640,7 +660,7 @@ namespace SteamProxyBackend.Controllers
 
                     if (isFree)
                         price = "Free";
-                    else if (isReleased)
+                    else if (isReleased || isPreOrder) 
                     {
                         var po = data["price_overview"];
                         if (po != null)

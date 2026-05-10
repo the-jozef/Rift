@@ -39,9 +39,10 @@ namespace Rift_App.Models
 
         [JsonIgnore]
         public string DateAddedDisplay => DateAddedUnix > 0
-           ? DateTimeOffset.FromUnixTimeSeconds(DateAddedUnix)
+    ? DateTimeOffset.FromUnixTimeSeconds(DateAddedUnix)
                     .LocalDateTime
-                    .ToString("d/M/yyyy"): "";
+                    .ToString("d/MM/yyyy") 
+    : "";
 
         // Pricing
         public string Price { get; set; } = string.Empty;
