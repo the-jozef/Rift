@@ -12,6 +12,7 @@ namespace Rift_App.Services
         public static Guid UserId { get; private set; } = Guid.Empty;
         public static string Username { get; private set; } = string.Empty;
         public static string LastLocation { get; private set; } = "Store";
+        public static event Action? OnSessionReady;
 
         // Avatar URL zo Steam API — Steam API avatar URL
         public static string AvatarUrl { get; private set; } = string.Empty;
@@ -42,6 +43,10 @@ namespace Rift_App.Services
             SteamId64 = string.Empty;
             LastLocation = "Store";
             AvatarUrl = string.Empty;
+        }
+        public static void NotifySessionReady()
+        {
+            OnSessionReady?.Invoke();
         }
     }
 }

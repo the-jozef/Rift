@@ -26,13 +26,15 @@ namespace Rift_App.Wishlist
         {
             InitializeComponent();
             DataContext = _viewModel;
+
             _viewModel.OnGameSelected += game =>
                 (Application.Current.MainWindow as MainWindow)?.ViewModel.ShowGamePage(game);
+
             Loaded += async (_, _) =>
             {
                 if (SessionManager.IsLoggedIn)
                     await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
-            };
+            };    
         }
     }
 }

@@ -26,6 +26,7 @@ namespace Rift_App.Models
         public long ReleaseDateUnix { get; set; }
         public string ReleaseDateDisplay { get; set; } = string.Empty;
         public bool IsReleased { get; set; }
+        public bool IsPreOrder { get; set; }
         public bool IsEarlyAccess { get; set; }
         public bool IsDlc { get; set; }
 
@@ -37,10 +38,10 @@ namespace Rift_App.Models
         public long DateAddedUnix { get; set; }
 
         [JsonIgnore]
-        public string DateAddedDisplay =>
-            DateAddedUnix > 0
-                ? DateTimeOffset.FromUnixTimeSeconds(DateAddedUnix).LocalDateTime.ToString("M/d/yyyy")
-                : string.Empty;
+        public string DateAddedDisplay => DateAddedUnix > 0
+           ? DateTimeOffset.FromUnixTimeSeconds(DateAddedUnix)
+                    .LocalDateTime
+                    .ToString("d/M/yyyy"): "";
 
         // Pricing
         public string Price { get; set; } = string.Empty;
@@ -57,7 +58,10 @@ namespace Rift_App.Models
         public bool HasPrice => !string.IsNullOrEmpty(Price) && Price != "N/A";
 
         [JsonIgnore]
-        public bool ShowAddToCart => IsReleased && HasPrice;
+        public bool ShowAddToCart =>
+    (IsReleased || IsPreOrder) &&
+    !string.IsNullOrEmpty(Price) &&
+    Price != "N/A";
 
         [JsonIgnore]
         public string DiscountDisplay => $"-{DiscountPercent}%";

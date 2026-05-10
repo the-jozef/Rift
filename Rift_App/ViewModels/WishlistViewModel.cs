@@ -31,6 +31,7 @@ namespace Rift_App.ViewModels
                 : $"{SessionManager.Username.ToUpper()}'S WISHLIST";
 
         public event Action<GameModel>? OnGameSelected;
+        public string AvatarUrl => SessionManager.AvatarUrl;
 
         // ─── LOAD ─────────────────────────────────────────────────────────
 
@@ -159,59 +160,66 @@ namespace Rift_App.ViewModels
 
         private async Task SyncInBackgroundAsync(string steamId, List<WishlistItemRef> currentRefs)
         {
-            try
+            // Sync každých 5 minút pokiaľ je okno otvorené
+            while (true)
             {
-                await Task.Delay(5000);
-                Debug.WriteLine("[Wishlist] Sync started");
-
-                var freshRefs = await ApiService.GetWishlistIdsAsync(steamId);
-                if (freshRefs == null) return;
-
-                var currentIds = currentRefs.Select(r => r.AppId).ToHashSet();
-                var freshIds = freshRefs.Select(r => r.AppId).ToHashSet();
-
-                // Odobrané
-                foreach (var removed in currentIds.Except(freshIds))
+                try
                 {
-                    WishlistGameCacheService.Delete(removed);
-                    Application.Current.Dispatcher.Invoke(() =>
+                    await Task.Delay(TimeSpan.FromMinutes(5));
+
+                    Debug.WriteLine("[Wishlist] Sync started");
+
+                    var freshRefs = await ApiService.GetWishlistIdsAsync(steamId);
+                    if (freshRefs == null) continue;
+
+                    var currentIds = currentRefs.Select(r => r.AppId).ToHashSet();
+                    var freshIds = freshRefs.Select(r => r.AppId).ToHashSet();
+
+                    // Zmazané z wishlistu
+                    foreach (var removed in currentIds.Except(freshIds))
                     {
-                        var g = Games.FirstOrDefault(x => x.AppId == removed);
-                        if (g != null) { Games.Remove(g); TotalGames = Games.Count; }
-                    });
-                    Debug.WriteLine($"[Wishlist] Sync removed: {removed}");
-                }
-
-                // Nové
-                var newRefs = freshRefs
-                    .Where(r => !currentIds.Contains(r.AppId))
-                    .ToList();
-
-                if (newRefs.Any())
-                {
-                    var dateMap = newRefs.ToDictionary(r => r.AppId, r => r.DateAdded);
-                    var fetched = await ApiService.GetWishlistBatchAsync(
-                        newRefs.Select(r => r.AppId).ToList());
-
-                    foreach (var game in fetched)
-                    {
-                        if (dateMap.TryGetValue(game.AppId, out var da))
-                            game.DateAddedUnix = da;
-
-                        await WishlistGameCacheService.SaveAsync(game);
+                        WishlistGameCacheService.Delete(removed);
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            InsertSorted(game);
-                            TotalGames = Games.Count;
-                            IsEmpty = false;
+                            var g = Games.FirstOrDefault(x => x.AppId == removed);
+                            if (g != null) { Games.Remove(g); TotalGames = Games.Count; }
                         });
-                        Debug.WriteLine($"[Wishlist] Sync added: {game.Name}");
+                        Debug.WriteLine($"[Wishlist] Sync removed: {removed}");
                     }
+
+                    // Nové v wishliste
+                    var newRefs = freshRefs.Where(r => !currentIds.Contains(r.AppId)).ToList();
+                    if (newRefs.Any())
+                    {
+                        var dateMap = newRefs.ToDictionary(r => r.AppId, r => r.DateAdded);
+                        var fetched = await ApiService.GetWishlistBatchAsync(
+                            newRefs.Select(r => r.AppId).ToList());
+
+                        foreach (var game in fetched)
+                        {
+                            if (dateMap.TryGetValue(game.AppId, out var da))
+                                game.DateAddedUnix = da;
+
+                            await WishlistGameCacheService.SaveAsync(game);
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                InsertSorted(game);
+                                TotalGames = Games.Count;
+                                IsEmpty = false;
+                            });
+                            Debug.WriteLine($"[Wishlist] Sync added: {game.Name}");
+                        }
+                    }
+
+                    // Aktualizuj currentRefs pre ďalší cyklus
+                    currentRefs = freshRefs;
+
+                    Debug.WriteLine("[Wishlist] Sync done");
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Wishlist] Sync error: {ex.Message}");
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[Wishlist] Sync error: {ex.Message}");
+                }
             }
         }
 
@@ -256,30 +264,43 @@ namespace Rift_App.ViewModels
 
         private void InsertSorted(WishlistGameModel game)
         {
-            // Poradie skupín: vydané hry → nevydané hry → vydané DLC → nevydané DLC
             int GetGroup(WishlistGameModel g) => (g.IsDlc, g.IsReleased, g.DiscountPercent > 0) switch
             {
-                (false, true, true) => 0,
-                (false, true, false) => 1,
-                (true, true, _) => 2,
-                (false, false, _) => 3,
-                (true, false, _) => 4,
+                (false, true, true) => 0,  // vydaná hra / pre-order v akcii
+                (false, true, false) => 1,  // vydaná hra / pre-order
+                (true, true, _) => 2,  // vydané DLC
+                (false, false, _) => 3,  // nevydaná hra
+                (true, false, _) => 4,  // nevydané DLC
             };
 
+            decimal GetPrice(WishlistGameModel g)
+            {
+                if (g.Price is "Free" or "N/A") return 0;
+                var cleaned = g.Price.Replace("$", "").Replace("€", "").Trim();
+                return decimal.TryParse(cleaned,
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var val) ? val : 0;
+            }
+
             int gameGroup = GetGroup(game);
+            decimal gamePrice = GetPrice(game);
             int index = Games.Count;
 
             for (int i = 0; i < Games.Count; i++)
             {
                 int existingGroup = GetGroup(Games[i]);
+                decimal existingPrice = GetPrice(Games[i]);
 
+                // Iná skupina — nižšia skupina
                 if (existingGroup > gameGroup)
                 {
                     index = i;
                     break;
                 }
 
-                if (existingGroup == gameGroup && Games[i].DateAddedUnix < game.DateAddedUnix)
+                // Rovnaká skupina — od najdrahšej po najlacnejšiu
+                if (existingGroup == gameGroup && existingPrice < gamePrice)
                 {
                     index = i;
                     break;

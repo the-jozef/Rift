@@ -112,6 +112,7 @@ namespace Rift_App.ViewModels
         {
             if (account == null) return;
             SessionManager.SetSession(account.UserId, account.Username, account.SteamId64, account.LastLocation);
+            SessionManager.NotifySessionReady();
             ViewNavigator.Instance?.ShowLoading();
         }
 
@@ -163,6 +164,7 @@ namespace Rift_App.ViewModels
                 }
 
                 SessionManager.SetSession(result.UserId!.Value, result.Username!, result.SteamId64!);
+                SessionManager.NotifySessionReady();
                 ViewNavigator.Instance?.ShowLoading();
             }
             catch { ShowError("Could not connect to server. Check your internet."); }
@@ -202,6 +204,7 @@ namespace Rift_App.ViewModels
                 }
 
                 SessionManager.SetSession(result.UserId!.Value, result.Username!, result.SteamId64!);
+                SessionManager.NotifySessionReady();
                 ViewNavigator.Instance?.ShowLoading();
             }
             catch { ShowError("Could not connect to server. Check your internet."); }
@@ -333,6 +336,7 @@ namespace Rift_App.ViewModels
                 }
 
                 SessionManager.SetSession(result.UserId!.Value, result.Username!, result.SteamId64!);
+                SessionManager.NotifySessionReady();
                 ViewNavigator.Instance?.ShowLoading();
             }
             catch { ShowError("Could not connect to server. Check your internet."); }

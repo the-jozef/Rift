@@ -531,9 +531,7 @@ namespace SteamProxyBackend.Controllers
             }
         }
 
-        private async Task<List<object>> FetchBatchAppDetailsAsync(
-    List<int> appIds,
-    Dictionary<int, long> dateAddedLookup)
+        private async Task<List<object>> FetchBatchAppDetailsAsync(List<int> appIds,Dictionary<int, long> dateAddedLookup)
         {
             var result = new List<object>();
 
@@ -554,53 +552,60 @@ namespace SteamProxyBackend.Controllers
                     string name = data["name"]?.Value<string>() ?? "";
                     if (HasAdultName(name) || HasExplicitContent(data)) continue;
 
-                    // Tags
-                    var tags = (data["categories"] as JArray)?
+                    // ─── 1. TAGS ──────────────────────────────────────────────────────────────
+                    var popularCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+{
+    "Single-player", "Multi-player", "Co-op", "Online Co-op",
+    "Tactical", "PvP", "Online PvP", "Co-op Campaign", "Cross-Platform Multiplayer"
+};
+
+                    var categoryTags = (data["categories"] as JArray)?
                         .Select(c => c["description"]?.Value<string>() ?? "")
+                        .Where(t => !string.IsNullOrEmpty(t) && popularCategories.Contains(t))
+                        .Take(2).ToList() ?? new List<string>();
+
+                    var genreTags = (data["genres"] as JArray)?
+                        .Select(g => g["description"]?.Value<string>() ?? "")
                         .Where(t => !string.IsNullOrEmpty(t))
-                        .Take(5).ToList() ?? new List<string>();
+                        .Take(3).ToList() ?? new List<string>();
 
-                    if (!tags.Any())
-                        tags = (data["genres"] as JArray)?
-                            .Select(g => g["description"]?.Value<string>() ?? "")
-                            .Where(t => !string.IsNullOrEmpty(t))
-                            .Take(5).ToList() ?? new List<string>();
+                    var tags = categoryTags.Concat(genreTags).Distinct().Take(4).ToList();
+                    if (!tags.Any()) tags = new List<string> { "Game" };
 
-                    // Reviews — použij review_score_desc (spoľahlivejší)
+                    // ─── 2. REVIEWS ───────────────────────────────────────────────────────────
                     string reviewDesc = "", reviewCss = "";
-                    var reviewScoreDesc = data["review_score_desc"]?.Value<string>() ?? "";
+                    var scoreDesc = data["review_score_desc"]?.Value<string>() ?? "";
 
-                    if (!string.IsNullOrEmpty(reviewScoreDesc) && reviewScoreDesc != "No user reviews")
+                    if (!string.IsNullOrEmpty(scoreDesc) && scoreDesc != "No user reviews")
                     {
-                        (reviewDesc, reviewCss) = reviewScoreDesc.ToLower() switch
+                        (reviewDesc, reviewCss) = scoreDesc switch
                         {
-                            var s when s.Contains("overwhelmingly positive") => ("Overwhelmingly Positive", "overwhelmingPositive"),
-                            var s when s.Contains("very positive") => ("Very Positive", "positive"),
-                            var s when s.Contains("mostly positive") => ("Mostly Positive", "positive"),
-                            var s when s.Contains("mixed") => ("Mixed", "mixed"),
-                            var s when s.Contains("mostly negative") => ("Mostly Negative", "negative"),
-                            var s when s.Contains("overwhelmingly negative") => ("Overwhelmingly Negative", "overwhelminglyNegative"),
+                            "Overwhelmingly Positive" => ("Overwhelmingly Positive", "overwhelmingPositive"),
+                            "Very Positive" => ("Very Positive", "positive"),
+                            "Mostly Positive" => ("Mostly Positive", "positive"),
+                            "Mixed" => ("Mixed", "mixed"),
+                            "Mostly Negative" => ("Mostly Negative", "negative"),
+                            "Overwhelmingly Negative" => ("Overwhelmingly Negative", "overwhelminglyNegative"),
                             _ => ("No Reviews", "")
                         };
                     }
                     else
                     {
                         int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
-                        if (meta > 0)
-                            (reviewDesc, reviewCss) = meta switch
-                            {
-                                >= 90 => ("Overwhelmingly Positive", "overwhelmingPositive"),
-                                >= 75 => ("Very Positive", "positive"),
-                                >= 60 => ("Mostly Positive", "positive"),
-                                >= 40 => ("Mixed", "mixed"),
-                                _ => ("Mostly Negative", "negative")
-                            };
-                        else
-                            reviewDesc = "No Reviews";
+                        (reviewDesc, reviewCss) = meta switch
+                        {
+                            >= 90 => ("Overwhelmingly Positive", "overwhelmingPositive"),
+                            >= 75 => ("Very Positive", "positive"),
+                            >= 60 => ("Mostly Positive", "positive"),
+                            >= 40 => ("Mixed", "mixed"),
+                            > 0 => ("Mostly Negative", "negative"),
+                            _ => ("No Reviews", "")
+                        };
                     }
 
-                    // Release date
+                    // ─── Release date ──────────────────────────────────────────────────────────
                     bool isReleased = !(data["release_date"]?["coming_soon"]?.Value<bool>() ?? false);
+                    bool isPreOrder = !isReleased && data["price_overview"] != null; 
                     string releaseStr = data["release_date"]?["date"]?.Value<string>() ?? "";
 
                     long releaseDateUnix = 0;
@@ -608,6 +613,7 @@ namespace SteamProxyBackend.Controllers
 
                     if (!isReleased)
                         releaseDateDisplay = string.IsNullOrEmpty(releaseStr) ? "Coming Soon" : releaseStr;
+
                     else if (DateTime.TryParse(releaseStr, out var dt))
                     {
                         releaseDateUnix = new DateTimeOffset(dt).ToUnixTimeSeconds();
@@ -620,7 +626,14 @@ namespace SteamProxyBackend.Controllers
                     bool win = data["platforms"]?["windows"]?.Value<bool>() ?? true;
                     bool mac = data["platforms"]?["mac"]?.Value<bool>() ?? false;
 
-                    // Pricing
+                    // ─── 4. PRICE ──────────────────────────────────────────────────────
+                    string FormatPrice(string? raw)
+                    {
+                        if (string.IsNullOrEmpty(raw)) return "";
+                        if (raw.StartsWith("$")) return raw.Substring(1) + "$";
+                        return raw;
+                    }
+
                     bool isFree = data["is_free"]?.Value<bool>() ?? false;
                     string price = "N/A", origPrice = "";
                     int discount = 0;
@@ -632,10 +645,10 @@ namespace SteamProxyBackend.Controllers
                         var po = data["price_overview"];
                         if (po != null)
                         {
-                            price = po["final_formatted"]?.Value<string>() ?? "N/A";
+                            price = FormatPrice(po["final_formatted"]?.Value<string>());
                             discount = po["discount_percent"]?.Value<int>() ?? 0;
                             if (discount > 0)
-                                origPrice = po["initial_formatted"]?.Value<string>() ?? "";
+                                origPrice = FormatPrice(po["initial_formatted"]?.Value<string>());
                         }
                     }
 
@@ -653,6 +666,7 @@ namespace SteamProxyBackend.Controllers
                         ReleaseDateUnix = releaseDateUnix,
                         ReleaseDateDisplay = releaseDateDisplay,
                         IsReleased = isReleased,
+                        IsPreOrder = isPreOrder,
                         IsEarlyAccess = data["early_access"]?.Value<bool>() ?? false,
                         DateAddedUnix = dateAdded,
                         PlatformWindows = win,
