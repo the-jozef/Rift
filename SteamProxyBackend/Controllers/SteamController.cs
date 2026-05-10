@@ -608,6 +608,7 @@ namespace SteamProxyBackend.Controllers
                     if (entry?["success"]?.Value<bool>() != true) continue;
 
                     var data = entry["data"];
+                    Console.WriteLine($"[R] {appId} score={data["review_score"]} desc={data["review_score_desc"]} type={data["type"]}");
                     if (data == null) continue;
 
                     string name = data["name"]?.Value<string>() ?? "";
@@ -669,7 +670,7 @@ namespace SteamProxyBackend.Controllers
                             };
                         }
                     }
-
+                    
                     if (string.IsNullOrEmpty(reviewDesc))
                     {
                         int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
@@ -684,7 +685,9 @@ namespace SteamProxyBackend.Controllers
                             _ => ("No Reviews", "")
                         };
                     }
-                    if (string.IsNullOrEmpty(reviewDesc))
+                    bool isDlc = data["type"]?.Value<string>()?.ToLower() == "dlc";
+
+                    if (string.IsNullOrEmpty(reviewDesc) || isDlc)
                         (reviewDesc, reviewCss) = await FetchReviewsAsync(appId);
 
                     if (string.IsNullOrEmpty(reviewDesc))
