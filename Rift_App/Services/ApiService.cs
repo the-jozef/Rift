@@ -304,6 +304,19 @@ namespace Rift_App.Services
         }
     }
 
+
+
+
+    public static async Task<List<GameModel>> GetFullLibraryAsync(string steamId64)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/library/{steamId64}/full");
+                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+            }
+            catch { return new List<GameModel>(); }
+        }
+
     // ─── RESPONSE TYPES ───────────────────────────────────────────────────────
 
     public class AuthResponse

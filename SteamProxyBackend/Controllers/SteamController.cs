@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Net;
 using System.Text.Json.Serialization;
 
 namespace SteamProxyBackend.Controllers
@@ -181,6 +182,58 @@ namespace SteamProxyBackend.Controllers
                 return Ok(new { Games = result });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+
+        Problém je že Steam API nikdy nevracia F2P hry ktoré neboli hrané.Jediné riešenie je Steam Community profil XML ktorý vracia všetky hry.
+Backend — pridaj nový endpoint:
+csharp[HttpGet("library/{steamId}/full")]
+public async Task<IActionResult> GetFullLibrary(string steamId)
+        {
+            try
+            {
+                // Steam Community XML — vracia VŠETKY hry vrátane F2P
+                var url = $"https://steamcommunity.com/profiles/{steamId}/games/?tab=all&xml=1";
+                var response = await _http.GetStringAsync(url);
+
+                // Parsuj XML
+                var doc = new System.Xml.XmlDocument();
+                doc.LoadXml(response);
+
+                var games = doc.SelectNodes("//game");
+                if (games == null || games.Count == 0)
+                    return Ok(new { Games = new List<object>() });
+
+                var result = new List<object>();
+                foreach (System.Xml.XmlNode game in games)
+                {
+                    var appIdStr = game["appID"]?.InnerText;
+                    var name = game["name"]?.InnerText;
+
+                    if (!int.TryParse(appIdStr, out int appId) || appId <= 0) continue;
+                    if (string.IsNullOrEmpty(name)) continue;
+
+                    int playtime = 0;
+                    int.TryParse(game["hoursOnRecord"]?.InnerText?.Replace(",", "")
+                                      .Replace(".", "") ?? "0", out int hoursRaw);
+                    playtime = hoursRaw;
+
+                    result.Add(new
+                    {
+                        AppId = appId,
+                        Name = name,
+                        PlaytimeMinutes = playtime,
+                        IconUrl = $"https://media.steampowered.com/steamcommunity/public/images/apps/{appId}/capsule_sm_120.jpg",
+                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
+                    });
+                }
+
+                Debug.WriteLine($"[Library] Full library: {result.Count} games");
+                return Ok(new { Games = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         // ─── ACHIEVEMENTS ─────────────────────────────────────────────────

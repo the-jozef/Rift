@@ -62,20 +62,31 @@ namespace Rift_App.ViewModels
 
                 var steamId = SessionManager.SteamId64;
 
-                // Zdroj 1 — Steam API
-                var apiGames = await ApiService.GetLibraryAsync(steamId);
-                Debug.WriteLine($"[Library] API: {apiGames.Count}");
+                // Zdroj 1 — Full library zo Steam Community (VŠETKY hry vrátane F2P)
+                var fullLibrary = await ApiService.GetFullLibraryAsync(steamId);
+                Debug.WriteLine($"[Library] Full Community: {fullLibrary.Count}");
 
-                // Zdroj 2 — Nainštalované
+                // Zdroj 2 — API fallback (ak je profil private)
+                var apiGames = fullLibrary.Count > 0
+                    ? fullLibrary
+                    : await ApiService.GetLibraryAsync(steamId);
+                Debug.WriteLine($"[Library] API/Fallback: {apiGames.Count}");
+
+                // Zdroj 3 — Nainštalované
                 var installedGames = SteamInstallService.GetAllGames();
                 Debug.WriteLine($"[Library] Nainštalované: {installedGames.Count}");
 
-                // Zdroj 3 — localconfig + sharedconfig
+                // Zdroj 4 — localconfig
                 var localConfigGames = SteamInstallService.GetAllAppsFromLocalConfig();
                 Debug.WriteLine($"[Library] LocalConfig: {localConfigGames.Count}");
 
-                // Spoj — bez duplikátov
+                // Spoj
                 var allById = new Dictionary<int, GameModel>();
+                foreach (var g in localConfigGames) allById[g.AppId] = g;
+                foreach (var g in installedGames) allById[g.AppId] = g;
+                foreach (var g in apiGames) allById[g.AppId] = g;
+
+                
 
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
                 foreach (var g in installedGames) allById[g.AppId] = g;
