@@ -66,37 +66,40 @@ namespace Rift_App.Services
         // ─── SYNC — compare cached vs fresh API data ──────────────────────
         // Returns (updated list, wasChanged)
 
-        public static async Task<(List<GameModel> Games, bool Changed)> SyncAsync(
-    List<GameModel> cached,
-    List<GameModel> freshInstalled)
+        public static async Task<(List<GameModel> Games, bool Changed)> SyncAsync(List<GameModel> cached,List<GameModel> freshFromApi)
         {
             bool changed = false;
             var result = new List<GameModel>(cached);
 
-            var cachedById = new Dictionary<int, GameModel>();
-            foreach (var g in cached) cachedById[g.AppId] = g;
+            var cachedById = cached.ToDictionary(g => g.AppId);
+            var freshById = freshFromApi.ToDictionary(g => g.AppId);
 
-            var freshById = new Dictionary<int, GameModel>();
-            foreach (var g in freshInstalled) freshById[g.AppId] = g;
-
-            // New games — in fresh but not in cache
-            foreach (var freshGame in freshInstalled)
+            // Nové hry — sú v API ale nie v cache
+            foreach (var freshGame in freshFromApi)
             {
                 if (cachedById.ContainsKey(freshGame.AppId)) continue;
 
-                Debug.WriteLine($"[LibraryCache] New game: {freshGame.Name}");
+                Debug.WriteLine($"[LibraryCache] Nová hra: {freshGame.Name}");
                 freshGame.IconPath = await DownloadIconAsync(freshGame.AppId, freshGame.IconUrl);
                 result.Add(freshGame);
                 changed = true;
             }
 
-            // Update install status — don't remove games, just update IsInstalled
+            // Update install status — NEmazaj hry, len aktualizuj IsInstalled
             foreach (var cachedGame in cached)
             {
-                bool nowInstalled = freshById.ContainsKey(cachedGame.AppId);
-                if (cachedGame.IsInstalled != nowInstalled)
+                if (!freshById.ContainsKey(cachedGame.AppId))
                 {
-                    cachedGame.IsInstalled = nowInstalled;
+                    // Hra zmizla z API (veľmi zriedkavé) — nechaj ju v cache
+                    continue;
+                }
+
+                var fresh = freshById[cachedGame.AppId];
+
+                // Aktualizuj playtime
+                if (fresh.PlaytimeMinutes > cachedGame.PlaytimeMinutes)
+                {
+                    cachedGame.PlaytimeMinutes = fresh.PlaytimeMinutes;
                     changed = true;
                 }
             }

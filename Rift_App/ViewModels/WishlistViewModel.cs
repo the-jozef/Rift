@@ -113,6 +113,28 @@ namespace Rift_App.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async Task RefreshAsync()
+        {
+            if (Games.Count == 0) return;
+
+            var steamId = SessionManager.SteamId64;
+            var allIds = Games.Select(g => new WishlistItemRef
+            {
+                AppId = g.AppId,
+                DateAdded = g.DateAddedUnix
+            }).ToList();
+
+            foreach (var game in Games)
+                WishlistGameCacheService.Delete(game.AppId);
+
+            IsFetching = true;
+            LoadingMessage = "Refreshing...";
+            await FetchMissingAsync(allIds);
+            IsFetching = false;
+            LoadingMessage = string.Empty;
+        }
+
         // ─── FETCH CHÝBAJÚCICH ────────────────────────────────────────────
 
         private async Task FetchMissingAsync(List<WishlistItemRef> toFetch)

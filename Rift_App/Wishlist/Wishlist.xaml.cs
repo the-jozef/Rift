@@ -34,7 +34,20 @@ namespace Rift_App.Wishlist
             {
                 if (SessionManager.IsLoggedIn)
                     await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
-            };    
+            };
+
+            // Refresh pri každom prepnutí na Wishlist
+            IsVisibleChanged += async (_, e) =>
+            {
+                if ((bool)e.NewValue && SessionManager.IsLoggedIn && _viewModel.Games.Count > 0)
+                    await _viewModel.RefreshCommand.ExecuteAsync(null);
+            };
+
+            SessionManager.OnSessionReady += async () =>
+            {
+                if (_viewModel.Games.Count == 0)
+                    await _viewModel.LoadWishlistCommand.ExecuteAsync(null);
+            };
         }
     }
 }

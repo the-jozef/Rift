@@ -48,42 +48,48 @@ namespace Rift_App.ViewModels
 
             try
             {
-                // 1. Load from disk cache first — instant startup
                 var cached = await LibraryCacheService.LoadAsync();
-
                 if (cached != null && cached.Count > 0)
                 {
                     RestoreIconPaths(cached);
                     CheckInstallStatus(cached);
                     PopulateGames(cached);
                     IsLoading = false;
-
-                    // Background sync to check for new/removed games
                     _ = SyncInBackgroundAsync();
                     return;
                 }
 
-                // 2. First run — get games directly from local Steam install
-                var games = SteamInstallService.GetAllGames();
-                if (games.Count == 0) return;
+                var steamId = SessionManager.SteamId64;
 
+                // 1. API — vlastnené hry vrátane free, tools, soundtracks
+                var apiGames = await ApiService.GetLibraryAsync(steamId);
+                Debug.WriteLine($"[Library] API: {apiGames.Count} hier");
+
+                // 2. Lokálny sken — nainštalované vrátane demo, prologue, beta
+                var localGames = SteamInstallService.GetAllGames();
+                Debug.WriteLine($"[Library] Lokálne: {localGames.Count} hier");
+
+                // 3. Spoj — lokálne hry ktoré nie sú v API (demo, prologue...)
+                var apiIds = apiGames.Select(g => g.AppId).ToHashSet();
+                var localOnly = localGames.Where(g => !apiIds.Contains(g.AppId)).ToList();
+                Debug.WriteLine($"[Library] Lokálne navyše: {localOnly.Count} hier");
+
+                var allGames = apiGames.Concat(localOnly).ToList();
+
+                // 4. Playtime
                 var playtime = SteamworksService.GetPlaytimeMinutes();
-                foreach (var game in games)
+                foreach (var game in allGames)
                 {
                     if (playtime.TryGetValue(game.AppId, out int minutes))
                         game.PlaytimeMinutes = minutes;
                 }
 
-                Debug.WriteLine($"[Library] Found {games.Count} games from Steam");
+                Debug.WriteLine($"[Library] Celkovo: {allGames.Count} hier");
 
-                var sorted = games.OrderByDescending(g => g.PlaytimeMinutes).ToList();
-                CheckInstallStatus(sorted);
-
-                // Download icons to disk
-                await LibraryCacheService.DownloadAllIconsAsync(sorted);
-                await LibraryCacheService.SaveAsync(sorted);
-
-                PopulateGames(sorted);
+                CheckInstallStatus(allGames);
+                await LibraryCacheService.DownloadAllIconsAsync(allGames);
+                await LibraryCacheService.SaveAsync(allGames);
+                PopulateGames(allGames);
             }
             catch (Exception ex)
             {
@@ -105,9 +111,19 @@ namespace Rift_App.ViewModels
             {
                 await Task.Delay(3000);
 
-                // Get fresh list from local Steam install
-                var fresh = SteamInstallService.GetAllGames();
+                var steamId = SessionManager.SteamId64;
+
+                // Vždy API — nie lokálny sken
+                var fresh = await ApiService.GetLibraryAsync(steamId);
                 if (fresh.Count == 0) return;
+
+                // Playtime update
+                var playtime = SteamworksService.GetPlaytimeMinutes();
+                foreach (var game in fresh)
+                {
+                    if (playtime.TryGetValue(game.AppId, out int minutes))
+                        game.PlaytimeMinutes = minutes;
+                }
 
                 var cached = Games.ToList();
                 var (synced, changed) = await LibraryCacheService.SyncAsync(cached, fresh);
@@ -120,11 +136,11 @@ namespace Rift_App.ViewModels
                 {
                     Games.Clear();
                     FilteredGames.Clear();
-                    PopulateGames(synced.OrderByDescending(g => g.PlaytimeMinutes).ToList());
+                    PopulateGames(synced);
                 });
 
                 await LibraryCacheService.SaveAsync(synced);
-                Debug.WriteLine("[Library] Sync complete.");
+                Debug.WriteLine("[Library] Sync hotový.");
             }
             catch (Exception ex)
             {
@@ -163,10 +179,10 @@ namespace Rift_App.ViewModels
 
         private void PopulateGames(List<GameModel> games)
         {
-            // Installed first, then uninstalled — both sorted by playtime
             var sorted = games
-                .OrderByDescending(g => g.IsInstalled)
-                .ThenByDescending(g => g.PlaytimeMinutes)
+                .OrderByDescending(g => g.IsInstalled)          // nainštalované prvé
+                .ThenByDescending(g => g.PlaytimeMinutes)        // potom podľa playtime
+                .ThenBy(g => g.Name)                             // abecedne zvyšok
                 .ToList();
 
             foreach (var game in sorted)
@@ -177,6 +193,8 @@ namespace Rift_App.ViewModels
 
             TotalGames = Games.Count;
             InstalledCount = Games.Count(g => g.IsInstalled);
+
+            Debug.WriteLine($"[Library] Zobrazené: {TotalGames} hier, nainštalované: {InstalledCount}");
         }
 
         // ─── SEARCH ───────────────────────────────────────────────────────

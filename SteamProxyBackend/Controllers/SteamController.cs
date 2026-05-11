@@ -150,7 +150,15 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
-                var url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={_steamApiKey}&steamid={steamId}&include_appinfo=true&include_played_free_games=true";
+                // include_free_sub=1 — pridá free games, tools, demos, soundtracks
+                var url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/" +
+                          $"?key={_steamApiKey}" +
+                          $"&steamid={steamId}" +
+                          $"&include_appinfo=true" +
+                          $"&include_played_free_games=true" +
+                          $"&include_free_sub=1" +          // ← kľúčové
+                          $"&skip_unvetted_apps=false";      // ← nezabúdaj na unvetted
+
                 var response = await _http.GetStringAsync(url);
                 var data = JsonConvert.DeserializeObject<dynamic>(response);
                 var games = data?.response?.games;
@@ -160,16 +168,20 @@ namespace SteamProxyBackend.Controllers
                 var result = new List<object>();
                 foreach (var game in games)
                 {
+                    string name = (string)game.name ?? "";
+                    if (string.IsNullOrEmpty(name)) continue;
+
                     result.Add(new
                     {
                         AppId = (int)game.appid,
-                        Name = (string)game.name,
-                        PlaytimeMinutes = (int)game.playtime_forever,
+                        Name = name,
+                        PlaytimeMinutes = (int)(game.playtime_forever ?? 0),
                         IconUrl = $"https://media.steampowered.com/steamcommunity/public/images/apps/{game.appid}/{game.img_icon_url}.jpg",
                         HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{game.appid}/header.jpg"
                     });
                 }
 
+                Debug.WriteLine($"[Library] API returned {result.Count} items for {steamId}");
                 return Ok(new { Games = result });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }

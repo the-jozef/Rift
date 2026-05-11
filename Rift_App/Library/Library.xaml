@@ -70,6 +70,13 @@
                                                     FontWeight="SemiBold"
                                                     FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                     Foreground="#A7BDD1" />
+
+                                        <TextBlock Foreground="#A7BDD1"
+                                                   FontSize="11"
+                                                   VerticalAlignment="Center"
+                                                   Margin="5,0,0,0">
+    <Run Text="{Binding TotalGames}" />
+                                        </TextBlock>
                                     </StackPanel>
                                 </Border>
                             </Grid>
