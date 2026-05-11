@@ -191,15 +191,24 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                // Steam Community XML — vracia VŠETKY hry vrátane F2P
                 var url = $"https://steamcommunity.com/profiles/{steamId}/games/?tab=all&xml=1";
                 var response = await _http.GetStringAsync(url);
 
-                // Parsuj XML
+                Console.WriteLine($"[XML] Response length: {response.Length}");
+                Console.WriteLine($"[XML] First 500 chars: {response.Substring(0, Math.Min(500, response.Length))}");
+
+                // Skontroluj či profil nie je private
+                if (response.Contains("profile is private") || response.Contains("privacyMessage"))
+                {
+                    Console.WriteLine("[XML] PROFIL JE PRIVATE!");
+                    return Ok(new { Games = new List<object>(), Error = "Profile is private" });
+                }
+
                 var doc = new System.Xml.XmlDocument();
                 doc.LoadXml(response);
 
                 var games = doc.SelectNodes("//game");
+                Console.WriteLine($"[XML] Games found: {games?.Count ?? 0}");
                 if (games == null || games.Count == 0)
                     return Ok(new { Games = new List<object>() });
 

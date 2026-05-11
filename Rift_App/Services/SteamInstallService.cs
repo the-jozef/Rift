@@ -157,6 +157,46 @@ namespace Rift_App.Services
             return result.Values.ToList();
         }
 
+        public static List<GameModel> GetAllAppsFromRegistry()
+        {
+            var result = new Dictionary<int, GameModel>();
+            try
+            {
+                var appsKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam\Apps");
+                if (appsKey == null)
+                {
+                    Debug.WriteLine("[Registry] Steam Apps key not found");
+                    return result.Values.ToList();
+                }
+
+                foreach (var subKeyName in appsKey.GetSubKeyNames())
+                {
+                    if (!int.TryParse(subKeyName, out int appId) || appId <= 0) continue;
+
+                    using var appKey = appsKey.OpenSubKey(subKeyName);
+                    if (appKey == null) continue;
+
+                    // Každá hra ktorú Steam pozná má tu záznam
+                    var name = appKey.GetValue("Name") as string ?? string.Empty;
+
+                    result[appId] = new GameModel
+                    {
+                        AppId = appId,
+                        Name = !string.IsNullOrEmpty(name) ? name : appId.ToString(),
+                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                        IconUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
+                    };
+                }
+
+                Debug.WriteLine($"[Registry] Found {result.Count} apps");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Registry] Error: {ex.Message}");
+            }
+            return result.Values.ToList();
+        }
+
         // ─── PRIVATE ──────────────────────────────────────────────────────
 
         private static void RefreshIfNeeded()

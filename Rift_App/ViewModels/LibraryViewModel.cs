@@ -62,31 +62,35 @@ namespace Rift_App.ViewModels
 
                 var steamId = SessionManager.SteamId64;
 
-                // Zdroj 1 — Full library zo Steam Community (VŠETKY hry vrátane F2P)
+                // Zdroj 1 — Full Community XML
                 var fullLibrary = await ApiService.GetFullLibraryAsync(steamId);
-                Debug.WriteLine($"[Library] Full Community: {fullLibrary.Count}");
+                Debug.WriteLine($"[Library] Community XML: {fullLibrary.Count}");
 
-                // Zdroj 2 — API fallback (ak je profil private)
+                // Zdroj 2 — API fallback
                 var apiGames = fullLibrary.Count > 0
                     ? fullLibrary
                     : await ApiService.GetLibraryAsync(steamId);
-                Debug.WriteLine($"[Library] API/Fallback: {apiGames.Count}");
 
-                // Zdroj 3 — Nainštalované
+                // Zdroj 3 — Nainštalované .acf
                 var installedGames = SteamInstallService.GetAllGames();
                 Debug.WriteLine($"[Library] Nainštalované: {installedGames.Count}");
 
-                // Zdroj 4 — localconfig
+                // Zdroj 4 — localconfig + sharedconfig
                 var localConfigGames = SteamInstallService.GetAllAppsFromLocalConfig();
                 Debug.WriteLine($"[Library] LocalConfig: {localConfigGames.Count}");
 
-                // Spoj
+                // Zdroj 5 — Windows Registry (F2P, CoD, BF, Delta Force...)
+                var registryGames = SteamInstallService.GetAllAppsFromRegistry();
+                Debug.WriteLine($"[Library] Registry: {registryGames.Count}");
+
+                // Spoj všetko
                 var allById = new Dictionary<int, GameModel>();
+                foreach (var g in registryGames) allById[g.AppId] = g;
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
                 foreach (var g in installedGames) allById[g.AppId] = g;
-                foreach (var g in apiGames) allById[g.AppId] = g;
+                foreach (var g in apiGames) allById[g.AppId] = g; 
 
-                
+
 
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
                 foreach (var g in installedGames) allById[g.AppId] = g;

@@ -260,8 +260,7 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
-        // ─── FEATURED — dedikovaný Steam endpoint ─────────────────────────────
-        // Uses Steam's featured categories — returns properly curated games
+        // ─── FEATURED ──────────────────────────────────────────────────────────
 
         public static async Task<List<GameModel>> GetFeaturedAsync()
         {
@@ -282,7 +281,6 @@ namespace Rift_App.Services
             }
             catch { return new List<GameModel>(); }
         }
-
         public static async Task<List<GameModel>> GetTopSellersAsync(int page = 0)
         {
             try
@@ -292,7 +290,6 @@ namespace Rift_App.Services
             }
             catch { return new List<GameModel>(); }
         }
-
         public static async Task<List<GameModel>> GetSpecialsAsync(int page = 0)
         {
             try
@@ -302,11 +299,6 @@ namespace Rift_App.Services
             }
             catch { return new List<GameModel>(); }
         }
-
-
-
-
-
         public static async Task<List<GameModel>> GetFullLibraryAsync(string steamId64)
         {
             try
@@ -319,6 +311,9 @@ namespace Rift_App.Services
                 return new List<GameModel>();
             }
         }
+
+
+
 
 
 
