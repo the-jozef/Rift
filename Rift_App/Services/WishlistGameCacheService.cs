@@ -26,6 +26,16 @@ namespace Rift_App.Services
             {
                 var path = FilePath(appId);
                 if (!File.Exists(path)) return null;
+
+                // Cache expiruje po 24 hodinách — reviews sa aktualizujú
+                var fileAge = DateTime.UtcNow - File.GetLastWriteTimeUtc(path);
+                if (fileAge.TotalHours > 24)
+                {
+                    File.Delete(path);
+                    Debug.WriteLine($"[WishlistCache] Expired: {appId}");
+                    return null;
+                }
+
                 var json = await File.ReadAllTextAsync(path);
                 var result = JsonConvert.DeserializeObject<WishlistGameModel>(json);
                 Debug.WriteLine($"[WishlistCache] Loaded: {result?.Name} ({appId})");

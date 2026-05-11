@@ -638,7 +638,7 @@ namespace SteamProxyBackend.Controllers
                     string reviewDesc = "", reviewCss = "";
 
                     int reviewScore = data["review_score"]?.Value<int>() ?? -1;
-                    if (reviewScore >= 0)
+                    if (reviewScore > 0)
                     {
                         (reviewDesc, reviewCss) = reviewScore switch
                         {
@@ -670,23 +670,26 @@ namespace SteamProxyBackend.Controllers
                             };
                         }
                     }
-                    
+
                     if (string.IsNullOrEmpty(reviewDesc))
                     {
                         int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
-                        (reviewDesc, reviewCss) = meta switch
+                        if (meta > 0)
                         {
-                            >= 90 => ("Very Positive", "veryPositive"),
+                            (reviewDesc, reviewCss) = meta switch
+                            {
+                                >= 90 => ("Very Positive", "veryPositive"),
                             >= 75 => ("Positive", "positive"),
                             >= 60 => ("Mostly Positive", "mostlyPositive"),
                             >= 40 => ("Mixed", "mixed"),
                             >= 20 => ("Mostly Negative", "mostlyNegative"),
                             >   0 => ("Negative", "negative"),
                             _ => ("No Reviews", "")
-                        };
+                            };
+                        }
                     }
-                    bool isDlc = data["type"]?.Value<string>()?.ToLower() == "dlc";
 
+                    bool isDlc = data["type"]?.Value<string>()?.ToLower() == "dlc";
                     if (string.IsNullOrEmpty(reviewDesc) || isDlc)
                         (reviewDesc, reviewCss) = await FetchReviewsAsync(appId);
 
