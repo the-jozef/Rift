@@ -184,10 +184,10 @@ namespace SteamProxyBackend.Controllers
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        Problém je že Steam API nikdy nevracia F2P hry ktoré neboli hrané.Jediné riešenie je Steam Community profil XML ktorý vracia všetky hry.
-Backend — pridaj nový endpoint:
-csharp[HttpGet("library/{steamId}/full")]
-public async Task<IActionResult> GetFullLibrary(string steamId)
+        // Problém je že Steam API nikdy nevracia F2P hry ktoré neboli hrané. Jediné riešenie je Steam Community profil XML ktorý vracia všetky hry.
+        // Backend — pridaj nový endpoint:
+        [HttpGet("library/{steamId}/full")]
+        public async Task<IActionResult> GetFullLibrary(string steamId)
         {
             try
             {

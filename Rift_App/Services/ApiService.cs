@@ -17,7 +17,7 @@ namespace Rift_App.Services
 
         private static readonly HttpClient _http = new HttpClient
         {
-            Timeout = TimeSpan.FromSeconds(90)  
+            Timeout = TimeSpan.FromSeconds(90)
         };
 
         private static StringContent ToJson(object obj) =>
@@ -162,7 +162,7 @@ namespace Rift_App.Services
                 var json = await _http.GetStringAsync(
                     $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}");
                 var data = JsonConvert.DeserializeObject<AchievementsResponse>(json);
-               
+
                 if (data == null) return null;
 
                 Debug.WriteLine($"[API] Achievements: {data.Total}, Unlocked: {data.Unlocked}");
@@ -302,21 +302,28 @@ namespace Rift_App.Services
             }
             catch { return new List<GameModel>(); }
         }
-    }
 
 
 
 
-    public static async Task<List<GameModel>> GetFullLibraryAsync(string steamId64)
+
+        public static async Task<List<GameModel>> GetFullLibraryAsync(string steamId64)
         {
             try
             {
                 var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/library/{steamId64}/full");
                 return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
             }
-            catch { return new List<GameModel>(); }
+            catch
+            {
+                return new List<GameModel>();
+            }
         }
 
+
+
+
+    }
     // ─── RESPONSE TYPES ───────────────────────────────────────────────────────
 
     public class AuthResponse
