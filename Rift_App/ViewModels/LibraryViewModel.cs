@@ -1,18 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json.Linq;
 using Rift_App.Models;
 using Rift_App.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using System.Diagnostics;
 using System.Threading;
-using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace Rift_App.ViewModels
 {
@@ -61,22 +62,29 @@ namespace Rift_App.ViewModels
 
                 var steamId = SessionManager.SteamId64;
 
-                // 1. API — vlastnené hry vrátane free, tools, soundtracks
+                // Zdroj 1 — Steam API
                 var apiGames = await ApiService.GetLibraryAsync(steamId);
-                Debug.WriteLine($"[Library] API: {apiGames.Count} hier");
+                Debug.WriteLine($"[Library] API: {apiGames.Count}");
 
-                // 2. Lokálny sken — nainštalované vrátane demo, prologue, beta
-                var localGames = SteamInstallService.GetAllGames();
-                Debug.WriteLine($"[Library] Lokálne: {localGames.Count} hier");
+                // Zdroj 2 — Nainštalované
+                var installedGames = SteamInstallService.GetAllGames();
+                Debug.WriteLine($"[Library] Nainštalované: {installedGames.Count}");
 
-                // 3. Spoj — lokálne hry ktoré nie sú v API (demo, prologue...)
-                var apiIds = apiGames.Select(g => g.AppId).ToHashSet();
-                var localOnly = localGames.Where(g => !apiIds.Contains(g.AppId)).ToList();
-                Debug.WriteLine($"[Library] Lokálne navyše: {localOnly.Count} hier");
+                // Zdroj 3 — localconfig + sharedconfig
+                var localConfigGames = SteamInstallService.GetAllAppsFromLocalConfig();
+                Debug.WriteLine($"[Library] LocalConfig: {localConfigGames.Count}");
 
-                var allGames = apiGames.Concat(localOnly).ToList();
+                // Spoj — bez duplikátov
+                var allById = new Dictionary<int, GameModel>();
 
-                // 4. Playtime
+                foreach (var g in localConfigGames) allById[g.AppId] = g;
+                foreach (var g in installedGames) allById[g.AppId] = g;
+                foreach (var g in apiGames) allById[g.AppId] = g;
+
+                var allGames = allById.Values.Where(g => g.AppId > 0).ToList();
+                Debug.WriteLine($"[Library] Celkovo unikátnych: {allGames.Count}");
+
+                // Playtime
                 var playtime = SteamworksService.GetPlaytimeMinutes();
                 foreach (var game in allGames)
                 {
@@ -84,7 +92,26 @@ namespace Rift_App.ViewModels
                         game.PlaytimeMinutes = minutes;
                 }
 
-                Debug.WriteLine($"[Library] Celkovo: {allGames.Count} hier");
+                // Doplň názvy pre hry bez názvu
+                var missingNames = allGames
+                    .Where(g => g.Name == g.AppId.ToString())
+                    .ToList();
+
+                if (missingNames.Any())
+                {
+                    Debug.WriteLine($"[Library] Doplňujem názvy pre {missingNames.Count} hier...");
+                    await FillMissingNamesAsync(missingNames);
+                }
+
+                // Vyhoď len tie čo stále nemajú názov
+                allGames = allGames
+            .Where(g => !SteamInternalIds.Contains(g.AppId))
+            .Where(g => !string.IsNullOrEmpty(g.Name))
+            .Where(g => !g.Name.StartsWith("__REMOVE_"))
+            .Where(g => g.Name != g.AppId.ToString())
+            .ToList();
+
+                Debug.WriteLine($"[Library] Po filtrácii: {allGames.Count}");
 
                 CheckInstallStatus(allGames);
                 await LibraryCacheService.DownloadAllIconsAsync(allGames);
@@ -99,6 +126,44 @@ namespace Rift_App.ViewModels
             {
                 IsLoading = false;
                 await ApiService.SaveSessionAsync("Library");
+            }
+        }
+
+        private static readonly HashSet<int> SteamInternalIds = new()
+{
+    7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
+    1520, 228980, 241100, 242550, 1430110
+};
+        // Doplní názvy pre hry z localconfig cez Steam store API
+        private async Task FillMissingNamesAsync(List<GameModel> games)
+        {
+            const int batchSize = 5;
+            for (int i = 0; i < games.Count; i += batchSize)
+            {
+                var chunk = games.Skip(i).Take(batchSize).ToList();
+                var tasks = chunk.Select(async game =>
+                {
+                    try
+                    {
+                        var details = await ApiService.GetGameDetailsAsync(game.AppId);
+                        if (details != null && !string.IsNullOrEmpty(details.Name))
+                        {
+                            game.Name = details.Name;
+                            Debug.WriteLine($"[Library] Názov doplnený: {game.Name} ({game.AppId})");
+                        }
+                        else
+                        {
+                            // Žiadna store page = tool/internal app — označ na zmazanie
+                            game.Name = $"__REMOVE_{game.AppId}";
+                        }
+                    }
+                    catch
+                    {
+                        game.Name = $"__REMOVE_{game.AppId}";
+                    }
+                });
+                await Task.WhenAll(tasks);
+                await Task.Delay(400);
             }
         }
 
@@ -147,6 +212,8 @@ namespace Rift_App.ViewModels
                 Debug.WriteLine($"[Library] Sync error: {ex.Message}");
             }
         }
+
+
 
         // ─── INSTALL STATUS ───────────────────────────────────────────────
         // Uses Steamworks if initialized, falls back to .acf file reader

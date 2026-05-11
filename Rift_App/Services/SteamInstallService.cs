@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Rift_App.Models;
+using Rift_App.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -83,6 +84,77 @@ namespace Rift_App.Services
 
             Debug.WriteLine($"[SteamInstall] GetAllGames: {result.Count} installed games");
             return result;
+        }
+
+        public static List<GameModel> GetAllAppsFromLocalConfig()
+        {
+            var result = new Dictionary<int, GameModel>();
+            try
+            {
+                var steamPath = GetSteamPath();
+                if (string.IsNullOrEmpty(steamPath)) return result.Values.ToList();
+
+                var userdataPath = Path.Combine(steamPath, "userdata");
+                if (!Directory.Exists(userdataPath)) return result.Values.ToList();
+
+                foreach (var userDir in Directory.GetDirectories(userdataPath))
+                {
+                    // ─── 1. localconfig.vdf ───────────────────────────────────
+                    var localConfig = Path.Combine(userDir, "config", "localconfig.vdf");
+                    if (File.Exists(localConfig))
+                    {
+                        var content = File.ReadAllText(localConfig);
+                        var appsSection = FindVdfSection(content, "apps");
+                        if (!string.IsNullOrEmpty(appsSection))
+                        {
+                            var appRegex = new Regex(@"""(\d+)""\s*\{", RegexOptions.Multiline);
+                            foreach (Match m in appRegex.Matches(appsSection))
+                            {
+                                if (!int.TryParse(m.Groups[1].Value, out int appId) || appId <= 0) continue;
+                                result[appId] = new GameModel
+                                {
+                                    AppId = appId,
+                                    Name = appId.ToString(),
+                                    HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                                    IconUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
+                                };
+                            }
+                        }
+                    }
+
+                    // ─── 2. SharedConfig.vdf — obsahuje aj zakúpené/free hry ─
+                    var sharedConfig = Path.Combine(userDir, "config", "sharedconfig.vdf");
+                    if (File.Exists(sharedConfig))
+                    {
+                        var content = File.ReadAllText(sharedConfig);
+                        var appsSection = FindVdfSection(content, "apps");
+                        if (!string.IsNullOrEmpty(appsSection))
+                        {
+                            var appRegex = new Regex(@"""(\d+)""\s*\{", RegexOptions.Multiline);
+                            foreach (Match m in appRegex.Matches(appsSection))
+                            {
+                                if (!int.TryParse(m.Groups[1].Value, out int appId) || appId <= 0) continue;
+                                if (!result.ContainsKey(appId))
+                                    result[appId] = new GameModel
+                                    {
+                                        AppId = appId,
+                                        Name = appId.ToString(),
+                                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                                        IconUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
+                                    };
+                            }
+                        }
+                    }
+
+                    Debug.WriteLine($"[SteamInstall] localconfig+sharedconfig apps: {result.Count}");
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SteamInstall] localconfig error: {ex.Message}");
+            }
+            return result.Values.ToList();
         }
 
         // ─── PRIVATE ──────────────────────────────────────────────────────
@@ -190,6 +262,39 @@ namespace Rift_App.Services
         {
             var match = Regex.Match(content, $@"""{key}""\s+""([^""]*)""");
             return match.Success ? match.Groups[1].Value : null;
+        }
+        private static string FindVdfSection(string content, string key)
+        {
+            var searchKey = $"\"{key}\"";
+            int idx = 0;
+
+            while (idx < content.Length)
+            {
+                var found = content.IndexOf(searchKey, idx, StringComparison.OrdinalIgnoreCase);
+                if (found < 0) return string.Empty;
+
+                int afterKey = found + searchKey.Length;
+                int j = afterKey;
+                while (j < content.Length && (content[j] == ' ' || content[j] == '\t' || content[j] == '\r' || content[j] == '\n')) j++;
+
+                if (j < content.Length && content[j] == '{')
+                {
+                    int braceStart = j;
+                    int depth = 1;
+                    int i = braceStart + 1;
+                    while (i < content.Length && depth > 0)
+                    {
+                        if (content[i] == '{') depth++;
+                        else if (content[i] == '}') depth--;
+                        i++;
+                    }
+                    return depth == 0 ? content.Substring(braceStart + 1, i - braceStart - 2) : string.Empty;
+                }
+
+                idx = found + 1;
+            }
+
+            return string.Empty;
         }
     }
 }
