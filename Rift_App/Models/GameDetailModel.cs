@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using Newtonsoft.Json;
 
 namespace Rift_App.Models
 {
@@ -18,7 +17,7 @@ namespace Rift_App.Models
         public string? HeroImageUrl { get; set; }
 
         // Set at runtime after checking local disk — NOT saved in JSON
-        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public string? HeroImagePath { get; set; }
 
         // Cache timestamp — used to check if detail is still fresh
@@ -26,8 +25,25 @@ namespace Rift_App.Models
 
         // ─── DISPLAY HELPERS ──────────────────────────────────────────────
 
-        public string LastPlayedDisplay =>
-         LastPlayed.HasValue ? LastPlayed.Value.ToString("MMM d, yyyy") : "Never";
+        public string LastPlayedDisplay
+        {
+            get
+            {
+                if (!LastPlayed.HasValue) return "Never";
+
+                var now = DateTime.UtcNow;
+                var played = LastPlayed.Value.ToUniversalTime();
+                var diff = (now.Date - played.Date).Days;
+
+                return diff switch
+                {
+                    0 => "Today",
+                    1 => "Yesterday",
+                    _ when played.Year == now.Year => played.ToString("MMM d", CultureInfo.InvariantCulture),
+                    _ => played.ToString("MMM d, yyyy", CultureInfo.InvariantCulture)
+                };
+            }
+        }
 
         public int AchievementsPercent =>
             AchievementsTotal > 0
@@ -35,6 +51,6 @@ namespace Rift_App.Models
                 : 0;
 
         public string AchievementsPercentDisplay =>
-            $"({AchievementsPercent}%)";
+            AchievementsTotal > 0 ? $"({AchievementsPercent}%)" : string.Empty;
     }
 }

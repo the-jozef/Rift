@@ -252,7 +252,7 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                // Schema — ikony + názvy (vždy funguje)
+                // Schema — ikony + názvy
                 var schemaUrl = $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={_steamApiKey}&appid={appId}&l=en";
                 var schemaJson = await _http.GetStringAsync(schemaUrl);
                 var schemaData = JObject.Parse(schemaJson);
@@ -271,8 +271,28 @@ namespace SteamProxyBackend.Controllers
                     }
                 }
 
-                // Player stats — unlock status
-                // Funguje aj pre private profil s vlastníckym API kľúčom
+                // ─── NOVÉ: Global achievement percentages (nevyžaduje API key) ───
+                var percentLookup = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+                try
+                {
+                    var pctUrl = $"https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid={appId}";
+                    var pctJson = await _http.GetStringAsync(pctUrl);
+                    var pctData = JObject.Parse(pctJson);
+                    var pctAchs = pctData["achievementpercentages"]?["achievements"];
+
+                    if (pctAchs != null)
+                        foreach (var a in pctAchs)
+                        {
+                            var name = a["name"]?.Value<string>() ?? "";
+                            var pct = a["percent"]?.Value<double>() ?? 100.0;
+                            if (!string.IsNullOrEmpty(name))
+                                percentLookup[name] = pct;
+                        }
+                }
+                catch { /* hra nemusí mať global stats — pokračuj bez nich */ }
+                // ─────────────────────────────────────────────────────────────────
+
+                // Player stats
                 var statsUrl = $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key={_steamApiKey}&appid={appId}&steamid={steamId}&l=en";
 
                 List<object> result = new();
@@ -294,6 +314,7 @@ namespace SteamProxyBackend.Controllers
                             if (achieved) unlocked++;
 
                             iconLookup.TryGetValue(apiName, out var icons);
+                            percentLookup.TryGetValue(apiName, out var rarity); // 0.0 ak nenájde
 
                             result.Add(new
                             {
@@ -305,17 +326,18 @@ namespace SteamProxyBackend.Controllers
                                 Unlocked = achieved,
                                 UnlockTime = unlockTime > 0
                                     ? DateTimeOffset.FromUnixTimeSeconds(unlockTime).UtcDateTime
-                                    : (DateTime?)null
+                                    : (DateTime?)null,
+                                RarityPercentage = rarity  // ← NOVÉ
                             });
                         }
                     }
                 }
                 catch
                 {
-                    // Private profil alebo hra bez achievementov
-                    // Vráť len schema bez unlock statusu
                     foreach (var kvp in iconLookup)
                     {
+                        percentLookup.TryGetValue(kvp.Key, out var rarity);
+
                         result.Add(new
                         {
                             ApiName = kvp.Key,
@@ -324,7 +346,8 @@ namespace SteamProxyBackend.Controllers
                             IconUrl = kvp.Value.icon,
                             IconGrayUrl = kvp.Value.iconGray,
                             Unlocked = false,
-                            UnlockTime = (DateTime?)null
+                            UnlockTime = (DateTime?)null,
+                            RarityPercentage = rarity  
                         });
                     }
                 }

@@ -16,6 +16,7 @@ namespace Rift_App.Models
         public string IconGrayUrl { get; set; } = string.Empty;
         public bool Unlocked { get; set; }
         public DateTime? UnlockTime { get; set; }
+        public double RarityPercentage { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public bool IsFirst { get; set; }

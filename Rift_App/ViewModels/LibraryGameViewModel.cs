@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
-using System.Windows.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using Rift_App.Models;
 using Rift_App.Services;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+using System.Windows.Media.Imaging;
 
 namespace Rift_App.ViewModels
 {
@@ -174,47 +175,59 @@ namespace Rift_App.ViewModels
 
             if (Detail == null) return;
 
-            var unlocked = Detail.Achievements.Where(a => a.Unlocked).ToList();
+            var allUnlocked = Detail.Achievements.Where(a => a.Unlocked).ToList();
             var locked = Detail.Achievements.Where(a => !a.Unlocked).ToList();
+          
+            var mostRecent = allUnlocked
+                .Where(a => a.UnlockTime.HasValue)
+                .OrderByDescending(a => a.UnlockTime)
+                .FirstOrDefault();
 
-            Debug.WriteLine($"[LibraryGame] Preview — unlocked: {unlocked.Count}, locked: {locked.Count}");
+            var rarestUnlocked = allUnlocked
+                .Where(a => a != mostRecent)
+                .OrderBy(a => a.RarityPercentage)
+                .Take(5)
+                .ToList();
 
-            bool isFirst = true;
-            foreach (var a in unlocked.Take(5))
-            {
-                a.IsFirst = isFirst;
-                isFirst = false;
+            foreach (var a in rarestUnlocked)
                 UnlockedPreview.Add(a);
-            }
 
-            foreach (var a in locked.Take(5))
+            var rarestLocked = locked
+                .OrderBy(a => a.RarityPercentage)
+                .Take(5)
+                .ToList();
+
+            foreach (var a in rarestLocked)
                 LockedPreview.Add(a);
 
-            UnlockedRemaining = Math.Max(0, unlocked.Count - 5);
-            LockedRemaining = Math.Max(0, locked.Count - 5);
+            UnlockedRemaining = Math.Max(0,
+                allUnlocked.Count
+                - rarestUnlocked.Count
+                - (mostRecent != null ? 1 : 0));
+
+            LockedRemaining = Math.Max(0, locked.Count - rarestLocked.Count);
+
             OnPropertyChanged(nameof(UnlockedRemaining));
             OnPropertyChanged(nameof(LockedRemaining));
-            OnPropertyChanged(nameof(HasUnlockedRemaining));
-            OnPropertyChanged(nameof(HasLockedRemaining));
 
-            // Group by unlock date — newest first, max 3 groups
-            var groups = unlocked
+            // Recent Activity 
+            var groups = allUnlocked
                 .Where(a => a.UnlockTime.HasValue)
                 .OrderByDescending(a => a.UnlockTime)
                 .GroupBy(a => a.UnlockTime!.Value.Date)
                 .Take(3)
                 .Select(g => new AchievementDateGroup
                 {
-                    DateLabel = g.Key.ToString("MMMM d"),
+                    DateLabel = g.Key.ToString("MMMM d", CultureInfo.InvariantCulture),
                     Items = g.ToList()
                 });
 
-            foreach (var group in groups) RecentActivity.Add(group);
+            foreach (var group in groups)
+                RecentActivity.Add(group);
         }
 
         // ─── LOCAL ICON PATHS ─────────────────────────────────────────────
-        // Sets LocalIconPath + LocalIconGrayPath on each achievement
-        // so IconImage binding loads from disk instead of network
+        // Sets LocalIconPath + LocalIconGrayPath on each achievement     
 
         private static void RestoreLocalIconPaths(GameDetailModel detail)
         {

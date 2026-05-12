@@ -46,7 +46,6 @@
                 <Grid Grid.Row="1">
 
                     <Border>
-
                         <Border.Background>
                             <LinearGradientBrush EndPoint="0,1"
                                                  StartPoint="0,0"
@@ -196,14 +195,35 @@
                                                             Foreground="#B6BBBF"
                                                             FontSize="14"
                                                             FontFamily="Arial" />
-
-                                                <TextBlock Text="{Binding Detail.LastPlayedDisplay}"
-                                                           Margin="2,3,0,0"
-                                                           FontSize="13.2"
+                                   
+                                                <TextBlock FontSize="13.2"
                                                            FontWeight="Medium"
                                                            Opacity="0.7"
                                                            Foreground="#92969C"
-                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
+                                                           FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                          
+                                                            <Setter Property="Text"
+                                                                    Value="{Binding Detail.LastPlayedDisplay}" />
+                                                            <Setter Property="Margin"
+                                                                    Value="2,3,0,0" />
+                                                            <Style.Triggers>
+                                                                
+                                                                <DataTrigger Binding="{Binding Detail.LastPlayed}"
+                                                                             Value="{x:Null}">
+                                                                    
+                                                                    <Setter Property="Text"
+                                                                            Value="Never" />
+                                                                    <Setter Property="Margin"
+                                                                            Value="3,3,0,0" />
+                                                                    <Setter Property="HorizontalAlignment"
+                                                                            Value="Center" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal"
@@ -576,20 +596,25 @@
                                         </StackPanel>
                                     </Border>
 
-                                    <StackPanel Grid.Row="1"
-                                                Margin="0,8,12,0">
+                                    <Grid Grid.Row="1"
+                                          Margin="0,8,12,0">
 
-                                        <ItemsControl ItemsSource="{Binding UnlockedPreview}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <ItemsControl ItemsSource="{Binding UnlockedPreview}"
+                                                      Grid.Row="0">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="0,0,0,10">
+                                                    <StackPanel Orientation="Horizontal">
 
                                                         <Border CornerRadius="2"
                                                                 Width="48"
                                                                 Height="48"
-                                                                ClipToBounds="True">
+                                                                ClipToBounds="True"
+                                                                Visibility="{Binding IsFirst, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                                             <Border.Effect>
                                                                 <DropShadowEffect Color="Gold"
@@ -597,7 +622,7 @@
                                                                                   ShadowDepth="0"
                                                                                   Opacity="0.5" />
                                                             </Border.Effect>
-                                                           
+
                                                             <Image Source="{Binding IconImage.Bitmap}"
                                                                    Stretch="UniformToFill" />
                                                         </Border>
@@ -616,41 +641,79 @@
                                                                        FontSize="13" />
                                                         </StackPanel>
                                                     </StackPanel>
+
+
+
+
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
                                         </ItemsControl>
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Margin="15,4,0,0"
-                                                    Visibility="{Binding HasUnlockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <ItemsControl ItemsSource="{Binding UnlockedPreview}"
+                                                      Grid.Row="1">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Rows="1"
+                                                                 HorizontalAlignment="Left"
+                                                                 Margin="2,0,0,0" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
 
-                                            <Button Background="#282E33"
-                                                    BorderBrush="Transparent"
-                                                    Width="52"
-                                                    Height="48"
-                                                    Padding="0"
-                                                    Foreground="#D4D4D4">
 
-                                                <StackPanel Orientation="Horizontal"
-                                                            Margin="-2,2,0,0">
+                                                        <Border CornerRadius="2"
+                                                                Width="48"
+                                                                Height="48"
+                                                                ClipToBounds="True">
 
-                                                    <TextBlock Text="+"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="16" />
+                                                            <Border.Effect>
+                                                                <DropShadowEffect Color="Gold"
+                                                                                  BlurRadius="70"
+                                                                                  ShadowDepth="0"
+                                                                                  Opacity="0.5" />
+                                                            </Border.Effect>
 
-                                                    <TextBlock Text="{Binding UnlockedRemaining}"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="17"
-                                                               Margin="1,0,0,0" />
-                                                </StackPanel>
-                                            </Button>
-                                        </StackPanel>
-                                    </StackPanel>
+                                                            <Image Source="{Binding IconImage.Bitmap}"
+                                                                   Stretch="UniformToFill" />
+                                                        </Border>
+
+                                                    </StackPanel>
+
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- 
+                                                        -->
+
+                                        <!--<StackPanel Orientation="Horizontal"
+            Margin="15,4,0,0"
+            Visibility="{Binding HasUnlockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+    <Button Background="#282E33"
+            BorderBrush="Transparent"
+            Width="52"
+            Height="48"
+            Padding="0"
+            Foreground="#D4D4D4">
+
+        <StackPanel Orientation="Horizontal"
+                    Margin="-2,2,0,0">
+
+            <TextBlock Text="+"
+                       FontWeight="SemiBold"
+                       FontSize="16" />
+
+            <TextBlock Text="{Binding UnlockedRemaining}"
+                       FontWeight="SemiBold"
+                       FontSize="17"
+                       Margin="1,0,0,0" />
+        </StackPanel>
+    </Button>
+</StackPanel>-->
+                                    </Grid>
 
                                     <Border Grid.Row="2"
                                             Height="1"
@@ -713,7 +776,7 @@
                                             </ItemsControl.ItemTemplate>
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal" />
+                                                    <StackPanel Orientation="Horizontal"/>
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
                                         </ItemsControl>

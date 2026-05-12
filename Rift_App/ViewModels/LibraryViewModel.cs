@@ -90,8 +90,6 @@ namespace Rift_App.ViewModels
                 foreach (var g in installedGames) allById[g.AppId] = g;
                 foreach (var g in apiGames) allById[g.AppId] = g; 
 
-
-
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
                 foreach (var g in installedGames) allById[g.AppId] = g;
                 foreach (var g in apiGames) allById[g.AppId] = g;
@@ -262,10 +260,11 @@ namespace Rift_App.ViewModels
         private void PopulateGames(List<GameModel> games)
         {
             var sorted = games
-                .OrderByDescending(g => g.IsInstalled)          // nainštalované prvé
-                .ThenByDescending(g => g.PlaytimeMinutes)        // potom podľa playtime
-                .ThenBy(g => g.Name)                             // abecedne zvyšok
-                .ToList();
+                  //  .OrderByDescending(g => g.IsInstalled)          // nainštalované prvé
+                  //   .ThenByDescending(g => g.PlaytimeMinutes)        // potom podľa playtime
+                  // .ThenBy(g => g.Name)                             // abecedne zvyšok
+                  .OrderByDescending(g => g.Name)
+                  .ToList();
 
             foreach (var game in sorted)
             {

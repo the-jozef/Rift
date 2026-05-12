@@ -8,8 +8,93 @@
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
              xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
              xmlns:local="clr-namespace:Rift_App.Testing"
-             mc:Ignorable="d">
-    <Grid>
+             mc:Ignorable="d"
+             Width="1000"
+             Height="1500">
+    <Grid Background="Gray">
 
+        <Grid Margin="0,8,12,0"
+              Height="Auto">
+            
+            
+            
+
+            <StackPanel Orientation="Vertical">
+
+                <StackPanel Orientation="Horizontal">
+                    <Border CornerRadius="2"
+                            Width="48"
+                            Height="48"
+                            ClipToBounds="True">
+
+                        <Border.Effect>
+                            <DropShadowEffect Color="Gold"
+                                              BlurRadius="70"
+                                              ShadowDepth="0"
+                                              Opacity="0.5" />
+                        </Border.Effect>
+
+                        <Image Source="/Image/Red.png"
+                               Stretch="UniformToFill" />
+                    </Border>
+
+                    <StackPanel Orientation="Vertical"
+                                Margin="12,0,0,0">
+
+                        <TextBlock Text="Name of game"
+                                   Foreground="White"
+                                   FontSize="15"
+                                   Margin="0,4,0,0" />
+
+                        <TextBlock Text="Description of game"
+                                   Foreground="#B1B1B5"
+                                   FontSize="13" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Border CornerRadius="2"
+                            Width="48"
+                            Height="48"
+                            ClipToBounds="True">
+
+                        <Border.Effect>
+                            <DropShadowEffect Color="Gold"
+                                              BlurRadius="70"
+                                              ShadowDepth="0"
+                                              Opacity="0.5" />
+                        </Border.Effect>
+
+                        <Image Source="/Image/Red.png"
+                               Stretch="UniformToFill" />
+                    </Border>
+                </StackPanel>
+                </StackPanel>
+            
+            <StackPanel Orientation="Horizontal"
+                        Margin="15,4,0,0">
+
+                <Button Background="#282E33"
+                        BorderBrush="Transparent"
+                        Width="52"
+                        Height="48"
+                        Padding="0"
+                        Foreground="#D4D4D4">
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="-2,2,0,0">
+
+                        <TextBlock Text="+"
+                                   FontWeight="SemiBold"
+                                   FontSize="16" />
+
+                        <TextBlock Text="15"
+                                   FontWeight="SemiBold"
+                                   FontSize="17"
+                                   Margin="1,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
