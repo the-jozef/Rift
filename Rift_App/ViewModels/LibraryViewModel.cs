@@ -263,7 +263,7 @@ namespace Rift_App.ViewModels
                   //  .OrderByDescending(g => g.IsInstalled)          // nainštalované prvé
                   //   .ThenByDescending(g => g.PlaytimeMinutes)        // potom podľa playtime
                   // .ThenBy(g => g.Name)                             // abecedne zvyšok
-                  .OrderByDescending(g => g.Name)
+                  .OrderBy(g => g.Name)
                   .ToList();
 
             foreach (var game in sorted)

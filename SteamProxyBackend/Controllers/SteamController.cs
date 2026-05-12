@@ -327,7 +327,7 @@ namespace SteamProxyBackend.Controllers
                                 UnlockTime = unlockTime > 0
                                     ? DateTimeOffset.FromUnixTimeSeconds(unlockTime).UtcDateTime
                                     : (DateTime?)null,
-                                RarityPercentage = rarity  // ← NOVÉ
+                                RarityPercentage = rarity 
                             });
                         }
                     }

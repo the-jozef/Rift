@@ -26,6 +26,7 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isInstalled = false;
         [ObservableProperty] private bool _needsUpdate = false;
         [ObservableProperty] private bool _hasGame = false;
+        [ObservableProperty] private AchievementModel? _mostRecentAchievement;
 
         public string ButtonText =>
             NeedsUpdate ? "UPDATE" :
@@ -183,6 +184,8 @@ namespace Rift_App.ViewModels
                 .OrderByDescending(a => a.UnlockTime)
                 .FirstOrDefault();
 
+            MostRecentAchievement = mostRecent;
+
             var rarestUnlocked = allUnlocked
                 .Where(a => a != mostRecent)
                 .OrderBy(a => a.RarityPercentage)
@@ -215,12 +218,15 @@ namespace Rift_App.ViewModels
                 .Where(a => a.UnlockTime.HasValue)
                 .OrderByDescending(a => a.UnlockTime)
                 .GroupBy(a => a.UnlockTime!.Value.Date)
-                .Take(3)
+                .Take(5)
                 .Select(g => new AchievementDateGroup
                 {
+                    
                     DateLabel = g.Key.ToString("MMMM d", CultureInfo.InvariantCulture),
                     Items = g.ToList()
                 });
+
+        
 
             foreach (var group in groups)
                 RecentActivity.Add(group);
