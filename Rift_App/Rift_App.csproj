@@ -16,12 +16,16 @@
 
 	<ItemGroup>
 		<Compile Remove="44\**" />
+		<Compile Remove="AppController\**" />
 		<Compile Remove="Service\**" />
 		<EmbeddedResource Remove="44\**" />
+		<EmbeddedResource Remove="AppController\**" />
 		<EmbeddedResource Remove="Service\**" />
 		<None Remove="44\**" />
+		<None Remove="AppController\**" />
 		<None Remove="Service\**" />
 		<Page Remove="44\**" />
+		<Page Remove="AppController\**" />
 		<Page Remove="Service\**" />
 	</ItemGroup>
 
@@ -73,10 +77,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="AppController\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Update="steam_api64.dll">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -86,13 +86,11 @@
 	</ItemGroup>
 
 	<Target Name="CopySteamWorker" AfterTargets="Build">
-		<Copy SourceFiles="$(SolutionDir)SteamWorker\bin\$(Configuration)\net10.0\SteamWorker.exe"
-			  DestinationFolder="$(OutputPath)SteamWorker\" />
-		<Copy SourceFiles="$(ProjectDir)steam_api64.dll"
-			  DestinationFolder="$(OutputPath)SteamWorker\" />
-		<WriteLinesToFile File="$(OutputPath)SteamWorker\steam_appid.txt"
-						  Lines="480"
-						  Overwrite="true" />
+		<!--<Copy SourceFiles="$(SolutionDir)SteamWorker\bin\$(Configuration)\net10.0\SteamWorker.exe"
+			  DestinationFolder="$(OutputPath)SteamWorker\" /> -->
+		
+		<Copy SourceFiles="$(ProjectDir)steam_api64.dll" DestinationFolder="$(OutputPath)SteamWorker\" />
+		<WriteLinesToFile File="$(OutputPath)SteamWorker\steam_appid.txt" Lines="480" Overwrite="true" />
 	</Target>
 
 </Project>

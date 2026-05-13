@@ -14,8 +14,8 @@ namespace Rift_App
           
             // 1. Check Steam installed + running + initialize Steamworks
             //    Shows MessageBox if Steam is missing or fails to start
-            bool steamReady = await SteamStartupService.CheckAndStartSteamAsync();
-            if (!steamReady) return; // Shutdown already called inside
+           // bool steamReady = await SteamStartupService.CheckAndStartSteamAsync();
+           // if (!steamReady) return; // Shutdown already called inside
 
             // 2. Initialize tag dictionary in background
             _ = TagService.InitAsync();

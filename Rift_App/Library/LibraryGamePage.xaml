@@ -369,7 +369,6 @@
                                                 Foreground="#87898C"
                                                 Text="{Binding DateLabel}" />
 
-
                                             <Border
                                                 Height="0.5"
                                                 Margin="5,1.5,0,0"
