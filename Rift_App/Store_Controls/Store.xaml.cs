@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rift_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +14,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Rift_App.Store_Controls
+namespace Rift_App.Account
 {
-    /// <summary>
-    /// Interaction logic for Store.xaml
-    /// </summary>
-    public partial class Store : UserControl
+    public partial class Account : UserControl
     {
-        public Store()
+        private readonly AccountViewModel _vm = new AccountViewModel();
+
+        public Account()
         {
             InitializeComponent();
+            DataContext = _vm;
+            Loaded += async (_, _) => await _vm.LoadAccountAsync();
         }
     }
 }

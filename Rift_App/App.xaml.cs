@@ -1,33 +1,51 @@
-﻿using Rift_App.Database;
+﻿using Rift_App.Loading;
 using Rift_App.Services;
+using Rift_App.ViewModels;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Rift_App
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            new DatabaseService().Initialize();
+          
+            // 1. Check Steam installed + running + initialize Steamworks
+            //    Shows MessageBox if Steam is missing or fails to start
+            //bool steamReady = await SteamStartupService.CheckAndStartSteamAsync();
+            //if (!steamReady) return; // Shutdown already called inside
 
-            string? lastSteamId = SessionService.Load();
-            if (lastSteamId != null)
+            // 2. Initialize tag dictionary in background
+            _ = TagService.InitAsync();
+
+            // 3. Create windows and start normal app flow
+            var auth = new AuthWindow();
+            var loading = new LoadingWindow();
+            var main = new MainWindow();
+
+            ViewNavigator.Initialize(auth, loading, main);
+
+            loading.Show();
+            loading.StartStartup();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            try
             {
-                var auth = new AuthService();
-                bool exists = auth.LoginWithSteam(
-                    lastSteamId, out string username, out string _);
+                SteamAuthService.Cancel();
 
-                if (exists)
-                {
-                    MessageBox.Show($"Automaticky prihlaseny: {username}");
-                    // TODO: otvor MainWindow
-                }
-                else
-                {
-                    SessionService.Clear();
-                }
+                // Shutdown Steamworks before closing Steam
+                SteamworksService.Shutdown();
+
+                // Close Steam only if Rift launched it
+               //SteamworksService.CloseSteamIfWeLaunchedIt();
             }
+            catch { }
+
+            base.OnExit(e);
         }
     }
 }
