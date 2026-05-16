@@ -35,10 +35,23 @@ namespace Rift_App.Models
         public string SteamStoreUrl { get; set; } = string.Empty;
 
         public int PlaytimeMinutes { get; set; } = 0;
-        public string PlaytimeDisplay =>
-            PlaytimeMinutes == 0 ? "Never played" :
-            PlaytimeMinutes < 60 ? $"{PlaytimeMinutes} mins" :
-            $"{(PlaytimeMinutes / 60.0):F1} hrs";
+        public string PlaytimeDisplay
+        {
+            get
+            {
+                if (PlaytimeMinutes <= 0)
+                    return "Never played";
+    
+                if (PlaytimeMinutes < 60)
+                    return $"{PlaytimeMinutes} mins";
+        
+                double hours = PlaytimeMinutes / 60.0;
+           
+                return hours % 1 == 0
+                    ? $"{(int)hours} hrs"
+                    : $"{hours:F1} hrs";
+            }
+        }
 
         // Set at runtime by SteamInstallService — not saved in JSON
         [Newtonsoft.Json.JsonIgnore]
@@ -49,7 +62,7 @@ namespace Rift_App.Models
         public string? IconPath { get; set; }
 
         public string StatusText { get; set; } = "Available Now";
-        public bool IsRecommended => StatusText == "Recommended";
+        public bool IsRecommended { get; set; } = false;
 
         [Newtonsoft.Json.JsonIgnore]
         private GameImageViewModel? _iconImage;

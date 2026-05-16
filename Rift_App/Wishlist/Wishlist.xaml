@@ -167,15 +167,17 @@
                                                                     <ItemsControl.ItemTemplate>
                                                                         <DataTemplate>
 
-                                                                            <Border Margin="0,0,5,0"
-                                                                                    Padding="2,0,2,0"
-                                                                                    BorderBrush="#7B8794"
-                                                                                    BorderThickness="0.6"
-                                                                                    CornerRadius="2">
+                                                                            <Border
+                                                                                Margin="0,0,5,0"
+                                                                                Padding="2,0,2,0"
+                                                                                BorderBrush="#7B8794"
+                                                                                BorderThickness="0.6"
+                                                                                CornerRadius="2">
 
-                                                                                <TextBlock FontSize="12"
-                                                                                           Foreground="#8794A1"
-                                                                                           Text="{Binding}" />
+                                                                                <TextBlock
+                                                                                    FontSize="12"
+                                                                                    Foreground="#8794A1"
+                                                                                    Text="{Binding}" />
                                                                             </Border>
                                                                         </DataTemplate>
                                                                     </ItemsControl.ItemTemplate>
@@ -204,15 +206,14 @@
 
                                                                 <Grid Grid.Column="1" Margin="50,-1.7,0,0">
 
-                                                                    <StackPanel Orientation="Vertical"
-                                                                                TextElement.FontSize="12.5">
+                                                                    <StackPanel Orientation="Vertical" TextElement.FontSize="12.5">
 
-                                                                        <TextBlock Foreground="{Binding ReviewBrush}"
-                                                                                   Text="{Binding ReviewDesc}" />
+                                                                        <TextBlock Foreground="{Binding ReviewBrush}" Text="{Binding ReviewDesc}" />
 
-                                                                        <TextBlock Margin="0,2,0,0"
-                                                                                   Foreground="#959BA6"
-                                                                                   Text="{Binding ReleaseDateDisplay}" />
+                                                                        <TextBlock
+                                                                            Margin="0,2,0,0"
+                                                                            Foreground="#959BA6"
+                                                                            Text="{Binding ReleaseDateDisplay}" />
                                                                     </StackPanel>
                                                                 </Grid>
                                                             </Grid>
@@ -245,47 +246,50 @@
                                                                 <RowDefinition Height="*" />
                                                             </Grid.RowDefinitions>
 
-                                                            <Grid Grid.Row="0"
-                                                                  Margin="0,0,0,9"
-                                                                  VerticalAlignment="Bottom"
-                                                                  HorizontalAlignment="Right">
+                                                            <Grid
+                                                                Grid.Row="0"
+                                                                Margin="0,0,0,9"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Bottom">
 
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="Auto" />
                                                                     <ColumnDefinition Width="Auto" />
                                                                 </Grid.ColumnDefinitions>
 
-                                                                <Grid Grid.Column="0"
-                                                                      Margin="0,1,0,0"
-                                                                      VerticalAlignment="Center">
-                                                                    
-                                                                    <TextBlock FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                                               FontSize="11.8"
-                                                                               Foreground="#9EA4AD"
-                                                                               Text="{Binding DateAddedDisplay, StringFormat='Added on {0}'}" />
+                                                                <Grid
+                                                                    Grid.Column="0"
+                                                                    Margin="0,1,0,0"
+                                                                    VerticalAlignment="Center">
+
+                                                                    <TextBlock
+                                                                        FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                                        FontSize="11.8"
+                                                                        Foreground="#9EA4AD"
+                                                                        Text="{Binding DateAddedDisplay, StringFormat='Added on {0}'}" />
                                                                 </Grid>
 
                                                                 <Grid Grid.Column="1">
 
-                                                                    <Border Margin="6,0,1,0"
-                                                                            CornerRadius="2">
+                                                                    <Border Margin="6,0,1,0" CornerRadius="2">
 
                                                                         <Border.Background>
-                                                                            <SolidColorBrush Opacity="0.7"
-                                                                                             Color="#586879" />
+                                                                            <SolidColorBrush Opacity="0.7" Color="#586879" />
                                                                         </Border.Background>
 
-                                                                        <Button Padding="0"
-                                                                                Height="20"
-                                                                                Width="50"
-                                                                                Background="Transparent"
-                                                                                BorderBrush="Transparent"
-                                                                                Command="{Binding DataContext.RemoveGameCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                                                CommandParameter="{Binding}">
+                                                                        <Button
+                                                                            Width="50"
+                                                                            Height="20"
+                                                                            Padding="0"
+                                                                            Background="Transparent"
+                                                                            BorderBrush="Transparent"
+                                                                            Command="{Binding DataContext.RemoveGameCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                            CommandParameter="{Binding}">
 
-                                                                            <TextBlock FontSize="12"
-                                                                                       Foreground="#A9AFB6"
-                                                                                       Text="remove" />
+                                                                            <TextBlock
+                                                                                FontSize="12"
+                                                                                Foreground="#A9AFB6"
+                                                                                Text="remove" />
                                                                         </Button>
                                                                     </Border>
                                                                 </Grid>
@@ -293,12 +297,13 @@
 
                                                             <Grid Grid.Row="1">
 
-                                                                <Border Padding="3"
-                                                                        HorizontalAlignment="Right"
-                                                                        VerticalAlignment="Bottom"
-                                                                        Background="#2D3945"
-                                                                        CornerRadius="2"
-                                                                        Visibility="{Binding ShowAddToCart, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                <Border
+                                                                    Padding="3"
+                                                                    HorizontalAlignment="Right"
+                                                                    VerticalAlignment="Bottom"
+                                                                    Background="#2D3945"
+                                                                    CornerRadius="2"
+                                                                    Visibility="{Binding ShowAddToCart, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                                                     <Grid>
 
@@ -310,84 +315,85 @@
 
                                                                         <Grid Grid.Column="0">
 
-                                                                            <Border Padding="4,0,4,2"
-                                                                                    Background="#3E5536"
-                                                                                    CornerRadius="2"
-                                                                                    Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                            <Border
+                                                                                Padding="4,0,4,2"
+                                                                                Background="#3E5536"
+                                                                                CornerRadius="2"
+                                                                                Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                                                                                <TextBlock VerticalAlignment="Center"
-                                                                                           FontSize="28"
-                                                                                           FontWeight="Bold"
-                                                                                           Foreground="#B6E312"
-                                                                                           Text="{Binding DiscountDisplay}" />
+                                                                                <TextBlock
+                                                                                    VerticalAlignment="Center"
+                                                                                    FontSize="28"
+                                                                                    FontWeight="Bold"
+                                                                                    Foreground="#B6E312"
+                                                                                    Text="{Binding DiscountDisplay}" />
                                                                             </Border>
                                                                         </Grid>
 
                                                                         <Grid Grid.Column="1">
 
-                                                                            <StackPanel Margin="8,0,8,0"
-                                                                                        VerticalAlignment="Bottom"
-                                                                                        Orientation="Vertical"
-                                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                            <StackPanel
+                                                                                Margin="8,0,8,0"
+                                                                                VerticalAlignment="Bottom"
+                                                                                Orientation="Vertical"
+                                                                                Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                                                                                <TextBlock HorizontalAlignment="Right"
-                                                                                           FontFamily="Arial"
-                                                                                           FontSize="12"
-                                                                                           Foreground="#91999E"
-                                                                                           Text="{Binding OriginalPrice}"
-                                                                                           TextDecorations="Strikethrough" />
+                                                                                <TextBlock
+                                                                                    HorizontalAlignment="Right"
+                                                                                    FontFamily="Arial"
+                                                                                    FontSize="12"
+                                                                                    Foreground="#91999E"
+                                                                                    Text="{Binding OriginalPrice}"
+                                                                                    TextDecorations="Strikethrough" />
 
-                                                                                <TextBlock FontSize="16.5"
-                                                                                           FontWeight="SemiBold"
-                                                                                           Foreground="#D8E0E6"
-                                                                                           Text="{Binding Price}" />
+                                                                                <TextBlock
+                                                                                    FontSize="16.5"
+                                                                                    FontWeight="SemiBold"
+                                                                                    Foreground="#D8E0E6"
+                                                                                    Text="{Binding Price}" />
                                                                             </StackPanel>
 
-                                                                            <TextBlock Margin="8,0,8,0"
-                                                                                       FontSize="16.5"
-                                                                                       FontWeight="SemiBold"
-                                                                                       Foreground="#D8E0E6"
-                                                                                       VerticalAlignment="Center"
-                                                                                       Text="{Binding Price}"
-                                                                                       Visibility="{Binding HasDiscount, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                                                                            <TextBlock
+                                                                                Margin="8,0,8,0"
+                                                                                VerticalAlignment="Center"
+                                                                                FontSize="16.5"
+                                                                                FontWeight="SemiBold"
+                                                                                Foreground="#D8E0E6"
+                                                                                Text="{Binding Price}"
+                                                                                Visibility="{Binding HasDiscount, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
                                                                         </Grid>
 
                                                                         <Grid Grid.Column="2">
 
-                                                                            <Border CornerRadius="2"
-                                                                                    Height="33">
-                                                                                
+                                                                            <Border Height="33" CornerRadius="2">
+
                                                                                 <Border.Background>
-                                                                                    <LinearGradientBrush StartPoint="0,0"
-                                                                                                         EndPoint="1,0">
-                                                                                        <GradientStop Offset="0.251"
-                                                                                                      Color="#74AE22" />
-                                                                                        <GradientStop Offset="1"
-                                                                                                      Color="#598C1B" />
+                                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                                        <GradientStop Offset="0.251" Color="#74AE22" />
+                                                                                        <GradientStop Offset="1" Color="#598C1B" />
                                                                                     </LinearGradientBrush>
                                                                                 </Border.Background>
 
-                                                                                <Button Width="100"
-                                                                                        Padding="0"
-                                                                                        Background="Transparent"
-                                                                                        BorderBrush="Transparent"
-                                                                                        Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                                                        CommandParameter="{Binding}">
+                                                                                <Button
+                                                                                    Width="100"
+                                                                                    Padding="0"
+                                                                                    Background="Transparent"
+                                                                                    BorderBrush="Transparent"
+                                                                                    Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                    CommandParameter="{Binding}">
 
-                                                                                    <TextBlock HorizontalAlignment="Center"
-                                                                                               VerticalAlignment="Center"
-                                                                                               FontSize="15"
-                                                                                               Foreground="#E8FFCF">
+                                                                                    <TextBlock
+                                                                                        HorizontalAlignment="Center"
+                                                                                        VerticalAlignment="Center"
+                                                                                        FontSize="15"
+                                                                                        Foreground="#E8FFCF">
 
                                                                                         <TextBlock.Style>
                                                                                             <Style TargetType="TextBlock">
-                                                                                                <Setter Property="Text"
-                                                                                                        Value="Add to Cart" />
+                                                                                                <Setter Property="Text" Value="Add to Cart" />
                                                                                                 <Style.Triggers>
-                                                                                                    <DataTrigger Binding="{Binding IsPreOrder}"
-                                                                                                                 Value="True">
-                                                                                                        <Setter Property="Text"
-                                                                                                                Value="Pre-order" />
+                                                                                                    <DataTrigger Binding="{Binding IsPreOrder}" Value="True">
+                                                                                                        <Setter Property="Text" Value="Pre-order" />
                                                                                                     </DataTrigger>
                                                                                                 </Style.Triggers>
                                                                                             </Style>

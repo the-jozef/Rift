@@ -99,7 +99,14 @@ namespace Rift_App.ViewModels
                 var accounts = await ApiService.GetDeviceAccountsAsync();
                 DeviceAccounts.Clear();
                 foreach (var acc in accounts)
+                {
+                    if (string.IsNullOrEmpty(acc.AvatarUrl))
+                    {
+                        var player = await ApiService.GetPlayerInfoAsync(acc.SteamId64);
+                        acc.AvatarUrl = player?.AvatarUrl ?? string.Empty;
+                    }
                     DeviceAccounts.Add(acc);
+                }
             }
             catch { }
         }

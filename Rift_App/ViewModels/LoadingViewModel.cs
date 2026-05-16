@@ -12,10 +12,40 @@ namespace Rift_App.ViewModels
 {
     public partial class LoadingViewModel : ObservableObject
     {
-        // ─── MODE 1: Startup ──────────────────────────────────────────────
+        [ObservableProperty] private string _loadingText = "Loading";
 
+        private System.Threading.CancellationTokenSource? _dotsCts;
+
+        private void StartDotsAnimation()
+        {
+            _dotsCts?.Cancel();
+            _dotsCts = new System.Threading.CancellationTokenSource();
+            var token = _dotsCts.Token;
+
+            Task.Run(async () =>
+            {
+                string[] frames = { "Loading", "Loading .", "Loading ..", "Loading ..." };
+                int i = 0;
+                while (!token.IsCancellationRequested)
+                {
+                    var frame = frames[i % frames.Length];
+                    Application.Current.Dispatcher.Invoke(() => LoadingText = frame);
+                    i++;
+                    await Task.Delay(800, token).ContinueWith(_ => { });
+                }
+            });
+        }
+
+        private void StopDotsAnimation()
+        {
+            _dotsCts?.Cancel();
+        }
+
+
+        // ─── MODE 1: Startup ──────────────────────────────────────────────
         public async Task StartupAsync()
         {
+            StartDotsAnimation();
             try
             {
                 _ = TagService.InitAsync();
@@ -36,17 +66,23 @@ namespace Rift_App.ViewModels
                 }
                 else
                 {
+                    StopDotsAnimation();
                     ViewNavigator.Instance?.ShowAuth();
                 }
             }
             catch
             {
+                StopDotsAnimation();
                 ViewNavigator.Instance?.ShowAuth();
             }
         }
+
         public async Task LoadSteamDataAsync()
         {
+            StartDotsAnimation();
             PlayerInfo? playerInfo = null;
+
+            var minimumDelay = Task.Delay(TimeSpan.FromSeconds(2));    //Change to 15-20 sec
 
             try
             {
@@ -54,7 +90,6 @@ namespace Rift_App.ViewModels
 
                 if (!string.IsNullOrEmpty(steamId))
                 {
-                    // ── Player info — cache first ──────────────────────────
                     var cacheKey = string.Format(LocalCacheService.KeyPlayer, steamId);
                     playerInfo = await LocalCacheService.LoadAsync<PlayerInfo>(
                         cacheKey, LocalCacheService.AccountTTL);
@@ -74,14 +109,15 @@ namespace Rift_App.ViewModels
             {
                 Debug.WriteLine($"[Loading] LoadSteamData error: {ex.Message}");
             }
-            finally
+
+            await minimumDelay;
+            StopDotsAnimation();
+
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    try { ViewNavigator.Instance?.ShowMain(playerInfo, SessionManager.LastLocation); }
-                    catch { }
-                });
-            }
+                try { ViewNavigator.Instance?.ShowMain(playerInfo, SessionManager.LastLocation); }
+                catch { }
+            });
         }
     }
 }

@@ -100,6 +100,11 @@ namespace SteamProxyBackend.Controllers
             public bool IsRecommended { get; set; }
             public string Description { get; set; } = "";
             public string SteamStoreUrl { get; set; } = "";
+            public List<string> Developers { get; set; } = new();
+            public List<string> Publishers { get; set; } = new();
+            public string ReleaseDate { get; set; } = "";
+            public string ReviewDesc { get; set; } = "";
+            public string ReviewCss { get; set; } = "";
         }
 
         // ─── Fetches game ─────────────────────────────────────────────────────────────────────────────────
@@ -172,6 +177,45 @@ namespace SteamProxyBackend.Controllers
                     .Where(s => !string.IsNullOrEmpty(s))
                     .Take(4).ToList() ?? new List<string>();
 
+                // Developers
+                var developers = (data["developers"] as JArray)?
+                    .Select(d => d.Value<string>() ?? "")
+                    .Where(d => !string.IsNullOrEmpty(d))
+                    .ToList() ?? new List<string>();
+
+                // Publishers
+                var publishers = (data["publishers"] as JArray)?
+                    .Select(p => p.Value<string>() ?? "")
+                    .Where(p => !string.IsNullOrEmpty(p))
+                    .ToList() ?? new List<string>();
+
+                // Release date
+                string releaseDate = data["release_date"]?["date"]?.Value<string>() ?? "";
+
+                // Reviews
+                string reviewDesc = "", reviewCss = "";
+                int reviewScore = data["review_score"]?.Value<int>() ?? -1;
+                if (reviewScore > 0)
+                {
+                    (reviewDesc, reviewCss) = reviewScore switch
+                    {
+                        9 => ("Very Positive", "veryPositive"),
+                        8 => ("Positive", "positive"),
+                        7 => ("Mostly Positive", "mostlyPositive"),
+                        5 => ("Mixed", "mixed"),
+                        4 => ("Mostly Negative", "mostlyNegative"),
+                        3 => ("Negative", "negative"),
+                        1 => ("Very Negative", "veryNegative"),
+                        _ => ("", "")
+                    };
+                }
+
+                if (string.IsNullOrEmpty(reviewDesc))
+                    (reviewDesc, reviewCss) = await FetchReviewsAsync(appId);
+
+                if (string.IsNullOrEmpty(reviewDesc))
+                    reviewDesc = "No Reviews";
+
                 var dto = new StoreGameDto
                 {
                     AppId = appId,
@@ -190,7 +234,12 @@ namespace SteamProxyBackend.Controllers
                     StatusText = "Available Now",
                     IsRecommended = false,
                     Description = data["short_description"]?.Value<string>() ?? "",
-                    SteamStoreUrl = $"https://store.steampowered.com/app/{appId}"
+                    SteamStoreUrl = $"https://store.steampowered.com/app/{appId}",
+                    Developers = developers,
+                    Publishers = publishers,
+                    ReleaseDate = releaseDate,
+                    ReviewDesc = reviewDesc,
+                    ReviewCss = reviewCss,
                 };
 
                 // 3. Save to memory
@@ -205,7 +254,7 @@ namespace SteamProxyBackend.Controllers
         }
 
         // ─── 5 games per page ──────────────────────────────────────────────────────────────
-        private async Task<List<StoreGameDto>> GetCuratedSectionAsync(int sectionSeed,int page,int size = 5,bool discountedOnly = false)
+        private async Task<List<StoreGameDto>> GetCuratedSectionAsync(int sectionSeed,int page,int size = 8,bool discountedOnly = false)
         {
             // Same shuffle all day for given seed
             var rng = new Random(sectionSeed);
@@ -243,7 +292,7 @@ namespace SteamProxyBackend.Controllers
         // ──── STORE ENDPOINTS ─────────────────────────────────────────────────────────────
 
         [HttpGet("store/featured")]
-        public async Task<IActionResult> GetFeatured([FromQuery] int page = 0, [FromQuery] int count = 5)
+        public async Task<IActionResult> GetFeatured([FromQuery] int page = 0, [FromQuery] int count = 8)
         {
             try
             {
@@ -251,7 +300,7 @@ namespace SteamProxyBackend.Controllers
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
                 var daySeed = int.Parse(DateTime.UtcNow.ToString("yyyyMMdd"));
-                var games = await GetCuratedSectionAsync(daySeed, page, Math.Min(count, 5));
+                var games = await GetCuratedSectionAsync(daySeed, page, Math.Min(count, 8));
                 return Ok(new { Games = games });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -267,7 +316,7 @@ namespace SteamProxyBackend.Controllers
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
                 var daySeed = int.Parse(DateTime.UtcNow.ToString("yyyyMMdd")) + 1000;
-                var games = await GetCuratedSectionAsync(daySeed, page, 5);
+                var games = await GetCuratedSectionAsync(daySeed, page, 8);
                 return Ok(new { Games = games });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -283,7 +332,7 @@ namespace SteamProxyBackend.Controllers
                     return StatusCode(429, new { Message = "Too many requests. Please wait." });
 
                 var daySeed = int.Parse(DateTime.UtcNow.ToString("yyyyMMdd")) + 2000;
-                var games = await GetCuratedSectionAsync(daySeed, page, 5);
+                var games = await GetCuratedSectionAsync(daySeed, page, 8);
                 return Ok(new { Games = games });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -300,11 +349,11 @@ namespace SteamProxyBackend.Controllers
 
                 var daySeed = int.Parse(DateTime.UtcNow.ToString("yyyyMMdd")) + 3000;
 
-                var games = await GetCuratedSectionAsync(daySeed, page, 5, discountedOnly: true);
+                var games = await GetCuratedSectionAsync(daySeed, page, 8, discountedOnly: true);
 
-                if (games.Count < 5)
+                if (games.Count < 8)
                 {
-                    var pad = await GetCuratedSectionAsync(daySeed + 500, page, 5 - games.Count);
+                    var pad = await GetCuratedSectionAsync(daySeed + 800, page, 8 - games.Count);
                     // Odfiltruj duplicity
                     var existingIds = new HashSet<int>(games.Select(g => g.AppId));
                     games.AddRange(pad.Where(g => !existingIds.Contains(g.AppId)));
@@ -368,9 +417,15 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests. Please wait." });
+
                 var url = $"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/" +
-                          $"?key={_steamApiKey}&steamid={steamId}&include_appinfo=true" +
-                          $"&include_played_free_games=true&skip_unvetted_apps=false&include_free_sub=1";
+                          $"?key={_steamApiKey}" +
+                          $"&steamid={steamId}" +
+                          $"&include_appinfo=true" +
+                          $"&include_played_free_games=true" +  // ← F2P + demo + beta
+                          $"&format=json";
 
                 var response = await _http.GetStringAsync(url);
                 var data = JsonConvert.DeserializeObject<dynamic>(response);
@@ -383,16 +438,33 @@ namespace SteamProxyBackend.Controllers
                 {
                     string name = (string)(game.name ?? "");
                     if (string.IsNullOrEmpty(name)) continue;
+
+                    int appId = (int)game.appid;
+                    int playtime = (int)(game.playtime_forever ?? 0);
+
+                    string type = "game";
+                    string nameLower = name.ToLower();
+                    if (nameLower.Contains("demo")) type = "demo";
+                    else if (nameLower.Contains("prologue")) type = "prologue";
+                    else if (nameLower.Contains("playtest")) type = "playtest";
+                    else if (nameLower.Contains(" beta")) type = "beta";
+                    else if (nameLower.Contains("soundtrack")) type = "soundtrack";
+                    else if (nameLower.Contains("dedicated server") ||
+                             nameLower.Contains(" sdk") ||
+                             nameLower.Contains(" tool")) type = "tool";
+
                     result.Add(new
                     {
-                        AppId = (int)game.appid,
+                        AppId = appId,
                         Name = name,
-                        PlaytimeMinutes = (int)(game.playtime_forever ?? 0),
-                        IconUrl = $"https://media.steampowered.com/steamcommunity/public/images/apps/{game.appid}/{game.img_icon_url}.jpg",
-                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{game.appid}/header.jpg"
+                        Type = type,
+                        PlaytimeMinutes = playtime,
+                        IconUrl = $"https://media.steampowered.com/steamcommunity/public/images/apps/{appId}/{game.img_icon_url}.jpg",
+                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
                     });
                 }
-                Debug.WriteLine($"[Library] {result.Count} games for {steamId}");
+
+                Console.WriteLine($"[Library] {result.Count} games for {steamId}");
                 return Ok(new { Games = result });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -438,6 +510,27 @@ namespace SteamProxyBackend.Controllers
                 return Ok(new { Games = result });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+
+        // ─── LIBRARY GAME INFO ────────────────────────────────────────────────
+        [HttpGet("library/game/{appId}/info")]
+        public async Task<IActionResult> GetLibraryGameInfo(int appId)
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests. Please wait." });
+
+                var dto = await FetchSingleForStoreAsync(appId);
+                if (dto == null)
+                    return NotFound(new { Message = "Game not found." });
+
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         // ──── ACHIEVEMENTS ─────────────────────────────────────────────────────────────
@@ -1070,12 +1163,10 @@ namespace SteamProxyBackend.Controllers
             return result;
         }
     }
-     
     public class WishlistBatchRequest
     {
         public List<int> AppIds { get; set; } = new();
     }
-
     public class WishlistItemRef
     {
         public int AppId { get; set; }

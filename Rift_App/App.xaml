@@ -1,14 +1,15 @@
-﻿<Application x:Class="Rift_App.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             xmlns:converters="clr-namespace:Rift_App.Converters">
+﻿<Application
+    x:Class="Rift_App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Rift_App.Converters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-               
+
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
                 <ResourceDictionary Source="/TitleBars/BarStyles.xaml" />
                 <ResourceDictionary Source="/Authorization/Authorization_layout.xaml" />
@@ -23,6 +24,7 @@
             <converters:RiftBoolToGridRowHeightConverter x:Key="BoolToGridRowHeightConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:IndexEqualsConverter x:Key="IndexEqualsConverter" />
+            <converters:FixedThumbHeightConverter x:Key="FixedThumbHeightConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

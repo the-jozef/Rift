@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rift_App.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Rift_App.Models
         public string LastLocation { get; set; } = "Store";
         public DateTime LastLoginAt { get; set; }
         public bool IsLastActive { get; set; }
-        public string AvatarUrl { get; set; } = string.Empty;
+        public string AvatarUrl { get; set; } = SessionManager.AvatarUrl;
 
         public string LastLoginDisplay
         {

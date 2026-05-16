@@ -58,4 +58,16 @@ namespace Rift_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
+    public class FixedThumbHeightConverter : IMultiValueConverter
+    {
+        public double ThumbHeight { get; set; } = 70;
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ThumbHeight;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
 }

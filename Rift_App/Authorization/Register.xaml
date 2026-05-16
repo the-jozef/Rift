@@ -1,16 +1,17 @@
-﻿<UserControl x:Class="Rift_App.Authorization.Register"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             xmlns:local="clr-namespace:Rift_App.Authorization"
-             xmlns:converters="clr-namespace:Rift_App.Converters"
-             xmlns:vm="clr-namespace:Rift_App.ViewModels"
-             mc:Ignorable="d"
-             Height="438"
-             Width="705">
+﻿<UserControl
+    x:Class="Rift_App.Authorization.Register"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Rift_App.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Rift_App.Authorization"
+    xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Rift_App.ViewModels"
+    Width="705"
+    Height="438"
+    mc:Ignorable="d">
     <Grid>
         <Border Style="{StaticResource Rift_Register_Main_Border}">
 
@@ -29,56 +30,54 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
-                        
+
                         <StackPanel Style="{StaticResource Rift_Register_StackPanel_Logo_Title}">
-                            
-                            <Button Style="{StaticResource Rift_Register_Button_Back_Arrow}"
-                                    Command="{Binding ShowLoginCommand}" />
-                            
+
+                            <Button Command="{Binding ShowLoginCommand}" Style="{StaticResource Rift_Register_Button_Back_Arrow}" />
+
                             <Image Style="{StaticResource Rift_Register_Image_Logo}" />
-                            
+
                             <StackPanel Style="{StaticResource Rift_Register_StackPanel_Title}">
-                                
+
                                 <TextBlock Style="{StaticResource Rift_Register_TextBlock_Title}" />
-                                
+
                                 <TextBlock Style="{StaticResource Rift_Register_TextBlock_Profile}" />
                             </StackPanel>
                         </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Row="1"
-                          Margin="60,15,0,0">
-                        
+                    <Grid Grid.Row="1" Margin="65,25,0,0">
+
                         <TextBlock Style="{StaticResource Rift_Register_Textblock_Create}" />
                     </Grid>
 
-                    <Grid Grid.Row="2"
-                          Margin="80,10,0,0">
+                    <Grid Grid.Row="2" Margin="85,25,0,0">
 
                         <StackPanel Style="{StaticResource Rift_Register_StackPanel_Layout}">
 
                             <TextBlock Style="{StaticResource Rift_Register_TextBlock_Layout}" />
 
-                            <TextBox Style="{StaticResource Rift_Register_TextBlock_Layout_AccountName}"
-                                     x:Name="UsernameBox"
-                                     Text="{Binding RegisterUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox
+                                x:Name="UsernameBox"
+                                Style="{StaticResource Rift_Register_TextBlock_Layout_AccountName}"
+                                Text="{Binding RegisterUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                             <TextBlock Style="{StaticResource Rift_Register_TextBlock_Layout_Password}" />
 
-                            <PasswordBox Style="{StaticResource Rift_Register_Password_Layout_Password}"
-                                         x:Name="PasswordBox"
-                                         PasswordChanged="PasswordBox_PasswordChanged" />
+                            <PasswordBox
+                                x:Name="PasswordBox"
+                                PasswordChanged="PasswordBox_PasswordChanged"
+                                Style="{StaticResource Rift_Register_Password_Layout_Password}" />
 
-                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Layout_Email}" />
+                            <!-- <TextBlock Style="{StaticResource Rift_Register_TextBlock_Layout_Email}" />
+                            <TextBox Style="{StaticResource Rift_Register_TextBox_Layout_Email}" />-->
 
-                            <TextBox Style="{StaticResource Rift_Register_TextBox_Layout_Email}" />
+                            <TextBlock
+                                Style="{StaticResource Rift_Register_TextBlock_Layout_ErrorMessage}"
+                                Text="{Binding ErrorMessage}"
+                                Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                            <TextBlock Text="{Binding ErrorMessage}"
-                                       Style="{StaticResource Rift_Register_TextBlock_Layout_ErrorMessage}"
-                                       Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                            <Button Style="{StaticResource Rift_Register_Button_Layout_SignUp}"
-                                    Command="{Binding RegisterCommand}" />
+                            <Button Command="{Binding RegisterCommand}" Style="{StaticResource Rift_Register_Button_Layout_SignUp}" />
 
                         </StackPanel>
                     </Grid>
@@ -92,16 +91,13 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
-                        <Button Style="{StaticResource Rift_Register_WindowState_Button_Close}"
-                                Command="{Binding ShowAccountSelectionCommand}">
-                            
-                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Register_Icon_WindowState}"
-                                                        Kind="Close" />
+                        <Button Command="{Binding ShowAccountSelectionCommand}" Style="{StaticResource Rift_Register_WindowState_Button_Close}">
+
+                            <materialIcons:MaterialIcon Kind="Close" Style="{StaticResource Rift_Register_Icon_WindowState}" />
                         </Button>
                     </Grid>
 
-                    <Grid Grid.Row="1"
-                          Margin="0,65,0,0">
+                    <Grid Grid.Row="1" Margin="0,65,0,0">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -115,72 +111,59 @@
                             </StackPanel>
                         </Grid>
 
-                        <Grid Grid.Row="1"
-                              Margin="0,15,0,0">
-                            
+                        <Grid Grid.Row="1" Margin="0,15,0,0">
+
                             <StackPanel Style="{StaticResource Rift_Register_StackPanel_Informations}">
 
                                 <Border Style="{StaticResource Rift_Register_Border_Informations}">
-                                    
+
                                     <StackPanel Orientation="Horizontal">
-                                        
+
                                         <Border Style="{StaticResource Rift_Register_Border_Icon_Informations}">
-                                            
-                                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Register_Icon_Informations}"
-                                                                        Kind="ShieldOutline" />
+
+                                            <materialIcons:MaterialIcon Kind="ShieldOutline" Style="{StaticResource Rift_Register_Icon_Informations}" />
                                         </Border>
-                                        <StackPanel Orientation="Vertical"
-                                                    Margin="10,0,0,0">
-                                            
-                                            <TextBlock Text="Secure &amp; Protected"
-                                                       Style="{StaticResource Rift_Register_TextBlock_Main_Information}" />
-                                            
-                                            <TextBlock Text="Advanced encryption"
-                                                       Style="{StaticResource Rift_Register_TextBlock_Second_Information}" />
+                                        <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="Secure &amp; Protected" />
+
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="Advanced encryption" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
 
                                 <Border Style="{StaticResource Rift_Register_Border_Informations}">
-                                    
+
                                     <StackPanel Orientation="Horizontal">
-                                        
+
                                         <Border Style="{StaticResource Rift_Register_Border_Icon_Informations}">
-                                            
-                                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Register_Icon_Informations}"
-                                                                        Kind="GamepadVariantOutline" />
+
+                                            <materialIcons:MaterialIcon Kind="GamepadVariantOutline" Style="{StaticResource Rift_Register_Icon_Informations}" />
                                         </Border>
-                                        
-                                        <StackPanel Orientation="Vertical"
-                                                    Margin="10,0,0,0">
-                                            
-                                            <TextBlock Text="Your entire Steam library"
-                                                       Style="{StaticResource Rift_Register_TextBlock_Main_Information}" />
-                                            
-                                            <TextBlock Text="Games in one place"
-                                                       Style="{StaticResource Rift_Register_TextBlock_Second_Information}" />
+
+                                        <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="Your entire Steam library" />
+
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="Games in one place" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
 
                                 <Border Style="{StaticResource Rift_Register_Border_Informations}">
-                                    
+
                                     <StackPanel Orientation="Horizontal">
-                                        
+
                                         <Border Style="{StaticResource Rift_Register_Border_Icon_Informations}">
-                                            
-                                            <materialIcons:MaterialIcon Style="{StaticResource Rift_Register_Icon_Informations}"
-                                                                        Kind="AutoAwesomeOutline" />
+
+                                            <materialIcons:MaterialIcon Kind="AutoAwesomeOutline" Style="{StaticResource Rift_Register_Icon_Informations}" />
                                         </Border>
-                                        
-                                        <StackPanel Orientation="Vertical"
-                                                    Margin="10,0,0,0">
-                                            
-                                            <TextBlock Text="Clean and modern design"
-                                                       Style="{StaticResource Rift_Register_TextBlock_Main_Information}" />
-                                            
-                                            <TextBlock Text="Simple, modern and minimal"
-                                                       Style="{StaticResource Rift_Register_TextBlock_Second_Information}" />
+
+                                        <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="Clean and modern design" />
+
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="Simple, modern and minimal" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>

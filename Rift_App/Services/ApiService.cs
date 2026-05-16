@@ -155,6 +155,17 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
+        public static async Task<GameInfoModel?> GetLibraryGameInfoAsync(int appId)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/library/game/{appId}/info");
+                return FromJson<GameInfoModel>(response);
+            }
+            catch { return null; }
+        }
+
         public static async Task<GameDetailModel?> GetAchievementsAsync(int appId, string steamId64)
         {
             try
