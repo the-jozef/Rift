@@ -20,15 +20,18 @@ namespace Rift_App.ViewModels
     public partial class LibraryViewModel : ObservableObject
     {
         public ObservableCollection<GameModel> Games { get; } = new();
-        public ObservableCollection<GameModel> FilteredGames { get; } = new();
 
         [ObservableProperty] private bool _isLoading = false;
-        [ObservableProperty] private string _searchText = string.Empty;
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private int _installedCount = 0;
 
-        // Fired when user clicks a game — Library.xaml.cs forwards to GameDetailPanel
         public event Action<GameModel>? OnGameSelected;
+
+        public LibraryViewModel()
+        {
+            // Subscribe to Steam changes (playtime, lastplayed)
+            SteamCallbackService.LibraryChanged += OnSteamLibraryChanged;
+        }
 
         // ─── SELECT GAME ──────────────────────────────────────────────────
 
@@ -45,7 +48,6 @@ namespace Rift_App.ViewModels
         {
             IsLoading = true;
             Games.Clear();
-            FilteredGames.Clear();
 
             try
             {
@@ -62,74 +64,56 @@ namespace Rift_App.ViewModels
 
                 var steamId = SessionManager.SteamId64;
 
-                // Zdroj 1 — Full Community XML
                 var fullLibrary = await ApiService.GetFullLibraryAsync(steamId);
                 Debug.WriteLine($"[Library] Community XML: {fullLibrary.Count}");
 
-                // Zdroj 2 — API fallback
                 var apiGames = fullLibrary.Count > 0
                     ? fullLibrary
                     : await ApiService.GetLibraryAsync(steamId);
 
-                // Zdroj 3 — Nainštalované .acf
                 var installedGames = SteamInstallService.GetAllGames();
-                Debug.WriteLine($"[Library] Nainštalované: {installedGames.Count}");
-
-                // Zdroj 4 — localconfig + sharedconfig
                 var localConfigGames = SteamInstallService.GetAllAppsFromLocalConfig();
-                Debug.WriteLine($"[Library] LocalConfig: {localConfigGames.Count}");
-
-                // Zdroj 5 — Windows Registry (F2P, CoD, BF, Delta Force...)
                 var registryGames = SteamInstallService.GetAllAppsFromRegistry();
-                Debug.WriteLine($"[Library] Registry: {registryGames.Count}");
 
-                // Spoj všetko
+                // Merge — API wins (has real names)
                 var allById = new Dictionary<int, GameModel>();
                 foreach (var g in registryGames) allById[g.AppId] = g;
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
                 foreach (var g in installedGames) allById[g.AppId] = g;
-                foreach (var g in apiGames) allById[g.AppId] = g; 
-
-                foreach (var g in localConfigGames) allById[g.AppId] = g;
-                foreach (var g in installedGames) allById[g.AppId] = g;
                 foreach (var g in apiGames) allById[g.AppId] = g;
 
-                var allGames = allById.Values.Where(g => g.AppId > 0).ToList();
-                Debug.WriteLine($"[Library] Celkovo unikátnych: {allGames.Count}");
-
-                // Playtime
-                var playtime = SteamworksService.GetPlaytimeMinutes();
-                foreach (var game in allGames)
-                {
-                    if (playtime.TryGetValue(game.AppId, out int minutes))
-                        game.PlaytimeMinutes = minutes;
-                }
-
-                // Doplň názvy pre hry bez názvu
-                var missingNames = allGames
-                    .Where(g => g.Name == g.AppId.ToString())
+                var allGames = allById.Values
+                    .Where(g => g.AppId > 0 && !SteamInternalIds.Contains(g.AppId))
                     .ToList();
 
-                if (missingNames.Any())
+                // Playtime from local VDF
+                var playtime = SteamworksService.GetPlaytimeMinutes();
+                foreach (var game in allGames)
+                    if (playtime.TryGetValue(game.AppId, out int min))
+                        game.PlaytimeMinutes = min;
+
+                // ── SPLIT: known names vs. needs API lookup ────────────────
+                var knownGames = allGames
+                    .Where(g => !string.IsNullOrEmpty(g.Name) && g.Name != g.AppId.ToString())
+                    .ToList();
+
+                var unknownGames = allGames
+                    .Where(g => string.IsNullOrEmpty(g.Name) || g.Name == g.AppId.ToString())
+                    .ToList();
+
+                // Show known games immediately
+                CheckInstallStatus(knownGames);
+                await LibraryCacheService.DownloadAllIconsAsync(knownGames);
+                await LibraryCacheService.SaveAsync(knownGames);
+                PopulateGames(knownGames);
+                IsLoading = false;
+
+                // Resolve unknown names progressively in background
+                if (unknownGames.Any())
                 {
-                    Debug.WriteLine($"[Library] Doplňujem názvy pre {missingNames.Count} hier...");
-                    await FillMissingNamesAsync(missingNames);
+                    Debug.WriteLine($"[Library] {unknownGames.Count} games need name lookup (background).");
+                    _ = FillNamesProgressiveAsync(unknownGames);
                 }
-
-                // Vyhoď len tie čo stále nemajú názov
-                allGames = allGames
-            .Where(g => !SteamInternalIds.Contains(g.AppId))
-            .Where(g => !string.IsNullOrEmpty(g.Name))
-            .Where(g => !g.Name.StartsWith("__REMOVE_"))
-            .Where(g => g.Name != g.AppId.ToString())
-            .ToList();
-
-                Debug.WriteLine($"[Library] Po filtrácii: {allGames.Count}");
-
-                CheckInstallStatus(allGames);
-                await LibraryCacheService.DownloadAllIconsAsync(allGames);
-                await LibraryCacheService.SaveAsync(allGames);
-                PopulateGames(allGames);
             }
             catch (Exception ex)
             {
@@ -137,51 +121,114 @@ namespace Rift_App.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                if (IsLoading) IsLoading = false;
                 await ApiService.SaveSessionAsync("Library");
             }
         }
 
-        private static readonly HashSet<int> SteamInternalIds = new()
-{
-    7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
-    1520, 228980, 241100, 242550, 1430110
-};
-        // Doplní názvy pre hry z localconfig cez Steam store API
-        private async Task FillMissingNamesAsync(List<GameModel> games)
+        // ─── PROGRESSIVE NAME FILL ────────────────────────────────────────
+        // Fetches names 3 at a time, inserts each game alphabetically as resolved.
+
+        private async Task FillNamesProgressiveAsync(List<GameModel> games)
         {
-            const int batchSize = 5;
+            var steamId = SessionManager.SteamId64;
+            const int batchSize = 3;
+
             for (int i = 0; i < games.Count; i += batchSize)
             {
                 var chunk = games.Skip(i).Take(batchSize).ToList();
+
                 var tasks = chunk.Select(async game =>
                 {
                     try
                     {
-                        var details = await ApiService.GetGameDetailsAsync(game.AppId);
+                        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+                        var details = await ApiService
+                            .GetGameDetailsAsync(game.AppId)
+                            .WaitAsync(cts.Token);
+
                         if (details != null && !string.IsNullOrEmpty(details.Name))
                         {
                             game.Name = details.Name;
-                            Debug.WriteLine($"[Library] Názov doplnený: {game.Name} ({game.AppId})");
-                        }
-                        else
-                        {
-                            // Žiadna store page = tool/internal app — označ na zmazanie
-                            game.Name = $"__REMOVE_{game.AppId}";
+                            game.IconPath = await LibraryCacheService
+                                .DownloadIconAsync(game.AppId, game.IconUrl);
+                            return game;
                         }
                     }
-                    catch
-                    {
-                        game.Name = $"__REMOVE_{game.AppId}";
-                    }
+                    catch { }
+                    return null;
                 });
-                await Task.WhenAll(tasks);
-                await Task.Delay(400);
+
+                var results = await Task.WhenAll(tasks);
+                var resolved = results.OfType<GameModel>().ToList();
+
+                if (resolved.Any())
+                {
+                    CheckInstallStatus(resolved);
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        foreach (var game in resolved)
+                        {
+                            InsertAlphabetically(game);
+                            TotalGames = Games.Count;
+                            InstalledCount = Games.Count(g => g.IsInstalled);
+                        }
+                    });
+
+                    // Save resolved games to cache
+                    foreach (var game in resolved)
+                        await LibraryCacheService.SaveGameAsync(steamId, game);
+                }
+
+                await Task.Delay(600);
             }
+
+            Debug.WriteLine("[Library] Progressive name fill complete.");
+        }
+
+        /// Inserts a game into Games keeping alphabetical order.
+        private void InsertAlphabetically(GameModel game)
+        {
+            for (int i = 0; i < Games.Count; i++)
+            {
+                if (string.Compare(game.Name, Games[i].Name,
+                        StringComparison.OrdinalIgnoreCase) <= 0)
+                {
+                    Games.Insert(i, game);
+                    return;
+                }
+            }
+            Games.Add(game);
+        }
+
+        // ─── STEAM CHANGE DETECTION ───────────────────────────────────────
+        // Called by SteamCallbackService when localconfig.vdf changes
+        // (i.e. user played a game and closed it).
+
+        private void OnSteamLibraryChanged()
+        {
+            Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                try
+                {
+                    var playtime = SteamworksService.GetPlaytimeMinutes();
+                    foreach (var game in Games)
+                    {
+                        if (playtime.TryGetValue(game.AppId, out int minutes))
+                            game.PlaytimeMinutes = minutes;
+                    }
+                    InstalledCount = Games.Count(g => g.IsInstalled);
+                    Debug.WriteLine("[Library] Playtime refreshed from Steam change.");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[Library] OnSteamLibraryChanged error: {ex.Message}");
+                }
+            });
         }
 
         // ─── BACKGROUND SYNC ──────────────────────────────────────────────
-        // Runs after UI is shown — adds new games, removes deleted ones
 
         private async Task SyncInBackgroundAsync()
         {
@@ -190,18 +237,13 @@ namespace Rift_App.ViewModels
                 await Task.Delay(3000);
 
                 var steamId = SessionManager.SteamId64;
-
-                // Vždy API — nie lokálny sken
                 var fresh = await ApiService.GetLibraryAsync(steamId);
                 if (fresh.Count == 0) return;
 
-                // Playtime update
                 var playtime = SteamworksService.GetPlaytimeMinutes();
                 foreach (var game in fresh)
-                {
                     if (playtime.TryGetValue(game.AppId, out int minutes))
                         game.PlaytimeMinutes = minutes;
-                }
 
                 var cached = Games.ToList();
                 var (synced, changed) = await LibraryCacheService.SyncAsync(cached, fresh);
@@ -213,12 +255,11 @@ namespace Rift_App.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Games.Clear();
-                    FilteredGames.Clear();
                     PopulateGames(synced);
                 });
 
                 await LibraryCacheService.SaveAsync(synced);
-                Debug.WriteLine("[Library] Sync hotový.");
+                Debug.WriteLine("[Library] Sync done.");
             }
             catch (Exception ex)
             {
@@ -226,27 +267,27 @@ namespace Rift_App.ViewModels
             }
         }
 
-
-
         // ─── INSTALL STATUS ───────────────────────────────────────────────
-        // Uses Steamworks if initialized, falls back to .acf file reader
 
         private static void CheckInstallStatus(List<GameModel> games)
         {
             foreach (var game in games)
             {
-                InstallInfo info;
-
-                if (SteamworksService.IsInitialized)
-                    info = SteamworksService.GetInstallInfo(game.AppId);
-                else
-                    info = SteamInstallService.GetInfo(game.AppId);
+                var info = SteamworksService.IsInitialized
+                    ? SteamworksService.GetInstallInfo(game.AppId)
+                    : SteamInstallService.GetInfo(game.AppId);
 
                 game.IsInstalled = info.IsInstalled;
             }
         }
 
         // ─── HELPERS ──────────────────────────────────────────────────────
+
+        private static readonly HashSet<int> SteamInternalIds = new()
+        {
+            7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
+            1520, 228980, 241100, 242550, 1430110
+        };
 
         private static void RestoreIconPaths(List<GameModel> games)
         {
@@ -259,34 +300,13 @@ namespace Rift_App.ViewModels
 
         private void PopulateGames(List<GameModel> games)
         {
-            var sorted = games
-                  //  .OrderByDescending(g => g.IsInstalled)          // nainštalované prvé
-                  //   .ThenByDescending(g => g.PlaytimeMinutes)        // potom podľa playtime
-                  // .ThenBy(g => g.Name)                             // abecedne zvyšok
-                  .OrderBy(g => g.Name)
-                  .ToList();
-
+            var sorted = games.OrderBy(g => g.Name).ToList();
             foreach (var game in sorted)
-            {
                 Games.Add(game);
-                FilteredGames.Add(game);
-            }
 
             TotalGames = Games.Count;
             InstalledCount = Games.Count(g => g.IsInstalled);
-
-            Debug.WriteLine($"[Library] Zobrazené: {TotalGames} hier, nainštalované: {InstalledCount}");
-        }
-
-        // ─── SEARCH ───────────────────────────────────────────────────────
-
-        partial void OnSearchTextChanged(string value)
-        {
-            FilteredGames.Clear();
-            var source = string.IsNullOrWhiteSpace(value)
-                ? Games
-                : Games.Where(g => g.Name.Contains(value, StringComparison.OrdinalIgnoreCase));
-            foreach (var game in source) FilteredGames.Add(game);
+            Debug.WriteLine($"[Library] Shown: {TotalGames}, installed: {InstalledCount}");
         }
     }
 }

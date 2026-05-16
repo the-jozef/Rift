@@ -10,8 +10,9 @@
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
     mc:Ignorable="d">
+    
     <Grid>
-        <Border CornerRadius="0,0,7.5,7.5">
+        <Border CornerRadius="0,0,6.1,6.1">
             <Grid>
                 <ScrollViewer
                     HorizontalAlignment="Stretch"

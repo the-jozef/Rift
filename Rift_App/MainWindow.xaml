@@ -10,21 +10,23 @@
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:vm="clr-namespace:Rift_App.ViewModels"
         Title="MainWindow"
-        AllowsTransparency="False"
-        ResizeMode="{Binding WindowState.IsMaximized}"
-        MinHeight="550"
         MinWidth="1110"
+        MinHeight="550"
+        AllowsTransparency="False"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
- 
+
     <WindowChrome.WindowChrome>
-        <shell:WindowChrome ResizeBorderThickness="7"
-                            CaptionHeight="65"
+        <shell:WindowChrome CaptionHeight="65"
                             CornerRadius="18"
-                            GlassFrameThickness="0" />
+                            GlassFrameThickness="0"
+                            ResizeBorderThickness="7" />
     </WindowChrome.WindowChrome>
 
-    <Border ClipToBounds="True">
+    <Border BorderBrush="#373A3E"
+            BorderThickness="2"
+            CornerRadius="8"
+            ClipToBounds="True">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -48,7 +50,6 @@
 
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
-                     
                         <Setter Property="Margin"
                                 Value="0" />
                         <Style.Triggers>

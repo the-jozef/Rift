@@ -9,6 +9,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Steamworks;
+using System;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Rift_App.ViewModels
 {
@@ -25,14 +29,51 @@ namespace Rift_App.ViewModels
         [ObservableProperty]
         private bool _showSearchBar = true;
 
-        // ─── PLAYER INFO — pre MenuBar binding ───────────────────────────
-        // Exposed from SessionManager for MenuBar binding
+        // ─── PLAYER INFO ──────────────────────────────────────────────────
         public string Username => SessionManager.Username;
         public string AvatarUrl => SessionManager.AvatarUrl;
 
+        // ─── STEAM TIMER ──────────────────────────────────────────────────
+        private readonly DispatcherTimer _steamTimer;
+
+        // ─── CONSTRUCTOR ──────────────────────────────────────────────────
+
         public WindowViewModel()
         {
+            _steamTimer = BuildSteamTimer();
+            InitializeSteam();
             ShowStore();
+        }
+
+        // ─── STEAM ────────────────────────────────────────────────────────
+
+        private static DispatcherTimer BuildSteamTimer() => new()
+        {
+            Interval = TimeSpan.FromMilliseconds(100)
+        };
+
+        private void InitializeSteam()
+        {
+            // RunCallbacks must be called regularly for ALL Steamworks events to fire
+            _steamTimer.Tick += (_, _) =>
+            {
+                if (SteamworksService.IsInitialized)
+                    SteamAPI.RunCallbacks();
+            };
+            _steamTimer.Start();
+
+            // FileSystemWatcher on localconfig.vdf + Steamworks achievement callbacks
+            SteamCallbackService.Register();
+
+            // Pre-load LastPlayed cache (reads localconfig.vdf once)
+            _ = LastPlayedCacheService.InitializeAsync();
+        }
+
+        // Called from App.xaml.cs OnExit — no need to touch MainWindow.xaml.cs
+        public void Cleanup()
+        {
+            _steamTimer.Stop();
+            SteamCallbackService.Unregister();
         }
 
         // ─── NAVIGATION ───────────────────────────────────────────────────

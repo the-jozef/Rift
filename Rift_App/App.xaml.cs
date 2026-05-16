@@ -37,11 +37,15 @@ namespace Rift_App
             {
                 SteamAuthService.Cancel();
 
+                // Stop Steam timer + unregister callbacks via ViewModel
+                ViewNavigator.Instance?.MainViewModel?.Cleanup();
+
+
                 // Shutdown Steamworks before closing Steam
                 SteamworksService.Shutdown();
 
                 // Close Steam only if Rift launched it
-               //SteamworksService.CloseSteamIfWeLaunchedIt();
+                //SteamworksService.CloseSteamIfWeLaunchedIt();
             }
             catch { }
 

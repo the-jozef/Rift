@@ -9,12 +9,9 @@ using System.Text;
 
 namespace Rift_App.Services
 {
-    /// <summary>
     /// Caches per-game detail JSON in AppData\RiftApp\games\{appId}.json
-    /// Also downloads and caches hero images in AppData\RiftApp\game_images\
-    /// TTL: 24 hours. Hero image: kept until the game is removed from library.
+    // TTL: 24 hours. Hero image: kept until the game is removed from library.
     /// Shared between Library and Store game pages.
-    /// </summary>
     public static class GameDetailCacheService
     {
         private static readonly string GamesFolder = Path.Combine(

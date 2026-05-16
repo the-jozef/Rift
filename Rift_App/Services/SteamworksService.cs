@@ -33,6 +33,11 @@ namespace Rift_App.Services
                 Environment.SetEnvironmentVariable("SteamGameId", "480");
                 _initialized = SteamAPI.Init();
                 Debug.WriteLine($"[Steamworks] Init: {_initialized}");
+
+                // Pre-load LastPlayed cache in background right after init
+                if (_initialized)
+                    _ = LastPlayedCacheService.InitializeAsync();
+
                 return _initialized;
             }
             catch (Exception ex)
@@ -139,10 +144,12 @@ namespace Rift_App.Services
                 var steamId = SessionManager.SteamId64;
                 if (string.IsNullOrEmpty(steamId)) return null;
 
+                // Ensure cache is ready (usually already initialized)
+                await LastPlayedCacheService.InitializeAsync();
+
                 var detail = await ApiService.GetAchievementsAsync(appId, steamId);
                 if (detail == null) return null;
 
-                // Stiahni ikony na disk
                 await DownloadAchievementIconsAsync(appId, detail.Achievements);
 
                 foreach (var a in detail.Achievements)
@@ -152,7 +159,8 @@ namespace Rift_App.Services
                     a.ResetIconImage();
                 }
 
-                detail.LastPlayed = GetLastPlayed(appId);
+                // Use cache — no more VDF read per game
+                detail.LastPlayed = LastPlayedCacheService.Get(appId);
                 return detail;
             }
             catch (Exception ex)
@@ -160,47 +168,6 @@ namespace Rift_App.Services
                 Debug.WriteLine($"[Steamworks] GetAchievements error: {ex.Message}");
                 return null;
             }
-        }
-
-        private static DateTime? GetLastPlayed(int appId)
-        {
-            try
-            {
-                if (!_initialized) return null;
-                var steamPath = Microsoft.Win32.Registry.LocalMachine
-                    .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
-                    ?.GetValue("InstallPath") as string;
-                if (string.IsNullOrEmpty(steamPath)) return null;
-
-                var accountId = SteamUser.GetSteamID().GetAccountID().m_AccountID;
-                var localConfig = Path.Combine(steamPath, "userdata",
-                    accountId.ToString(), "config", "localconfig.vdf");
-
-                if (!File.Exists(localConfig)) return null;
-
-                var content = File.ReadAllText(localConfig);
-
-                // Nájdi apps sekciu
-                var appsSection = FindVdfSection(content, "apps");
-                if (string.IsNullOrEmpty(appsSection)) return null;
-
-                // Nájdi sekciu pre konkrétny appId
-                var appSection = FindVdfSection(appsSection, appId.ToString());
-                if (string.IsNullOrEmpty(appSection)) return null;
-
-                // Parsuj LastPlayed
-                var match = System.Text.RegularExpressions.Regex.Match(
-                    appSection, @"""LastPlayed""\s+""(\d+)""");
-                if (!match.Success) return null;
-
-                if (long.TryParse(match.Groups[1].Value, out long timestamp) && timestamp > 0)
-                    return DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Steamworks] GetLastPlayed error: {ex.Message}");
-            }
-            return null;
         }
 
         public static Dictionary<int, int> GetPlaytimeMinutes()

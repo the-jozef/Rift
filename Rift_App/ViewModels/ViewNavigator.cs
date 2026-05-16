@@ -20,7 +20,6 @@ namespace Rift_App.ViewModels
 {
     public class ViewNavigator
     {
-        // ─── SINGLETON ────────────────────────────────────────────────────
         public static ViewNavigator? Instance { get; private set; }
 
         public static void Initialize(AuthWindow auth, LoadingWindow loading, MainWindow main)
@@ -32,18 +31,14 @@ namespace Rift_App.ViewModels
         private readonly LoadingWindow _loading;
         private readonly MainWindow _main;
 
+        public WindowViewModel? MainViewModel => _main.ViewModel;
+
         private ViewNavigator(AuthWindow auth, LoadingWindow loading, MainWindow main)
         {
             _auth = auth;
             _loading = loading;
             _main = main;
         }
-
-        // ─── SHOW AUTH ────────────────────────────────────────────────────
-
-        /// <summary>
-        /// Shows AuthWindow at AccountSelection — hides everything else.
-        /// </summary>
         public void ShowAuth()
         {
             try
@@ -55,10 +50,6 @@ namespace Rift_App.ViewModels
             }
             catch { }
         }
-
-        /// <summary>
-        /// Called when user clicks "Switch Account" in MainWindow.
-        /// </summary>
         public void SwitchToAuth()
         {
             try
@@ -69,13 +60,6 @@ namespace Rift_App.ViewModels
             }
             catch { }
         }
-
-        // ─── SHOW LOADING ─────────────────────────────────────────────────
-
-        /// <summary>
-        /// Shows LoadingWindow — hides auth, starts loading Steam data.
-        /// Called after successful login or register.
-        /// </summary>
         public void ShowLoading()
         {
             try
@@ -87,13 +71,6 @@ namespace Rift_App.ViewModels
             }
             catch { }
         }
-
-        // ─── SHOW MAIN ────────────────────────────────────────────────────
-
-        /// <summary>
-        /// Called by LoadingWindow when all data is ready.
-        /// Navigates to last known location.
-        /// </summary>
         public void ShowMain(PlayerInfo? playerInfo, string lastLocation)
         {
             try

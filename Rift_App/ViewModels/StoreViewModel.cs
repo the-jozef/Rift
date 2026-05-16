@@ -205,18 +205,12 @@ namespace Rift_App.ViewModels
         //  SHOW MORE — načíta +5 ďalších hier z ďalšej stránky
         //  Loads +5 more games from next page
         // ─────────────────────────────────────────────────────────────────
-        private async Task ShowMoreAsync(
-            ObservableCollection<GameModel> collection,
-            int pageCounter,
-            Func<int, Task<List<GameModel>>> fetchPage,
-            Action<bool> setLoading,
-            Action<bool> setHasMore)
-            {
-            pageCounter++;
+        private async Task ShowMoreAsync(ObservableCollection<GameModel> collection, int page, Func<int, Task<List<GameModel>>> fetchPage, Action<bool> setLoading, Action<bool> setHasMore)
+        {
             setLoading(true);
             try
             {
-                var games = await fetchPage(pageCounter);
+                var games = await fetchPage(page);
                 if (games.Count == 0) { setHasMore(false); return; }
 
                 // Odfiltruj hry ktoré už sú v kolekcii — no duplicates
@@ -242,7 +236,7 @@ namespace Rift_App.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Store] ShowMore error: {ex.Message}");
-                pageCounter--; // Rollback pri chybe
+                page--; // Rollback pri chybe
             }
             finally
             {
@@ -261,11 +255,14 @@ namespace Rift_App.ViewModels
             h => HasMoreNewTrending = h);
 
         [RelayCommand]
-        private async Task ShowMoreNewTrendingAsync() =>
+        private async Task ShowMoreNewTrendingAsync()
+        {
+            _newTrendingPage++;  // zvýš TU, pred volaním
             await ShowMoreAsync(NewTrending, _newTrendingPage,
                 page => ApiService.GetNewTrendingAsync(page),
                 l => IsLoadingNewTrending = l,
                 h => HasMoreNewTrending = h);
+        }
 
         // ─────────────────────────────────────────────────────────────────
         //  TOP SELLERS
@@ -278,11 +275,14 @@ namespace Rift_App.ViewModels
             h => HasMoreTopSellers = h);
 
         [RelayCommand]
-        private async Task ShowMoreTopSellersAsync() =>
+        private async Task ShowMoreTopSellersAsync()
+        {
+            _topSellersPage++;
             await ShowMoreAsync(TopSellers, _topSellersPage,
                 page => ApiService.GetTopSellersAsync(page),
                 l => IsLoadingTopSellers = l,
                 h => HasMoreTopSellers = h);
+        }
 
         // ─────────────────────────────────────────────────────────────────
         //  SPECIALS
@@ -295,11 +295,14 @@ namespace Rift_App.ViewModels
             h => HasMoreSpecials = h);
 
         [RelayCommand]
-        private async Task ShowMoreSpecialsAsync() =>
+        private async Task ShowMoreSpecialsAsync()
+        {
+            _specialsPage++;
             await ShowMoreAsync(Specials, _specialsPage,
                 page => ApiService.GetSpecialsAsync(page),
                 l => IsLoadingSpecials = l,
                 h => HasMoreSpecials = h);
+        }
 
         // ─────────────────────────────────────────────────────────────────
         //  IMAGE PRELOADING

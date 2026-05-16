@@ -222,8 +222,7 @@ public static class LibraryCacheService
     }
 
     // ─── PRIVATE ──────────────────────────────────────────────────────────
-
-    private static async Task<string?> DownloadIconAsync(int appId, string? iconUrl)
+    public static async Task<string?> DownloadIconAsync(int appId, string? iconUrl)
     {
         try
         {

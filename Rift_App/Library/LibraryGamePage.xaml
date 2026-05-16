@@ -48,9 +48,9 @@
                             <LinearGradientBrush Opacity="0.7"
                                                  StartPoint="0,0"
                                                  EndPoint="0,1">
-                                <GradientStop Offset="0"
+                                <GradientStop Offset="0.12"
                                               Color="#474A54" />
-                                <GradientStop Offset="0.846"
+                                <GradientStop Offset="1"
                                               Color="#22262E" />
                             </LinearGradientBrush>
                         </Border.Background>
@@ -787,6 +787,7 @@
                                                     Background="#282E33"
                                                     BorderBrush="Transparent"
                                                     Foreground="#D4D4D4"
+                                                    Command="{Binding OpenAchievementsCommand}"
                                                     Visibility="{Binding HasUnlockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                                 <StackPanel Margin="-2,2,0,0"
@@ -795,6 +796,7 @@
                                                     <TextBlock FontSize="16"
                                                                FontWeight="SemiBold"
                                                                Text="+" />
+                                                    
                                                     <TextBlock Margin="1,0,0,0"
                                                                FontSize="17"
                                                                FontWeight="SemiBold"
@@ -862,6 +864,7 @@
                                                 Background="#282E33"
                                                 BorderBrush="Transparent"
                                                 Foreground="#D4D4D4"
+                                                Command="{Binding OpenAchievementsCommand}"
                                                 Visibility="{Binding HasLockedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                             <StackPanel Margin="-2,2,0,0"
@@ -886,7 +889,7 @@
                                         <Button Padding="0"
                                                 Background="Transparent"
                                                 BorderBrush="Transparent"
-                                                Command="{Binding OpenStoreCommand}">
+                                                Command="{Binding OpenAchievementsCommand}">
 
                                             <TextBlock Padding="2"
                                                        FontSize="13"

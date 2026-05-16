@@ -35,13 +35,21 @@ namespace Rift_App.ViewModels
         public bool HasLockedRemaining => LockedRemaining > 0;
         public int UnlockedRemaining { get; private set; }
         public int LockedRemaining { get; private set; }
-
+        public AchievementModel? MostRecentAchievement { get; private set; }
         public string CurrentUsername => SessionManager.Username;
         public string CurrentAvatarUrl => SessionManager.AvatarUrl;
 
         public ObservableCollection<AchievementModel> UnlockedPreview { get; } = new();
         public ObservableCollection<AchievementModel> LockedPreview { get; } = new();
         public ObservableCollection<AchievementDateGroup> RecentActivity { get; } = new();
+
+
+        public LibraryGameViewModel()
+        {
+            SteamCallbackService.LibraryChanged += OnSteamLibraryChanged;
+            SteamCallbackService.AchievementUnlocked += OnAchievementUnlocked;
+        }
+
 
         // ─── LOAD ─────────────────────────────────────────────────────────
         public async Task LoadAsync(GameModel game)
@@ -158,16 +166,35 @@ namespace Rift_App.ViewModels
         private void OpenStore()
         {
             if (Game == null) return;
+            // Opens Steam client directly on the game's store page
+            OpenUri($"steam://store/{Game.AppId}");
+        }
+        // Steam change detection — refresh LastPlayed when user plays something
+        private void OnSteamLibraryChanged()
+        {
+            if (Game == null || Detail == null) return;
 
-            // Pokús sa otvoriť priamo v Steam app — ak nie, fallback na browser
-            try
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                OpenUri($"steam://store/{Game.AppId}");
-            }
-            catch
+                try
+                {
+                    Detail.LastPlayed = LastPlayedCacheService.Get(Game.AppId);
+                    OnPropertyChanged(nameof(Detail));
+                    Debug.WriteLine($"[LibraryGame] LastPlayed refreshed for {Game.AppId}");
+                }
+                catch { }
+            });
+        }
+        // Achievement unlocked while game is running (requires RunCallbacks timer)
+        private void OnAchievementUnlocked(int appId, string apiName)
+        {
+            if (Game?.AppId != appId) return;
+
+            Application.Current.Dispatcher.InvokeAsync(async () =>
             {
-                OpenUri($"https://store.steampowered.com/app/{Game.AppId}");
-            }
+                Debug.WriteLine($"[LibraryGame] Achievement unlocked: {apiName} — refreshing.");
+                await LoadAsync(Game);
+            });
         }
 
         // ─── BACKGROUND REFRESH ───────────────────────────────────────────
@@ -240,6 +267,13 @@ namespace Rift_App.ViewModels
             OnPropertyChanged(nameof(HasLockedRemaining));
             OnPropertyChanged(nameof(HasAchievements));
             OnPropertyChanged(nameof(HasNoAchievements));
+
+            MostRecentAchievement = unlocked
+    .Where(a => a.UnlockTime.HasValue)
+    .OrderByDescending(a => a.UnlockTime)
+    .FirstOrDefault();
+
+            OnPropertyChanged(nameof(MostRecentAchievement));
 
             // Recent activity — newest first, max 3 groups
             var groups = unlocked

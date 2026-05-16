@@ -20,10 +20,11 @@
     mc:Ignorable="d">
 
     <WindowChrome.WindowChrome>
-        <shell:WindowChrome CaptionHeight="438"
-                            CornerRadius="18"
-                            GlassFrameThickness="0"
-                            ResizeBorderThickness="7" />
+        <shell:WindowChrome
+            CaptionHeight="438"
+            CornerRadius="18"
+            GlassFrameThickness="0"
+            ResizeBorderThickness="7" />
     </WindowChrome.WindowChrome>
 
     <Window.Resources>

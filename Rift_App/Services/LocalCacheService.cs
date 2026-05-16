@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Services
 {
-    /// <summary>
-    /// Lokálny JSON cache so TTL expiry — ukladá do AppData\RiftApp\cache\
-    /// Local JSON cache with TTL expiry — saves to AppData\RiftApp\cache\
-    /// </summary>
+    // Local JSON cache with TTL expiry — saves to AppData\RiftApp\cache\
     public static class LocalCacheService
     {
         private static readonly string CacheFolder = Path.Combine(

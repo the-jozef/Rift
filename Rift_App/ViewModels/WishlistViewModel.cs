@@ -24,6 +24,7 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private bool _isEmpty = false;
         [ObservableProperty] private string _loadingMessage = "Loading wishlist...";
+        private CancellationTokenSource? _syncCts;
 
         public string WishlistTitle =>
             string.IsNullOrEmpty(SessionManager.Username)
@@ -101,8 +102,11 @@ namespace Rift_App.ViewModels
                 IsEmpty = Games.Count == 0;
                 Debug.WriteLine($"[Wishlist] Final count: {Games.Count}");
 
+                _syncCts?.Cancel();
+                _syncCts = new CancellationTokenSource();
+
                 // 5. Sync v pozadí
-                _ = SyncInBackgroundAsync(steamId, refs);
+                _ = SyncInBackgroundAsync(steamId, refs, _syncCts.Token);
             }
             catch (Exception ex)
             {
@@ -180,14 +184,14 @@ namespace Rift_App.ViewModels
 
         // ─── BACKGROUND SYNC ──────────────────────────────────────────────
 
-        private async Task SyncInBackgroundAsync(string steamId, List<WishlistItemRef> currentRefs)
+        private async Task SyncInBackgroundAsync(string steamId, List<WishlistItemRef> currentRefs, CancellationToken token)
         {
-            // Sync každých 5 minút pokiaľ je okno otvorené
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 try
                 {
-                    await Task.Delay(TimeSpan.FromMinutes(5));
+                    await Task.Delay(TimeSpan.FromMinutes(5), token);
+                    if (token.IsCancellationRequested) break;
 
                     Debug.WriteLine("[Wishlist] Sync started");
 
