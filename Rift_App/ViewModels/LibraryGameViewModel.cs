@@ -124,6 +124,19 @@ namespace Rift_App.ViewModels
         }
 
         // ─── COMMANDS ─────────────────────────────────────────────────────
+        [RelayCommand]
+        private void OpenAchievements()
+        {
+            if (Game == null) return;
+            OpenSteamUri($"steam://url/GameStatsPage/{Game.AppId}");
+        }
+
+        [RelayCommand]
+        private void OpenStore()
+        {
+            if (Game == null) return;
+            OpenSteamUri($"steam://store/{Game.AppId}");
+        }
 
         [RelayCommand]
         private void LaunchOrInstall()
@@ -132,42 +145,23 @@ namespace Rift_App.ViewModels
 
             if (NeedsUpdate)
             {
-                var res = MessageBox.Show(
-                    $"Do you want to update {Game.Name}?",
-                    "Update Available",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
+                var res = MessageBox.Show($"Do you want to update {Game.Name}?",
+                    "Update Available", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
-                    OpenUri($"steam://update/{Game.AppId}");
-
+                    OpenSteamUri($"steam://update/{Game.AppId}");
                 return;
             }
 
             if (!IsInstalled)
             {
-                var res = MessageBox.Show(
-                    $"Do you want to install {Game.Name}?",
-                    "Install Game",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
+                var res = MessageBox.Show($"Do you want to install {Game.Name}?",
+                    "Install Game", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
-                    OpenUri($"steam://install/{Game.AppId}");
-
+                    OpenSteamUri($"steam://install/{Game.AppId}");
                 return;
             }
 
-            // Play
-            OpenUri($"steam://run/{Game.AppId}");
-        }
-
-        [RelayCommand]
-        private void OpenStore()
-        {
-            if (Game == null) return;
-            // Opens Steam client directly on the game's store page
-            OpenUri($"steam://store/{Game.AppId}");
+            OpenSteamUri($"steam://run/{Game.AppId}");
         }
         // Steam change detection — refresh LastPlayed when user plays something
         private void OnSteamLibraryChanged()
@@ -307,6 +301,48 @@ namespace Rift_App.ViewModels
         }
 
         // ─── HELPERS ──────────────────────────────────────────────────────
+        private static void OpenSteamUri(string uri)
+        {
+            try
+            {
+                // SteamExe kľúč nemusí existovať — konštruuj cestu z InstallPath
+                var key =
+                    Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
+                    ?? Microsoft.Win32.Registry.LocalMachine
+                        .OpenSubKey(@"SOFTWARE\Valve\Steam");
+
+                var steamExe =
+                    key?.GetValue("SteamExe") as string
+                    ?? Path.Combine(key?.GetValue("InstallPath") as string ?? "", "steam.exe");
+
+                Debug.WriteLine($"[Steam] exe path: {steamExe}, exists: {File.Exists(steamExe)}");
+
+                if (!string.IsNullOrEmpty(steamExe) && File.Exists(steamExe))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = steamExe,
+                        Arguments = uri,
+                        UseShellExecute = false
+                    });
+                    Debug.WriteLine($"[Steam] Opened via exe: {uri}");
+                    return;
+                }
+
+                // Fallback
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = uri,
+                    UseShellExecute = true
+                });
+                Debug.WriteLine($"[Steam] Opened via shell: {uri}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Steam] OpenUri failed: {uri} — {ex.Message}");
+            }
+        }
         private static BitmapImage? LoadBitmap(string? path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path)) return null;
@@ -321,19 +357,6 @@ namespace Rift_App.ViewModels
                 return bmp;
             }
             catch { return null; }
-        }
-
-        private static void OpenUri(string uri)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = uri,
-                    UseShellExecute = true
-                });
-            }
-            catch { }
         }
     }
 }

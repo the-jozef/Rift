@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rift_App.Models;
 using Rift_App.Services;
@@ -31,6 +32,34 @@ namespace Rift_App.ViewModels
         {
             // Subscribe to Steam changes (playtime, lastplayed)
             SteamCallbackService.LibraryChanged += OnSteamLibraryChanged;
+        }
+
+
+        // ─── BLACKLIST ──────────────────────────────────────────────────
+        private static readonly string BlacklistPath = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+    "RiftApp", "cache", "appid_blacklist.json");
+
+        private static HashSet<int> LoadBlacklist()
+        {
+            try
+            {
+                if (!File.Exists(BlacklistPath)) return new();
+                var json = File.ReadAllText(BlacklistPath);
+                return JsonConvert.DeserializeObject<HashSet<int>>(json) ?? new();
+            }
+            catch { return new(); }
+        }
+
+        private static void SaveBlacklist(HashSet<int> blacklist)
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(BlacklistPath)!;
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                File.WriteAllText(BlacklistPath, JsonConvert.SerializeObject(blacklist));
+            }
+            catch { }
         }
 
         // ─── SELECT GAME ──────────────────────────────────────────────────
@@ -132,6 +161,20 @@ namespace Rift_App.ViewModels
         private async Task FillNamesProgressiveAsync(List<GameModel> games)
         {
             var steamId = SessionManager.SteamId64;
+            var blacklist = LoadBlacklist();
+            bool blacklistChanged = false;
+
+            // Skip already blacklisted IDs
+            games = games.Where(g => !blacklist.Contains(g.AppId)).ToList();
+
+            Debug.WriteLine($"[Fill] IDs to resolve: {string.Join(", ", games.Select(g => g.AppId))}");
+
+            if (!games.Any())
+            {
+                Debug.WriteLine("[Fill] All unknown IDs are blacklisted — skipping.");
+                return;
+            }
+
             const int batchSize = 3;
 
             for (int i = 0; i < games.Count; i += batchSize)
@@ -147,6 +190,8 @@ namespace Rift_App.ViewModels
                             .GetGameDetailsAsync(game.AppId)
                             .WaitAsync(cts.Token);
 
+                        Debug.WriteLine($"[Fill] {game.AppId} → {(details == null ? "NULL" : details.Name)}");
+
                         if (details != null && !string.IsNullOrEmpty(details.Name))
                         {
                             game.Name = details.Name;
@@ -155,7 +200,13 @@ namespace Rift_App.ViewModels
                             return game;
                         }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[Fill] {game.AppId} error: {ex.Message}");
+                    }
+
+                    // NULL alebo error — pridaj do blacklistu
+                    lock (blacklist) { blacklist.Add(game.AppId); blacklistChanged = true; }
                     return null;
                 });
 
@@ -176,13 +227,16 @@ namespace Rift_App.ViewModels
                         }
                     });
 
-                    // Save resolved games to cache
                     foreach (var game in resolved)
                         await LibraryCacheService.SaveGameAsync(steamId, game);
                 }
 
                 await Task.Delay(600);
             }
+
+            // Ulož blacklist iba ak sa zmenil
+            if (blacklistChanged)
+                SaveBlacklist(blacklist);
 
             Debug.WriteLine("[Library] Progressive name fill complete.");
         }

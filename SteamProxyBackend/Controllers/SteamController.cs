@@ -476,16 +476,36 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                var url = $"https://steamcommunity.com/profiles/{steamId}/games/?tab=all&xml=1";
-                var response = await _http.GetStringAsync(url);
+                // Steam blokuje requesty bez User-Agent — musíme simulovať browser
+                var request = new HttpRequestMessage(HttpMethod.Get,
+                    $"https://steamcommunity.com/profiles/{steamId}/games/?tab=all&xml=1");
 
-                if (response.Contains("profile is private") || response.Contains("privacyMessage"))
+                request.Headers.Add("User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+                    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+                request.Headers.Add("Accept", "text/xml,application/xml,*/*");
+
+                var response = await _http.SendAsync(request);
+                var content = await response.Content.ReadAsStringAsync();
+
+                Debug.WriteLine($"[FullLibrary] Status: {response.StatusCode}, " +
+                                $"Content starts with: {content.Substring(0, Math.Min(100, content.Length))}");
+
+                // Stále dostávame HTML — profil nie je public alebo XML nefunguje
+                if (!content.TrimStart().StartsWith("<?xml") && !content.TrimStart().StartsWith("<gamesList"))
+                {
+                    Debug.WriteLine($"[FullLibrary] Got HTML instead of XML for {steamId}");
+                    return Ok(new { Games = new List<object>(), Error = "Not XML" });
+                }
+
+                if (content.Contains("profile is private") || content.Contains("privacyMessage"))
                     return Ok(new { Games = new List<object>(), Error = "Profile is private" });
 
                 var doc = new System.Xml.XmlDocument();
-                doc.LoadXml(response);
+                doc.LoadXml(content);
                 var games = doc.SelectNodes("//game");
-                if (games == null || games.Count == 0) return Ok(new { Games = new List<object>() });
+                if (games == null || games.Count == 0)
+                    return Ok(new { Games = new List<object>() });
 
                 var result = new List<object>();
                 foreach (System.Xml.XmlNode game in games)
@@ -495,21 +515,31 @@ namespace SteamProxyBackend.Controllers
                     if (!int.TryParse(appIdStr, out int appId) || appId <= 0) continue;
                     if (string.IsNullOrEmpty(name)) continue;
 
-                    int.TryParse(game["hoursOnRecord"]?.InnerText?.Replace(",", "").Replace(".", "") ?? "0", out int hoursRaw);
+                    // hoursOnRecord môže byť desatinné číslo napr. "1,234.5"
+                    var hoursRaw = game["hoursOnRecord"]?.InnerText ?? "0";
+                    double.TryParse(hoursRaw.Replace(",", ""),
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out double hours);
 
                     result.Add(new
                     {
                         AppId = appId,
                         Name = name,
-                        PlaytimeMinutes = hoursRaw,
+                        PlaytimeMinutes = (int)(hours * 60),
                         IconUrl = $"https://media.steampowered.com/steamcommunity/public/images/apps/{appId}/capsule_sm_120.jpg",
                         HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg"
                     });
                 }
-                Debug.WriteLine($"[Library] Full library: {result.Count} games");
+
+                Debug.WriteLine($"[FullLibrary] Parsed {result.Count} games for {steamId}");
                 return Ok(new { Games = result });
             }
-            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[FullLibrary] Error: {ex.Message}");
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         // ─── LIBRARY GAME INFO ────────────────────────────────────────────────
