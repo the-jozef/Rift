@@ -190,7 +190,7 @@ namespace Rift_App.ViewModels
             {
                 try
                 {
-                    await Task.Delay(TimeSpan.FromMinutes(5), token);
+                    await Task.Delay(TimeSpan.FromMinutes(15), token);
                     if (token.IsCancellationRequested) break;
 
                     Debug.WriteLine("[Wishlist] Sync started");
@@ -290,15 +290,17 @@ namespace Rift_App.ViewModels
 
         private void InsertSorted(WishlistGameModel game)
         {
-            int GetGroup(WishlistGameModel g) => (g.IsDlc, g.IsReleased, g.IsPreOrder, g.DiscountPercent > 0) switch
+            int GetGroup(WishlistGameModel g)
             {
-                (false, true, _, true) => 0,  // vydaná hra v akcii
-                (false, false, true, _) => 1,  // pre-order hra
-                (false, true, _, false) => 2,  // vydaná hra
-                (true, true, _, _) => 3,  // vydané DLC
-                (false, false, false, _) => 4,  // nevydaná hra
-                (true, false, _, _) => 5,  // nevydané DLC
-            };
+                if (!g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 0; // released game on sale
+                if (g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 1; // released DLC on sale
+                if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2; // pre-order game
+                if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 3; // released game
+                if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4; // released DLC
+                if (!g.IsDlc && !g.IsReleased && !g.IsPreOrder) return 5; // unreleased game
+                if (g.IsDlc && !g.IsReleased) return 6; // unreleased DLC
+                return 7;
+            }
 
             decimal GetPrice(WishlistGameModel g)
             {
@@ -319,19 +321,8 @@ namespace Rift_App.ViewModels
                 int existingGroup = GetGroup(Games[i]);
                 decimal existingPrice = GetPrice(Games[i]);
 
-                // Iná skupina — nižšia skupina
-                if (existingGroup > gameGroup)
-                {
-                    index = i;
-                    break;
-                }
-
-                // Rovnaká skupina — od najdrahšej po najlacnejšiu
-                if (existingGroup == gameGroup && existingPrice < gamePrice)
-                {
-                    index = i;
-                    break;
-                }
+                if (existingGroup > gameGroup) { index = i; break; }
+                if (existingGroup == gameGroup && existingPrice < gamePrice) { index = i; break; }
             }
 
             Games.Insert(index, game);

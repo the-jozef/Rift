@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using Rift_App.Models;
 using Rift_App.Services;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -195,6 +196,123 @@ namespace Rift_App.Services
                 Debug.WriteLine($"[Registry] Error: {ex.Message}");
             }
             return result.Values.ToList();
+        }
+        private static readonly Dictionary<int, string> KnownFreeGames = new()
+{
+    { 789210,  "Bleach Brave Souls" },
+    { 1276390, "Bloons TD Battles 2" },
+    { 1938090, "Call of Duty" },
+    { 2694490, "Darkest Days" },
+    { 1240440, "Halo Infinite" },
+    { 2139460, "Once a Human" },
+    { 1222670, "The Sims 4" },
+    { 1069680, "World of Sea Battles" },
+    { 730,     "Counter-Strike 2" },
+    { 570,     "Dota 2" },
+    { 578080,  "PUBG: Battlegrounds" },
+    { 1172470, "Apex Legends" },
+    { 252490,  "Rust" },
+    { 346110,  "ARK: Survival Evolved" },
+    { 550,     "Left 4 Dead 2" },
+    { 440,     "Team Fortress 2" },
+    { 230410,  "Warframe" },
+    { 304930,  "Unturned" },
+    { 359550,  "Rainbow Six Siege" },
+    { 1517290, "Battlefield 2042" },
+    { 1269260, "Battlefield V" },
+    { 1238840, "Battlefield 1" },
+    { 1238810, "Battlefield 4" },
+    { 394360,  "Hunt: Showdown" },
+    { 107410,  "Arma 3" },
+    { 255710,  "Cities: Skylines" },
+    { 322170,  "Geometry Dash" },
+    { 381210,  "Dead by Daylight" },
+    { 1623730, "Palworld" },
+    { 1145360, "Hades" },
+    { 2357570, "Lethal Company" },
+    { 2050650, "Hogwarts Legacy" },
+    { 1966720, "The Planet Crafter" },
+    { 2483980, "Enshrouded" },
+    { 1326470, "Sons of the Forest" },
+    { 526870,  "Satisfactory" },
+    { 644830,  "For the King" },
+    { 49520,   "Borderlands 2" },
+    { 391540,  "Undertale" },
+    { 268910,  "Cuphead" },
+    { 1446780, "Monster Hunter Rise" },
+    { 218620,  "Payday 2" },
+    { 239140,  "Dying Light" },
+    { 1426210, "It Takes Two" },
+    { 582010,  "Monster Hunter: World" },
+    { 646570,  "Slay the Spire" },
+    { 1593500, "God of War" },
+    { 814380,  "Sekiro: Shadows Die Twice" },
+    { 435150,  "Divinity: Original Sin 2" },
+    { 242760,  "The Forest" },
+    { 306130,  "The Elder Scrolls Online" },
+    { 489830,  "Skyrim Special Edition" },
+    { 377160,  "Fallout 4" },
+    { 367520,  "Hollow Knight" },
+    { 1250410, "Disco Elysium" },
+    { 2183900, "Starfield" },
+    { 271590,  "Grand Theft Auto V" },
+    { 1091500, "Cyberpunk 2077" },
+    { 1245620, "Elden Ring" },
+    { 1174180, "Red Dead Redemption 2" },
+    { 2308810, "Armored Core VI" },
+    { 2915570, "Gray Zone Warfare" },
+    { 2215430, "Dead Island 2" },
+    { 1612100, "Ghostwire: Tokyo" },
+    { 1151340, "Crusader Kings III" },
+    { 1063730, "Remnant: From the Ashes" },
+    { 1794680, "Marvel's Spider-Man Remastered" },
+    { 1551360, "Forza Horizon 5" },
+    { 1281930, "Forza Horizon 4" },
+    { 2507950, "Delta Force" },
+{ 2807960, "Battlefield 6" },
+{ 1201240, "Bleach Brave Souls" },
+{ 1548520, "Darkest Days" },
+{ 412220,  "DDraceNetwork" },
+{ 1599340, "Lost Ark" },
+{ 3312020, "Lost in Anomaly" },
+{ 1977530, "One Armed Cook" },
+{ 2551020, "One Armed Robbery" },
+{ 1536610, "OpenTTD" },
+{ 1502660, "Untrusted" },
+        };
+
+        public static List<GameModel> GetSubscribedFreeGames()
+        {
+            var result = new List<GameModel>();
+            try
+            {
+                foreach (var kvp in KnownFreeGames)
+                {
+                    try
+                    {
+                        if (!SteamApps.BIsSubscribedApp(new AppId_t((uint)kvp.Key))) continue;
+
+                        result.Add(new GameModel
+                        {
+                            AppId = kvp.Key,
+                            Name = kvp.Value,
+                            HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{kvp.Key}/header.jpg",                 
+                            IconUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{kvp.Key}/capsule_sm_120.jpg"
+                        });
+
+                        Debug.WriteLine($"[SteamInstall] Subscribed: {kvp.Key} ({kvp.Value})");
+                    }
+                    catch { }
+                }
+
+                Debug.WriteLine($"[SteamInstall] GetSubscribedFreeGames: {result.Count} owned");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SteamInstall] GetSubscribedFreeGames error: {ex.Message}");
+            }
+
+            return result;
         }
 
         // ─── PRIVATE ──────────────────────────────────────────────────────

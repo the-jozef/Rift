@@ -1012,10 +1012,13 @@ namespace SteamProxyBackend.Controllers
             }
             catch {return ("No Reviews", ""); }
         }
-       
+
         private async Task<List<object>> FetchBatchAppDetailsAsync(List<int> appIds, Dictionary<int, long> dateAddedLookup)
         {
             var result = new List<object>();
+
+            // Track which tags are already used across games in this batch
+            var usedTags = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var appId in appIds)
             {
@@ -1029,33 +1032,48 @@ namespace SteamProxyBackend.Controllers
                     if (entry?["success"]?.Value<bool>() != true) continue;
 
                     var data = entry["data"];
-                    Console.WriteLine($"[R] {appId} score={data["review_score"]} desc={data["review_score_desc"]} type={data["type"]}");
                     if (data == null) continue;
 
                     string name = data["name"]?.Value<string>() ?? "";
                     if (HasAdultName(name) || HasExplicitContent(data)) continue;
 
+                    // ─── TAGS — unique per game, prefer less-used across batch ───
                     var popularCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        "Single-player", "Multi-player", "Co-op", "Online Co-op",
-                        "Tactical", "PvP", "Online PvP", "Co-op Campaign"
-                    };
+            {
+                "Single-player", "Multi-player", "Co-op", "Online Co-op",
+                "Tactical", "PvP", "Online PvP", "Co-op Campaign",
+                "Cross-Platform Multiplayer", "Full controller support"
+            };
 
-                    var categoryTags = (data["categories"] as JArray)?
+                    var allCategoryTags = (data["categories"] as JArray)?
                         .Select(c => c["description"]?.Value<string>() ?? "")
                         .Where(t => !string.IsNullOrEmpty(t) && popularCategories.Contains(t))
-                        .Take(2).ToList() ?? new List<string>();
+                        .ToList() ?? new List<string>();
 
-                    var genreTags = (data["genres"] as JArray)?
+                    var allGenreTags = (data["genres"] as JArray)?
                         .Select(g => g["description"]?.Value<string>() ?? "")
                         .Where(t => !string.IsNullOrEmpty(t))
-                        .Take(3).ToList() ?? new List<string>();
+                        .ToList() ?? new List<string>();
 
-                    var tags = categoryTags.Concat(genreTags).Distinct().Take(4).ToList();
+                    // Build tag list: prefer tags used less across the batch
+                    var candidateTags = allGenreTags
+                        .Concat(allCategoryTags)
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .OrderBy(t => usedTags.TryGetValue(t, out var count) ? count : 0)
+                        .ToList();
+
+                    // Pick up to 4 unique tags for this game
+                    var tags = candidateTags.Take(4).ToList();
                     if (!tags.Any()) tags = new List<string> { "Game" };
 
+                    // Update usage counts
+                    foreach (var tag in tags)
+                        usedTags[tag] = (usedTags.TryGetValue(tag, out var c) ? c : 0) + 1;
+
+                    // ─── REVIEWS — multiple fallback paths ────────────────────────
                     string reviewDesc = "", reviewCss = "";
 
+                    // Fallback 1: review_score field
                     int reviewScore = data["review_score"]?.Value<int>() ?? -1;
                     if (reviewScore > 0)
                         (reviewDesc, reviewCss) = reviewScore switch
@@ -1070,27 +1088,31 @@ namespace SteamProxyBackend.Controllers
                             _ => ("", "")
                         };
 
+                    // Fallback 2: review_score_desc field
                     if (string.IsNullOrEmpty(reviewDesc))
                     {
                         var scoreDesc = data["review_score_desc"]?.Value<string>() ?? "";
                         if (!string.IsNullOrEmpty(scoreDesc) && scoreDesc != "No user reviews")
                             (reviewDesc, reviewCss) = scoreDesc switch
                             {
+                                "Overwhelmingly Positive" => ("Very Positive", "veryPositive"),
                                 "Very Positive" => ("Very Positive", "veryPositive"),
                                 "Positive" => ("Positive", "positive"),
                                 "Mostly Positive" => ("Mostly Positive", "mostlyPositive"),
                                 "Mixed" => ("Mixed", "mixed"),
                                 "Mostly Negative" => ("Mostly Negative", "mostlyNegative"),
-                                "Very Negative" => ("Very Negative", "veryNegative"),
+                                "Overwhelmingly Negative" => ("Negative", "negative"),
+                                "Very Negative" => ("Negative", "negative"),
+                                "Negative" => ("Negative", "negative"),
                                 _ => ("", "")
                             };
                     }
 
+                    // Fallback 3: Metacritic score
                     if (string.IsNullOrEmpty(reviewDesc))
                     {
                         int meta = data["metacritic"]?["score"]?.Value<int>() ?? 0;
                         if (meta > 0)
-                        {
                             (reviewDesc, reviewCss) = meta switch
                             {
                                 >= 90 => ("Very Positive", "veryPositive"),
@@ -1098,19 +1120,20 @@ namespace SteamProxyBackend.Controllers
                                 >= 60 => ("Mostly Positive", "mostlyPositive"),
                                 >= 40 => ("Mixed", "mixed"),
                                 >= 20 => ("Mostly Negative", "mostlyNegative"),
-                                > 0 => ("Negative", "negative"),
-                                _ => ("No Reviews", "")
+                                _ => ("Negative", "negative")
                             };
-                        }
                     }
 
+                    // Fallback 4: fetch review summary from store API
+                    if (string.IsNullOrEmpty(reviewDesc))
+                        (reviewDesc, reviewCss) = await FetchReviewsAsync(appId);
+
+                    // Final fallback
                     if (string.IsNullOrEmpty(reviewDesc))
                         reviewDesc = "No Reviews";
 
+                    // ─── RELEASE / PREORDER ───────────────────────────────────────
                     bool isDlc = data["type"]?.Value<string>()?.ToLower() == "dlc";
-                    if (string.IsNullOrEmpty(reviewDesc) || isDlc)
-                        (reviewDesc, reviewCss) = await FetchReviewsAsync(appId);
-
                     bool isReleased = !(data["release_date"]?["coming_soon"]?.Value<bool>() ?? false);
                     bool isPreOrder = !isReleased && data["price_overview"] != null;
                     string releaseStr = data["release_date"]?["date"]?.Value<string>() ?? "";
@@ -1128,10 +1151,7 @@ namespace SteamProxyBackend.Controllers
                     else
                         releaseDateDisplay = releaseStr;
 
-                    // Platforms
-                    bool win = data["platforms"]?["windows"]?.Value<bool>() ?? true;
-                    bool mac = data["platforms"]?["mac"]?.Value<bool>() ?? false;
-
+                    // ─── PRICING ──────────────────────────────────────────────────
                     string FormatPrice(string? raw)
                     {
                         if (string.IsNullOrEmpty(raw)) return "";
@@ -1150,7 +1170,6 @@ namespace SteamProxyBackend.Controllers
                         var po = data["price_overview"];
                         if (po != null)
                         {
-
                             price = FormatPrice(po["final_formatted"]?.Value<string>());
                             discount = po["discount_percent"]?.Value<int>() ?? 0;
                             if (discount > 0)
@@ -1184,7 +1203,7 @@ namespace SteamProxyBackend.Controllers
                         IsFree = isFree
                     });
 
-                    Debug.WriteLine($"[Batch] Fetched: {name} ({appId})");
+                    Debug.WriteLine($"[Batch] Fetched: {name} ({appId}) | Reviews: {reviewDesc} | Tags: {string.Join(", ", tags)}");
                     await Task.Delay(400);
                 }
                 catch (Exception ex) { Debug.WriteLine($"[Batch] Error {appId}: {ex.Message}"); }

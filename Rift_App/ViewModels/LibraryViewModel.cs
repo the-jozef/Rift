@@ -102,12 +102,22 @@ namespace Rift_App.ViewModels
 
                 var installedGames = SteamInstallService.GetAllGames();
                 var localConfigGames = SteamInstallService.GetAllAppsFromLocalConfig();
-                var registryGames = SteamInstallService.GetAllAppsFromRegistry();
 
-                // Merge — API wins (has real names)
+                // Zdroj 5 — Windows Registry
+                var registryGames = SteamInstallService.GetAllAppsFromRegistry();
+                Debug.WriteLine($"[Library] Registry: {registryGames.Count}");
+
+                // Zdroj 6 — Subscribed F2P cez Steamworks (nikdy nehrané hry)
+                var subscribedGames = SteamworksService.IsInitialized
+                    ? SteamInstallService.GetSubscribedFreeGames()
+                    : new List<GameModel>();
+                Debug.WriteLine($"[Library] Subscribed F2P: {subscribedGames.Count}");
+
+                // Spoj všetko — API vyhráva (má reálne mená)
                 var allById = new Dictionary<int, GameModel>();
                 foreach (var g in registryGames) allById[g.AppId] = g;
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
+                foreach (var g in subscribedGames) allById[g.AppId] = g;  // NOVÝ RIADOK
                 foreach (var g in installedGames) allById[g.AppId] = g;
                 foreach (var g in apiGames) allById[g.AppId] = g;
 
@@ -125,6 +135,8 @@ namespace Rift_App.ViewModels
                 var knownGames = allGames
                     .Where(g => !string.IsNullOrEmpty(g.Name) && g.Name != g.AppId.ToString())
                     .ToList();
+
+                Debug.WriteLine($"[Library] Known: {knownGames.Count}, sample icons: {string.Join(", ", knownGames.Take(3).Select(g => g.AppId + "=" + g.IconUrl))}");
 
                 var unknownGames = allGames
                     .Where(g => string.IsNullOrEmpty(g.Name) || g.Name == g.AppId.ToString())

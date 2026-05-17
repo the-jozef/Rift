@@ -84,10 +84,11 @@ namespace Rift_App.Services
 
         private static string GetDiskPath(string url)
         {
-            // Turn URL into a safe filename
-            var hash = Math.Abs(url.GetHashCode()).ToString();
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var hash = sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(url));
+            var hashStr = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant()[..16];
             var ext = url.EndsWith(".png") ? ".png" : ".jpg";
-            return Path.Combine(DiskCacheFolder, hash + ext);
+            return Path.Combine(DiskCacheFolder, hashStr + ext);
         }
 
         private static BitmapImage? LoadFromDisk(string path)
