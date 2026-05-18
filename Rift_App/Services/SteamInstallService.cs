@@ -281,12 +281,12 @@ namespace Rift_App.Services
 { 1502660, "Untrusted" },
         };
 
-        public static List<GameModel> GetSubscribedFreeGames()
+        public static List<GameModel> GetSubscribedFreeGames(Dictionary<int, string> freeGames)
         {
             var result = new List<GameModel>();
             try
             {
-                foreach (var kvp in KnownFreeGames)
+                foreach (var kvp in freeGames)
                 {
                     try
                     {
@@ -296,7 +296,7 @@ namespace Rift_App.Services
                         {
                             AppId = kvp.Key,
                             Name = kvp.Value,
-                            HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{kvp.Key}/header.jpg",                 
+                            HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{kvp.Key}/header.jpg",
                             IconUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{kvp.Key}/capsule_sm_120.jpg"
                         });
 

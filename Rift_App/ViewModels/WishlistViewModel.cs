@@ -260,12 +260,38 @@ namespace Rift_App.ViewModels
             IsEmpty = Games.Count == 0;
             WishlistGameCacheService.Delete(game.AppId);
             await ApiService.RemoveFromWishlistAsync(SessionManager.SteamId64, game.AppId);
+
+            // Open Steam wishlist page for this game
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = $"steam://store/{game.AppId}",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Wishlist] RemoveGame open steam error: {ex.Message}");
+            }
         }
 
         [RelayCommand]
         private void SelectGame(WishlistGameModel game)
         {
-            if (game != null) OnGameSelected?.Invoke(game.ToGameModel());
+            if (game == null) return;
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = $"steam://store/{game.AppId}",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Wishlist] SelectGame error: {ex.Message}");
+            }
         }
 
         [RelayCommand]
@@ -297,15 +323,15 @@ namespace Rift_App.ViewModels
                 if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2; // pre-order game
                 if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 3; // released game
                 if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4; // released DLC
-                if (!g.IsDlc && !g.IsReleased && !g.IsPreOrder) return 5; // unreleased game
-                if (g.IsDlc && !g.IsReleased) return 6; // unreleased DLC
-                return 7;
+                return 5;                                                           // unreleased
             }
 
             decimal GetPrice(WishlistGameModel g)
             {
-                if (g.Price is "Free" or "N/A") return 0;
-                var cleaned = g.Price.Replace("$", "").Replace("€", "").Trim();
+                if (g.IsFree || g.Price is "Free" or "N/A") return 0;
+                var cleaned = g.Price
+                    .Replace("$", "").Replace("€", "")
+                    .Replace(",", ".").Trim();
                 return decimal.TryParse(cleaned,
                     System.Globalization.NumberStyles.Any,
                     System.Globalization.CultureInfo.InvariantCulture,

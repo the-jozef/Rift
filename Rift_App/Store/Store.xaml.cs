@@ -27,20 +27,14 @@ namespace Rift_App.Store
             InitializeComponent();
             DataContext = _viewModel;
 
-            // Napoj event — klik na hru načíta plné detaily a prepne na GamePage
-            // Wire event — game click loads full details and switches to GamePage
-            _viewModel.OnGameSelected += OnGameSelected;
+            _viewModel.OnGameSelected += async game =>
+            {
+                var full = await ApiService.GetGameDetailsAsync(game.AppId);
+                if (Application.Current.MainWindow is MainWindow main)
+                    main.ViewModel.ShowGamePageCommand.Execute(full ?? game);
+            };
 
-            Loaded += async (s, e) => await _viewModel.LoadStoreCommand.ExecuteAsync(null);
-        }
-
-        private async void OnGameSelected(GameModel game)
-        {
-            var fullGame = await ApiService.GetGameDetailsAsync(game.AppId);
-            var gameToShow = fullGame ?? game;
-
-            if (Application.Current.MainWindow is MainWindow main)
-                main.ViewModel.ShowGamePageCommand.Execute(gameToShow);
+            Loaded += async (_, _) => await _viewModel.LoadStoreCommand.ExecuteAsync(null);
         }
     }
 }

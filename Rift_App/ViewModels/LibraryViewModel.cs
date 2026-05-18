@@ -107,10 +107,13 @@ namespace Rift_App.ViewModels
                 var registryGames = SteamInstallService.GetAllAppsFromRegistry();
                 Debug.WriteLine($"[Library] Registry: {registryGames.Count}");
 
-                // Zdroj 6 — Subscribed F2P cez Steamworks (nikdy nehrané hry)
-                var subscribedGames = SteamworksService.IsInitialized
-                    ? SteamInstallService.GetSubscribedFreeGames()
-                    : new List<GameModel>();
+                // Zdroj 6 — Subscribed F2P cez Steamworks + SteamSpy
+                List<GameModel> subscribedGames = new();
+                if (SteamworksService.IsInitialized)
+                {
+                    var freeGames = await SteamSpyService.GetFreeGamesAsync();
+                    subscribedGames = SteamInstallService.GetSubscribedFreeGames(freeGames);
+                }
                 Debug.WriteLine($"[Library] Subscribed F2P: {subscribedGames.Count}");
 
                 // Spoj všetko — API vyhráva (má reálne mená)

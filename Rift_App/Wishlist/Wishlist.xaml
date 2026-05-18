@@ -14,14 +14,11 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Border CornerRadius="0,0,6.1,6.1">
+        <Border Background="#1b2838" CornerRadius="0,0,6.1,6.1">
 
             <Grid>
-                <ScrollViewer
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Background="#1b2838"
-                    VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Style="{StaticResource SlimScrollViewerStyle3}">
+
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="165" />
@@ -130,14 +127,23 @@
 
                                                         <Grid Grid.Column="0">
 
-                                                            <Image
-                                                                Width="295"
+                                                            <Button
                                                                 Height="135"
-                                                                Source="{Binding HeaderImage.Bitmap}"
-                                                                Stretch="UniformToFill" />
+                                                                Margin="0"
+                                                                Padding="0"
+                                                                Background="Transparent"
+                                                                BorderBrush="Transparent"
+                                                                Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                CommandParameter="{Binding}">
+
+                                                                <Image
+                                                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                                                    Source="{Binding HeaderImage.Bitmap}"
+                                                                    Stretch="UniformToFill" />
+                                                            </Button>
                                                         </Grid>
 
-                                                        <Grid Grid.Column="1" Margin="10,5,0,0">
+                                                        <Grid Grid.Column="1" Margin="10,4,0,0">
 
                                                             <Grid.RowDefinitions>
                                                                 <RowDefinition Height="Auto" />
@@ -147,13 +153,24 @@
                                                             </Grid.RowDefinitions>
 
                                                             <Grid Row="0">
-                                                                <TextBlock
-                                                                    Width="600"
-                                                                    FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                                    FontSize="25"
-                                                                    Foreground="White"
-                                                                    Text="{Binding Name}"
-                                                                    TextWrapping="Wrap" />
+
+                                                                <Button
+                                                                    Margin="0"
+                                                                    Padding="0"
+                                                                    Background="Transparent"
+                                                                    BorderBrush="Transparent"
+                                                                    Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                    CommandParameter="{Binding}">
+
+                                                                    <TextBlock
+                                                                        Width="600"
+                                                                        FontFamily="Arial"
+                                                                        FontSize="25"
+                                                                        FontWeight="Medium"
+                                                                        Foreground="White"
+                                                                        Text="{Binding Name}"
+                                                                        TextWrapping="Wrap" />
+                                                                </Button>
                                                             </Grid>
 
                                                             <Grid Grid.Row="1" Margin="2,5,0,0">

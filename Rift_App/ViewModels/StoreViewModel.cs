@@ -20,28 +20,28 @@ namespace Rift_App.ViewModels
 {
     public partial class StoreViewModel : ObservableObject
     {
-        // ─── COLLECTIONS ──────────────────────────────────────────────────
-        public ObservableCollection<GameModel> NewTrending { get; } = new();
-        public ObservableCollection<GameModel> TopSellers { get; } = new();
-        public ObservableCollection<GameModel> Specials { get; } = new();
+        // ═════════════════════════════════════════════════════════════════
+        //  COLLECTIONS — one per store section
+        // ═════════════════════════════════════════════════════════════════
+
+        /// 8 games shown in the main featured carousel at the top.
         public ObservableCollection<GameModel> FeaturedGames { get; } = new();
 
-        // ─── CONFIG ───────────────────────────────────────────────────────
-        private const int FeaturedTarget = 8;   // hry vo featured / games in featured
-        private const int PageSize = 8;   // show more krok / show more step
+        /// 24 discounted games — arrows show 8 at a time (client-side pagination).
+        public ObservableCollection<GameModel> DiscountGames { get; } = new();
 
-        // ─── PAGE COUNTERS ────────────────────────────────────────────────
-        private int _newTrendingPage = 0;
-        private int _topSellersPage = 0;
-        private int _specialsPage = 0;
+        /// 12 games recommended based on the player's library genres.
+        public ObservableCollection<GameModel> RecommendedGames { get; } = new();
 
-        // ─── OBSERVABLE PROPERTIES ────────────────────────────────────────
-        [ObservableProperty] private bool _isLoadingNewTrending;
-        [ObservableProperty] private bool _isLoadingTopSellers;
-        [ObservableProperty] private bool _isLoadingSpecials;
-        [ObservableProperty] private bool _hasMoreNewTrending = true;
-        [ObservableProperty] private bool _hasMoreTopSellers = true;
-        [ObservableProperty] private bool _hasMoreSpecials = true;
+        /// 12 games matching a specific tag from the player's library.
+        public ObservableCollection<GameModel> ByTagGames { get; } = new();
+
+        /// "More" section — starts empty, grows 5 per click, max 25.
+        public ObservableCollection<GameModel> MoreGames { get; } = new();
+
+        // ═════════════════════════════════════════════════════════════════
+        //  FEATURED CAROUSEL STATE
+        // ═════════════════════════════════════════════════════════════════
 
         [ObservableProperty] private GameModel? _currentFeaturedGame;
         [ObservableProperty] private int _featuredIndex;
@@ -51,339 +51,353 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private GameImageViewModel? _featuredScreenshot3;
         [ObservableProperty] private GameImageViewModel? _featuredScreenshot4;
 
+        // ═════════════════════════════════════════════════════════════════
+        //  DISCOUNT CAROUSEL STATE (client-side, no network on arrow click)
+        // ═════════════════════════════════════════════════════════════════
+
+        [ObservableProperty] private int _discountPageIndex = 0;
+
+        /// Slice of DiscountGames currently visible (8 games).
+        public ObservableCollection<GameModel> VisibleDiscounts { get; } = new();
+
+        private const int DiscountPageSize = 8;
+
+        // ═════════════════════════════════════════════════════════════════
+        //  "MORE" SECTION STATE
+        // ═════════════════════════════════════════════════════════════════
+
+        [ObservableProperty] private bool _hasMoreGames = true;
+        [ObservableProperty] private bool _isLoadingMore = false;
+        private int _morePage = -1;   // -1 = not yet loaded
+        private const int MoreMaxPages = 5;
+
+        // ═════════════════════════════════════════════════════════════════
+        //  LOADING FLAGS
+        // ═════════════════════════════════════════════════════════════════
+
+        [ObservableProperty] private bool _isLoadingFeatured;
+        [ObservableProperty] private bool _isLoadingDiscounts;
+        [ObservableProperty] private bool _isLoadingRecommended;
+        [ObservableProperty] private bool _isLoadingByTag;
+
+        // ═════════════════════════════════════════════════════════════════
+        //  BY-TAG LABEL  (shown in header: "Because you play Action")
+        // ═════════════════════════════════════════════════════════════════
+
+        [ObservableProperty] private string _byTagLabel = "Popular in Your Genre";
+
+        // ═════════════════════════════════════════════════════════════════
+        //  EVENTS
+        // ═════════════════════════════════════════════════════════════════
+
         public event Action<GameModel>? OnGameSelected;
 
-        // ─────────────────────────────────────────────────────────────────
-        //  LOAD ALL
-        // ─────────────────────────────────────────────────────────────────
+        // ═════════════════════════════════════════════════════════════════
+        //  MAIN LOAD  — progressive, visible sections first
+        // ═════════════════════════════════════════════════════════════════
+
         [RelayCommand]
         public async Task LoadStoreAsync()
         {
             await TagService.InitAsync();
 
-            // Featured má prioritu — zobrazí sa čo najskôr
-            // Featured has priority — shown as fast as possible
+            // 1. Featured first — user sees something immediately
             await LoadFeaturedAsync();
 
-            // Ostatné sekcie s malým oneskorením aby Featured nezabralo celý bandwidth
-            await Task.Delay(800);
-            await LoadNewTrendingAsync();
-            await Task.Delay(800);
-            await LoadTopSellersAsync();
-            await Task.Delay(800);
-            await LoadSpecialsAsync();
+            // 2. Discounts — big section, load early so arrows work
+            await LoadDiscountsAsync();
 
-            await ApiService.SaveSessionAsync("Store");
+            // 3. Recommended + by-tag in parallel (both need library genres)
+            var genres = await GetLibraryGenresAsync();
+            await Task.WhenAll(
+                LoadRecommendedAsync(genres),
+                LoadByTagAsync(genres));
+
+            // 4. Save session in background
+            _ = ApiService.SaveSessionAsync("Store");
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        //  FEATURED — 8 hier, cache-first, bez opakovaného volania API
-        //  8 games, cache-first, no repeated API calls
-        // ─────────────────────────────────────────────────────────────────
+        // ═════════════════════════════════════════════════════════════════
+        //  FEATURED  — 8 games, carousel
+        // ═════════════════════════════════════════════════════════════════
+
         private async Task LoadFeaturedAsync()
         {
+            IsLoadingFeatured = true;
             try
             {
-                // 1. LocalCache hit → okamžité zobrazenie
-                var cached = await LocalCacheService.LoadAsync<List<GameModel>>(
-                    LocalCacheService.KeyFeatured, LocalCacheService.StoreTTL);
+                // Try disk cache first
+                var cached = await StoreGameCacheService.LoadSectionAsync(
+                    StoreGameCacheService.KeyFeatured);
 
                 if (cached != null && cached.Count >= 3)
                 {
-                    foreach (var g in cached) FeaturedGames.Add(g);
+                    PopulateCollection(FeaturedGames, cached);
                     SetFeaturedGame(0);
-                    _ = PreloadFeaturedImagesAsync(cached);
+                    _ = PreloadImagesAsync(cached);
                     return;
                 }
 
-                // 2. Nový fetch — backend vráti plné detaily priamo
-                //    Backend now returns full details directly (no per-game extra call needed)
-                var libraryGenres = await GetLibraryGenresAsync();
-                var candidates = await ApiService.GetFeaturedAsync();
+                // Fetch from API
+                var games = await ApiService.GetFeaturedAsync();
+                if (games.Count == 0) return;
 
-                if (candidates.Count == 0) return;
+                PopulateCollection(FeaturedGames, games);
+                SetFeaturedGame(0);
 
-                var result = new List<GameModel>();
+                // Save to cache (images downloaded inside SaveSectionAsync)
+                await StoreGameCacheService.SaveSectionAsync(
+                    StoreGameCacheService.KeyFeatured, games);
 
-                foreach (var game in candidates.Take(FeaturedTarget))
-                {
-                    // Možno už je v StoreGameCache z inej sekcie
-                    // Maybe already in StoreGameCache from another section
-                    var fromDisk = await StoreGameCacheService.LoadAsync(game.AppId);
-                    var final = fromDisk ?? game;
-
-                    // Nastav odporúčanie podľa knižnice
-                    bool recommended = final.Genres?.Any(g =>
-                        libraryGenres.Contains(g, StringComparer.OrdinalIgnoreCase)) ?? false;
-                    final.StatusText = recommended ? "Recommended" : "Available Now";
-                    final.IsRecommended= recommended;
-
-                    result.Add(final);
-                    FeaturedGames.Add(final);
-
-                    // Zobraz prvú hru hneď ako je k dispozícii
-                    if (FeaturedGames.Count == 1) SetFeaturedGame(0);
-
-                    // Ulož na disk ak ešte nie je
-                    if (fromDisk == null)
-                        await StoreGameCacheService.SaveAsync(final);
-                }
-
-                if (result.Count > 0)
-                {
-                    await LocalCacheService.SaveAsync(LocalCacheService.KeyFeatured, result);
-                    _ = PreloadFeaturedImagesAsync(result);
-                }
+                _ = PreloadImagesAsync(games);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Featured] Error: {ex.Message}");
+                Debug.WriteLine($"[StoreVM] Featured error: {ex.Message}");
+            }
+            finally
+            {
+                IsLoadingFeatured = false;
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        //  GENERICKÁ SEKCIA — cache-first, per-game disk cache
-        //  Generic section — cache-first, per-game disk cache
-        // ─────────────────────────────────────────────────────────────────
-        private async Task LoadSectionAsync(
-            ObservableCollection<GameModel> collection,
-            string cacheKey,
-            Func<int, Task<List<GameModel>>> fetchPage,
-            Action<bool> setLoading,
-            Action<bool> setHasMore)
+        // ═════════════════════════════════════════════════════════════════
+        //  DISCOUNTS  — 24 games, arrows switch 8 at a time (client-side)
+        // ═════════════════════════════════════════════════════════════════
+
+        private async Task LoadDiscountsAsync()
         {
-            setLoading(true);
+            IsLoadingDiscounts = true;
             try
             {
-                // 1. Skús LocalCache pre celú sekciu (zoznam hier)
-                var cached = await LocalCacheService.LoadAsync<List<GameModel>>(
-                    cacheKey, LocalCacheService.StoreTTL);
+                var cached = await StoreGameCacheService.LoadSectionAsync(
+                    StoreGameCacheService.KeyDiscounts);
+
+                if (cached != null && cached.Count >= 8)
+                {
+                    PopulateCollection(DiscountGames, cached);
+                    RefreshVisibleDiscounts();
+                    _ = PreloadImagesAsync(cached);
+                    return;
+                }
+
+                var games = await ApiService.GetDiscountsAsync();
+                if (games.Count == 0) return;
+
+                PopulateCollection(DiscountGames, games);
+                RefreshVisibleDiscounts();
+
+                await StoreGameCacheService.SaveSectionAsync(
+                    StoreGameCacheService.KeyDiscounts, games);
+
+                _ = PreloadImagesAsync(games);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[StoreVM] Discounts error: {ex.Message}");
+            }
+            finally
+            {
+                IsLoadingDiscounts = false;
+            }
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  RECOMMENDED  — 12 games based on library genres
+        // ═════════════════════════════════════════════════════════════════
+
+        private async Task LoadRecommendedAsync(HashSet<string> genres)
+        {
+            IsLoadingRecommended = true;
+            try
+            {
+                var cached = await StoreGameCacheService.LoadSectionAsync(
+                    StoreGameCacheService.KeyRecommended);
+
+                if (cached != null && cached.Count >= 4)
+                {
+                    PopulateCollection(RecommendedGames, cached);
+                    _ = PreloadImagesAsync(cached);
+                    return;
+                }
+
+                var games = await ApiService.GetRecommendedAsync(genres);
+                if (games.Count == 0) return;
+
+                // Remove any already shown in Featured / Discounts
+                var usedIds = GetUsedIds();
+                games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
+
+                PopulateCollection(RecommendedGames, games);
+
+                await StoreGameCacheService.SaveSectionAsync(
+                    StoreGameCacheService.KeyRecommended, games);
+
+                _ = PreloadImagesAsync(games);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[StoreVM] Recommended error: {ex.Message}");
+            }
+            finally
+            {
+                IsLoadingRecommended = false;
+            }
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  BY TAG  — 12 games matching player's top genre
+        // ═════════════════════════════════════════════════════════════════
+
+        private async Task LoadByTagAsync(HashSet<string> genres)
+        {
+            IsLoadingByTag = true;
+            try
+            {
+                // Pick the most relevant tag from player's library
+                var tag = PickBestTag(genres);
+                var cacheKey = StoreGameCacheService.KeyByTag(tag);
+
+                ByTagLabel = $"Because You Play {tag}";
+
+                var cached = await StoreGameCacheService.LoadSectionAsync(cacheKey);
+                if (cached != null && cached.Count >= 4)
+                {
+                    PopulateCollection(ByTagGames, cached);
+                    _ = PreloadImagesAsync(cached);
+                    return;
+                }
+
+                var games = await ApiService.GetByTagAsync(tag);
+                if (games.Count == 0) return;
+
+                // Remove duplicates from other sections
+                var usedIds = GetUsedIds();
+                games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
+
+                PopulateCollection(ByTagGames, games);
+
+                await StoreGameCacheService.SaveSectionAsync(cacheKey, games);
+                _ = PreloadImagesAsync(games);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[StoreVM] ByTag error: {ex.Message}");
+            }
+            finally
+            {
+                IsLoadingByTag = false;
+            }
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  MORE — 5 per click, max 25 total
+        // ═════════════════════════════════════════════════════════════════
+
+        [RelayCommand]
+        private async Task ShowMoreAsync()
+        {
+            if (IsLoadingMore || !HasMoreGames) return;
+
+            IsLoadingMore = true;
+            try
+            {
+                _morePage++;
+
+                if (_morePage >= MoreMaxPages)
+                {
+                    HasMoreGames = false;
+                    return;
+                }
+
+                // Check disk cache for this page
+                var cacheKey = $"{StoreGameCacheService.KeyMore}_p{_morePage}";
+                var cached = await StoreGameCacheService.LoadSectionAsync(cacheKey);
+
+                List<GameModel> games;
+                bool fetchedFromApi = false;
 
                 if (cached != null && cached.Count > 0)
                 {
-                    foreach (var g in cached) collection.Add(g);
-                    setHasMore(cached.Count >= PageSize);
-                    _ = PreloadListImagesAsync(cached);
+                    games = cached;
+                }
+                else
+                {
+                    var result = await ApiService.GetMoreAsync(_morePage);
+                    games = result.Games;
+                    HasMoreGames = result.HasMore && (_morePage + 1) < MoreMaxPages;
+                    fetchedFromApi = true;
+                }
+
+                if (games.Count == 0)
+                {
+                    HasMoreGames = false;
                     return;
                 }
 
-                // 2. Fetch stránky 0 z API
-                var games = await fetchPage(0);
-                if (games.Count == 0) return;
-
-                var toSave = new List<GameModel>();
+                // Remove duplicates from ALL other sections
+                var usedIds = GetAllUsedIds();
+                games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
 
                 foreach (var game in games)
-                {
-                    // Skontroluj per-game cache — môže byť z Featured alebo inej sekcie
-                    // Check per-game cache — might be from Featured or another section
-                    var fromDisk = await StoreGameCacheService.LoadAsync(game.AppId);
-                    var final = fromDisk ?? game;
+                    MoreGames.Add(game);
 
-                    collection.Add(final);
-                    toSave.Add(final);
+                if (fetchedFromApi)
+                    await StoreGameCacheService.SaveSectionAsync(cacheKey, games);
 
-                    if (fromDisk == null)
-                        await StoreGameCacheService.SaveAsync(final);
-                }
+                _ = PreloadImagesAsync(games);
 
-                setHasMore(games.Count >= PageSize);
-                await LocalCacheService.SaveAsync(cacheKey, toSave);
-                _ = PreloadListImagesAsync(toSave);
+                // Hide button after last page
+                if (_morePage + 1 >= MoreMaxPages)
+                    HasMoreGames = false;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Store] LoadSection error: {ex.Message}");
+                Debug.WriteLine($"[StoreVM] ShowMore error: {ex.Message}");
+                _morePage--; // rollback on error
             }
             finally
             {
-                setLoading(false);
+                IsLoadingMore = false;
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        //  SHOW MORE — načíta +5 ďalších hier z ďalšej stránky
-        //  Loads +5 more games from next page
-        // ─────────────────────────────────────────────────────────────────
-        private async Task ShowMoreAsync(ObservableCollection<GameModel> collection, int page, Func<int, Task<List<GameModel>>> fetchPage, Action<bool> setLoading, Action<bool> setHasMore)
-        {
-            setLoading(true);
-            try
-            {
-                var games = await fetchPage(page);
-                if (games.Count == 0) { setHasMore(false); return; }
-
-                // Odfiltruj hry ktoré už sú v kolekcii — no duplicates
-                var existingIds = new HashSet<int>(collection.Select(g => g.AppId));
-
-                foreach (var game in games)
-                {
-                    if (existingIds.Contains(game.AppId)) continue;
-
-                    var fromDisk = await StoreGameCacheService.LoadAsync(game.AppId);
-                    var final = fromDisk ?? game;
-
-                    collection.Add(final);
-                    existingIds.Add(final.AppId);
-
-                    if (fromDisk == null)
-                        await StoreGameCacheService.SaveAsync(final);
-                }
-
-                setHasMore(games.Count >= PageSize);
-                _ = PreloadListImagesAsync(games);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Store] ShowMore error: {ex.Message}");
-                page--; // Rollback pri chybe
-            }
-            finally
-            {
-                setLoading(false);
-            }
-        }
-
-        // ─────────────────────────────────────────────────────────────────
-        //  NEW TRENDING
-        // ─────────────────────────────────────────────────────────────────
-        private Task LoadNewTrendingAsync() => LoadSectionAsync(
-            NewTrending,
-            LocalCacheService.KeyTrending,
-            page => ApiService.GetNewTrendingAsync(page),
-            l => IsLoadingNewTrending = l,
-            h => HasMoreNewTrending = h);
+        // ═════════════════════════════════════════════════════════════════
+        //  DISCOUNT CAROUSEL COMMANDS  (client-side, instant)
+        // ═════════════════════════════════════════════════════════════════
 
         [RelayCommand]
-        private async Task ShowMoreNewTrendingAsync()
+        private void NextDiscountPage()
         {
-            _newTrendingPage++;  // zvýš TU, pred volaním
-            await ShowMoreAsync(NewTrending, _newTrendingPage,
-                page => ApiService.GetNewTrendingAsync(page),
-                l => IsLoadingNewTrending = l,
-                h => HasMoreNewTrending = h);
+            if (DiscountGames.Count == 0) return;
+            int totalPages = (int)Math.Ceiling(DiscountGames.Count / (double)DiscountPageSize);
+            DiscountPageIndex = (DiscountPageIndex + 1) % totalPages;
+            RefreshVisibleDiscounts();
         }
-
-        // ─────────────────────────────────────────────────────────────────
-        //  TOP SELLERS
-        // ─────────────────────────────────────────────────────────────────
-        private Task LoadTopSellersAsync() => LoadSectionAsync(
-            TopSellers,
-            LocalCacheService.KeyTopSellers,
-            page => ApiService.GetTopSellersAsync(page),
-            l => IsLoadingTopSellers = l,
-            h => HasMoreTopSellers = h);
 
         [RelayCommand]
-        private async Task ShowMoreTopSellersAsync()
+        private void PrevDiscountPage()
         {
-            _topSellersPage++;
-            await ShowMoreAsync(TopSellers, _topSellersPage,
-                page => ApiService.GetTopSellersAsync(page),
-                l => IsLoadingTopSellers = l,
-                h => HasMoreTopSellers = h);
+            if (DiscountGames.Count == 0) return;
+            int totalPages = (int)Math.Ceiling(DiscountGames.Count / (double)DiscountPageSize);
+            DiscountPageIndex = (DiscountPageIndex - 1 + totalPages) % totalPages;
+            RefreshVisibleDiscounts();
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        //  SPECIALS
-        // ─────────────────────────────────────────────────────────────────
-        private Task LoadSpecialsAsync() => LoadSectionAsync(
-            Specials,
-            LocalCacheService.KeySpecials,
-            page => ApiService.GetSpecialsAsync(page),
-            l => IsLoadingSpecials = l,
-            h => HasMoreSpecials = h);
-
-        [RelayCommand]
-        private async Task ShowMoreSpecialsAsync()
+        private void RefreshVisibleDiscounts()
         {
-            _specialsPage++;
-            await ShowMoreAsync(Specials, _specialsPage,
-                page => ApiService.GetSpecialsAsync(page),
-                l => IsLoadingSpecials = l,
-                h => HasMoreSpecials = h);
+            VisibleDiscounts.Clear();
+            var page = DiscountGames
+                .Skip(DiscountPageIndex * DiscountPageSize)
+                .Take(DiscountPageSize);
+            foreach (var g in page)
+                VisibleDiscounts.Add(g);
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        //  IMAGE PRELOADING
-        // ─────────────────────────────────────────────────────────────────
-        private async Task PreloadFeaturedImagesAsync(List<GameModel> games)
-        {
-            foreach (var game in games)
-            {
-                await PreloadSingleGameImagesAsync(game);
-                await Task.Delay(100);
-            }
-        }
+        // ═════════════════════════════════════════════════════════════════
+        //  FEATURED CAROUSEL COMMANDS
+        // ═════════════════════════════════════════════════════════════════
 
-        private static async Task PreloadSingleGameImagesAsync(GameModel game)
-        {
-            if (!string.IsNullOrEmpty(game.HeaderImageUrl))
-                await ImageCacheService.GetAsync(game.HeaderImageUrl);
-
-            // Prednahrá prvé 4 screenshoty
-            foreach (var shot in (game.Screenshots ?? new()).Take(4))
-            {
-                if (string.IsNullOrEmpty(shot)) continue;
-                await ImageCacheService.GetAsync(shot);
-                await Task.Delay(80);
-            }
-        }
-
-        private static async Task PreloadListImagesAsync(List<GameModel> games)
-        {
-            foreach (var g in games)
-            {
-                if (string.IsNullOrEmpty(g.HeaderImageUrl)) continue;
-                try { await ImageCacheService.GetAsync(g.HeaderImageUrl); }
-                catch { }
-                await Task.Delay(60);
-            }
-        }
-
-        // ─────────────────────────────────────────────────────────────────
-        //  SET FEATURED GAME — nastaví aktívnu hru v carouseli
-        //  Sets the active game in the carousel
-        // ─────────────────────────────────────────────────────────────────
-        private void SetFeaturedGame(int index)
-        {
-            if (FeaturedGames.Count == 0) return;
-            index = Math.Clamp(index, 0, FeaturedGames.Count - 1);
-
-            FeaturedIndex = index;
-            CurrentFeaturedGame = FeaturedGames[index];
-
-            var game = FeaturedGames[index];
-            var shots = game.Screenshots ?? new List<string>();
-
-            FeaturedMainImage = new GameImageViewModel(game.HeaderImageUrl ?? "");
-            FeaturedScreenshot1 = new GameImageViewModel(shots.ElementAtOrDefault(0) ?? "");
-            FeaturedScreenshot2 = new GameImageViewModel(shots.ElementAtOrDefault(1) ?? "");
-            FeaturedScreenshot3 = new GameImageViewModel(shots.ElementAtOrDefault(2) ?? "");
-            FeaturedScreenshot4 = new GameImageViewModel(shots.ElementAtOrDefault(3) ?? "");
-        }
-
-        // ─────────────────────────────────────────────────────────────────
-        //  HELPERS
-        // ─────────────────────────────────────────────────────────────────
-        private static async Task<HashSet<string>> GetLibraryGenresAsync()
-        {
-            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            try
-            {
-                if (!SessionManager.IsLoggedIn) return result;
-                var library = await ApiService.GetLibraryAsync(SessionManager.SteamId64);
-                foreach (var game in library)
-                    foreach (var genre in game.Genres ?? new())
-                        result.Add(genre);
-            }
-            catch { }
-            return result;
-        }
-
-        // ─────────────────────────────────────────────────────────────────
-        //  CAROUSEL COMMANDS
-        // ─────────────────────────────────────────────────────────────────
         [RelayCommand]
         private void NextFeatured()
         {
@@ -405,13 +419,114 @@ namespace Rift_App.ViewModels
                 SetFeaturedGame(index);
         }
 
-        // ─────────────────────────────────────────────────────────────────
-        //  SELECT GAME
-        // ─────────────────────────────────────────────────────────────────
+        private void SetFeaturedGame(int index)
+        {
+            if (FeaturedGames.Count == 0) return;
+            index = Math.Clamp(index, 0, FeaturedGames.Count - 1);
+
+            FeaturedIndex = index;
+            CurrentFeaturedGame = FeaturedGames[index];
+
+            var game = FeaturedGames[index];
+            var shots = game.Screenshots ?? new List<string>();
+
+            FeaturedMainImage = new GameImageViewModel(game.HeaderImageUrl ?? "");
+            FeaturedScreenshot1 = new GameImageViewModel(shots.ElementAtOrDefault(0) ?? "");
+            FeaturedScreenshot2 = new GameImageViewModel(shots.ElementAtOrDefault(1) ?? "");
+            FeaturedScreenshot3 = new GameImageViewModel(shots.ElementAtOrDefault(2) ?? "");
+            FeaturedScreenshot4 = new GameImageViewModel(shots.ElementAtOrDefault(3) ?? "");
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  SELECT GAME  (navigate to game page)
+        // ═════════════════════════════════════════════════════════════════
+
         [RelayCommand]
         private void SelectGame(GameModel game)
         {
             if (game != null) OnGameSelected?.Invoke(game);
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  HELPERS
+        // ═════════════════════════════════════════════════════════════════
+
+        /// Replaces collection contents without clearing and re-adding one by one
+        /// (reduces UI flicker).
+        private static void PopulateCollection(ObservableCollection<GameModel> col,
+                                               List<GameModel> games)
+        {
+            col.Clear();
+            foreach (var g in games)
+                col.Add(g);
+        }
+
+        /// AppIds already used in Featured + Discounts (for deduplication).
+        private HashSet<int> GetUsedIds() =>
+            new(FeaturedGames.Select(g => g.AppId)
+                .Concat(DiscountGames.Select(g => g.AppId)));
+
+        /// AppIds used across ALL sections (for More deduplication).
+        private HashSet<int> GetAllUsedIds() =>
+            new(FeaturedGames.Select(g => g.AppId)
+                .Concat(DiscountGames.Select(g => g.AppId))
+                .Concat(RecommendedGames.Select(g => g.AppId))
+                .Concat(ByTagGames.Select(g => g.AppId))
+                .Concat(MoreGames.Select(g => g.AppId)));
+
+        /// Gets the player's library genres for personalisation.
+        private static async Task<HashSet<string>> GetLibraryGenresAsync()
+        {
+            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                if (!SessionManager.IsLoggedIn) return result;
+                var library = await ApiService.GetLibraryAsync(SessionManager.SteamId64);
+                foreach (var game in library)
+                    foreach (var genre in game.Genres ?? new())
+                        result.Add(genre);
+            }
+            catch { }
+            return result;
+        }
+
+        /// Picks the best matching tag from the known tag map.
+        private static readonly string[] KnownTags =
+            { "Action", "RPG", "Survival", "Multiplayer", "Strategy", "Horror", "Indie", "Simulation" };
+
+        private static string PickBestTag(HashSet<string> genres)
+        {
+            foreach (var tag in KnownTags)
+                if (genres.Contains(tag)) return tag;
+
+            // Fallback — pick first genre that maps to a known tag
+            foreach (var genre in genres)
+                foreach (var tag in KnownTags)
+                    if (genre.Contains(tag, StringComparison.OrdinalIgnoreCase)) return tag;
+
+            return "Action"; // final fallback
+        }
+
+        /// Preloads images into ImageCacheService in the background.
+        private static async Task PreloadImagesAsync(List<GameModel> games)
+        {
+            foreach (var g in games)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(g.HeaderImageUrl))
+                        await ImageCacheService.GetAsync(g.HeaderImageUrl);
+
+                    foreach (var shot in (g.Screenshots ?? new()).Take(4))
+                    {
+                        if (!string.IsNullOrEmpty(shot))
+                            await ImageCacheService.GetAsync(shot);
+                        await Task.Delay(60);
+                    }
+                }
+                catch { }
+                await Task.Delay(80);
+            }
         }
     }
 }
