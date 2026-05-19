@@ -238,6 +238,13 @@ namespace SteamProxyBackend.Controllers
 
         // ─── HELPERS ──────────────────────────────────────────────────────
 
+        private static string FormatMinutes(int minutes)
+        {
+            if (minutes <= 0) return "0 hrs";
+            if (minutes < 60) return $"{minutes} mins";
+            double h = minutes / 60.0;
+            return h % 1 == 0 ? $"{(int)h} hrs" : $"{h:F1} hrs";
+        }
         private bool IsRateLimited(string ip)
         {
             if (_lastRequestTime.TryGetValue(ip, out var last))
@@ -836,6 +843,64 @@ namespace SteamProxyBackend.Controllers
                 .ToList();
 
                 return Ok(new { IsPrivate = false, Friends = result });
+            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+
+        // GET /api/steam/player/{steamId}/recentactivity
+        [HttpGet("player/{steamId}/recentactivity")]
+        public async Task<IActionResult> GetRecentActivity(string steamId)
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests." });
+
+                var url = $"https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/" +
+                          $"?key={_steamApiKey}&steamid={steamId}&count=5";
+
+                var response = await _http.GetStringAsync(url);
+                var json = JObject.Parse(response);
+                var games = json["response"]?["games"] as JArray;
+
+                if (games == null || !games.Any())
+                    return Ok(new { TotalHours = 0.0, Games = new List<object>() });
+
+                double totalMinutes2Weeks = 0;
+                var result = new List<object>();
+
+                foreach (var g in games)
+                {
+                    int appId = g["appid"]?.Value<int>() ?? 0;
+                    string name = g["name"]?.Value<string>() ?? "";
+                    int playtime2w = g["playtime_2weeks"]?.Value<int>() ?? 0;
+                    int playtimeTotal = g["playtime_forever"]?.Value<int>() ?? 0;
+
+                    totalMinutes2Weeks += playtime2w;
+
+                    // Header image
+                    string headerUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg";
+
+                    result.Add(new
+                    {
+                        AppId = appId,
+                        Name = name,
+                        HeaderImageUrl = headerUrl,
+                        Playtime2Weeks = playtime2w,
+                        PlaytimeTotal = playtimeTotal,
+                        // Display helpers
+                        Playtime2WeeksDisplay = FormatMinutes(playtime2w),
+                        PlaytimeTotalDisplay = FormatMinutes(playtimeTotal),
+                    });
+                }
+
+                double totalHours2Weeks = Math.Round(totalMinutes2Weeks / 60.0, 1);
+
+                return Ok(new
+                {
+                    TotalHours = totalHours2Weeks,
+                    Games = result
+                });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }

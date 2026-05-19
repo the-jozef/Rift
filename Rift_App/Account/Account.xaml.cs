@@ -12,11 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Rift_App.ViewModels;
 
 namespace Rift_App.Account
 {
     public partial class Account : UserControl
     {
-        public Account() => InitializeComponent();
+        public AccountViewModel ViewModel { get; } = new();
+
+        public Account()
+        {
+            InitializeComponent();
+            DataContext = ViewModel;
+            Loaded += async (_, _) => await ViewModel.LoadAsync();
+        }
     }
 }

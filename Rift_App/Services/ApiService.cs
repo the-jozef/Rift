@@ -164,7 +164,16 @@ namespace Rift_App.Services
             }
             catch { return null; }
         }
-
+        public static async Task<RecentActivityResponse?> GetRecentActivityAsync(string steamId64)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/player/{steamId64}/recentactivity");
+                return FromJson<RecentActivityResponse>(response);
+            }
+            catch { return null; }
+        }
         public static async Task<List<SearchResultModel>> SearchGamesAsync(string query)
         {
             try
