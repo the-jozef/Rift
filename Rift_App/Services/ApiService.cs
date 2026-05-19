@@ -26,10 +26,7 @@ namespace Rift_App.Services
         private static T? FromJson<T>(string json) =>
             JsonConvert.DeserializeObject<T>(json);
 
-        // ═════════════════════════════════════════════════════════════════
-        //  AUTH
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── AUTH ──────────────────────────────────────────────
         public static async Task<AuthResponse?> RegisterAsync(string username, string password, string steamId64)
         {
             try
@@ -63,10 +60,7 @@ namespace Rift_App.Services
             catch { return new AuthResponse { Success = false, Message = "Connection error. Check your internet." }; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  DEVICE
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── DEVICE ──────────────────────────────────────────────
         public static async Task InitDeviceAsync()
         {
             try
@@ -137,10 +131,7 @@ namespace Rift_App.Services
             catch { return false; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  STEAM — PLAYER
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── STEAM — PLAYER ──────────────────────────────────────────────
         public static async Task<PlayerInfo?> GetPlayerInfoAsync(string steamId64)
         {
             try
@@ -151,10 +142,42 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  STEAM — LIBRARY
-        // ═════════════════════════════════════════════════════════════════
+        public static async Task<int> GetSteamLevelAsync(string steamId64)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/player/{steamId64}/level");
+                var data = FromJson<LevelResponse>(response);
+                return data?.Level ?? 0;
+            }
+            catch { return 0; }
+        }
 
+        public static async Task<FriendsResponse?> GetFriendsAsync(string steamId64)
+        {
+            try
+            {
+                var response = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/player/{steamId64}/friends");
+                return FromJson<FriendsResponse>(response);
+            }
+            catch { return null; }
+        }
+
+        public static async Task<List<SearchResultModel>> SearchGamesAsync(string query)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(query)) return new();
+                var response = await _http.GetStringAsync(
+                    $"{BaseUrl}/api/steam/store/search?q={Uri.EscapeDataString(query)}");
+                return FromJson<SearchResponse>(response)?.Results ?? new();
+            }
+            catch { return new(); }
+        }
+
+        // ─── STEAM — LIBRARY ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetLibraryAsync(string steamId64)
         {
             try
@@ -186,10 +209,7 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  STEAM — ACHIEVEMENTS
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── STEAM — ACHIEVEMENTS ──────────────────────────────────────────────
         public static async Task<GameDetailModel?> GetAchievementsAsync(int appId, string steamId64)
         {
             try
@@ -214,7 +234,6 @@ namespace Rift_App.Services
                 return null;
             }
         }
-
         private class AchievementsResponse
         {
             public List<AchievementModel>? Achievements { get; set; }
@@ -222,13 +241,9 @@ namespace Rift_App.Services
             public int Unlocked { get; set; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  STEAM — STORE  (new section endpoints)
-        // ═════════════════════════════════════════════════════════════════
+        // ─── STEAM — STORE ──────────────────────────────────────────────
 
-        /// <summary>
-        /// 8 featured games — shown in the main carousel.
-        /// </summary>
+        // ─── 8 featured games ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetFeaturedAsync()
         {
             try
@@ -239,10 +254,7 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-        /// <summary>
-        /// 24 discounted games — client paginates 8 at a time with arrows.
-        /// Returns all 24 in one call so arrows are instant (no network on arrow click).
-        /// </summary>
+        // ─── 24 discounted games ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetDiscountsAsync()
         {
             try
@@ -253,10 +265,7 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-        /// <summary>
-        /// 12 recommended games based on the player's library genres.
-        /// Sends genre list as query param so backend can personalise the result.
-        /// </summary>
+        // ─── 12 recommended games ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetRecommendedAsync(IEnumerable<string> genres)
         {
             try
@@ -269,10 +278,7 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-        /// <summary>
-        /// 12 games matching a specific tag (e.g. "Action", "RPG").
-        /// Tag is chosen from the player's most-played genre.
-        /// </summary>
+        // ─── 12 games matching a specific tag ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetByTagAsync(string tag)
         {
             try
@@ -284,10 +290,7 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-        /// <summary>
-        /// 5 games per page for the "More" section.
-        /// page 0..4 — returns HasMore=false on last page.
-        /// </summary>
+        // ─── 5 games per page for the "More" section ──────────────────────────────────────────────
         public static async Task<MoreGamesResponse> GetMoreAsync(int page)
         {
             try
@@ -301,7 +304,6 @@ namespace Rift_App.Services
         }
 
         // ── Kept for backward compatibility ───────────────────────────────
-
         public static async Task<List<GameModel>> GetNewTrendingAsync(int page = 0)
         {
             try
@@ -332,10 +334,7 @@ namespace Rift_App.Services
             catch { return new List<GameModel>(); }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  STEAM — SINGLE GAME
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── STEAM — SINGLE GAME ──────────────────────────────────────────────
         public static async Task<GameModel?> GetGameDetailsAsync(int appId)
         {
             try
@@ -346,10 +345,7 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  WISHLIST
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── WISHLIST ──────────────────────────────────────────────
         public static async Task<List<WishlistItemRef>> GetWishlistIdsAsync(string steamId64)
         {
             try
@@ -401,10 +397,7 @@ namespace Rift_App.Services
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════
-    //  RESPONSE TYPES
-    // ═════════════════════════════════════════════════════════════════════
-
+    // ─── RESPONSE TYPES ──────────────────────────────────────────────
     public class AuthResponse
     {
         public bool Success { get; set; }
@@ -444,4 +437,9 @@ namespace Rift_App.Services
     {
         public List<WishlistItemRef> Items { get; set; } = new();
     }
+    public class LevelResponse
+    {
+        public int Level { get; set; }
+    }
+
 }

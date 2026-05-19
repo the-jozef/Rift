@@ -102,48 +102,19 @@
                                                                                     <Border x:Name="Root" Background="Transparent">
                                                                                         <Grid Width="253.2">
 
-                                                                                            <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
+                                                                                            <StackPanel Margin="25,0,0,0"
+                                                                                                        Orientation="Horizontal">
 
-                                                                                                <Border Width="20"
-                                                                                                        Height="20"
-                                                                                                        ClipToBounds="True"
-                                                                                                        CornerRadius="2"
-                                                                                                        Visibility="{Binding IconPath,Converter={StaticResource RiftStringToVisibilityConverter}}">
-                                                                                                    
-                                                                                                    <Image Width="20"
+                                                                                                <Image Width="20"
                                                                                                            Height="20"
+                                                                                                       Margin="0,0,4,0"
+                                                                                                           Visibility="{Binding IconPath,Converter={StaticResource StringToVisibilityConverter}}"
                                                                                                            RenderOptions.BitmapScalingMode="HighQuality"
                                                                                                            Source="{Binding IconPath}"
                                                                                                            Stretch="UniformToFill" />
-                                                                                                </Border>
-
-                                                                                                <Border Width="20"
-                                                                                                        Height="20"
-                                                                                                        Visibility="{Binding IconPath,
-        Converter={StaticResource RiftInverseBoolToVisibilityConverter}}">
-                                                                                                    <Border.Style>
-                                                                                                        <Style TargetType="Border">
-                                                                                                            <Setter Property="Visibility"
-                                                                                                                    Value="Collapsed" />
-                                                                                                            <Style.Triggers>
-                                                                                                                <DataTrigger Binding="{Binding IconPath}"
-                                                                                                                             Value="{x:Null}">
-                                                                                                                    <Setter Property="Visibility"
-                                                                                                                            Value="Visible" />
-                                                                                                                </DataTrigger>
-                                                                                                                <DataTrigger Binding="{Binding IconPath}"
-                                                                                                                             Value="">
-                                                                                                                    <Setter Property="Visibility"
-                                                                                                                            Value="Visible" />
-                                                                                                                </DataTrigger>
-                                                                                                            </Style.Triggers>
-                                                                                                        </Style>
-                                                                                                    </Border.Style>
-                                                                                                </Border>
-
+                                                                                            
                                                                                                 <TextBlock
                                                                                                     x:Name="Text"
-                                                                                                    Margin="3,0,0,0"
                                                                                                     VerticalAlignment="Center"
                                                                                                     FontSize="13"
                                                                                                     FontWeight="SemiBold"

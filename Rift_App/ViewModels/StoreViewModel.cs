@@ -21,23 +21,43 @@ namespace Rift_App.ViewModels
     public partial class StoreViewModel : ObservableObject
     {
         // ═════════════════════════════════════════════════════════════════
-        //  COLLECTIONS — one per store section
+        //  FULL COLLECTIONS
         // ═════════════════════════════════════════════════════════════════
 
-        /// 8 games shown in the main featured carousel at the top.
         public ObservableCollection<GameModel> FeaturedGames { get; } = new();
-
-        /// 24 discounted games — arrows show 8 at a time (client-side pagination).
         public ObservableCollection<GameModel> DiscountGames { get; } = new();
-
-        /// 12 games recommended based on the player's library genres.
         public ObservableCollection<GameModel> RecommendedGames { get; } = new();
-
-        /// 12 games matching a specific tag from the player's library.
         public ObservableCollection<GameModel> ByTagGames { get; } = new();
-
-        /// "More" section — starts empty, grows 5 per click, max 25.
         public ObservableCollection<GameModel> MoreGames { get; } = new();
+
+        // ═════════════════════════════════════════════════════════════════
+        //  VISIBLE SLICES
+        // ═════════════════════════════════════════════════════════════════
+
+        // 8 of 24 discounts visible at once
+        public ObservableCollection<GameModel> VisibleDiscounts { get; } = new();
+
+        // 4 of 12 recommended visible at once
+        public ObservableCollection<GameModel> VisibleRecommended { get; } = new();
+
+        // 4 of 12 by-tag visible at once
+        public ObservableCollection<GameModel> VisibleByTag { get; } = new();
+
+        // ═════════════════════════════════════════════════════════════════
+        //  PAGE SIZES
+        // ═════════════════════════════════════════════════════════════════
+
+        private const int DiscountPageSize = 8;
+        private const int CardPageSize = 4;
+        private const int MoreMaxPages = 5;
+
+        // ═════════════════════════════════════════════════════════════════
+        //  PAGE INDICES  (remembered — arrows go back to same position)
+        // ═════════════════════════════════════════════════════════════════
+
+        [ObservableProperty] private int _discountPageIndex;
+        [ObservableProperty] private int _recommendedPageIndex;
+        [ObservableProperty] private int _byTagPageIndex;
 
         // ═════════════════════════════════════════════════════════════════
         //  FEATURED CAROUSEL STATE
@@ -52,26 +72,6 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private GameImageViewModel? _featuredScreenshot4;
 
         // ═════════════════════════════════════════════════════════════════
-        //  DISCOUNT CAROUSEL STATE (client-side, no network on arrow click)
-        // ═════════════════════════════════════════════════════════════════
-
-        [ObservableProperty] private int _discountPageIndex = 0;
-
-        /// Slice of DiscountGames currently visible (8 games).
-        public ObservableCollection<GameModel> VisibleDiscounts { get; } = new();
-
-        private const int DiscountPageSize = 8;
-
-        // ═════════════════════════════════════════════════════════════════
-        //  "MORE" SECTION STATE
-        // ═════════════════════════════════════════════════════════════════
-
-        [ObservableProperty] private bool _hasMoreGames = true;
-        [ObservableProperty] private bool _isLoadingMore = false;
-        private int _morePage = -1;   // -1 = not yet loaded
-        private const int MoreMaxPages = 5;
-
-        // ═════════════════════════════════════════════════════════════════
         //  LOADING FLAGS
         // ═════════════════════════════════════════════════════════════════
 
@@ -81,19 +81,27 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isLoadingByTag;
 
         // ═════════════════════════════════════════════════════════════════
-        //  BY-TAG LABEL  (shown in header: "Because you play Action")
+        //  MORE SECTION STATE
         // ═════════════════════════════════════════════════════════════════
 
-        [ObservableProperty] private string _byTagLabel = "Popular in Your Genre";
+        [ObservableProperty] private bool _hasMoreGames = true;
+        [ObservableProperty] private bool _isLoadingMore = false;
+        private int _morePage = -1;
 
         // ═════════════════════════════════════════════════════════════════
-        //  EVENTS
+        //  BY-TAG HEADER
+        // ═════════════════════════════════════════════════════════════════
+
+        [ObservableProperty] private string _byTagLabel = "Because You Play...";
+
+        // ═════════════════════════════════════════════════════════════════
+        //  EVENT
         // ═════════════════════════════════════════════════════════════════
 
         public event Action<GameModel>? OnGameSelected;
 
         // ═════════════════════════════════════════════════════════════════
-        //  MAIN LOAD  — progressive, visible sections first
+        //  MAIN LOAD — progressive, visible sections first
         // ═════════════════════════════════════════════════════════════════
 
         [RelayCommand]
@@ -101,24 +109,22 @@ namespace Rift_App.ViewModels
         {
             await TagService.InitAsync();
 
-            // 1. Featured first — user sees something immediately
             await LoadFeaturedAsync();
-
-            // 2. Discounts — big section, load early so arrows work
             await LoadDiscountsAsync();
 
-            // 3. Recommended + by-tag in parallel (both need library genres)
             var genres = await GetLibraryGenresAsync();
             await Task.WhenAll(
                 LoadRecommendedAsync(genres),
                 LoadByTagAsync(genres));
 
-            // 4. Save session in background
+            // Pre-load first 5 "more" games so the section isn't empty on open
+            await ShowMoreAsync();
+
             _ = ApiService.SaveSessionAsync("Store");
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  FEATURED  — 8 games, carousel
+        //  FEATURED
         // ═════════════════════════════════════════════════════════════════
 
         private async Task LoadFeaturedAsync()
@@ -126,10 +132,7 @@ namespace Rift_App.ViewModels
             IsLoadingFeatured = true;
             try
             {
-                // Try disk cache first
-                var cached = await StoreGameCacheService.LoadSectionAsync(
-                    StoreGameCacheService.KeyFeatured);
-
+                var cached = await StoreGameCacheService.LoadSectionAsync(StoreGameCacheService.KeyFeatured);
                 if (cached != null && cached.Count >= 3)
                 {
                     PopulateCollection(FeaturedGames, cached);
@@ -138,31 +141,20 @@ namespace Rift_App.ViewModels
                     return;
                 }
 
-                // Fetch from API
                 var games = await ApiService.GetFeaturedAsync();
                 if (games.Count == 0) return;
 
                 PopulateCollection(FeaturedGames, games);
                 SetFeaturedGame(0);
-
-                // Save to cache (images downloaded inside SaveSectionAsync)
-                await StoreGameCacheService.SaveSectionAsync(
-                    StoreGameCacheService.KeyFeatured, games);
-
+                await StoreGameCacheService.SaveSectionAsync(StoreGameCacheService.KeyFeatured, games);
                 _ = PreloadImagesAsync(games);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[StoreVM] Featured error: {ex.Message}");
-            }
-            finally
-            {
-                IsLoadingFeatured = false;
-            }
+            catch (Exception ex) { Debug.WriteLine($"[StoreVM] Featured: {ex.Message}"); }
+            finally { IsLoadingFeatured = false; }
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  DISCOUNTS  — 24 games, arrows switch 8 at a time (client-side)
+        //  DISCOUNTS
         // ═════════════════════════════════════════════════════════════════
 
         private async Task LoadDiscountsAsync()
@@ -170,9 +162,7 @@ namespace Rift_App.ViewModels
             IsLoadingDiscounts = true;
             try
             {
-                var cached = await StoreGameCacheService.LoadSectionAsync(
-                    StoreGameCacheService.KeyDiscounts);
-
+                var cached = await StoreGameCacheService.LoadSectionAsync(StoreGameCacheService.KeyDiscounts);
                 if (cached != null && cached.Count >= 8)
                 {
                     PopulateCollection(DiscountGames, cached);
@@ -186,24 +176,15 @@ namespace Rift_App.ViewModels
 
                 PopulateCollection(DiscountGames, games);
                 RefreshVisibleDiscounts();
-
-                await StoreGameCacheService.SaveSectionAsync(
-                    StoreGameCacheService.KeyDiscounts, games);
-
+                await StoreGameCacheService.SaveSectionAsync(StoreGameCacheService.KeyDiscounts, games);
                 _ = PreloadImagesAsync(games);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[StoreVM] Discounts error: {ex.Message}");
-            }
-            finally
-            {
-                IsLoadingDiscounts = false;
-            }
+            catch (Exception ex) { Debug.WriteLine($"[StoreVM] Discounts: {ex.Message}"); }
+            finally { IsLoadingDiscounts = false; }
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  RECOMMENDED  — 12 games based on library genres
+        //  RECOMMENDED
         // ═════════════════════════════════════════════════════════════════
 
         private async Task LoadRecommendedAsync(HashSet<string> genres)
@@ -211,12 +192,11 @@ namespace Rift_App.ViewModels
             IsLoadingRecommended = true;
             try
             {
-                var cached = await StoreGameCacheService.LoadSectionAsync(
-                    StoreGameCacheService.KeyRecommended);
-
+                var cached = await StoreGameCacheService.LoadSectionAsync(StoreGameCacheService.KeyRecommended);
                 if (cached != null && cached.Count >= 4)
                 {
                     PopulateCollection(RecommendedGames, cached);
+                    RefreshVisibleRecommended();
                     _ = PreloadImagesAsync(cached);
                     return;
                 }
@@ -224,29 +204,20 @@ namespace Rift_App.ViewModels
                 var games = await ApiService.GetRecommendedAsync(genres);
                 if (games.Count == 0) return;
 
-                // Remove any already shown in Featured / Discounts
                 var usedIds = GetUsedIds();
                 games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
 
                 PopulateCollection(RecommendedGames, games);
-
-                await StoreGameCacheService.SaveSectionAsync(
-                    StoreGameCacheService.KeyRecommended, games);
-
+                RefreshVisibleRecommended();
+                await StoreGameCacheService.SaveSectionAsync(StoreGameCacheService.KeyRecommended, games);
                 _ = PreloadImagesAsync(games);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[StoreVM] Recommended error: {ex.Message}");
-            }
-            finally
-            {
-                IsLoadingRecommended = false;
-            }
+            catch (Exception ex) { Debug.WriteLine($"[StoreVM] Recommended: {ex.Message}"); }
+            finally { IsLoadingRecommended = false; }
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  BY TAG  — 12 games matching player's top genre
+        //  BY TAG
         // ═════════════════════════════════════════════════════════════════
 
         private async Task LoadByTagAsync(HashSet<string> genres)
@@ -254,16 +225,15 @@ namespace Rift_App.ViewModels
             IsLoadingByTag = true;
             try
             {
-                // Pick the most relevant tag from player's library
                 var tag = PickBestTag(genres);
                 var cacheKey = StoreGameCacheService.KeyByTag(tag);
-
                 ByTagLabel = $"Because You Play {tag}";
 
                 var cached = await StoreGameCacheService.LoadSectionAsync(cacheKey);
                 if (cached != null && cached.Count >= 4)
                 {
                     PopulateCollection(ByTagGames, cached);
+                    RefreshVisibleByTag();
                     _ = PreloadImagesAsync(cached);
                     return;
                 }
@@ -271,51 +241,37 @@ namespace Rift_App.ViewModels
                 var games = await ApiService.GetByTagAsync(tag);
                 if (games.Count == 0) return;
 
-                // Remove duplicates from other sections
                 var usedIds = GetUsedIds();
                 games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
 
                 PopulateCollection(ByTagGames, games);
-
+                RefreshVisibleByTag();
                 await StoreGameCacheService.SaveSectionAsync(cacheKey, games);
                 _ = PreloadImagesAsync(games);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[StoreVM] ByTag error: {ex.Message}");
-            }
-            finally
-            {
-                IsLoadingByTag = false;
-            }
+            catch (Exception ex) { Debug.WriteLine($"[StoreVM] ByTag: {ex.Message}"); }
+            finally { IsLoadingByTag = false; }
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  MORE — 5 per click, max 25 total
+        //  MORE
         // ═════════════════════════════════════════════════════════════════
 
         [RelayCommand]
         private async Task ShowMoreAsync()
         {
             if (IsLoadingMore || !HasMoreGames) return;
-
             IsLoadingMore = true;
             try
             {
                 _morePage++;
+                if (_morePage >= MoreMaxPages) { HasMoreGames = false; return; }
 
-                if (_morePage >= MoreMaxPages)
-                {
-                    HasMoreGames = false;
-                    return;
-                }
-
-                // Check disk cache for this page
                 var cacheKey = $"{StoreGameCacheService.KeyMore}_p{_morePage}";
                 var cached = await StoreGameCacheService.LoadSectionAsync(cacheKey);
 
                 List<GameModel> games;
-                bool fetchedFromApi = false;
+                bool fromApi = false;
 
                 if (cached != null && cached.Count > 0)
                 {
@@ -325,53 +281,42 @@ namespace Rift_App.ViewModels
                 {
                     var result = await ApiService.GetMoreAsync(_morePage);
                     games = result.Games;
+                    fromApi = true;
                     HasMoreGames = result.HasMore && (_morePage + 1) < MoreMaxPages;
-                    fetchedFromApi = true;
                 }
 
-                if (games.Count == 0)
-                {
-                    HasMoreGames = false;
-                    return;
-                }
+                if (games.Count == 0) { HasMoreGames = false; return; }
 
-                // Remove duplicates from ALL other sections
                 var usedIds = GetAllUsedIds();
                 games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
 
-                foreach (var game in games)
-                    MoreGames.Add(game);
+                foreach (var g in games) MoreGames.Add(g);
 
-                if (fetchedFromApi)
+                if (fromApi)
                     await StoreGameCacheService.SaveSectionAsync(cacheKey, games);
 
                 _ = PreloadImagesAsync(games);
 
-                // Hide button after last page
-                if (_morePage + 1 >= MoreMaxPages)
-                    HasMoreGames = false;
+                if (_morePage + 1 >= MoreMaxPages) HasMoreGames = false;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[StoreVM] ShowMore error: {ex.Message}");
-                _morePage--; // rollback on error
+                Debug.WriteLine($"[StoreVM] ShowMore: {ex.Message}");
+                _morePage--;
             }
-            finally
-            {
-                IsLoadingMore = false;
-            }
+            finally { IsLoadingMore = false; }
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  DISCOUNT CAROUSEL COMMANDS  (client-side, instant)
+        //  CAROUSEL COMMANDS — DISCOUNTS
         // ═════════════════════════════════════════════════════════════════
 
         [RelayCommand]
         private void NextDiscountPage()
         {
             if (DiscountGames.Count == 0) return;
-            int totalPages = (int)Math.Ceiling(DiscountGames.Count / (double)DiscountPageSize);
-            DiscountPageIndex = (DiscountPageIndex + 1) % totalPages;
+            int total = (int)Math.Ceiling(DiscountGames.Count / (double)DiscountPageSize);
+            DiscountPageIndex = (DiscountPageIndex + 1) % total;
             RefreshVisibleDiscounts();
         }
 
@@ -379,23 +324,78 @@ namespace Rift_App.ViewModels
         private void PrevDiscountPage()
         {
             if (DiscountGames.Count == 0) return;
-            int totalPages = (int)Math.Ceiling(DiscountGames.Count / (double)DiscountPageSize);
-            DiscountPageIndex = (DiscountPageIndex - 1 + totalPages) % totalPages;
+            int total = (int)Math.Ceiling(DiscountGames.Count / (double)DiscountPageSize);
+            DiscountPageIndex = (DiscountPageIndex - 1 + total) % total;
             RefreshVisibleDiscounts();
         }
 
         private void RefreshVisibleDiscounts()
         {
             VisibleDiscounts.Clear();
-            var page = DiscountGames
-                .Skip(DiscountPageIndex * DiscountPageSize)
-                .Take(DiscountPageSize);
-            foreach (var g in page)
+            foreach (var g in DiscountGames.Skip(DiscountPageIndex * DiscountPageSize).Take(DiscountPageSize))
                 VisibleDiscounts.Add(g);
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  FEATURED CAROUSEL COMMANDS
+        //  CAROUSEL COMMANDS — RECOMMENDED
+        // ═════════════════════════════════════════════════════════════════
+
+        [RelayCommand]
+        private void NextRecommended()
+        {
+            if (RecommendedGames.Count == 0) return;
+            int total = (int)Math.Ceiling(RecommendedGames.Count / (double)CardPageSize);
+            RecommendedPageIndex = (RecommendedPageIndex + 1) % total;
+            RefreshVisibleRecommended();
+        }
+
+        [RelayCommand]
+        private void PrevRecommended()
+        {
+            if (RecommendedGames.Count == 0) return;
+            int total = (int)Math.Ceiling(RecommendedGames.Count / (double)CardPageSize);
+            RecommendedPageIndex = (RecommendedPageIndex - 1 + total) % total;
+            RefreshVisibleRecommended();
+        }
+
+        private void RefreshVisibleRecommended()
+        {
+            VisibleRecommended.Clear();
+            foreach (var g in RecommendedGames.Skip(RecommendedPageIndex * CardPageSize).Take(CardPageSize))
+                VisibleRecommended.Add(g);
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  CAROUSEL COMMANDS — BY TAG
+        // ═════════════════════════════════════════════════════════════════
+
+        [RelayCommand]
+        private void NextByTag()
+        {
+            if (ByTagGames.Count == 0) return;
+            int total = (int)Math.Ceiling(ByTagGames.Count / (double)CardPageSize);
+            ByTagPageIndex = (ByTagPageIndex + 1) % total;
+            RefreshVisibleByTag();
+        }
+
+        [RelayCommand]
+        private void PrevByTag()
+        {
+            if (ByTagGames.Count == 0) return;
+            int total = (int)Math.Ceiling(ByTagGames.Count / (double)CardPageSize);
+            ByTagPageIndex = (ByTagPageIndex - 1 + total) % total;
+            RefreshVisibleByTag();
+        }
+
+        private void RefreshVisibleByTag()
+        {
+            VisibleByTag.Clear();
+            foreach (var g in ByTagGames.Skip(ByTagPageIndex * CardPageSize).Take(CardPageSize))
+                VisibleByTag.Add(g);
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        //  CAROUSEL COMMANDS — FEATURED
         // ═════════════════════════════════════════════════════════════════
 
         [RelayCommand]
@@ -438,7 +438,7 @@ namespace Rift_App.ViewModels
         }
 
         // ═════════════════════════════════════════════════════════════════
-        //  SELECT GAME  (navigate to game page)
+        //  SELECT GAME
         // ═════════════════════════════════════════════════════════════════
 
         [RelayCommand]
@@ -451,22 +451,16 @@ namespace Rift_App.ViewModels
         //  HELPERS
         // ═════════════════════════════════════════════════════════════════
 
-        /// Replaces collection contents without clearing and re-adding one by one
-        /// (reduces UI flicker).
-        private static void PopulateCollection(ObservableCollection<GameModel> col,
-                                               List<GameModel> games)
+        private static void PopulateCollection(ObservableCollection<GameModel> col, List<GameModel> games)
         {
             col.Clear();
-            foreach (var g in games)
-                col.Add(g);
+            foreach (var g in games) col.Add(g);
         }
 
-        /// AppIds already used in Featured + Discounts (for deduplication).
         private HashSet<int> GetUsedIds() =>
             new(FeaturedGames.Select(g => g.AppId)
                 .Concat(DiscountGames.Select(g => g.AppId)));
 
-        /// AppIds used across ALL sections (for More deduplication).
         private HashSet<int> GetAllUsedIds() =>
             new(FeaturedGames.Select(g => g.AppId)
                 .Concat(DiscountGames.Select(g => g.AppId))
@@ -474,7 +468,6 @@ namespace Rift_App.ViewModels
                 .Concat(ByTagGames.Select(g => g.AppId))
                 .Concat(MoreGames.Select(g => g.AppId)));
 
-        /// Gets the player's library genres for personalisation.
         private static async Task<HashSet<string>> GetLibraryGenresAsync()
         {
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -490,7 +483,6 @@ namespace Rift_App.ViewModels
             return result;
         }
 
-        /// Picks the best matching tag from the known tag map.
         private static readonly string[] KnownTags =
             { "Action", "RPG", "Survival", "Multiplayer", "Strategy", "Horror", "Indie", "Simulation" };
 
@@ -498,16 +490,12 @@ namespace Rift_App.ViewModels
         {
             foreach (var tag in KnownTags)
                 if (genres.Contains(tag)) return tag;
-
-            // Fallback — pick first genre that maps to a known tag
             foreach (var genre in genres)
                 foreach (var tag in KnownTags)
                     if (genre.Contains(tag, StringComparison.OrdinalIgnoreCase)) return tag;
-
-            return "Action"; // final fallback
+            return "Action";
         }
 
-        /// Preloads images into ImageCacheService in the background.
         private static async Task PreloadImagesAsync(List<GameModel> games)
         {
             foreach (var g in games)
@@ -516,7 +504,6 @@ namespace Rift_App.ViewModels
                 {
                     if (!string.IsNullOrEmpty(g.HeaderImageUrl))
                         await ImageCacheService.GetAsync(g.HeaderImageUrl);
-
                     foreach (var shot in (g.Screenshots ?? new()).Take(4))
                     {
                         if (!string.IsNullOrEmpty(shot))

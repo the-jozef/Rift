@@ -4,7 +4,6 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
-using System.Text.Json.Serialization;
 using static System.Net.WebRequestMethods;
 
 namespace SteamProxyBackend.Controllers
@@ -712,10 +711,6 @@ namespace SteamProxyBackend.Controllers
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  ALL OTHER EXISTING ENDPOINTS (unchanged)
-        // ═════════════════════════════════════════════════════════════════
-
         [HttpGet("player/{steamId}")]
         public async Task<IActionResult> GetPlayerSummary(string steamId)
         {
@@ -740,6 +735,159 @@ namespace SteamProxyBackend.Controllers
                     AvatarUrl = (string)player.avatarfull,
                     ProfileUrl = (string)player.profileurl
                 });
+            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+        // GET /api/steam/player/{steamId}/level
+        [HttpGet("player/{steamId}/level")]
+        public async Task<IActionResult> GetSteamLevel(string steamId)
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests." });
+
+                var url = $"https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/" +
+                          $"?key={_steamApiKey}&steamid={steamId}";
+                var response = await _http.GetStringAsync(url);
+                var json = JObject.Parse(response);
+                int level = json["response"]?["player_level"]?.Value<int>() ?? 0;
+                return Ok(new { Level = level });
+            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+
+        // GET /api/steam/player/{steamId}/friends
+        [HttpGet("player/{steamId}/friends")]
+        public async Task<IActionResult> GetFriendsList(string steamId)
+        {
+            try
+            {
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests." });
+
+                // 1. Získaj zoznam friend steamId-čiek
+                var friendsUrl = $"https://api.steampowered.com/ISteamUser/GetFriendList/v1/" +
+                                 $"?key={_steamApiKey}&steamid={steamId}&relationship=friend";
+                string friendsJson;
+                try
+                {
+                    friendsJson = await _http.GetStringAsync(friendsUrl);
+                }
+                catch
+                {
+                    // Private profile — vrátime špeciálny flag
+                    return Ok(new { IsPrivate = true, Friends = new List<object>() });
+                }
+
+                var friendsData = JObject.Parse(friendsJson);
+                var friendsList = friendsData["friendslist"]?["friends"] as JArray;
+
+                if (friendsList == null || !friendsList.Any())
+                    return Ok(new { IsPrivate = false, Friends = new List<object>() });
+
+                // 2. Zoberieme max 100 (Steam API limit pre GetPlayerSummaries)
+                var friendIds = friendsList
+                    .Select(f => f["steamid"]?.Value<string>() ?? "")
+                    .Where(id => !string.IsNullOrEmpty(id))
+                    .Take(100)
+                    .ToList();
+
+                // 3. Batch fetch summaries
+                var ids = string.Join(",", friendIds);
+                var summaryUrl = $"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/" +
+                                 $"?key={_steamApiKey}&steamids={ids}";
+                var summaryJson = await _http.GetStringAsync(summaryUrl);
+                var summaryData = JObject.Parse(summaryJson);
+                var players = summaryData["response"]?["players"] as JArray;
+
+                if (players == null)
+                    return Ok(new { IsPrivate = false, Friends = new List<object>() });
+
+                // 4. Mapuj persona state
+                static string MapState(int state, string? gameId) =>
+                    !string.IsNullOrEmpty(gameId) && gameId != "0" ? "In-Game" :
+                    state switch
+                    {
+                        1 => "Online",
+                        2 => "Busy",
+                        3 => "Away",
+                        4 => "Snooze",
+                        5 => "Looking to Trade",
+                        6 => "Looking to Play",
+                        _ => "Offline"
+                    };
+
+                var result = players.Select(p => new
+                {
+                    SteamId = p["steamid"]?.Value<string>() ?? "",
+                    Username = p["personaname"]?.Value<string>() ?? "",
+                    AvatarUrl = p["avatarfull"]?.Value<string>() ?? "",
+                    Status = MapState(
+                                    p["personastate"]?.Value<int>() ?? 0,
+                                    p["gameid"]?.Value<string>()),
+                    CurrentGame = p["gameextrainfo"]?.Value<string>() ?? "",
+                    IsOnline = (p["personastate"]?.Value<int>() ?? 0) != 0
+                })
+                // Online/In-Game first, then alphabetically
+                .OrderByDescending(f => f.Status == "In-Game")
+                .ThenByDescending(f => f.IsOnline)
+                .ThenBy(f => f.Username)
+                .ToList();
+
+                return Ok(new { IsPrivate = false, Friends = result });
+            }
+            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+        }
+
+        // GET /api/steam/store/search?q=xxx
+        [HttpGet("store/search")]
+        public async Task<IActionResult> SearchGames([FromQuery] string q = "")
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(q) || q.Length < 2)
+                    return Ok(new { Results = new List<object>() });
+
+                if (IsRateLimited(GetClientIp()))
+                    return StatusCode(429, new { Message = "Too many requests." });
+
+                // Steam search API — vracia zoznam { appid, name }
+                var searchUrl = $"https://steamcommunity.com/actions/SearchApps/{Uri.EscapeDataString(q)}";
+                var searchJson = await _http.GetStringAsync(searchUrl);
+                var searchArr = JArray.Parse(searchJson);
+
+                // Zoberieme top 5
+                var top5 = searchArr.Take(5).ToList();
+                if (!top5.Any())
+                    return Ok(new { Results = new List<object>() });
+
+                var appIds = top5
+                    .Select(x => x["appid"]?.Value<int>() ?? 0)
+                    .Where(id => id > 0)
+                    .ToList();
+
+                // Batch fetch cez appdetails (s memory cache)
+                var results = new List<object>();
+                foreach (var appId in appIds)
+                {
+                    var dto = await FetchSingleAsync(appId);
+                    if (dto == null) continue;
+
+                    results.Add(new
+                    {
+                        AppId = dto.AppId,
+                        Name = dto.Name,
+                        HeaderImageUrl = dto.HeaderImageUrl,
+                        Price = dto.Price,
+                        OriginalPrice = dto.OriginalPrice,
+                        DiscountPercent = dto.DiscountPercent,
+                        IsFree = dto.IsFree,
+                        HasDiscount = dto.HasDiscount
+                    });
+                }
+
+                return Ok(new { Results = results });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }

@@ -60,29 +60,49 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
+        private static readonly string[] SteamSpyGenres =
+{
+    "Free%20to%20Play",
+    "Early%20Access",
+    "Action",
+    "Massively%20Multiplayer",
+};
         private static async Task<Dictionary<int, string>?> DownloadAsync()
         {
             try
             {
-                var json = await _http.GetStringAsync(
-                    "https://steamspy.com/api.php?request=genre&genre=Free%20to%20Play");
-
-                // SteamSpy returns { "appId": { "name": "...", ... }, ... }
-                var raw = JsonConvert.DeserializeObject<Dictionary<string, SteamSpyEntry>>(json);
-                if (raw == null) return null;
-
                 var result = new Dictionary<int, string>();
-                foreach (var kvp in raw)
+
+                foreach (var genre in SteamSpyGenres)
                 {
-                    if (int.TryParse(kvp.Key, out int appId) && appId > 0
-                        && !string.IsNullOrEmpty(kvp.Value.Name))
+                    try
                     {
-                        result[appId] = kvp.Value.Name;
+                        var json = await _http.GetStringAsync(
+                            $"https://steamspy.com/api.php?request=genre&genre={genre}");
+
+                        var raw = JsonConvert.DeserializeObject<Dictionary<string, SteamSpyEntry>>(json);
+                        if (raw == null) continue;
+
+                        foreach (var kvp in raw)
+                        {
+                            if (int.TryParse(kvp.Key, out int appId) && appId > 0
+                                && !string.IsNullOrEmpty(kvp.Value.Name))
+                            {
+                                result[appId] = kvp.Value.Name;
+                            }
+                        }
+
+                        Debug.WriteLine($"[SteamSpy] Genre '{genre}': {raw.Count} games");
+                        await Task.Delay(1000); // SteamSpy rate limit
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[SteamSpy] Genre '{genre}' error: {ex.Message}");
                     }
                 }
 
                 await SaveDiskAsync(result);
-                Debug.WriteLine($"[SteamSpy] Downloaded {result.Count} F2P games.");
+                Debug.WriteLine($"[SteamSpy] Downloaded total {result.Count} games.");
                 return result;
             }
             catch (Exception ex)

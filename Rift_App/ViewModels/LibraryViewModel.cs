@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -75,11 +76,18 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public async Task LoadLibraryAsync()
         {
+            //delete
+            if (File.Exists(BlacklistPath))
+            {
+                File.Delete(BlacklistPath);
+                Debug.WriteLine("[Library] Old blacklist cleared.");
+            }
             IsLoading = true;
             Games.Clear();
 
             try
             {
+               
                 var cached = await LibraryCacheService.LoadAsync();
                 if (cached != null && cached.Count > 0)
                 {
@@ -179,16 +187,11 @@ namespace Rift_App.ViewModels
             var blacklist = LoadBlacklist();
             bool blacklistChanged = false;
 
-            // Skip already blacklisted IDs
             games = games.Where(g => !blacklist.Contains(g.AppId)).ToList();
 
             Debug.WriteLine($"[Fill] IDs to resolve: {string.Join(", ", games.Select(g => g.AppId))}");
 
-            if (!games.Any())
-            {
-                Debug.WriteLine("[Fill] All unknown IDs are blacklisted — skipping.");
-                return;
-            }
+            if (!games.Any()) return;
 
             const int batchSize = 3;
 
@@ -212,26 +215,48 @@ namespace Rift_App.ViewModels
                             game.Name = details.Name;
                             game.IconPath = await LibraryCacheService
                                 .DownloadIconAsync(game.AppId, game.IconUrl);
-                            return game;
+                            return (game, blacklist: false);
                         }
+
+                        // NULL ale bez HTTP exception = hra neexistuje → blacklist
+                        return (null, blacklist: true);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        // Rate limit alebo network error — NESMIE ísť do blacklistu
+                        Debug.WriteLine($"[Fill] {game.AppId} HTTP error (no blacklist): {ex.Message}");
+                        return (null, blacklist: false);
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine($"[Fill] {game.AppId} error: {ex.Message}");
+                        return (null, blacklist: false);
                     }
-
-                    // NULL alebo error — pridaj do blacklistu
-                    lock (blacklist) { blacklist.Add(game.AppId); blacklistChanged = true; }
-                    return null;
                 });
 
                 var results = await Task.WhenAll(tasks);
-                var resolved = results.OfType<GameModel>().ToList();
+
+                var resolved = results
+                    .Where(r => r.game != null)
+                    .Select(r => r.game!)
+                    .ToList();
+
+                // Len skutočne neexistujúce hry (nie HTTP errory) idú do blacklistu
+                foreach (var ((_, isBlacklisted), originalGame) in results.Zip(chunk))
+                {
+                    if (isBlacklisted)
+                    {
+                        lock (blacklist)
+                        {
+                            blacklist.Add(originalGame.AppId); // originalGame comes straight from chunk
+                            blacklistChanged = true;
+                        }
+                    }
+                }
 
                 if (resolved.Any())
                 {
                     CheckInstallStatus(resolved);
-
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         foreach (var game in resolved)
@@ -249,10 +274,7 @@ namespace Rift_App.ViewModels
                 await Task.Delay(600);
             }
 
-            // Ulož blacklist iba ak sa zmenil
-            if (blacklistChanged)
-                SaveBlacklist(blacklist);
-
+            if (blacklistChanged) SaveBlacklist(blacklist);
             Debug.WriteLine("[Library] Progressive name fill complete.");
         }
 
