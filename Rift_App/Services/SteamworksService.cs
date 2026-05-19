@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
-using System.Windows;
+using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Windows;
 
 namespace Rift_App.Services
 {
@@ -71,6 +72,26 @@ namespace Rift_App.Services
                 return key?.GetValue("InstallPath") != null;
             }
             catch { return false; }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_RESTORE = 9;
+
+        public static void FocusSteamWindow()
+        {
+            var process = Process.GetProcessesByName("steam").FirstOrDefault();
+            if (process == null) return;
+
+            var hwnd = process.MainWindowHandle;
+            if (hwnd == IntPtr.Zero) return;
+
+            ShowWindow(hwnd, SW_RESTORE);
+            SetForegroundWindow(hwnd);
         }
 
         public static async Task<bool> LaunchSteamAndWaitAsync()

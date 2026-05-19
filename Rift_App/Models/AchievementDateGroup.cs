@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Models
 {
-    /// <summary>
-    /// Groups achievements by their unlock date.
-    /// Used in the Library game detail activity feed.
-    /// </summary>
     public class AchievementDateGroup
     {
         public string DateLabel { get; set; } = string.Empty;

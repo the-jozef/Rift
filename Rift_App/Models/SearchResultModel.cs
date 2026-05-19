@@ -19,7 +19,6 @@ namespace Rift_App.Models
         public string DiscountDisplay => $"-{DiscountPercent}%";
         public string PriceDisplay => IsFree ? "Free To Play" : Price;
     }
-
     public class SearchResponse
     {
         public List<SearchResultModel> Results { get; set; } = new();

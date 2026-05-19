@@ -7,22 +7,19 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Services
 {
-    // Local JSON cache with TTL expiry — saves to AppData\RiftApp\cache\
     public static class LocalCacheService
     {
         private static readonly string CacheFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "RiftApp", "cache");
 
-        // ─── TTL konfigurácia ─────────────────────────────────────────────
-        // TTL configuration
-        public static readonly TimeSpan StoreTTL = TimeSpan.FromHours(6);   // Store sekcie
+        // ─── TTL configuration ─────────────────────────────────────────────
+        public static readonly TimeSpan StoreTTL = TimeSpan.FromHours(6);   // Store
         public static readonly TimeSpan LibraryTTL = TimeSpan.FromHours(24);  // Library
         public static readonly TimeSpan WishlistTTL = TimeSpan.FromHours(24); // Wishlist
         public static readonly TimeSpan AccountTTL = TimeSpan.FromHours(24);  // Account/Player
 
-        // ─── CACHE KĽÚČE ─────────────────────────────────────────────────
-        // Cache keys
+        // ─── CACHE KEYS ─────────────────────────────────────────────────
         public const string KeyFeatured = "store_featured";
         public const string KeyTrending = "store_trending";
         public const string KeyTopSellers = "store_topsellers";
@@ -33,7 +30,6 @@ namespace Rift_App.Services
         public const string KeyTags = "steam_tags";
 
         // ─── WRAPPER ──────────────────────────────────────────────────────
-
         private class CacheEntry<T>
         {
             public DateTime SavedAt { get; set; }
@@ -41,7 +37,6 @@ namespace Rift_App.Services
         }
 
         // ─── SAVE ─────────────────────────────────────────────────────────
-
         public static async Task SaveAsync<T>(string key, T data)
         {
             try
@@ -56,11 +51,6 @@ namespace Rift_App.Services
         }
 
         // ─── LOAD ─────────────────────────────────────────────────────────
-
-        /// <summary>
-        /// Načíta cache ak existuje a nie je expirovaná.
-        /// Loads cache if it exists and is not expired.
-        /// </summary>
         public static async Task<T?> LoadAsync<T>(string key, TimeSpan ttl)
         {
             try
@@ -84,10 +74,6 @@ namespace Rift_App.Services
             catch { return default; }
         }
 
-        /// <summary>
-        /// Overí či cache existuje a nie je expirovaná — bez načítania dát.
-        /// Checks if cache exists and is not expired — without loading data.
-        /// </summary>
         public static bool IsValid(string key, TimeSpan ttl)
         {
             try
@@ -104,10 +90,6 @@ namespace Rift_App.Services
             catch { return false; }
         }
 
-        /// <summary>
-        /// Vymaže konkrétny cache záznam.
-        /// Deletes a specific cache entry.
-        /// </summary>
         public static void Invalidate(string key)
         {
             try
@@ -118,10 +100,6 @@ namespace Rift_App.Services
             catch { }
         }
 
-        /// <summary>
-        /// Vymaže celý cache priečinok.
-        /// Clears entire cache folder.
-        /// </summary>
         public static void ClearAll()
         {
             try
@@ -133,7 +111,6 @@ namespace Rift_App.Services
         }
 
         // ─── HELPER ───────────────────────────────────────────────────────
-
         private static string GetPath(string key) =>
             Path.Combine(CacheFolder, $"{SanitizeKey(key)}.json");
 

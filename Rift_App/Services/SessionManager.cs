@@ -14,7 +14,7 @@ namespace Rift_App.Services
         public static string LastLocation { get; private set; } = "Store";
         public static event Action? OnSessionReady;
 
-        // Avatar URL zo Steam API — Steam API avatar URL
+        // Avatar URL from Steam API 
         public static string AvatarUrl { get; private set; } = string.Empty;
 
         public static bool IsLoggedIn => UserId != Guid.Empty && !string.IsNullOrEmpty(SteamId64);
@@ -27,7 +27,6 @@ namespace Rift_App.Services
             LastLocation = lastLocation;
         }
 
-        // Nastaví avatar po načítaní Steam profilu
         // Sets avatar after Steam profile is loaded
         public static void SetAvatar(string avatarUrl)
         {

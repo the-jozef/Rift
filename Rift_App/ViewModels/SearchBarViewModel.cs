@@ -16,27 +16,19 @@ namespace Rift_App.ViewModels
 {
     public partial class SearchBarViewModel : ObservableObject
     {
-        // ─── PROPERTIES ───────────────────────────────────────────────────
-
         [ObservableProperty] private string _searchText = string.Empty;
         [ObservableProperty] private bool _isSearching = false;
         [ObservableProperty] private bool _showDropdown = false;
+        [ObservableProperty] private int _wishlistCount = 0;
 
         public ObservableCollection<SearchResultModel> Results { get; } = new();
 
-        // Wishlist count — shared source
-        [ObservableProperty] private int _wishlistCount = 0;
-
-        // ─── DEBOUNCE ─────────────────────────────────────────────────────
         private CancellationTokenSource? _debounceCts;
         private const int DebounceMs = 320;
 
-        // ─── SEARCH TRIGGER ───────────────────────────────────────────────
-        // Called from code-behind whenever SearchText changes
-
+        // ─── SEARCH ───────────────────────────────────────────────────────
         public async Task OnSearchTextChangedAsync(string text)
         {
-            // Cancel previous debounce
             _debounceCts?.Cancel();
             _debounceCts = new CancellationTokenSource();
             var token = _debounceCts.Token;
@@ -62,8 +54,7 @@ namespace Rift_App.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Results.Clear();
-                    foreach (var r in results)
-                        Results.Add(r);
+                    foreach (var r in results) Results.Add(r);
                     ShowDropdown = Results.Count > 0;
                 });
             }
@@ -79,7 +70,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── COMMANDS ─────────────────────────────────────────────────────
-
         [RelayCommand]
         public void SelectResult(SearchResultModel result)
         {
@@ -88,7 +78,6 @@ namespace Rift_App.ViewModels
             SearchText = string.Empty;
             Results.Clear();
 
-            // Open directly in Steam store
             try
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -112,25 +101,23 @@ namespace Rift_App.ViewModels
         }
 
         [RelayCommand]
-        public void GoToWishlist() =>
+        public void ShowWishlist() =>
             ViewNavigator.Instance?.MainViewModel?.ShowWishlist();
 
         [RelayCommand]
-        public void CloseDropdown()
+        public void CloseDropdown() => ShowDropdown = false;
+
+        // ─── WISHLIST COUNT — z centrálneho cache ─────────────────────────
+        // Žiadny API call — len číta čo už WishlistVM alebo AccountVM načítal
+        public async Task LoadWishlistCountAsync()
         {
-            ShowDropdown = false;
+            WishlistCount = await WishlistCountCache.GetAsync();
         }
 
-        // ─── WISHLIST COUNT ───────────────────────────────────────────────
-
-        public async Task RefreshWishlistCountAsync()
+        // Zavolaj po každej zmene wishlisu (add/remove)
+        public void RefreshWishlistCount()
         {
-            try
-            {
-                var refs = await ApiService.GetWishlistIdsAsync(SessionManager.SteamId64);
-                WishlistCount = refs?.Count ?? 0;
-            }
-            catch { }
+            WishlistCount = WishlistCountCache.Count;
         }
     }
 }

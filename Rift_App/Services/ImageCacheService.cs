@@ -47,7 +47,6 @@ namespace Rift_App.Services
 
                 BitmapImage? image;
 
-                // Lokálny súbor — načítaj priamo z disku
                 if (url.StartsWith("C:\\") || url.StartsWith("/") || File.Exists(url))
                 {
                     image = LoadFromDisk(url);
@@ -81,7 +80,6 @@ namespace Rift_App.Services
         public static int Count => _memCache.Count;
 
         // ─── PRIVATE ──────────────────────────────────────────────────────
-
         private static string GetDiskPath(string url)
         {
             using var sha = System.Security.Cryptography.SHA256.Create();
@@ -105,7 +103,6 @@ namespace Rift_App.Services
             }
             catch { return null; }
         }
-
         private static async Task<BitmapImage?> DownloadAsync(string url, string savePath)
         {
             try

@@ -2,19 +2,21 @@
 using CommunityToolkit.Mvvm.Input;
 using Rift_App.Models;
 using Rift_App.Services;
+using Rift_App.Store;
+using Rift_App.ViewModels;
+using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using Rift_App.ViewModels;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Diagnostics;
+using System.Windows.Input;
 
 namespace Rift_App.ViewModels
 {
@@ -445,6 +447,19 @@ namespace Rift_App.ViewModels
         private void SelectGame(GameModel game)
         {
             if (game != null) OnGameSelected?.Invoke(game);
+
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = $"steam://store/{game.AppId}",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SearchBar] Open steam error: {ex.Message}");
+            }
         }
 
         // ═════════════════════════════════════════════════════════════════

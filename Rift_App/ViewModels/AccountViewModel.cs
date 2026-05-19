@@ -28,10 +28,10 @@ namespace Rift_App.ViewModels
 
         private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(1);
 
-        // ─── LOCK — prevents concurrent refreshes ─────────────────────────
+        // ─── LOCK ─────────────────────────────────────────────────────────
         private readonly SemaphoreSlim _loadLock = new(1, 1);
 
-        // ─── SNAPSHOT — holds a complete consistent state ─────────────────
+        // ─── SNAPSHOT ─────────────────────────────────────────────────────
         private class AccountSnapshot
         {
             public DateTime SavedAt { get; set; }
@@ -48,7 +48,7 @@ namespace Rift_App.ViewModels
             public List<RecentActivityGame> RecentGames { get; set; } = new();
         }
 
-        // ─── OBSERVABLE PROPERTIES ────────────────────────────────────────
+        // ─── PROPERTIES ───────────────────────────────────────────────────
         [ObservableProperty] private string _avatarUrl = SessionManager.AvatarUrl;
         [ObservableProperty] private string _username = SessionManager.Username;
         [ObservableProperty] private string _onlineStatus = "Online";
@@ -84,23 +84,20 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public async Task LoadAsync()
         {
-            // Always show session data instantly
             Username = SessionManager.Username;
             AvatarUrl = SessionManager.AvatarUrl;
 
+            // 1. Zobraz cache okamžite
             var cached = await TryLoadCacheAsync();
             if (cached != null)
             {
-                // Show cache immediately — no loading spinner
                 ApplySnapshot(cached);
                 IsLoading = false;
-
-                // Silently refresh in background
                 _ = RefreshInBackgroundAsync();
                 return;
             }
 
-            // No cache — show spinner, fetch all
+            // 2. Žiadna cache — fetchuj
             IsLoading = true;
             var snap = await BuildSnapshotAsync();
             ApplySnapshot(snap);
@@ -120,7 +117,7 @@ namespace Rift_App.ViewModels
             if (!await _loadLock.WaitAsync(0)) return;
             try
             {
-                await Task.Delay(2500);
+                await Task.Delay(3000);
                 var snap = await BuildSnapshotAsync();
                 ApplySnapshot(snap);
                 await SaveCacheAsync(snap);
@@ -146,19 +143,25 @@ namespace Rift_App.ViewModels
                 AvatarUrl = SessionManager.AvatarUrl,
             };
 
-            // All independent calls in parallel
+            // Wishlist count z centrálneho cache — žiadny extra API call
+            // Ostatné volania bežia paralelne
             var levelTask = ApiService.GetSteamLevelAsync(steamId);
             var friendsTask = ApiService.GetFriendsAsync(steamId);
             var libraryTask = ApiService.GetLibraryAsync(steamId);
-            var wishlistTask = ApiService.GetWishlistIdsAsync(steamId);
             var activityTask = ApiService.GetRecentActivityAsync(steamId);
 
+            // Wishlist — použi centrálny cache (môže byť už načítaný z WishlistVM)
+            var wishlistCountTask = WishlistCountCache.GetAsync();
+
             await Task.WhenAll(levelTask, friendsTask, libraryTask,
-                               wishlistTask, activityTask);
+                               activityTask, wishlistCountTask);
 
             snap.Level = levelTask.Result;
             snap.GamesOwnedCount = libraryTask.Result?.Count ?? 0;
-            snap.WishlistCount = wishlistTask.Result?.Count ?? 0;
+            snap.WishlistCount = wishlistCountTask.Result;
+
+            // Aktualizuj centrálny cache
+            WishlistCountCache.Set(snap.WishlistCount);
 
             var fr = friendsTask.Result;
             snap.FriendsPrivate = fr?.IsPrivate ?? false;
@@ -192,7 +195,6 @@ namespace Rift_App.ViewModels
                     game.AchievementsUnlocked = unlocked.Count;
                     game.AchievementsTotal = total;
 
-                    // Last played from local cache
                     var lastPlayed = LastPlayedCacheService.Get(game.AppId);
                     if (lastPlayed.HasValue)
                     {
@@ -205,7 +207,6 @@ namespace Rift_App.ViewModels
                         };
                     }
 
-                    // Recent achievement icons — newest first, max 5 visible + badge
                     var recent = unlocked
                         .Where(a => a.UnlockTime.HasValue)
                         .OrderByDescending(a => a.UnlockTime)
@@ -242,7 +243,6 @@ namespace Rift_App.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                // Scalar props — simple assignment, no flicker
                 Username = snap.Username;
                 AvatarUrl = snap.AvatarUrl;
                 OnlineStatus = snap.OnlineStatus;
@@ -253,7 +253,6 @@ namespace Rift_App.ViewModels
                 FriendsPrivate = snap.FriendsPrivate;
                 TotalHours2W = snap.TotalHours2W;
 
-                // Collections — only rebuild if content actually changed
                 var newFriendIds = snap.Friends.Select(f => f.SteamId).ToList();
                 var currFriendIds = Friends.Select(f => f.SteamId).ToList();
                 if (!newFriendIds.SequenceEqual(currFriendIds))

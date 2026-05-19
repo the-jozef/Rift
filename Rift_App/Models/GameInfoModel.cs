@@ -19,8 +19,6 @@ namespace Rift_App.Models
         public string ReleaseDate { get; set; } = string.Empty;
         public string ReviewDesc { get; set; } = string.Empty;
         public string ReviewCss { get; set; } = string.Empty;
-
-        // Display helpers
         public string DeveloperDisplay => Developers.FirstOrDefault() ?? "";
         public string PublisherDisplay => Publishers.FirstOrDefault() ?? "";
         public string TagsDisplay => string.Join(" • ", Tags.Take(4));

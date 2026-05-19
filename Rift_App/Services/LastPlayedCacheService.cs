@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 namespace Rift_App.Services
 {
     /// Reads localconfig.vdf ONCE → stores in memory + disk (TTL 2h).
-    /// Avoids re-reading the file on every game selection.
     public static class LastPlayedCacheService
     {
         private static readonly string CachePath = Path.Combine(
@@ -34,8 +33,6 @@ namespace Rift_App.Services
         }
 
         // ─── PUBLIC ───────────────────────────────────────────────────────
-
-        /// Call once after Steamworks is initialized.
         public static async Task InitializeAsync()
         {
             if (_initialized && DateTime.UtcNow - _loadedAt < TTL) return;
@@ -43,26 +40,19 @@ namespace Rift_App.Services
             if (await TryLoadDiskAsync()) return;
             await LoadVdfAsync();
         }
-
-        /// Fast O(1) lookup — always call InitializeAsync first.
         public static DateTime? Get(int appId)
         {
             _mem.TryGetValue(appId, out var v);
             return v;
         }
-
-        /// Called by SteamCallbackService when localconfig.vdf changes.
         public static async Task RefreshAsync()
         {
             await LoadVdfAsync();
             Debug.WriteLine("[LastPlayedCache] Refreshed from VDF.");
         }
-
-        /// Manual override (e.g. from a callback).
         public static void Set(int appId, DateTime? value) => _mem[appId] = value;
 
         // ─── PRIVATE ──────────────────────────────────────────────────────
-
         private static async Task<bool> TryLoadDiskAsync()
         {
             try
@@ -86,7 +76,6 @@ namespace Rift_App.Services
             }
             catch { return false; }
         }
-
         private static async Task LoadVdfAsync()
         {
             try
@@ -133,7 +122,6 @@ namespace Rift_App.Services
                 Debug.WriteLine($"[LastPlayedCache] VDF error: {ex.Message}");
             }
         }
-
         private static async Task SaveDiskAsync()
         {
             try
@@ -152,7 +140,6 @@ namespace Rift_App.Services
             }
             catch { }
         }
-
         private static string FindVdfSection(string content, string key)
         {
             var searchKey = $"\"{key}\"";

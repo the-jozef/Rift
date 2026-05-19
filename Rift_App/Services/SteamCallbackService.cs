@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Services
 {
-    /// Watches localconfig.vdf for playtime/lastplayed changes.
-    /// Also registers Steamworks callbacks for achievements.
     public static class SteamCallbackService
     {
         private static Callback<UserAchievementStored_t>? _achCallback;
@@ -57,7 +55,6 @@ namespace Rift_App.Services
         }
 
         // ─── PRIVATE: STEAMWORKS CALLBACKS ────────────────────────────────
-
         private static void OnAchievementStored(UserAchievementStored_t data)
         {
             var appId = (int)data.m_nGameID;
@@ -75,9 +72,6 @@ namespace Rift_App.Services
         }
 
         // ─── PRIVATE: FILESYSTEM WATCHER ──────────────────────────────────
-        // When the user closes a game, Steam writes updated playtime/lastplayed
-        // to localconfig.vdf. We catch that and refresh our cache + notify Library.
-
         private static void StartVdfWatcher()
         {
             try

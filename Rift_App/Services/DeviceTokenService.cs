@@ -33,7 +33,6 @@ namespace Rift_App.Services
                 return _cachedToken;
             }
         }
-
         private static string CreateNew()
         {
             _cachedToken = Guid.NewGuid().ToString();

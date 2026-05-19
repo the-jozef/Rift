@@ -2,16 +2,18 @@
 using CommunityToolkit.Mvvm.Input;
 using Rift_App.Authorization;
 using Rift_App.Library;
+using Rift_App.Models;
 using Rift_App.Services;
 using Rift_App.Store;
 using Rift_App.StoreGamePage;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Controls;
-using System.Windows.Input;
 using Steamworks;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace Rift_App.ViewModels
@@ -109,7 +111,6 @@ namespace Rift_App.ViewModels
             CurrentView = new Account.Account();
             ShowSearchBar = false;
         }
-
         [RelayCommand]
         public void ShowGamePage(Models.GameModel game)
         {
@@ -117,6 +118,23 @@ namespace Rift_App.ViewModels
             page.LoadGame(game);
             CurrentView = page;
             ShowSearchBar = false;
+        }
+        [RelayCommand]
+        public void ShowSteam()
+        {
+            OpenSteamUrl("steam://open/main");
+        }
+        [RelayCommand]
+        public void ShowSteamFriends()
+        {
+            OpenSteamUrl("steam://open/friends");
+        }
+
+        [RelayCommand]
+        public void ShowSteamAccount()
+        {
+            var steamId = SessionManager.SteamId64;
+            OpenSteamUrl($"steam://url/SteamIDPage/{steamId}");
         }
 
         // ─── SWITCH ACCOUNT ───────────────────────────────────────────────
@@ -139,6 +157,26 @@ namespace Rift_App.ViewModels
                 case "Account": ShowAccount(); break;
                 default: ShowStore(); break;
             }
+        }
+        // ─── HELPER ───────────────────────────────────────────────────────
+
+        private static void OpenSteamUrl(string url)
+        {
+            if (!SteamworksService.IsSteamInstalled())
+            {
+                MessageBox.Show(
+                    "Steam is not installed on this computer.",
+                    "Steam Not Found",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
     }
 }

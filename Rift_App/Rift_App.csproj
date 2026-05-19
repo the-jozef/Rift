@@ -53,9 +53,6 @@
 		<Resource Include="Image\Steam.jpg">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Resource>
-		<Resource Include="Image\Red.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
 		<Resource Include="Image\Rift_logo.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Resource>

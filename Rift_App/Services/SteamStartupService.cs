@@ -7,11 +7,7 @@ using System.Windows;
 
 namespace Rift_App.Services
 {
-    /// <summary>
-    /// Handles Steam startup checks shown at app launch.
-    /// Shows MessageBox if Steam is not installed.
-    /// Launches Steam automatically if not running.
-    /// </summary>
+    // Launches Steam automatically if not running.
     public static class SteamStartupService
     {
         private static bool _firstRun = !File.Exists(Path.Combine(
@@ -19,11 +15,9 @@ namespace Rift_App.Services
             "RiftApp", "initialized.flag"));
 
         // ─── MAIN ENTRY POINT ─────────────────────────────────────────────
-
-        /// <summary>
         /// Call this at app startup (before showing any window).
         /// Returns false if the app should shut down (Steam not installed).
-        /// </summary>
+
         public static async Task<bool> CheckAndStartSteamAsync()
         {
             // ── DEBUG: verify steam_appid.txt ──────────────────────────────────

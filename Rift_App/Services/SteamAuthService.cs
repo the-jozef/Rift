@@ -78,7 +78,6 @@ namespace Rift_App.Services
             catch { }
         }
 
-        // FIX: contextTask sa vytvori raz pred looopom — nie kazdy cyklus znova
         // contextTask is created once before the loop — not recreated every 500ms
         private static async Task<string?> WaitForCallbackAsync(CancellationToken token)
         {
@@ -103,9 +102,6 @@ namespace Rift_App.Services
 
                         return ExtractSteamId(fullUrl);
                     }
-
-                    // Delay skoncil — over cancellation a cakaj dalej
-                    // Delay elapsed — check cancellation and keep waiting
                 }
 
                 Debug.WriteLine("[Steam] Cancelled.");

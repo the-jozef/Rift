@@ -48,10 +48,7 @@ namespace Rift_App.Models
                 _iconImage = new GameImageViewModel(source ?? string.Empty);
                 return _iconImage;
             }
-        }
-
-        // Call this to reset icon so it reloads with new paths
-      
+        }      
         public void ResetIconImage() => _iconImage = null;
     }
 }

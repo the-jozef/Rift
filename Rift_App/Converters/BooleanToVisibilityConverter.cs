@@ -12,7 +12,6 @@ namespace Rift_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => value is Visibility.Visible;
     }
-
     public class RiftInverseBoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -20,7 +19,6 @@ namespace Rift_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => value is Visibility.Collapsed;
     }
-
     public class RiftStringToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -28,7 +26,6 @@ namespace Rift_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
-
     public class RiftBoolToGridRowHeightConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -36,7 +33,6 @@ namespace Rift_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
-
     public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -44,9 +40,6 @@ namespace Rift_App.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
-
-    // Porovná FeaturedIndex s parametrom radio buttona — 0,1,2...
-    // Compares FeaturedIndex with radio button parameter — 0,1,2...
     public class IndexEqualsConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -56,18 +49,6 @@ namespace Rift_App.Converters
             return false;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
-    }
-    public class FixedThumbHeightConverter : IMultiValueConverter
-    {
-        public double ThumbHeight { get; set; } = 70;
-
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ThumbHeight;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
 }

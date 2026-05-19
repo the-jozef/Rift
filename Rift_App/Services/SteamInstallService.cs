@@ -13,11 +13,6 @@ namespace Rift_App.Services
 {
     public record InstallInfo(bool IsInstalled, bool NeedsUpdate);
 
-    /// <summary>
-    /// Checks whether a Steam game is installed or needs an update
-    /// by reading local .acf manifest files. No API calls needed.
-    /// StateFlags: 4 = installed, 6 = needs update.
-    /// </summary>
     public static class SteamInstallService
     {
         private static Dictionary<int, InstallInfo>? _cache;

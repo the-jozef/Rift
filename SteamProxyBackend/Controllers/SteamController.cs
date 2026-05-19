@@ -17,7 +17,7 @@ namespace SteamProxyBackend.Controllers
 
         // ─── RATE LIMIT ───────────────────────────────────────────────────
         private static readonly ConcurrentDictionary<string, DateTime> _lastRequestTime = new();
-        private const int RateLimitSeconds = 2;
+        private const int RateLimitMs = 500; 
 
         // ─── GAME DETAIL MEMORY CACHE ─────────────────────────────────────
         // Shared across ALL section endpoints — fetch once, serve everywhere
@@ -247,9 +247,11 @@ namespace SteamProxyBackend.Controllers
         }
         private bool IsRateLimited(string ip)
         {
-            if (_lastRequestTime.TryGetValue(ip, out var last))
-                if ((DateTime.UtcNow - last).TotalSeconds < RateLimitSeconds) return true;
-            _lastRequestTime[ip] = DateTime.UtcNow;
+            // Kľúč = IP + endpoint path — paralelné volania na rôzne endpointy nie sú blokované
+            var key = $"{ip}:{Request.Path}";
+            if (_lastRequestTime.TryGetValue(key, out var last))
+                if ((DateTime.UtcNow - last).TotalMilliseconds < RateLimitMs) return true;
+            _lastRequestTime[key] = DateTime.UtcNow;
             return false;
         }
 

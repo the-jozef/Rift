@@ -9,9 +9,7 @@ using System.Text;
 
 namespace Rift_App.Services
 {
-    /// Caches per-game detail JSON in AppData\RiftApp\games\{appId}.json
     // TTL: 24 hours. Hero image: kept until the game is removed from library.
-    /// Shared between Library and Store game pages.
     public static class GameDetailCacheService
     {
         private static readonly string GamesFolder = Path.Combine(
@@ -63,7 +61,6 @@ namespace Rift_App.Services
         }
 
         // ─── SAVE ─────────────────────────────────────────────────────────
-
         public static async Task SaveAsync(GameDetailModel detail)
         {
             try
@@ -81,9 +78,6 @@ namespace Rift_App.Services
         }
 
         // ─── HERO IMAGE ───────────────────────────────────────────────────
-        // Tries library_hero (1920x620) first, falls back to header (460x215)
-        // Returns local file path, or null if download failed
-
         public static async Task<string?> EnsureHeroImageAsync(int appId)
         {
             try
@@ -121,7 +115,6 @@ namespace Rift_App.Services
         }
 
         // ─── DELETE — called when a game is removed from library ──────────
-
         public static void Delete(int appId)
         {
             try
@@ -136,7 +129,6 @@ namespace Rift_App.Services
         }
 
         // ─── HELPERS ──────────────────────────────────────────────────────
-
         private static async Task<byte[]?> TryDownloadAsync(string url)
         {
             try

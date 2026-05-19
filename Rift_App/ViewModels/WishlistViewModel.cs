@@ -256,6 +256,7 @@ namespace Rift_App.ViewModels
         {
             if (game == null) return;
             Games.Remove(game);
+            WishlistCountCache.Set(Games.Count);
             TotalGames = Games.Count;
             IsEmpty = Games.Count == 0;
             WishlistGameCacheService.Delete(game.AppId);

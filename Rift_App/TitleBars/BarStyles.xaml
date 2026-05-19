@@ -4,7 +4,6 @@
                     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
 
                              <!-- MenuBar -->
-    
     <!-- Main boder -->
     <Style x:Key="Rift_Menubar_MainBorder"
            TargetType="Border">
@@ -150,12 +149,10 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ScrollViewer in PopupBox  /both -->
-    <Style x:Key="Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications"
-           TargetType="ScrollViewer">
-
-        <Setter Property="VerticalScrollBarVisibility"
-                Value="Disabled" />
+    <!-- StackPanel in PopupBox  /both -->
+    <Style x:Key="Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications"
+           TargetType="StackPanel">
+        
         <Setter Property="Background"
                 Value="#3D4450" />
     </Style>
@@ -476,14 +473,14 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
                 Value="#46B0FF" />
     </Style>
 
-    <!-- ScrollViewer in PopupBox_Account -->
-    <Style x:Key="Rift_MenuBar_ScrollViewer_PopupBox_Account"
-           TargetType="ScrollViewer">
+    <!-- StackPanel in PopupBox_Account -->
+    <Style x:Key="Rift_MenuBar_StackPanel_PopupBox_Account"
+           TargetType="StackPanel">
 
-        <Setter Property="VerticalScrollBarVisibility"
-                Value="Disabled" />
         <Setter Property="Background"
                 Value="#3D4450" />
+        <Setter Property="Orientation"
+                Value="Vertical" />
     </Style>
 
     <!-- Separator in PopupBox_Account -->
@@ -705,102 +702,62 @@ RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
            TargetType="TextBox"
            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
 
-        <Setter Property="Height"
-                Value="22" />
-        <Setter Property="Width"
-                Value="165" />
+     
+        <Setter Property="MinWidth"
+                Value="235" />
+        <Setter Property="MaxWidth"
+                Value="235" />
         <Setter Property="FontSize"
-                Value="15" />
+                Value="16" />
         <Setter Property="Margin"
                 Value="6,0,0,0" />
         <Setter Property="Padding"
-                Value="5,0,50,0" />
+                Value="5,0,0,0" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="Background"
-                Value="#415261" />
+                Value="Transparent" />
         <Setter Property="BorderBrush"
-                Value="#343F4E" />
+                Value="Transparent" />
         <Setter Property="BorderThickness"
                 Value="0.5" />
-        <!-- Hint -->
+
         <Setter Property="materialDesign:HintAssist.Hint"
                 Value="Search the Store" />
         <Setter Property="materialDesign:HintAssist.IsFloating"
                 Value="False" />
-
-        <!-- Focus efekt -->
-        <Style.Triggers>
-
-            <Trigger Property="IsMouseOver"
-                     Value="True">
-                <Setter Property="BorderBrush"
-                        Value="#2B6694" />
-                <Setter Property="materialDesign:TextFieldAssist.OutlinedBorderActiveThickness"
-                        Value="1" />
-            </Trigger>
-
-            <!-- Focused alone -->
-            <Trigger Property="IsFocused"
-                     Value="True">
-                <Setter Property="BorderBrush"
-                        Value="#1A9FFF" />
-                <Setter Property="FontSize"
-                        Value="14" />
-                <Setter Property="materialDesign:TextFieldAssist.OutlinedBorderActiveThickness"
-                        Value="0.8" />
-                <Setter Property="Background"
-                        Value="#21272E" />
-            </Trigger>
-
-
-            <!-- Focused AND mouse over — focused wins -->
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsFocused"
-                               Value="True" />
-                    <Condition Property="IsMouseOver"
-                               Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush"
-                        Value="#1A9FFF" />
-                <Setter Property="materialDesign:TextFieldAssist.OutlinedBorderActiveThickness"
-                        Value="0.8" />
-                <Setter Property="Background"
-                        Value="#21272E" />
-                <Setter Property="FontSize"
-                        Value="14" />
-            </MultiTrigger>
-        </Style.Triggers>
     </Style>
 
 
     <Style x:Key="Rift_CLear_Button"
-           TargetType="Button"
-           BasedOn="{StaticResource MaterialDesignIconButton}">
-        <Setter Property="Width"
-                Value="20" />
-        <Setter Property="Height"
-                Value="20" />
+           TargetType="Button">
+
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
+                    
                     <materialDesign:PackIcon x:Name="Icon"
                                              Kind="Close"
-                                             Width="15"
-                                             Height="15"
+                                             Width="26"
+                                             Margin="5,0,0,0"
+                                             Height="26"
                                              Foreground="#4B4F55"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center" />
+                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter TargetName="Icon"
                                     Property="Width"
-                                    Value="20" />
+                                    Value="28" />
                             <Setter TargetName="Icon"
                                     Property="Height"
-                                    Value="20" />
+                                    Value="28" />
                             <Setter TargetName="Icon"
                                     Property="Foreground"
                                     Value="White" />

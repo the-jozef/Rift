@@ -32,15 +32,13 @@ namespace Rift_App.Models
 
         public bool HasAchievements => AchievementsTotal > 0;
     }
-
     public class RecentAchIcon
     {
         public string IconUrl { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public int ExtraCount { get; set; } // > 0 means "+N" badge
+        public int ExtraCount { get; set; }
         public bool IsExtra => ExtraCount > 0;
     }
-
     public class RecentActivityResponse
     {
         public double TotalHours { get; set; }

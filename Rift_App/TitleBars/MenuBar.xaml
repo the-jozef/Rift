@@ -58,21 +58,47 @@
                                         <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="View" />
                                     </materialDesign:PopupBox.ToggleContent>
 
-                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <StackPanel>
+                                        <Button
+                                            Command="{Binding ShowLibraryCommand}"
+                                            Content="Library"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
-                                            <Button
-                                                Command="{Binding ShowLibraryCommand}"
-                                                Content="Library"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button
+                                            Command="{Binding ShowStoreCommand}"
+                                            Content="Store"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
-                                            <Button
-                                                Command="{Binding ShowStoreCommand}"
-                                                Content="Store"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                        <Button
+                                            Command="{Binding ShowWishlistCommand}"
+                                            Content="Wishlist"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+
+                                        <Button
+                                            Command="{Binding ShowAccountCommand}"
+                                            Content="Profile"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Button
+                                            Command="{Binding ShowSteamAccountCommand}"
+                                            Content="Steam Profile"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+
+                                        <Button
+                                            Command="{Binding ShowSteamCommand}"
+                                            Content="Steam Store"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Button
+                                            Command="{Binding ShowSteamFriendsCommand}"
+                                            Content="Steam Friends"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>
 
@@ -85,19 +111,25 @@
 
                                     </materialDesign:PopupBox.ToggleContent>
 
-                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <StackPanel>
-                                            <Button
-                                                Command="{Binding ShowLibraryCommand}"
-                                                Content="View Games Library"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                            <Button
-                                                Command="{Binding ShowStoreCommand}"
-                                                Content="View Store"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                        <Button
+                                            Command="{Binding ShowLibraryCommand}"
+                                            Content="View Games Library"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Button
+                                            Command="{Binding ShowWishlistCommand}"
+                                            Content="View Games Wishlist"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+
+                                        <Button
+                                            Command="{Binding ShowStoreCommand}"
+                                            Content="View Store"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>
 
@@ -110,21 +142,13 @@
 
                                     </materialDesign:PopupBox.ToggleContent>
 
-                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <StackPanel>
-                                            <Button
-                                                Command=""
-                                                Content="Rift Support"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-
-                                            <Button
-                                                Command=""
-                                                Content="About RIFT"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                        <Button
+                                            Command=""
+                                            Content="About RIFT"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>
                         </Grid>
@@ -148,19 +172,20 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                    <StackPanel>
-                                        <Button
-                                            Command="{Binding ShowStoreCommand}"
-                                            Content="Featured"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                        <Button
-                                            Command="{Binding ShowWishlistCommand}"
-                                            Content="Wishlist"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                    </StackPanel>
-                                </ScrollViewer>
+                                    <Button
+                                        Command="{Binding ShowStoreCommand}"
+                                        Content="Featured"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                    <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+
+                                    <Button
+                                        Command="{Binding ShowWishlistCommand}"
+                                        Content="Wishlist"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                </StackPanel>
                             </materialDesign:PopupBox>
                         </Grid>
 
@@ -173,15 +198,18 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                    <StackPanel>
-                                        <Button
-                                            Command="{Binding ShowStoreCommand}"
-                                            Content="Home"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                    </StackPanel>
-                                </ScrollViewer>
+                                    <Button
+                                        Command="{Binding ShowLibraryCommand}"
+                                        Content="Library games"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                    <Button
+                                        Command="{Binding ShowStoreCommand}"
+                                        Content="Home"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                </StackPanel>
                             </materialDesign:PopupBox>
                         </Grid>
 
@@ -194,19 +222,23 @@
 
                                 </materialDesign:PopupBox.ToggleContent>
 
-                                <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                    <StackPanel>
-                                        <Button
-                                            Command="{Binding ShowAccountCommand}"
-                                            Content="Profile"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                        <Button
-                                            Command="{Binding ShowLibraryCommand}"
-                                            Content="Library"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                    </StackPanel>
-                                </ScrollViewer>
+                                    <Button
+                                        Command="{Binding ShowAccountCommand}"
+                                        Content="Profile"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                    <Button
+                                        Command="{Binding ShowLibraryCommand}"
+                                        Content="Library"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                    <Button
+                                        Command="{Binding ShowWishlistCommand}"
+                                        Content="Wishlist"
+                                        Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                </StackPanel>
                             </materialDesign:PopupBox>
                         </Grid>
                     </Grid>
@@ -233,19 +265,24 @@
                                 <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Notifications}" WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialDesign:PopupBox.ToggleContent>
-                                        <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Notifications}" />
+                                        <Button
+                                            Height="22"
+                                            Margin="0"
+                                            Padding="0"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding ShowSteamNotificationsCommand}"
+                                            CommandParameter="{Binding}">
 
+                                            <materialIcons:MaterialIcon Style="{StaticResource Rift_MenuBar_Icon_PopupBox_Notifications}" />
+
+                                        </Button>
                                     </materialDesign:PopupBox.ToggleContent>
 
-                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Tools_Options_Notifications}">
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <StackPanel>
-                                            <Button
-                                                Command=""
-                                                Content="View Notifications"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Notifications}" />
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                        <Button Content="View Notifications" Style="{StaticResource Rift_MenuBar_Items_PopupBox_Notifications}" />
+                                    </StackPanel>
                                 </materialDesign:PopupBox>
 
                                 <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Account}" WindowChrome.IsHitTestVisibleInChrome="True">
@@ -282,33 +319,30 @@
                                         </Border>
                                     </materialDesign:PopupBox.ToggleContent>
 
-                                    <ScrollViewer Style="{StaticResource Rift_MenuBar_ScrollViewer_PopupBox_Account}">
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Account}">
 
-                                        <StackPanel>
-                                            <Button
-                                                Command="{Binding ShowAccountCommand}"
-                                                Content="View my Profile"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+                                        <Button
+                                            Command="{Binding ShowAccountCommand}"
+                                            Content="View my Profile"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
-                                            <Button
-                                                Command="{Binding ShowWishlistCommand}"
-                                                Content="View my Wishlist"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+                                        <Button
+                                            Command="{Binding ShowWishlistCommand}"
+                                            Content="View my Wishlist"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
-                                            <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+                                        <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
-                                            <Button
-                                                Command="{Binding SwitchAccountCommand}"
-                                                Content="Change Account"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+                                        <Button
+                                            Command="{Binding SwitchAccountCommand}"
+                                            Content="Change Account"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
-                                            <Button
-                                                Command="{Binding SwitchAccountCommand}"
-                                                Content="Sign out of account..."
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
-
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                        <Button
+                                            Command="{Binding ShowSteamAccountCommand}"
+                                            Content="View Profile on Steam"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
+                                    </StackPanel>
                                 </materialDesign:PopupBox>
                             </StackPanel>
                         </Grid>

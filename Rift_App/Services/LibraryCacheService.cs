@@ -25,7 +25,6 @@ public static class LibraryCacheService
     };
 
     // ─── PATHS ────────────────────────────────────────────────────────────
-
     private static string UserFolder(string steamId) =>
         Path.Combine(BaseFolder, steamId, "games");
 
@@ -39,7 +38,6 @@ public static class LibraryCacheService
         Path.Combine(UserFolder(steamId), $"{appId}_unlocked.json");
 
     // ─── LOAD ALL ─────────────────────────────────────────────────────────
-
     public static async Task<List<GameModel>?> LoadAsync()
     {
         var steamId = SessionManager.SteamId64;
@@ -82,7 +80,6 @@ public static class LibraryCacheService
     }
 
     // ─── SAVE ALL ─────────────────────────────────────────────────────────
-
     public static async Task SaveAsync(List<GameModel> games)
     {
         var steamId = SessionManager.SteamId64;
@@ -120,7 +117,6 @@ public static class LibraryCacheService
     }
 
     // ─── ACHIEVEMENTS ─────────────────────────────────────────────────────
-
     public static async Task SaveAchievementsAsync(string steamId, int appId,
         List<AchievementModel> locked, List<AchievementModel> unlocked)
     {
@@ -138,9 +134,7 @@ public static class LibraryCacheService
         }
     }
 
-    public static async Task<(List<AchievementModel> Locked,
-                               List<AchievementModel> Unlocked)?> LoadAchievementsAsync(
-        string steamId, int appId)
+    public static async Task<(List<AchievementModel> Locked,List<AchievementModel> Unlocked)?> LoadAchievementsAsync(string steamId, int appId)
     {
         try
         {
@@ -159,7 +153,6 @@ public static class LibraryCacheService
     }
 
     // ─── SYNC ─────────────────────────────────────────────────────────────
-
     public static async Task<(List<GameModel> Games, bool Changed)> SyncAsync(
         List<GameModel> cached, List<GameModel> freshFromApi)
     {
@@ -195,7 +188,6 @@ public static class LibraryCacheService
     }
 
     // ─── ICONS ────────────────────────────────────────────────────────────
-
     public static async Task DownloadAllIconsAsync(List<GameModel> games)
     {
         EnsureIconFolder();

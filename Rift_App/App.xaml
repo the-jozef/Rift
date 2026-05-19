@@ -24,7 +24,6 @@
             <converters:RiftBoolToGridRowHeightConverter x:Key="BoolToGridRowHeightConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:IndexEqualsConverter x:Key="IndexEqualsConverter" />
-            <converters:FixedThumbHeightConverter x:Key="FixedThumbHeightConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

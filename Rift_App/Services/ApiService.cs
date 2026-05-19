@@ -26,7 +26,28 @@ namespace Rift_App.Services
         private static T? FromJson<T>(string json) =>
             JsonConvert.DeserializeObject<T>(json);
 
-        // ─── AUTH ──────────────────────────────────────────────
+        // ─── RETRY helper  ───────────────────
+        private static async Task<string?> GetWithRetryAsync(string url, int maxRetries = 3)
+        {
+            int delay = 1000;
+            for (int i = 0; i < maxRetries; i++)
+            {
+                try
+                {
+                    return await _http.GetStringAsync(url);
+                }
+                catch (HttpRequestException ex) when (ex.Message.Contains("429"))
+                {
+                    if (i == maxRetries - 1) throw;
+                    Debug.WriteLine($"[API] 429 on {url}, retry {i + 1} after {delay}ms");
+                    await Task.Delay(delay);
+                    delay *= 2; 
+                }
+            }
+            return null;
+        }
+
+        // ─── AUTH  ─────────────────────────────────────────────────────────
         public static async Task<AuthResponse?> RegisterAsync(string username, string password, string steamId64)
         {
             try
@@ -60,7 +81,7 @@ namespace Rift_App.Services
             catch { return new AuthResponse { Success = false, Message = "Connection error. Check your internet." }; }
         }
 
-        // ─── DEVICE ──────────────────────────────────────────────
+        // ─── DEVICE  ─────────────────────────────────────────────────────────
         public static async Task InitDeviceAsync()
         {
             try
@@ -131,13 +152,13 @@ namespace Rift_App.Services
             catch { return false; }
         }
 
-        // ─── STEAM — PLAYER ──────────────────────────────────────────────
+        // ─── STEAM — PLAYER  ─────────────────────────────────────────────────────────
         public static async Task<PlayerInfo?> GetPlayerInfoAsync(string steamId64)
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/player/{steamId64}");
-                return FromJson<PlayerInfo>(response);
+                var response = await GetWithRetryAsync($"{BaseUrl}/api/steam/player/{steamId64}");
+                return response == null ? null : FromJson<PlayerInfo>(response);
             }
             catch { return null; }
         }
@@ -146,10 +167,9 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/player/{steamId64}/level");
-                var data = FromJson<LevelResponse>(response);
-                return data?.Level ?? 0;
+                return response == null ? 0 : FromJson<LevelResponse>(response)?.Level ?? 0;
             }
             catch { return 0; }
         }
@@ -158,41 +178,43 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/player/{steamId64}/friends");
-                return FromJson<FriendsResponse>(response);
+                return response == null ? null : FromJson<FriendsResponse>(response);
             }
             catch { return null; }
         }
+
         public static async Task<RecentActivityResponse?> GetRecentActivityAsync(string steamId64)
         {
             try
             {
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/player/{steamId64}/recentactivity");
-                return FromJson<RecentActivityResponse>(response);
+                return response == null ? null : FromJson<RecentActivityResponse>(response);
             }
             catch { return null; }
         }
+
         public static async Task<List<SearchResultModel>> SearchGamesAsync(string query)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(query)) return new();
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/store/search?q={Uri.EscapeDataString(query)}");
-                return FromJson<SearchResponse>(response)?.Results ?? new();
+                return response == null ? new() : FromJson<SearchResponse>(response)?.Results ?? new();
             }
             catch { return new(); }
         }
 
-        // ─── STEAM — LIBRARY ──────────────────────────────────────────────
+        // ─── STEAM — LIBRARY  ─────────────────────────────────────────────────────────
         public static async Task<List<GameModel>> GetLibraryAsync(string steamId64)
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/library/{steamId64}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync($"{BaseUrl}/api/steam/library/{steamId64}");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
@@ -201,9 +223,9 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/library/game/{appId}/info");
-                return FromJson<GameInfoModel>(response);
+                return response == null ? null : FromJson<GameInfoModel>(response);
             }
             catch { return null; }
         }
@@ -212,19 +234,22 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/library/{steamId64}/full");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync(
+                    $"{BaseUrl}/api/steam/library/{steamId64}/full");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
 
-        // ─── STEAM — ACHIEVEMENTS ──────────────────────────────────────────────
+        // ─── STEAM — ACHIEVEMENTS  ─────────────────────────────────────────────────────────
         public static async Task<GameDetailModel?> GetAchievementsAsync(int appId, string steamId64)
         {
             try
             {
-                var json = await _http.GetStringAsync(
+                var json = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/achievements/{appId}/{steamId64}");
+                if (json == null) return null;
+
                 var data = JsonConvert.DeserializeObject<AchievementsResponse>(json);
                 if (data == null) return null;
 
@@ -243,6 +268,7 @@ namespace Rift_App.Services
                 return null;
             }
         }
+
         private class AchievementsResponse
         {
             public List<AchievementModel>? Achievements { get; set; }
@@ -250,75 +276,71 @@ namespace Rift_App.Services
             public int Unlocked { get; set; }
         }
 
-        // ─── STEAM — STORE ──────────────────────────────────────────────
-
-        // ─── 8 featured games ──────────────────────────────────────────────
+        // ─── STEAM — STORE  ─────────────────────────────────────────────────────────
         public static async Task<List<GameModel>> GetFeaturedAsync()
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/store/featured");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync($"{BaseUrl}/api/steam/store/featured");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
 
-        // ─── 24 discounted games ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetDiscountsAsync()
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/store/discounts");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync($"{BaseUrl}/api/steam/store/discounts");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
 
-        // ─── 12 recommended games ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetRecommendedAsync(IEnumerable<string> genres)
         {
             try
             {
                 var genreParam = Uri.EscapeDataString(string.Join(",", genres));
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/store/recommended?genres={genreParam}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
 
-        // ─── 12 games matching a specific tag ──────────────────────────────────────────────
         public static async Task<List<GameModel>> GetByTagAsync(string tag)
         {
             try
             {
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/store/bytag?tag={Uri.EscapeDataString(tag)}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
 
-        // ─── 5 games per page for the "More" section ──────────────────────────────────────────────
         public static async Task<MoreGamesResponse> GetMoreAsync(int page)
         {
             try
             {
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/store/more?page={page}");
-                return FromJson<MoreGamesResponse>(response)
-                    ?? new MoreGamesResponse { Games = new List<GameModel>(), HasMore = false };
+                return response == null
+                    ? new MoreGamesResponse { Games = new(), HasMore = false }
+                    : FromJson<MoreGamesResponse>(response)
+                      ?? new MoreGamesResponse { Games = new(), HasMore = false };
             }
-            catch { return new MoreGamesResponse { Games = new List<GameModel>(), HasMore = false }; }
+            catch { return new MoreGamesResponse { Games = new(), HasMore = false }; }
         }
 
-        // ── Kept for backward compatibility ───────────────────────────────
         public static async Task<List<GameModel>> GetNewTrendingAsync(int page = 0)
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/store/newtrending?page={page}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync(
+                    $"{BaseUrl}/api/steam/store/newtrending?page={page}");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
@@ -327,8 +349,9 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/store/topsellers?page={page}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync(
+                    $"{BaseUrl}/api/steam/store/topsellers?page={page}");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
@@ -337,33 +360,35 @@ namespace Rift_App.Services
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/store/specials?page={page}");
-                return FromJson<GamesResponse>(response)?.Games ?? new List<GameModel>();
+                var response = await GetWithRetryAsync(
+                    $"{BaseUrl}/api/steam/store/specials?page={page}");
+                return response == null ? new() : FromJson<GamesResponse>(response)?.Games ?? new();
             }
             catch { return new List<GameModel>(); }
         }
 
-        // ─── STEAM — SINGLE GAME ──────────────────────────────────────────────
+        // ─── STEAM — SINGLE GAME  ─────────────────────────────────────────────────────────
         public static async Task<GameModel?> GetGameDetailsAsync(int appId)
         {
             try
             {
-                var response = await _http.GetStringAsync($"{BaseUrl}/api/steam/game/{appId}");
-                return FromJson<GameModel>(response);
+                var response = await GetWithRetryAsync($"{BaseUrl}/api/steam/game/{appId}");
+                return response == null ? null : FromJson<GameModel>(response);
             }
             catch { return null; }
         }
 
-        // ─── WISHLIST ──────────────────────────────────────────────
+        // ─── WISHLIST  ─────────────────────────────────────────────────────────
         public static async Task<List<WishlistItemRef>> GetWishlistIdsAsync(string steamId64)
         {
             try
             {
                 Debug.WriteLine($"[API] GetWishlistIds: {steamId64}");
-                var response = await _http.GetStringAsync(
+                var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/wishlist/{steamId64}/ids");
-                var result = FromJson<WishlistIdsResponse>(response)?.Items
-                             ?? new List<WishlistItemRef>();
+                var result = response == null
+                    ? new List<WishlistItemRef>()
+                    : FromJson<WishlistIdsResponse>(response)?.Items ?? new();
                 Debug.WriteLine($"[API] GetWishlistIds: {result.Count} items");
                 return result;
             }
@@ -382,8 +407,7 @@ namespace Rift_App.Services
                 var body = ToJson(new { AppIds = appIds });
                 var response = await _http.PostAsync($"{BaseUrl}/api/steam/wishlist/batch", body);
                 var json = await response.Content.ReadAsStringAsync();
-                var result = FromJson<WishlistGamesResponse>(json)?.Games
-                               ?? new List<WishlistGameModel>();
+                var result = FromJson<WishlistGamesResponse>(json)?.Games ?? new();
                 Debug.WriteLine($"[API] GetWishlistBatch parsed: {result.Count} games");
                 return result;
             }
@@ -404,50 +428,51 @@ namespace Rift_App.Services
             }
             catch { return false; }
         }
-    }
 
-    // ─── RESPONSE TYPES ──────────────────────────────────────────────
-    public class AuthResponse
-    {
-        public bool Success { get; set; }
-        public string Message { get; set; } = string.Empty;
-        public Guid? UserId { get; set; }
-        public string? Username { get; set; }
-        public string? SteamId64 { get; set; }
-    }
+        // ─── RESPONSE TYPES  ─────────────────────────────────────────────────────────
+        public class AuthResponse
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; } = string.Empty;
+            public Guid? UserId { get; set; }
+            public string? Username { get; set; }
+            public string? SteamId64 { get; set; }
+        }
 
-    public class SessionResponse
-    {
-        public bool HasSession { get; set; }
-        public Guid? UserId { get; set; }
-        public string? Username { get; set; }
-        public string? SteamId64 { get; set; }
-        public string LastLocation { get; set; } = "Store";
-    }
+        public class SessionResponse
+        {
+            public bool HasSession { get; set; }
+            public Guid? UserId { get; set; }
+            public string? Username { get; set; }
+            public string? SteamId64 { get; set; }
+            public string LastLocation { get; set; } = "Store";
+        }
 
-    public class GamesResponse
-    {
-        public List<GameModel> Games { get; set; } = new();
-    }
+        public class GamesResponse
+        {
+            public List<GameModel> Games { get; set; } = new();
+        }
 
-    public class MoreGamesResponse
-    {
-        public List<GameModel> Games { get; set; } = new();
-        public bool HasMore { get; set; }
-        public int Page { get; set; }
-    }
+        public class MoreGamesResponse
+        {
+            public List<GameModel> Games { get; set; } = new();
+            public bool HasMore { get; set; }
+            public int Page { get; set; }
+        }
 
-    public class WishlistGamesResponse
-    {
-        public List<WishlistGameModel> Games { get; set; } = new();
-    }
+        public class WishlistGamesResponse
+        {
+            public List<WishlistGameModel> Games { get; set; } = new();
+        }
 
-    public class WishlistIdsResponse
-    {
-        public List<WishlistItemRef> Items { get; set; } = new();
-    }
-    public class LevelResponse
-    {
-        public int Level { get; set; }
+        public class WishlistIdsResponse
+        {
+            public List<WishlistItemRef> Items { get; set; } = new();
+        }
+
+        public class LevelResponse
+        {
+            public int Level { get; set; }
+        }
     }
 }

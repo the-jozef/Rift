@@ -12,19 +12,13 @@ namespace Rift_App.Models
         public int AchievementsUnlocked { get; set; }
         public int AchievementsTotal { get; set; }
         public List<AchievementModel> Achievements { get; set; } = new();
-
-        // Saved in JSON — the URL used to download the hero image
         public string? HeroImageUrl { get; set; }
-
-        // Set at runtime after checking local disk — NOT saved in JSON
         [JsonIgnore]
         public string? HeroImagePath { get; set; }
-
         // Cache timestamp — used to check if detail is still fresh
         public DateTime CachedAt { get; set; } = DateTime.UtcNow;
 
         // ─── DISPLAY HELPERS ──────────────────────────────────────────────
-
         public string LastPlayedDisplay
         {
             get
@@ -44,12 +38,10 @@ namespace Rift_App.Models
                 };
             }
         }
-
         public int AchievementsPercent =>
             AchievementsTotal > 0
                 ? (int)((double)AchievementsUnlocked / AchievementsTotal * 100)
                 : 0;
-
         public string AchievementsPercentDisplay =>
             AchievementsTotal > 0 ? $"({AchievementsPercent}%)" : string.Empty;
     }

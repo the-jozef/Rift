@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Rift_App.ViewModels;
+using Rift_App.Services;
 
 namespace Rift_App.TitleBars
 {
@@ -24,22 +25,11 @@ namespace Rift_App.TitleBars
         {
             InitializeComponent();
             DataContext = ViewModel;
-
-            // Wire up text changed for debounced search
-            SearchBox.TextChanged += async (_, _) =>
-                await ViewModel.OnSearchTextChangedAsync(SearchBox.Text);
-
-            // Close dropdown when clicking outside
-            SearchBox.LostFocus += (_, _) =>
-            {
-                // Small delay so button clicks in dropdown still register
-                System.Threading.Tasks.Task.Delay(200).ContinueWith(_ =>
-                    Dispatcher.Invoke(() => ViewModel.CloseDropdown()));
-            };
-
-            // Refresh wishlist count when loaded
             Loaded += async (_, _) =>
-                await ViewModel.RefreshWishlistCountAsync();
+            {
+                // Centrálny cache — žiadny extra API call
+                ViewModel.WishlistCount = await WishlistCountCache.GetAsync();
+            };
         }
     }
 }
