@@ -10,16 +10,13 @@
 
     <Grid>
         <Border Background="#132333">
-
             <Grid>
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
-
                     <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock VerticalAlignment="Center"
@@ -37,6 +34,7 @@
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
+
                     <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}">
                         <materialDesign:PopupBox.ToggleContent>
                             <TextBlock VerticalAlignment="Center"
@@ -54,57 +52,169 @@
                             </StackPanel>
                         </ScrollViewer>
                     </materialDesign:PopupBox>
-
-
                 </Grid>
 
                 <Grid Grid.Column="1">
-
                     <StackPanel Orientation="Horizontal"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Left">
 
-                        <TextBox x:Name="SearchBox"
-                                 materialDesign:TextFieldAssist.TextFieldCornerRadius="2,0,0,2"
-                                 Style="{StaticResource RiftSearchBar}"
-                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-                        <StackPanel Margin="147,5,1,5"
-                                    Orientation="Horizontal">
-                            <Button Command="{Binding ClearCommand}"
-                                    Style="{StaticResource Rift_CLear_Button}"
-                                    Visibility="{Binding Text, ElementName=SearchBox, Converter={StaticResource StringToVisibilityConverter}}" />
-                        </StackPanel>
+                        <Grid>
 
-                        <Button Width="21.999"
-                                Height="21.999"
-                                materialDesign:ButtonAssist.CornerRadius="0">
-                            <materialDesign:PackIcon Width="15"
-                                                     Height="15"
-                                                     Margin="-12.8,0,0,0"
-                                                     Foreground="White"
-                                                     Kind="Magnify" />
-                        </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="SearchBox"
+                                         materialDesign:TextFieldAssist.TextFieldCornerRadius="2,0,0,2"
+                                         Style="{StaticResource RiftSearchBar}"
+                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
+                                <StackPanel Margin="147,5,1,5"
+                                            Orientation="Horizontal">
+                                    <Button Command="{Binding ClearSearchCommand}"
+                                            Style="{StaticResource Rift_CLear_Button}"
+                                            Visibility="{Binding Text, ElementName=SearchBox,
+                                                         Converter={StaticResource StringToVisibilityConverter}}" />
+                                </StackPanel>
 
+                                <Button Width="21.999"
+                                        Height="21.999"
+                                        materialDesign:ButtonAssist.CornerRadius="0">
+                                    <materialDesign:PackIcon Width="15"
+                                                             Height="15"
+                                                             Margin="-12.8,0,0,0"
+                                                             Foreground="White"
+                                                             Kind="Magnify" />
+                                </Button>
+                            </StackPanel>
+
+                            <Popup x:Name="SearchPopup"
+                                   IsOpen="{Binding ShowDropdown}"
+                                   PlacementTarget="{Binding ElementName=SearchBox}"
+                                   Placement="Bottom"
+                                   StaysOpen="False"
+                                   AllowsTransparency="True">
+                                <Border Background="#1A2B3A"
+                                        BorderBrush="#2A4A5A"
+                                        BorderThickness="1"
+                                        CornerRadius="0,0,4,4"
+                                        MinWidth="320"
+                                        MaxWidth="400">
+                                    <StackPanel>
+
+                                        <TextBlock Text="Searching..."
+                                                   FontSize="12"
+                                                   Foreground="#7A8A9A"
+                                                   Margin="12,8,12,4"
+                                                   Visibility="{Binding IsSearching,Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                        <ItemsControl ItemsSource="{Binding Results}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Padding="0"
+                                                            HorizontalContentAlignment="Stretch"
+                                                            Command="{Binding DataContext.SelectResultCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Cursor="Hand">
+                                                        <Border Padding="8,6"
+                                                                Background="Transparent">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver"
+                                                                                 Value="True">
+                                                                            <Setter Property="Background"
+                                                                                    Value="#243545" />
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="60" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <Border Grid.Column="0"
+                                                                        Width="56"
+                                                                        Height="26"
+                                                                        CornerRadius="2"
+                                                                        ClipToBounds="True">
+                                                                    <Image Source="{Binding HeaderImageUrl}"
+                                                                           Stretch="UniformToFill"
+                                                                           RenderOptions.BitmapScalingMode="HighQuality" />
+                                                                </Border>
+
+                                                                <TextBlock Grid.Column="1"
+                                                                           Text="{Binding Name}"
+                                                                           FontSize="13"
+                                                                           Foreground="White"
+                                                                           Margin="8,0,8,0"
+                                                                           VerticalAlignment="Center"
+                                                                           TextTrimming="CharacterEllipsis" />
+
+                                                                <StackPanel Grid.Column="2"
+                                                                            Orientation="Vertical"
+                                                                            VerticalAlignment="Center"
+                                                                            HorizontalAlignment="Right">
+
+                                                                    <Border Background="#4C6B22"
+                                                                            CornerRadius="2"
+                                                                            Padding="4,1"
+                                                                            HorizontalAlignment="Right"
+                                                                            Visibility="{Binding HasDiscount,
+                                                                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                        <TextBlock Text="{Binding DiscountDisplay}"
+                                                                                   FontSize="11"
+                                                                                   FontWeight="Bold"
+                                                                                   Foreground="#A4D85A" />
+                                                                    </Border>
+
+                                                                    <TextBlock Text="{Binding PriceDisplay}"
+                                                                               FontSize="12"
+                                                                               Foreground="#C0BFC0"
+                                                                               HorizontalAlignment="Right">
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="TextBlock">
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsFree}"
+                                                                                                 Value="True">
+                                                                                        <Setter Property="Foreground"
+                                                                                                Value="#90EE90" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </Grid>
 
                         <Button Margin="10,0,0,0"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
                                 Padding="0"
-                                Foreground="White">
-
+                                Foreground="White"
+                                Command="{Binding GoToWishlistCommand}"
+                                Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
-
                                 <materialIcons:MaterialIcon Width="16"
                                                             Height="16"
                                                             Kind="Star" />
-
                                 <TextBlock Margin="5,0,0,0"
                                            VerticalAlignment="Center"
                                            FontSize="13.3"
                                            Text="Wishlist" />
-
-                                <TextBlock Text="25"
+                                <TextBlock Text="{Binding WishlistCount}"
                                            Margin="5,5,0,0"
                                            VerticalAlignment="Bottom"
                                            FontSize="12"

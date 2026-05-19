@@ -441,5 +441,4 @@ namespace Rift_App.Services
     {
         public int Level { get; set; }
     }
-
 }

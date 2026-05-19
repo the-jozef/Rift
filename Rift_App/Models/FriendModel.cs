@@ -9,7 +9,7 @@ namespace Rift_App.Models
         public string SteamId { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string AvatarUrl { get; set; } = string.Empty;
-        public string Status { get; set; } = "Offline";   //friend status: Online, Offline, Busy, Away, Snooze, Looking to trade, Looking to play
+        public string Status { get; set; } = "Offline";   // Online / Offline / In-Game / Away …
         public string CurrentGame { get; set; } = string.Empty;
         public bool IsOnline { get; set; }
     }

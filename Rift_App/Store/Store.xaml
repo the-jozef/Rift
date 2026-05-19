@@ -116,13 +116,20 @@
 
                                     <Button Grid.Column="0"
                                             Padding="0"
+                                            Margin="0"
+                                            MinWidth="680"
+                                            MinHeight="391"
                                             BorderBrush="Transparent"
                                             Background="Transparent"
                                             Command="{Binding SelectGameCommand}"
                                             CommandParameter="{Binding CurrentFeaturedGame}"
                                             Panel.ZIndex="1">
+                                        
                                         <Border ClipToBounds="True"
-                                                CornerRadius="3,0,0,3">
+                                                CornerRadius="3,0,0,3"
+                                                Height="391"
+                                                Width="830">
+                                            
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding FeaturedMainImage.Bitmap}"
                                                             RenderOptions.BitmapScalingMode="HighQuality"
@@ -515,20 +522,25 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Button Margin="0,0,10,10"
+                                                    
+                                                    <Button Margin="0,0,8,8"
                                                             Padding="0"
+                                                            Height="145"
                                                             BorderBrush="Transparent"
                                                             Background="Transparent"
                                                             Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                             CommandParameter="{Binding}">
+                                                        
                                                         <StackPanel HorizontalAlignment="Stretch"
                                                                     Background="#1D698D"
                                                                     Orientation="Vertical">
-                                                            <Image Height="150"
+                                                            
+                                                            <Image Height="100"
                                                                    HorizontalAlignment="Stretch"
                                                                    RenderOptions.BitmapScalingMode="HighQuality"
                                                                    Source="{Binding HeaderImage.Bitmap}"
                                                                    Stretch="UniformToFill" />
+                                                            
                                                             <Grid Height="35"
                                                                   Margin="0,5,4,5"
                                                                   HorizontalAlignment="Right">
