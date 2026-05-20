@@ -321,6 +321,13 @@ namespace SteamProxyBackend.Controllers
                 if (data == null) return null;
 
                 string name = data["name"]?.Value<string>() ?? "";
+
+                string appType = data["type"]?.Value<string>()?.ToLower() ?? "game";
+                if (appType == "dlc")
+                {
+                    Debug.WriteLine($"[Store] Skipping DLC: {name} ({appId})");
+                    return null;
+                }
                 if (string.IsNullOrEmpty(name)) return null;
                 if (HasAdultName(name) || HasExplicitContent(data)) return null;
 

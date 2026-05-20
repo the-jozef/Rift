@@ -21,7 +21,7 @@ namespace Rift_App.Models
         public string OriginalPrice { get; set; } = string.Empty;
         public int DiscountPercent { get; set; } = 0;
         public string InstallDir { get; set; } = string.Empty;
-
+        public string Type { get; set; } = "game";  
         public bool HasDiscount => DiscountPercent > 0;
         public bool IsFree =>
             Price?.Equals("Free", StringComparison.OrdinalIgnoreCase) == true ||

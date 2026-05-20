@@ -47,12 +47,12 @@
 
             <Grid>
 
-                <Popup
-                    x:Name="SearchPopup"
-                    IsOpen="{Binding ShowDropdown}"
-                    Placement="Bottom"
-                    PlacementTarget="{Binding ElementName=SearchBox}"
-                    StaysOpen="True">
+                <Popup x:Name="SearchPopup"
+                       IsOpen="{Binding ShowDropdown}"
+                       PlacementTarget="{Binding ElementName=SearchBox}"
+                       Placement="Bottom"
+                       StaysOpen="False"
+                       AllowsTransparency="True">
 
                     <Border
                         MinWidth="320"

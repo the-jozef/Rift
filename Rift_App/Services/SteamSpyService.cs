@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Steamworks;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Rift_App.Services
@@ -55,16 +56,22 @@ namespace Rift_App.Services
                 var json = await File.ReadAllTextAsync(CachePath);
                 var result = JsonConvert.DeserializeObject<Dictionary<int, string>>(json);
                 Debug.WriteLine($"[SteamSpy] Disk cache hit — {result?.Count} F2P games.");
+                if (result?.Count < 10000)
+                {
+                    File.Delete(CachePath);
+                    return null;
+                }
                 return result;
             }
-            catch { return null; }
+            catch {return null;}
+
+            
         }
 
         private static readonly string[] SteamSpyGenres =
-{
+  {
     "Free%20to%20Play",
-    "Early%20Access",
-    "Action",
+    "Early%20Access",        
     "Massively%20Multiplayer",
 };
         private static async Task<Dictionary<int, string>?> DownloadAsync()

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Threading;
+using System.Net.Http;
 
 namespace Rift_App.ViewModels
 {
@@ -23,10 +24,19 @@ namespace Rift_App.ViewModels
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "RiftApp", "cache");
 
+        private static readonly string ImagesFolder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "RiftApp", "account_headers");
+
         private static string CachePath =>
             Path.Combine(CacheFolder, $"account_{SessionManager.SteamId64}.json");
 
         private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(1);
+
+        private static readonly HttpClient _http = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(15)
+        };
 
         // ─── LOCK ─────────────────────────────────────────────────────────
         private readonly SemaphoreSlim _loadLock = new(1, 1);
@@ -87,7 +97,6 @@ namespace Rift_App.ViewModels
             Username = SessionManager.Username;
             AvatarUrl = SessionManager.AvatarUrl;
 
-            // 1. Zobraz cache okamžite
             var cached = await TryLoadCacheAsync();
             if (cached != null)
             {
@@ -97,7 +106,6 @@ namespace Rift_App.ViewModels
                 return;
             }
 
-            // 2. Žiadna cache — fetchuj
             IsLoading = true;
             var snap = await BuildSnapshotAsync();
             ApplySnapshot(snap);
@@ -143,14 +151,10 @@ namespace Rift_App.ViewModels
                 AvatarUrl = SessionManager.AvatarUrl,
             };
 
-            // Wishlist count z centrálneho cache — žiadny extra API call
-            // Ostatné volania bežia paralelne
             var levelTask = ApiService.GetSteamLevelAsync(steamId);
             var friendsTask = ApiService.GetFriendsAsync(steamId);
             var libraryTask = ApiService.GetLibraryAsync(steamId);
             var activityTask = ApiService.GetRecentActivityAsync(steamId);
-
-            // Wishlist — použi centrálny cache (môže byť už načítaný z WishlistVM)
             var wishlistCountTask = WishlistCountCache.GetAsync();
 
             await Task.WhenAll(levelTask, friendsTask, libraryTask,
@@ -159,8 +163,6 @@ namespace Rift_App.ViewModels
             snap.Level = levelTask.Result;
             snap.GamesOwnedCount = libraryTask.Result?.Count ?? 0;
             snap.WishlistCount = wishlistCountTask.Result;
-
-            // Aktualizuj centrálny cache
             WishlistCountCache.Set(snap.WishlistCount);
 
             var fr = friendsTask.Result;
@@ -181,10 +183,32 @@ namespace Rift_App.ViewModels
         private static async Task<List<RecentActivityGame>> EnrichRecentGamesAsync(
             List<RecentActivityGame> games, string steamId)
         {
+            EnsureImageFolder();
+
             foreach (var game in games)
             {
                 try
                 {
+                    // ── 1. Ensure header image on disk ────────────────────
+                    var localPath = GetHeaderPath(game.AppId);
+                    if (!File.Exists(localPath))
+                    {
+                        // Try library_hero first, fallback to header.jpg
+                        var downloaded = await TryDownloadImageAsync(
+                            $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/library_hero.jpg",
+                            localPath);
+
+                        if (!downloaded)
+                            await TryDownloadImageAsync(
+                                $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/header.jpg",
+                                localPath);
+                    }
+
+                    // Use local path if exists, otherwise keep URL
+                    if (File.Exists(localPath))
+                        game.HeaderImageUrl = localPath;
+
+                    // ── 2. Achievement data from local cache ──────────────
                     var achs = await LibraryCacheService.LoadAchievementsAsync(
                                    steamId, game.AppId);
                     if (!achs.HasValue) continue;
@@ -195,6 +219,7 @@ namespace Rift_App.ViewModels
                     game.AchievementsUnlocked = unlocked.Count;
                     game.AchievementsTotal = total;
 
+                    // Last played
                     var lastPlayed = LastPlayedCacheService.Get(game.AppId);
                     if (lastPlayed.HasValue)
                     {
@@ -207,6 +232,7 @@ namespace Rift_App.ViewModels
                         };
                     }
 
+                    // Recent achievement icons — newest first
                     var recent = unlocked
                         .Where(a => a.UnlockTime.HasValue)
                         .OrderByDescending(a => a.UnlockTime)
@@ -271,6 +297,27 @@ namespace Rift_App.ViewModels
             });
         }
 
+        // ─── IMAGE HELPERS ────────────────────────────────────────────────
+        private static string GetHeaderPath(int appId) =>
+            Path.Combine(ImagesFolder, $"{appId}_header.jpg");
+
+        private static void EnsureImageFolder()
+        {
+            if (!Directory.Exists(ImagesFolder))
+                Directory.CreateDirectory(ImagesFolder);
+        }
+
+        private static async Task<bool> TryDownloadImageAsync(string url, string savePath)
+        {
+            try
+            {
+                var bytes = await _http.GetByteArrayAsync(url);
+                await File.WriteAllBytesAsync(savePath, bytes);
+                return true;
+            }
+            catch { return false; }
+        }
+
         // ─── CACHE I/O ────────────────────────────────────────────────────
         private async Task<AccountSnapshot?> TryLoadCacheAsync()
         {
@@ -281,6 +328,15 @@ namespace Rift_App.ViewModels
                 var snap = JsonConvert.DeserializeObject<AccountSnapshot>(json);
                 if (snap == null) return null;
                 if (DateTime.UtcNow - snap.SavedAt > CacheTTL) return null;
+
+                // Restore local image paths for cached games
+                foreach (var g in snap.RecentGames)
+                {
+                    var localPath = GetHeaderPath(g.AppId);
+                    if (File.Exists(localPath))
+                        g.HeaderImageUrl = localPath;
+                }
+
                 return snap;
             }
             catch { return null; }

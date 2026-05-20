@@ -76,12 +76,12 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public async Task LoadLibraryAsync()
         {
-            //delete
+            /*//delete
             if (File.Exists(BlacklistPath))
             {
                 File.Delete(BlacklistPath);
                 Debug.WriteLine("[Library] Old blacklist cleared.");
-            }
+            }*/
             IsLoading = true;
             Games.Clear();
 
@@ -133,8 +133,10 @@ namespace Rift_App.ViewModels
                 foreach (var g in apiGames) allById[g.AppId] = g;
 
                 var allGames = allById.Values
-                    .Where(g => g.AppId > 0 && !SteamInternalIds.Contains(g.AppId))
-                    .ToList();
+    .Where(g => g.AppId > 0
+             && !SteamInternalIds.Contains(g.AppId)
+             && !IsDlcOrJunk(g))
+    .ToList();
 
                 // Playtime from local VDF
                 var playtime = SteamworksService.GetPlaytimeMinutes();
@@ -146,8 +148,6 @@ namespace Rift_App.ViewModels
                 var knownGames = allGames
                     .Where(g => !string.IsNullOrEmpty(g.Name) && g.Name != g.AppId.ToString())
                     .ToList();
-
-                Debug.WriteLine($"[Library] Known: {knownGames.Count}, sample icons: {string.Join(", ", knownGames.Take(3).Select(g => g.AppId + "=" + g.IconUrl))}");
 
                 var unknownGames = allGames
                     .Where(g => string.IsNullOrEmpty(g.Name) || g.Name == g.AppId.ToString())
@@ -208,7 +208,7 @@ namespace Rift_App.ViewModels
                             .GetGameDetailsAsync(game.AppId)
                             .WaitAsync(cts.Token);
 
-                        Debug.WriteLine($"[Fill] {game.AppId} → {(details == null ? "NULL" : details.Name)}");
+                        //Debug.WriteLine($"[Fill] {game.AppId} → {(details == null ? "NULL" : details.Name)}");
 
                         if (details != null && !string.IsNullOrEmpty(details.Name))
                         {
@@ -224,7 +224,7 @@ namespace Rift_App.ViewModels
                     catch (HttpRequestException ex)
                     {
                         // Rate limit alebo network error — NESMIE ísť do blacklistu
-                        Debug.WriteLine($"[Fill] {game.AppId} HTTP error (no blacklist): {ex.Message}");
+                        //Debug.WriteLine($"[Fill] {game.AppId} HTTP error (no blacklist): {ex.Message}");
                         return (null, blacklist: false);
                     }
                     catch (Exception ex)
@@ -375,10 +375,10 @@ namespace Rift_App.ViewModels
         // ─── HELPERS ──────────────────────────────────────────────────────
 
         private static readonly HashSet<int> SteamInternalIds = new()
-        {
-            7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
-            1520, 228980, 241100, 242550, 1430110
-        };
+{
+    7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
+    1520, 228980, 241100, 242550, 1430110, 250820, 1059530, 1391110, 1628350,
+};
 
         private static void RestoreIconPaths(List<GameModel> games)
         {
@@ -387,6 +387,23 @@ namespace Rift_App.ViewModels
                 var path = LibraryCacheService.GetIconPath(game.AppId);
                 game.IconPath = File.Exists(path) ? path : null;
             }
+        }
+        private static bool IsDlcOrJunk(GameModel g)
+        {
+            var t = g.Type?.ToLowerInvariant() ?? "game";
+            if (t == "dlc" || t == "demo" || t == "soundtrack" ||
+                t == "tool" || t == "beta" || t == "playtest" ||
+                t == "prologue") return true;
+
+            if (string.IsNullOrEmpty(g.Name) || g.Name == g.AppId.ToString())
+                return false;
+
+            var lower = g.Name.ToLowerInvariant();
+            return lower.EndsWith(" - dlc")
+                || lower.Contains("soundtrack")
+                || lower.Contains("dedicated server")
+                || lower.Contains(" - demo")
+                || lower.Contains("playtest");
         }
 
         private void PopulateGames(List<GameModel> games)
