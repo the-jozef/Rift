@@ -108,13 +108,13 @@ namespace Rift_App.ViewModels
         public void CloseDropdown() => ShowDropdown = false;
 
         // ─── WISHLIST COUNT — z centrálneho cache ─────────────────────────
-        // Žiadny API call — len číta čo už WishlistVM alebo AccountVM načítal
+        // No API call — just reads what WishlistVM or AccountVM already loaded
         public async Task LoadWishlistCountAsync()
         {
             WishlistCount = await WishlistCountCache.GetAsync();
         }
 
-        // Zavolaj po každej zmene wishlisu (add/remove)
+        // Call this after every wishlist change (add/remove)
         public void RefreshWishlistCount()
         {
             WishlistCount = WishlistCountCache.Count;

@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace Rift_App.Services
 {
@@ -35,7 +36,6 @@ namespace Rift_App.Services
                 _initialized = SteamAPI.Init();
                 Debug.WriteLine($"[Steamworks] Init: {_initialized}");
 
-                // Pre-load LastPlayed cache in background right after init
                 if (_initialized)
                     _ = LastPlayedCacheService.InitializeAsync();
 
@@ -59,16 +59,14 @@ namespace Rift_App.Services
         // ─── STEAM PROCESS ────────────────────────────────────────────────
 
         public static bool IsSteamRunning() =>
-            Process.GetProcessesByName("steam").Length > 0;
+            System.Diagnostics.Process.GetProcessesByName("steam").Length > 0;
 
         public static bool IsSteamInstalled()
         {
             try
             {
-                var key = Microsoft.Win32.Registry.LocalMachine
-                    .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
-                    ?? Microsoft.Win32.Registry.LocalMachine
-                    .OpenSubKey(@"SOFTWARE\Valve\Steam");
+                var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
+                       ?? Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam");
                 return key?.GetValue("InstallPath") != null;
             }
             catch { return false; }
@@ -84,12 +82,10 @@ namespace Rift_App.Services
 
         public static void FocusSteamWindow()
         {
-            var process = Process.GetProcessesByName("steam").FirstOrDefault();
+            var process = System.Diagnostics.Process.GetProcessesByName("steam").FirstOrDefault();
             if (process == null) return;
-
             var hwnd = process.MainWindowHandle;
             if (hwnd == IntPtr.Zero) return;
-
             ShowWindow(hwnd, SW_RESTORE);
             SetForegroundWindow(hwnd);
         }
@@ -100,19 +96,18 @@ namespace Rift_App.Services
             if (_steamWasAlreadyRunning) return true;
             try
             {
-                var key = Microsoft.Win32.Registry.LocalMachine
-                    .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
-                    ?? Microsoft.Win32.Registry.LocalMachine
-                    .OpenSubKey(@"SOFTWARE\Valve\Steam");
+                var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
+                       ?? Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam");
 
                 var steamPath = key?.GetValue("SteamExe") as string
-                    ?? key?.GetValue("InstallPath") as string;
-
+                             ?? key?.GetValue("InstallPath") as string;
                 if (string.IsNullOrEmpty(steamPath)) return false;
                 if (Directory.Exists(steamPath))
                     steamPath = Path.Combine(steamPath, "steam.exe");
 
-                Process.Start(new ProcessStartInfo { FileName = steamPath, UseShellExecute = true });
+                System.Diagnostics.Process.Start(
+                    new System.Diagnostics.ProcessStartInfo
+                    { FileName = steamPath, UseShellExecute = true });
 
                 for (int i = 0; i < 30; i++)
                 {
@@ -131,7 +126,12 @@ namespace Rift_App.Services
         public static void CloseSteamIfWeLaunchedIt()
         {
             if (_steamWasAlreadyRunning) return;
-            try { foreach (var p in Process.GetProcessesByName("steam")) p.Kill(); } catch { }
+            try
+            {
+                foreach (var p in System.Diagnostics.Process.GetProcessesByName("steam"))
+                    p.Kill();
+            }
+            catch { }
         }
 
         // ─── PLAYER INFO ──────────────────────────────────────────────────
@@ -155,8 +155,6 @@ namespace Rift_App.Services
         }
 
         // ─── ACHIEVEMENTS ─────────────────────────────────────────────────
-        // Schema (názvy + ikony) z API — funguje vždy
-        // Unlock status z Steamworks lokálne — funguje vždy bez ohľadu na privacy
 
         public static async Task<GameDetailModel?> GetAchievementsForAppAsync(int appId)
         {
@@ -165,7 +163,6 @@ namespace Rift_App.Services
                 var steamId = SessionManager.SteamId64;
                 if (string.IsNullOrEmpty(steamId)) return null;
 
-                // Ensure cache is ready (usually already initialized)
                 await LastPlayedCacheService.InitializeAsync();
 
                 var detail = await ApiService.GetAchievementsAsync(appId, steamId);
@@ -180,7 +177,6 @@ namespace Rift_App.Services
                     a.ResetIconImage();
                 }
 
-                // Use cache — no more VDF read per game
                 detail.LastPlayed = LastPlayedCacheService.Get(appId);
                 return detail;
             }
@@ -198,7 +194,7 @@ namespace Rift_App.Services
             {
                 if (!_initialized) return result;
 
-                var steamPath = Microsoft.Win32.Registry.LocalMachine
+                var steamPath = Registry.LocalMachine
                     .OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam")
                     ?.GetValue("InstallPath") as string;
                 if (string.IsNullOrEmpty(steamPath)) return result;
@@ -206,14 +202,12 @@ namespace Rift_App.Services
                 var accountId = SteamUser.GetSteamID().GetAccountID().m_AccountID;
                 var localConfig = Path.Combine(steamPath, "userdata",
                     accountId.ToString(), "config", "localconfig.vdf");
-
                 if (!File.Exists(localConfig)) return result;
 
                 var content = File.ReadAllText(localConfig);
                 var appsSection = FindVdfSection(content, "apps");
                 if (string.IsNullOrEmpty(appsSection)) return result;
 
-                // Parsuj každú hru
                 var appRegex = new System.Text.RegularExpressions.Regex(
                     @"""(\d+)""\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}",
                     System.Text.RegularExpressions.RegexOptions.Singleline);
@@ -221,11 +215,9 @@ namespace Rift_App.Services
                 foreach (System.Text.RegularExpressions.Match m in appRegex.Matches(appsSection))
                 {
                     if (!int.TryParse(m.Groups[1].Value, out int appId)) continue;
-
-                    var playtimeMatch = System.Text.RegularExpressions.Regex.Match(
+                    var ptMatch = System.Text.RegularExpressions.Regex.Match(
                         m.Groups[2].Value, @"""Playtime""\s+""(\d+)""");
-
-                    if (playtimeMatch.Success && int.TryParse(playtimeMatch.Groups[1].Value, out int minutes))
+                    if (ptMatch.Success && int.TryParse(ptMatch.Groups[1].Value, out int minutes))
                         result[appId] = minutes;
                 }
 
@@ -236,79 +228,6 @@ namespace Rift_App.Services
                 Debug.WriteLine($"[Steamworks] GetPlaytime error: {ex.Message}");
             }
             return result;
-        }
-
-        // ─── SCHEMA FROM API ──────────────────────────────────────────────
-
-        private record SchemaEntry(string ApiName, string DisplayName, string Description, string IconUrl, string IconGrayUrl);
-
-        private static async Task<List<SchemaEntry>> GetSchemaFromApiAsync(int appId)
-        {
-            try
-            {
-                var json = await _http.GetStringAsync($"{BaseUrl}/api/steam/schema/{appId}");
-                var doc = JsonDocument.Parse(json);
-                var result = new List<SchemaEntry>();
-
-                foreach (var a in doc.RootElement.GetProperty("achievements").EnumerateArray())
-                {
-                    result.Add(new SchemaEntry(
-                        a.GetProperty("apiName").GetString() ?? "",
-                        a.GetProperty("displayName").GetString() ?? "",
-                        a.GetProperty("description").GetString() ?? "",
-                        a.GetProperty("iconUrl").GetString() ?? "",
-                        a.GetProperty("iconGrayUrl").GetString() ?? ""
-                    ));
-                }
-
-                Debug.WriteLine($"[Steamworks] Schema loaded: {result.Count} achievements for {appId}");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Steamworks] Schema error: {ex.Message}");
-                return new List<SchemaEntry>();
-            }
-        }
-
-        private static string FindVdfSection(string content, string key)
-        {
-            // Hľadaj presne "key" s úvodzovkami
-            var searchKey = $"\"{key}\"";
-            int idx = 0;
-
-            while (idx < content.Length)
-            {
-                var found = content.IndexOf(searchKey, idx, StringComparison.OrdinalIgnoreCase);
-                if (found < 0) return string.Empty;
-
-                // Skontroluj že je to samostatný kľúč — pred ním musí byť whitespace alebo začiatok
-                int afterKey = found + searchKey.Length;
-
-                // Preskočí whitespace
-                int j = afterKey;
-                while (j < content.Length && (content[j] == ' ' || content[j] == '\t' || content[j] == '\r' || content[j] == '\n')) j++;
-
-                // Ďalší znak musí byť { — inak to nie je sekcia ale value
-                if (j < content.Length && content[j] == '{')
-                {
-                    int braceStart = j;
-                    int depth = 1;
-                    int i = braceStart + 1;
-                    while (i < content.Length && depth > 0)
-                    {
-                        if (content[i] == '{') depth++;
-                        else if (content[i] == '}') depth--;
-                        i++;
-                    }
-                    return depth == 0 ? content.Substring(braceStart + 1, i - braceStart - 2) : string.Empty;
-                }
-
-                // Nie je to sekcia — hľadaj ďalej
-                idx = found + 1;
-            }
-
-            return string.Empty;
         }
 
         // ─── INSTALL STATUS ───────────────────────────────────────────────
@@ -327,15 +246,21 @@ namespace Rift_App.Services
             return SteamInstallService.GetInfo(appId);
         }
 
-        // ─── ICON DOWNLOAD ────────────────────────────────────────────────
+        // ─── ICON PATHS — shared\achievement_icons\{appId}\ ──────────────
+
+        public static string? GetLocalIconPath(int appId, string apiName, bool gray = false)
+        {
+            var path = Path.Combine(
+                AppPaths.AchievementIconsForGame(appId),
+                gray ? $"{apiName}_gray.jpg" : $"{apiName}.jpg");
+            return File.Exists(path) ? path : null;
+        }
+
+        // ─── PRIVATE ──────────────────────────────────────────────────────
 
         private static async Task DownloadAchievementIconsAsync(int appId, List<AchievementModel> achievements)
         {
-            var folder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "RiftApp", "achievement_icons", appId.ToString());
-
-            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+            var folder = AppPaths.Ensure(AppPaths.AchievementIconsForGame(appId));
 
             using var semaphore = new SemaphoreSlim(8, 8);
 
@@ -367,15 +292,6 @@ namespace Rift_App.Services
             Debug.WriteLine($"[Steamworks] Icons downloaded for {appId}");
         }
 
-        public static string? GetLocalIconPath(int appId, string apiName, bool gray = false)
-        {
-            var path = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "RiftApp", "achievement_icons", appId.ToString(),
-                gray ? $"{apiName}_gray.jpg" : $"{apiName}.jpg");
-            return File.Exists(path) ? path : null;
-        }
-
         private static async Task<byte[]?> TryDownloadAsync(string url)
         {
             try
@@ -388,5 +304,39 @@ namespace Rift_App.Services
             }
             catch { return null; }
         }
+
+        private static string FindVdfSection(string content, string key)
+        {
+            var searchKey = $"\"{key}\"";
+            int idx = 0;
+            while (idx < content.Length)
+            {
+                var found = content.IndexOf(searchKey, idx, StringComparison.OrdinalIgnoreCase);
+                if (found < 0) return string.Empty;
+
+                int j = found + searchKey.Length;
+                while (j < content.Length &&
+                       (content[j] == ' ' || content[j] == '\t' ||
+                        content[j] == '\r' || content[j] == '\n')) j++;
+
+                if (j < content.Length && content[j] == '{')
+                {
+                    int depth = 1, i = j + 1;
+                    while (i < content.Length && depth > 0)
+                    {
+                        if (content[i] == '{') depth++;
+                        else if (content[i] == '}') depth--;
+                        i++;
+                    }
+                    return depth == 0
+                        ? content.Substring(j + 1, i - j - 2)
+                        : string.Empty;
+                }
+                idx = found + 1;
+            }
+            return string.Empty;
+        }
+
+        private record SchemaEntry(string ApiName, string DisplayName, string Description, string IconUrl, string IconGrayUrl);
     }
 }

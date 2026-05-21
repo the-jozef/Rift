@@ -8,21 +8,10 @@ using System.IO;
 
 namespace Rift_App.Services
 {
-    /// <summary>
-    /// Persists wishlist data locally — no TTL expiry.
-    /// Sync happens in background on every open (added/removed games + price updates).
-    /// Location: AppData\RiftApp\wishlist\{steamId64}_wishlist.json
-    /// </summary>
     public static class WishlistCacheService
     {
-        private static readonly string Folder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "wishlist");
-
         private static string FilePath(string steamId64) =>
-            Path.Combine(Folder, $"{steamId64}_wishlist.json");
-
-        // ─── LOAD ─────────────────────────────────────────────────────────
+            Path.Combine(AppPaths.Ensure(AppPaths.Wishlist(steamId64)), "list.json");
 
         public static async Task<List<WishlistGameModel>?> LoadAsync(string steamId64)
         {
@@ -40,13 +29,10 @@ namespace Rift_App.Services
             }
         }
 
-        // ─── SAVE ─────────────────────────────────────────────────────────
-
         public static async Task SaveAsync(string steamId64, List<WishlistGameModel> games)
         {
             try
             {
-                EnsureFolder();
                 var json = JsonConvert.SerializeObject(games, Formatting.None);
                 await File.WriteAllTextAsync(FilePath(steamId64), json);
                 Debug.WriteLine($"[WishlistCache] Saved {games.Count} games.");
@@ -56,8 +42,6 @@ namespace Rift_App.Services
                 Debug.WriteLine($"[WishlistCache] Save error: {ex.Message}");
             }
         }
-
-        // ─── REMOVE SINGLE ────────────────────────────────────────────────
 
         public static async Task RemoveAsync(string steamId64, int appId)
         {
@@ -72,13 +56,6 @@ namespace Rift_App.Services
             {
                 Debug.WriteLine($"[WishlistCache] Remove error: {ex.Message}");
             }
-        }
-
-        // ─── HELPER ───────────────────────────────────────────────────────
-
-        private static void EnsureFolder()
-        {
-            if (!Directory.Exists(Folder)) Directory.CreateDirectory(Folder);
         }
     }
 }

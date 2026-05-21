@@ -57,7 +57,7 @@ namespace Rift_App.ViewModels
                     return;
                 }
 
-                // 1. Získaj ID zoznam
+                // 1. Get Id list
                 var refs = await ApiService.GetWishlistIdsAsync(steamId);
                 if (refs == null || refs.Count == 0)
                 {
@@ -70,7 +70,7 @@ namespace Rift_App.ViewModels
                 TotalGames = refs.Count;
                 Debug.WriteLine($"[Wishlist] Total items: {refs.Count}");
 
-                // 2. Zobraz cached hry IHNEĎ
+                // 2. Show cached games IMMEDIATELY
                 var toFetch = new List<WishlistItemRef>();
                 foreach (var r in refs)
                 {
@@ -88,10 +88,10 @@ namespace Rift_App.ViewModels
 
                 Debug.WriteLine($"[Wishlist] From cache: {Games.Count}, to fetch: {toFetch.Count}");
 
-                // 3. IsLoading = false — cached hry sú viditeľné
+                // 3. IsLoading = false, so UI can display and the user can see at least something while missing data is being fetched.
                 IsLoading = false;
 
-                // 4. Fetch chýbajúce
+                // 4. Fetch
                 if (toFetch.Count > 0)
                 {
                     IsFetching = true;
@@ -105,7 +105,7 @@ namespace Rift_App.ViewModels
                 _syncCts?.Cancel();
                 _syncCts = new CancellationTokenSource();
 
-                // 5. Sync v pozadí
+                // 5. Sync in background every 15 minutes to keep wishlist up-to-date
                 _ = SyncInBackgroundAsync(steamId, refs, _syncCts.Token);
             }
             catch (Exception ex)
@@ -139,7 +139,7 @@ namespace Rift_App.ViewModels
             LoadingMessage = string.Empty;
         }
 
-        // ─── FETCH CHÝBAJÚCICH ────────────────────────────────────────────
+        // ─── FETCH ────────────────────────────────────────────
 
         private async Task FetchMissingAsync(List<WishlistItemRef> toFetch)
         {
@@ -201,7 +201,7 @@ namespace Rift_App.ViewModels
                     var currentIds = currentRefs.Select(r => r.AppId).ToHashSet();
                     var freshIds = freshRefs.Select(r => r.AppId).ToHashSet();
 
-                    // Zmazané z wishlistu
+                    // Delete from wishlist
                     foreach (var removed in currentIds.Except(freshIds))
                     {
                         WishlistGameCacheService.Delete(removed);
@@ -213,7 +213,7 @@ namespace Rift_App.ViewModels
                         Debug.WriteLine($"[Wishlist] Sync removed: {removed}");
                     }
 
-                    // Nové v wishliste
+                    // New in wishlist
                     var newRefs = freshRefs.Where(r => !currentIds.Contains(r.AppId)).ToList();
                     if (newRefs.Any())
                     {
@@ -237,7 +237,7 @@ namespace Rift_App.ViewModels
                         }
                     }
 
-                    // Aktualizuj currentRefs pre ďalší cyklus
+                    // Update currentRefs for next cycle
                     currentRefs = freshRefs;
 
                     Debug.WriteLine("[Wishlist] Sync done");
@@ -262,7 +262,7 @@ namespace Rift_App.ViewModels
             WishlistGameCacheService.Delete(game.AppId);
             await ApiService.RemoveFromWishlistAsync(SessionManager.SteamId64, game.AppId);
 
-            // Open Steam wishlist page for this game
+            // Open Steam wishlist page for this game 
             try
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo

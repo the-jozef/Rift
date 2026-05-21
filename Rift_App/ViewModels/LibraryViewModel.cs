@@ -29,22 +29,22 @@ namespace Rift_App.ViewModels
 
         public event Action<GameModel>? OnGameSelected;
 
+        // ─── BLACKLIST — shared\cache\appid_blacklist.json ────────────────
+        private static readonly string BlacklistPath =
+            Path.Combine(AppPaths.SharedCache, "appid_blacklist.json");
+
         public LibraryViewModel()
         {
-            // Subscribe to Steam changes (playtime, lastplayed)
             SteamCallbackService.LibraryChanged += OnSteamLibraryChanged;
         }
 
-
-        // ─── BLACKLIST ──────────────────────────────────────────────────
-        private static readonly string BlacklistPath = Path.Combine(
-    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-    "RiftApp", "cache", "appid_blacklist.json");
+        // ─── BLACKLIST I/O ────────────────────────────────────────────────
 
         private static HashSet<int> LoadBlacklist()
         {
             try
             {
+                AppPaths.Ensure(AppPaths.SharedCache);
                 if (!File.Exists(BlacklistPath)) return new();
                 var json = File.ReadAllText(BlacklistPath);
                 return JsonConvert.DeserializeObject<HashSet<int>>(json) ?? new();
@@ -56,9 +56,9 @@ namespace Rift_App.ViewModels
         {
             try
             {
-                var dir = Path.GetDirectoryName(BlacklistPath)!;
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-                File.WriteAllText(BlacklistPath, JsonConvert.SerializeObject(blacklist));
+                AppPaths.Ensure(AppPaths.SharedCache);
+                File.WriteAllText(BlacklistPath,
+                    JsonConvert.SerializeObject(blacklist));
             }
             catch { }
         }
@@ -76,22 +76,15 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public async Task LoadLibraryAsync()
         {
-            /*//delete
-            if (File.Exists(BlacklistPath))
-            {
-                File.Delete(BlacklistPath);
-                Debug.WriteLine("[Library] Old blacklist cleared.");
-            }*/
             IsLoading = true;
             Games.Clear();
 
             try
             {
-               
                 var cached = await LibraryCacheService.LoadAsync();
                 if (cached != null && cached.Count > 0)
                 {
-                    RestoreIconPaths(cached);
+                    LibraryCacheService.RestoreIconPaths(cached);
                     CheckInstallStatus(cached);
                     PopulateGames(cached);
                     IsLoading = false;
@@ -110,12 +103,9 @@ namespace Rift_App.ViewModels
 
                 var installedGames = SteamInstallService.GetAllGames();
                 var localConfigGames = SteamInstallService.GetAllAppsFromLocalConfig();
-
-                // Zdroj 5 — Windows Registry
                 var registryGames = SteamInstallService.GetAllAppsFromRegistry();
                 Debug.WriteLine($"[Library] Registry: {registryGames.Count}");
 
-                // Zdroj 6 — Subscribed F2P cez Steamworks + SteamSpy
                 List<GameModel> subscribedGames = new();
                 if (SteamworksService.IsInitialized)
                 {
@@ -124,19 +114,19 @@ namespace Rift_App.ViewModels
                 }
                 Debug.WriteLine($"[Library] Subscribed F2P: {subscribedGames.Count}");
 
-                // Spoj všetko — API vyhráva (má reálne mená)
+                // Merge — API wins (has real names)
                 var allById = new Dictionary<int, GameModel>();
                 foreach (var g in registryGames) allById[g.AppId] = g;
                 foreach (var g in localConfigGames) allById[g.AppId] = g;
-                foreach (var g in subscribedGames) allById[g.AppId] = g;  // NOVÝ RIADOK
+                foreach (var g in subscribedGames) allById[g.AppId] = g;
                 foreach (var g in installedGames) allById[g.AppId] = g;
                 foreach (var g in apiGames) allById[g.AppId] = g;
 
                 var allGames = allById.Values
-    .Where(g => g.AppId > 0
-             && !SteamInternalIds.Contains(g.AppId)
-             && !IsDlcOrJunk(g))
-    .ToList();
+                    .Where(g => g.AppId > 0
+                             && !SteamInternalIds.Contains(g.AppId)
+                             && !IsDlcOrJunk(g))
+                    .ToList();
 
                 // Playtime from local VDF
                 var playtime = SteamworksService.GetPlaytimeMinutes();
@@ -144,7 +134,6 @@ namespace Rift_App.ViewModels
                     if (playtime.TryGetValue(game.AppId, out int min))
                         game.PlaytimeMinutes = min;
 
-                // ── SPLIT: known names vs. needs API lookup ────────────────
                 var knownGames = allGames
                     .Where(g => !string.IsNullOrEmpty(g.Name) && g.Name != g.AppId.ToString())
                     .ToList();
@@ -153,17 +142,15 @@ namespace Rift_App.ViewModels
                     .Where(g => string.IsNullOrEmpty(g.Name) || g.Name == g.AppId.ToString())
                     .ToList();
 
-                // Show known games immediately
                 CheckInstallStatus(knownGames);
                 await LibraryCacheService.DownloadAllIconsAsync(knownGames);
                 await LibraryCacheService.SaveAsync(knownGames);
                 PopulateGames(knownGames);
                 IsLoading = false;
 
-                // Resolve unknown names progressively in background
                 if (unknownGames.Any())
                 {
-                    Debug.WriteLine($"[Library] {unknownGames.Count} games need name lookup (background).");
+                    Debug.WriteLine($"[Library] {unknownGames.Count} games need name lookup.");
                     _ = FillNamesProgressiveAsync(unknownGames);
                 }
             }
@@ -179,7 +166,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── PROGRESSIVE NAME FILL ────────────────────────────────────────
-        // Fetches names 3 at a time, inserts each game alphabetically as resolved.
 
         private async Task FillNamesProgressiveAsync(List<GameModel> games)
         {
@@ -188,9 +174,6 @@ namespace Rift_App.ViewModels
             bool blacklistChanged = false;
 
             games = games.Where(g => !blacklist.Contains(g.AppId)).ToList();
-
-            Debug.WriteLine($"[Fill] IDs to resolve: {string.Join(", ", games.Select(g => g.AppId))}");
-
             if (!games.Any()) return;
 
             const int batchSize = 3;
@@ -208,8 +191,6 @@ namespace Rift_App.ViewModels
                             .GetGameDetailsAsync(game.AppId)
                             .WaitAsync(cts.Token);
 
-                        //Debug.WriteLine($"[Fill] {game.AppId} → {(details == null ? "NULL" : details.Name)}");
-
                         if (details != null && !string.IsNullOrEmpty(details.Name))
                         {
                             game.Name = details.Name;
@@ -218,14 +199,11 @@ namespace Rift_App.ViewModels
                             return (game, blacklist: false);
                         }
 
-                        // NULL ale bez HTTP exception = hra neexistuje → blacklist
                         return (null, blacklist: true);
                     }
-                    catch (HttpRequestException ex)
+                    catch (HttpRequestException)
                     {
-                        // Rate limit alebo network error — NESMIE ísť do blacklistu
-                        //Debug.WriteLine($"[Fill] {game.AppId} HTTP error (no blacklist): {ex.Message}");
-                        return (null, blacklist: false);
+                        return (null, blacklist: false); // network error — not blacklisted
                     }
                     catch (Exception ex)
                     {
@@ -241,14 +219,13 @@ namespace Rift_App.ViewModels
                     .Select(r => r.game!)
                     .ToList();
 
-                // Len skutočne neexistujúce hry (nie HTTP errory) idú do blacklistu
                 foreach (var ((_, isBlacklisted), originalGame) in results.Zip(chunk))
                 {
                     if (isBlacklisted)
                     {
                         lock (blacklist)
                         {
-                            blacklist.Add(originalGame.AppId); // originalGame comes straight from chunk
+                            blacklist.Add(originalGame.AppId);
                             blacklistChanged = true;
                         }
                     }
@@ -278,7 +255,6 @@ namespace Rift_App.ViewModels
             Debug.WriteLine("[Library] Progressive name fill complete.");
         }
 
-        /// Inserts a game into Games keeping alphabetical order.
         private void InsertAlphabetically(GameModel game)
         {
             for (int i = 0; i < Games.Count; i++)
@@ -294,8 +270,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── STEAM CHANGE DETECTION ───────────────────────────────────────
-        // Called by SteamCallbackService when localconfig.vdf changes
-        // (i.e. user played a game and closed it).
 
         private void OnSteamLibraryChanged()
         {
@@ -305,12 +279,11 @@ namespace Rift_App.ViewModels
                 {
                     var playtime = SteamworksService.GetPlaytimeMinutes();
                     foreach (var game in Games)
-                    {
                         if (playtime.TryGetValue(game.AppId, out int minutes))
                             game.PlaytimeMinutes = minutes;
-                    }
+
                     InstalledCount = Games.Count(g => g.IsInstalled);
-                    Debug.WriteLine("[Library] Playtime refreshed from Steam change.");
+                    Debug.WriteLine("[Library] Playtime refreshed.");
                 }
                 catch (Exception ex)
                 {
@@ -326,7 +299,6 @@ namespace Rift_App.ViewModels
             try
             {
                 await Task.Delay(3000);
-
                 var steamId = SessionManager.SteamId64;
                 var fresh = await ApiService.GetLibraryAsync(steamId);
                 if (fresh.Count == 0) return;
@@ -340,7 +312,7 @@ namespace Rift_App.ViewModels
                 var (synced, changed) = await LibraryCacheService.SyncAsync(cached, fresh);
                 if (!changed) return;
 
-                RestoreIconPaths(synced);
+                LibraryCacheService.RestoreIconPaths(synced);
                 CheckInstallStatus(synced);
 
                 Application.Current.Dispatcher.Invoke(() =>
@@ -367,7 +339,6 @@ namespace Rift_App.ViewModels
                 var info = SteamworksService.IsInitialized
                     ? SteamworksService.GetInstallInfo(game.AppId)
                     : SteamInstallService.GetInfo(game.AppId);
-
                 game.IsInstalled = info.IsInstalled;
             }
         }
@@ -375,25 +346,16 @@ namespace Rift_App.ViewModels
         // ─── HELPERS ──────────────────────────────────────────────────────
 
         private static readonly HashSet<int> SteamInternalIds = new()
-{
-    7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
-    1520, 228980, 241100, 242550, 1430110, 250820, 1059530, 1391110, 1628350,
-};
-
-        private static void RestoreIconPaths(List<GameModel> games)
         {
-            foreach (var game in games)
-            {
-                var path = LibraryCacheService.GetIconPath(game.AppId);
-                game.IconPath = File.Exists(path) ? path : null;
-            }
-        }
+            7, 460, 480, 760, 764, 765, 766, 767, 1007, 1406,
+            1520, 228980, 241100, 242550, 1430110, 250820, 1059530, 1391110, 1628350,
+        };
+
         private static bool IsDlcOrJunk(GameModel g)
         {
             var t = g.Type?.ToLowerInvariant() ?? "game";
-            if (t == "dlc" || t == "demo" || t == "soundtrack" ||
-                t == "tool" || t == "beta" || t == "playtest" ||
-                t == "prologue") return true;
+            if (t is "dlc" or "demo" or "soundtrack" or "tool" or "beta" or "playtest" or "prologue")
+                return true;
 
             if (string.IsNullOrEmpty(g.Name) || g.Name == g.AppId.ToString())
                 return false;

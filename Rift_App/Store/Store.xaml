@@ -13,13 +13,14 @@
     <Grid>
         <Border Background="#1b2838" CornerRadius="0,0,6.1,6.1">
             <Grid>
-                <ScrollViewer>
+                <ScrollViewer Style="{StaticResource SlimScrollViewerStyle4}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="190" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="190" />
                         </Grid.ColumnDefinitions>
+
                         <Grid Grid.Column="0">
 
                             <Button
@@ -72,6 +73,7 @@
                         </Grid>
 
                         <Grid Grid.Column="1">
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
@@ -95,242 +97,243 @@
 
                                 <Grid
                                     Grid.Row="1"
-                                    Height="390"
                                     Margin="0,8,0,0"
                                     Visibility="{Binding IsLoadingFeatured, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="315" />
-                                    </Grid.ColumnDefinitions>
-
                                     <Button
-                                        Grid.Column="0"
-                                        MinWidth="680"
-                                        MinHeight="391"
+                                        Width="Auto"
+                                        Height="Auto"
                                         Margin="0"
                                         Padding="0"
-                                        Panel.ZIndex="1"
+                                        HorizontalAlignment="Left"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
                                         Command="{Binding SelectGameCommand}"
                                         CommandParameter="{Binding CurrentFeaturedGame}">
 
-                                        <Border
-                                            Width="830"
-                                            Height="391"
-                                            ClipToBounds="True"
-                                            CornerRadius="3,0,0,3">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="315" />
+                                            </Grid.ColumnDefinitions>
 
-                                            <Border.Background>
-                                                <ImageBrush
-                                                    ImageSource="{Binding FeaturedMainImage.Bitmap}"
-                                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                                    Stretch="UniformToFill" />
-                                            </Border.Background>
-                                        </Border>
-                                    </Button>
+                                            <Border
+                                                Grid.Column="0"
+                                                MinWidth="830"
+                                                MinHeight="375"
+                                                Panel.ZIndex="3"
+                                                CornerRadius="3,0,0,3">
 
-                                    <Grid Grid.Column="1">
-                                        <Border Background="#0B151E" CornerRadius="0,3,3,0">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="50" />
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-
-                                                <Grid Grid.Row="0">
-                                                    <TextBlock
-                                                        Width="293"
-                                                        Margin="8,22,0,0"
-                                                        HorizontalAlignment="Left"
-                                                        FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                        FontSize="23"
-                                                        Foreground="White"
-                                                        Text="{Binding CurrentFeaturedGame.Name}"
-                                                        TextWrapping="Wrap" />
-                                                </Grid>
-
-                                                <Grid
-                                                    Grid.Row="1"
-                                                    Margin="-1,14,0,0"
-                                                    Panel.ZIndex="0">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="8" />
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="10" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="*" />
-                                                        <RowDefinition Height="11" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-
-                                                    <Image
-                                                        Grid.Row="0"
-                                                        Grid.Column="0"
-                                                        Width="145"
-                                                        Height="82"
-                                                        HorizontalAlignment="Left"
+                                                <Border.Background>
+                                                    <ImageBrush
+                                                        ImageSource="{Binding FeaturedMainImage.Bitmap}"
                                                         RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Source="{Binding FeaturedScreenshot1.Bitmap}"
                                                         Stretch="UniformToFill" />
-                                                    <Image
-                                                        Grid.Row="0"
-                                                        Grid.Column="2"
-                                                        Width="145"
-                                                        Height="82"
-                                                        HorizontalAlignment="Left"
-                                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Source="{Binding FeaturedScreenshot2.Bitmap}"
-                                                        Stretch="UniformToFill" />
-                                                    <Image
-                                                        Grid.Row="2"
-                                                        Grid.Column="0"
-                                                        Width="145"
-                                                        Height="82"
-                                                        HorizontalAlignment="Left"
-                                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Source="{Binding FeaturedScreenshot3.Bitmap}"
-                                                        Stretch="UniformToFill" />
-                                                    <Image
-                                                        Grid.Row="2"
-                                                        Grid.Column="2"
-                                                        Width="145"
-                                                        Height="82"
-                                                        HorizontalAlignment="Left"
-                                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Source="{Binding FeaturedScreenshot4.Bitmap}"
-                                                        Stretch="UniformToFill" />
-                                                </Grid>
+                                                </Border.Background>
+                                            </Border>
 
-                                                <Grid Grid.Row="2" Margin="0,8,0,0">
-                                                    <TextBlock
-                                                        Width="280"
-                                                        Margin="10,0,0,2"
-                                                        HorizontalAlignment="Left"
-                                                        FontSize="16"
-                                                        TextWrapping="Wrap">
-                                                        <Run Text="{Binding CurrentFeaturedGame.StatusText}">
-                                                            <Run.Style>
-                                                                <Style TargetType="Run">
-                                                                    <Setter Property="Foreground" Value="#4DC44D" />
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding CurrentFeaturedGame.IsRecommended}" Value="False">
-                                                                            <Setter Property="Foreground" Value="White" />
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Run.Style>
-                                                        </Run>
-                                                    </TextBlock>
-                                                </Grid>
+                                            <Grid Grid.Column="1">
+                                                <Border Background="#0B151E" CornerRadius="0,3,3,0">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="50" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
 
-                                                <Grid Grid.Row="3" Margin="15,6,15,0">
-                                                    <ItemsControl VerticalAlignment="Top" ItemsSource="{Binding CurrentFeaturedGame.FeaturedTags}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <WrapPanel />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
+                                                        <Grid Grid.Row="0">
+                                                            <TextBlock
+                                                                Width="293"
+                                                                Margin="8,22,0,0"
+                                                                HorizontalAlignment="Left"
+                                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                                FontSize="23"
+                                                                Foreground="White"
+                                                                Text="{Binding CurrentFeaturedGame.Name}"
+                                                                TextWrapping="Wrap" />
+                                                        </Grid>
+
+                                                        <Grid
+                                                            Grid.Row="1"
+                                                            Margin="-1,14,0,0"
+                                                            Panel.ZIndex="0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="8" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="10" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="*" />
+                                                                <RowDefinition Height="11" />
+                                                                <RowDefinition Height="*" />
+                                                            </Grid.RowDefinitions>
+
+                                                            <Image
+                                                                Grid.Row="0"
+                                                                Grid.Column="0"
+                                                                Width="145"
+                                                                Height="82"
+                                                                HorizontalAlignment="Left"
+                                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                                Source="{Binding FeaturedScreenshot1.Bitmap}"
+                                                                Stretch="UniformToFill" />
+                                                            <Image
+                                                                Grid.Row="0"
+                                                                Grid.Column="2"
+                                                                Width="145"
+                                                                Height="82"
+                                                                HorizontalAlignment="Left"
+                                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                                Source="{Binding FeaturedScreenshot2.Bitmap}"
+                                                                Stretch="UniformToFill" />
+                                                            <Image
+                                                                Grid.Row="2"
+                                                                Grid.Column="0"
+                                                                Width="145"
+                                                                Height="82"
+                                                                HorizontalAlignment="Left"
+                                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                                Source="{Binding FeaturedScreenshot3.Bitmap}"
+                                                                Stretch="UniformToFill" />
+                                                            <Image
+                                                                Grid.Row="2"
+                                                                Grid.Column="2"
+                                                                Width="145"
+                                                                Height="82"
+                                                                HorizontalAlignment="Left"
+                                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                                Source="{Binding FeaturedScreenshot4.Bitmap}"
+                                                                Stretch="UniformToFill" />
+                                                        </Grid>
+
+                                                        <Grid Grid.Row="2" Margin="0,8,0,0">
+                                                            <TextBlock
+                                                                Width="280"
+                                                                Margin="10,0,0,2"
+                                                                HorizontalAlignment="Left"
+                                                                FontSize="16"
+                                                                TextWrapping="Wrap">
+                                                                <Run Text="{Binding CurrentFeaturedGame.StatusText}">
+                                                                    <Run.Style>
+                                                                        <Style TargetType="Run">
+                                                                            <Setter Property="Foreground" Value="#4DC44D" />
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding CurrentFeaturedGame.IsRecommended}" Value="False">
+                                                                                    <Setter Property="Foreground" Value="White" />
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </Run.Style>
+                                                                </Run>
+                                                            </TextBlock>
+                                                        </Grid>
+
+                                                        <Grid Grid.Row="3" Margin="15,6,15,0">
+                                                            <ItemsControl VerticalAlignment="Top" ItemsSource="{Binding CurrentFeaturedGame.FeaturedTags}">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <WrapPanel />
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border
+                                                                            Margin="0,0,4,0"
+                                                                            Padding="6,2"
+                                                                            Background="#394148"
+                                                                            CornerRadius="2">
+                                                                            <TextBlock
+                                                                                VerticalAlignment="Center"
+                                                                                FontSize="11"
+                                                                                Foreground="White"
+                                                                                Text="{Binding}" />
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </Grid>
+
+                                                        <Grid Grid.Row="4" Margin="10,0,10,10">
+
+                                                            <StackPanel
+                                                                HorizontalAlignment="Left"
+                                                                Orientation="Horizontal"
+                                                                Visibility="{Binding CurrentFeaturedGame.HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                                 <Border
-                                                                    Margin="0,0,4,0"
-                                                                    Padding="6,2"
-                                                                    Background="#394148"
-                                                                    CornerRadius="2">
+                                                                    Padding="8,0,8,0"
+                                                                    Background="#4c6b22"
+                                                                    CornerRadius="1,0,0,1">
                                                                     <TextBlock
                                                                         VerticalAlignment="Center"
-                                                                        FontSize="11"
-                                                                        Foreground="White"
-                                                                        Text="{Binding}" />
+                                                                        FontFamily="Arial"
+                                                                        FontSize="20"
+                                                                        FontWeight="Bold"
+                                                                        Foreground="#a4d007"
+                                                                        Text="{Binding CurrentFeaturedGame.DiscountPercent, StringFormat='-{0}%'}" />
                                                                 </Border>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </Grid>
-
-                                                <Grid Grid.Row="4" Margin="10,0,10,10">
-
-                                                    <StackPanel
-                                                        HorizontalAlignment="Left"
-                                                        Orientation="Horizontal"
-                                                        Visibility="{Binding CurrentFeaturedGame.HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                        <Border
-                                                            Padding="8,0,8,0"
-                                                            Background="#4c6b22"
-                                                            CornerRadius="1,0,0,1">
-                                                            <TextBlock
-                                                                VerticalAlignment="Center"
-                                                                FontFamily="Arial"
-                                                                FontSize="20"
-                                                                FontWeight="Bold"
-                                                                Foreground="#a4d007"
-                                                                Text="{Binding CurrentFeaturedGame.DiscountPercent, StringFormat='-{0}%'}" />
-                                                        </Border>
-                                                        <Border
-                                                            Padding="5,3,10,3"
-                                                            Background="#1C2A35"
-                                                            CornerRadius="0,1,1,0">
-                                                            <StackPanel
-                                                                HorizontalAlignment="Right"
-                                                                VerticalAlignment="Center"
-                                                                Orientation="Horizontal">
-                                                                <TextBlock
-                                                                    FontSize="16"
-                                                                    Foreground="#738895"
-                                                                    Text="{Binding CurrentFeaturedGame.OriginalPrice}"
-                                                                    TextDecorations="Strikethrough" />
-                                                                <TextBlock
-                                                                    Margin="8,0,0,0"
-                                                                    FontSize="16"
-                                                                    FontWeight="SemiBold"
-                                                                    Foreground="#a4d007"
-                                                                    Text="{Binding CurrentFeaturedGame.Price}" />
+                                                                <Border
+                                                                    Padding="5,3,10,3"
+                                                                    Background="#1C2A35"
+                                                                    CornerRadius="0,1,1,0">
+                                                                    <StackPanel
+                                                                        HorizontalAlignment="Right"
+                                                                        VerticalAlignment="Center"
+                                                                        Orientation="Horizontal">
+                                                                        <TextBlock
+                                                                            FontSize="16"
+                                                                            Foreground="#738895"
+                                                                            Text="{Binding CurrentFeaturedGame.OriginalPrice}"
+                                                                            TextDecorations="Strikethrough" />
+                                                                        <TextBlock
+                                                                            Margin="8,0,0,0"
+                                                                            FontSize="16"
+                                                                            FontWeight="SemiBold"
+                                                                            Foreground="#a4d007"
+                                                                            Text="{Binding CurrentFeaturedGame.Price}" />
+                                                                    </StackPanel>
+                                                                </Border>
                                                             </StackPanel>
-                                                        </Border>
-                                                    </StackPanel>
 
-                                                    <TextBlock
-                                                        Margin="18,15,0,0"
-                                                        FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                        FontSize="17"
-                                                        FontWeight="Medium"
-                                                        Foreground="White"
-                                                        Text="Free To Play"
-                                                        Visibility="{Binding CurrentFeaturedGame.IsFree, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                            <TextBlock
+                                                                Margin="18,15,0,0"
+                                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                                FontSize="17"
+                                                                FontWeight="Medium"
+                                                                Foreground="White"
+                                                                Text="Free To Play"
+                                                                Visibility="{Binding CurrentFeaturedGame.IsFree, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                                                    <TextBlock
-                                                        Margin="18,15,0,0"
-                                                        FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                        FontWeight="Medium"
-                                                        Foreground="White"
-                                                        Text="{Binding CurrentFeaturedGame.Price}">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                                <Style.Triggers>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding CurrentFeaturedGame.HasDiscount}" Value="False" />
-                                                                            <Condition Binding="{Binding CurrentFeaturedGame.IsFree}" Value="False" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Visibility" Value="Visible" />
-                                                                        <Setter Property="FontSize" Value="19" />
-                                                                    </MultiDataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </Grid>
+                                                            <TextBlock
+                                                                Margin="18,15,0,0"
+                                                                FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                                FontWeight="Medium"
+                                                                Foreground="White"
+                                                                Text="{Binding CurrentFeaturedGame.Price}">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                                        <Style.Triggers>
+                                                                            <MultiDataTrigger>
+                                                                                <MultiDataTrigger.Conditions>
+                                                                                    <Condition Binding="{Binding CurrentFeaturedGame.HasDiscount}" Value="False" />
+                                                                                    <Condition Binding="{Binding CurrentFeaturedGame.IsFree}" Value="False" />
+                                                                                </MultiDataTrigger.Conditions>
+                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                                <Setter Property="FontSize" Value="19" />
+                                                                            </MultiDataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Border>
                                             </Grid>
-                                        </Border>
-                                    </Grid>
+                                        </Grid>
+                                    </Button>
                                 </Grid>
 
                                 <Grid Grid.Row="2" Margin="0,10,0,0">
@@ -417,9 +420,9 @@
                             <Grid Grid.Row="1" Visibility="{Binding IsLoadingDiscounts, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="120" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="120" />
                                 </Grid.ColumnDefinitions>
 
                                 <Grid.RowDefinitions>
@@ -429,7 +432,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="150" />
+                                    <RowDefinition Height="80" />
                                 </Grid.RowDefinitions>
 
                                 <Grid Grid.Row="1" Grid.Column="0">
@@ -499,7 +502,7 @@
                                                 HorizontalAlignment="Left"
                                                 FontSize="14"
                                                 Foreground="White"
-                                                Text="Discounts &amp; Special Offers" />
+                                                Text="Discounts &amp; Free Offers" />
                                         </Grid>
 
                                         <ItemsControl
@@ -515,7 +518,7 @@
                                                 <DataTemplate>
 
                                                     <Button
-                                                        Height="145"
+                                                        Height="Auto"
                                                         Margin="0,0,8,8"
                                                         Padding="0"
                                                         Background="Transparent"
@@ -523,22 +526,26 @@
                                                         Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
 
-                                                        <StackPanel
-                                                            HorizontalAlignment="Stretch"
-                                                            Background="#1D698D"
-                                                            Orientation="Vertical">
+                                                        <StackPanel Orientation="Vertical">
+                                                            <StackPanel.Background>
+                                                                <LinearGradientBrush>
+                                                                    <GradientStop Color="#1C7096" />
+                                                                    <GradientStop Color="#1E739A" />
+                                                                </LinearGradientBrush>
+                                                            </StackPanel.Background>
 
                                                             <Image
-                                                                Height="100"
+                                                                Height="101"
                                                                 HorizontalAlignment="Stretch"
                                                                 RenderOptions.BitmapScalingMode="HighQuality"
                                                                 Source="{Binding HeaderImage.Bitmap}"
                                                                 Stretch="UniformToFill" />
 
                                                             <Grid
-                                                                Height="35"
+                                                                Height="40"
                                                                 Margin="0,5,4,5"
                                                                 HorizontalAlignment="Right">
+
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="Auto" />
                                                                     <ColumnDefinition Width="Auto" />
@@ -547,35 +554,39 @@
                                                                 <Border
                                                                     Grid.Column="0"
                                                                     Padding="5,0,5,0"
-                                                                    Background="#4c6b22"
+                                                                    Background="#4C6B22"
                                                                     CornerRadius="2,0,0,2"
                                                                     Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+
                                                                     <TextBlock
                                                                         VerticalAlignment="Center"
                                                                         FontSize="22"
                                                                         FontWeight="Bold"
-                                                                        Foreground="#a4d007"
+                                                                        Foreground="#BEEE11"
                                                                         Text="{Binding DiscountPercent, StringFormat='-{0}%'}" />
                                                                 </Border>
 
                                                                 <Border
                                                                     Grid.Column="1"
-                                                                    Padding="5,0,5,0"
+                                                                    Padding="8,0,8,0"
                                                                     Background="#173143">
+
                                                                     <StackPanel Orientation="Vertical">
+
                                                                         <TextBlock
                                                                             HorizontalAlignment="Right"
-                                                                            FontSize="11"
+                                                                            FontSize="12"
                                                                             Foreground="#738895"
                                                                             Text="{Binding OriginalPrice}"
                                                                             TextDecorations="Strikethrough"
                                                                             Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
                                                                         <TextBlock
-                                                                            HorizontalAlignment="Center"
-                                                                            FontSize="15"
+                                                                            FontSize="16"
                                                                             FontWeight="SemiBold"
-                                                                            Foreground="#a4d007"
-                                                                            Text="{Binding Price}" />
+                                                                            Foreground="#BEEE11"
+                                                                            Text="{Binding Price}"
+                                                                            TextAlignment="Center" />
                                                                     </StackPanel>
                                                                 </Border>
                                                             </Grid>
@@ -587,27 +598,37 @@
                                     </Grid>
                                 </Grid>
 
-                                <Grid
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Margin="0,40,0,0">
+                                <!--<Grid Grid.Row="2"
+                                      Grid.Column="1"
+                                      Margin="0,40,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="14.5" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="14" />
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="1">
-                                        <MediaElement
-                                            Width="Auto"
-                                            Height="300"
-                                            VerticalAlignment="Top"
-                                            LoadedBehavior="Play"
-                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                            Source="Videos\Steam_advertisiment.mp4"
-                                            Stretch="UniformToFill"
-                                            UnloadedBehavior="Manual" />
+                                        <Rectangle VerticalAlignment="Top"
+                                                   Width="Auto"
+                                                   Height="96"
+                                                   Fill="#1b2838"
+                                                   Panel.ZIndex="1" />
+                                        <MediaElement Name="MyVideoPlayer"
+                                                      Panel.ZIndex="0"
+                                                      Width="Auto"
+                                                      Height="475"
+                                                      VerticalAlignment="Top"
+                                                      LoadedBehavior="Play"
+                                                      RenderOptions.BitmapScalingMode="HighQuality"
+                                                      Source="Videos\Advertisiment.mp4"
+                                                      Stretch="UniformToFill"
+                                                      UnloadedBehavior="Manual" />
+                                        <Rectangle VerticalAlignment="Bottom"
+                                                   Width="Auto"
+                                                   Height="96"
+                                                   Fill="#1b2838"
+                                                   Panel.ZIndex="1" />
                                     </Grid>
-                                </Grid>
+                                </Grid>-->
 
                                 <Grid Grid.Row="3" Grid.Column="0">
                                     <Button
@@ -695,26 +716,31 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
+
                                                     <Button
+                                                        Height="Auto"
                                                         Margin="0,0,10,0"
                                                         Padding="0"
                                                         Background="Transparent"
                                                         BorderBrush="Transparent"
                                                         Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
+
                                                         <StackPanel
                                                             HorizontalAlignment="Stretch"
                                                             Background="#374351"
                                                             Orientation="Vertical">
+
                                                             <Image
-                                                                Height="120"
+                                                                Height="99"
                                                                 HorizontalAlignment="Stretch"
                                                                 RenderOptions.BitmapScalingMode="HighQuality"
                                                                 Source="{Binding HeaderImage.Bitmap}"
                                                                 Stretch="UniformToFill" />
+
                                                             <Grid
                                                                 Height="18"
-                                                                Margin="4,5,0,5"
+                                                                Margin="4,10,0,8"
                                                                 HorizontalAlignment="Left">
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="Auto" />
@@ -735,13 +761,13 @@
                                                                 </Border>
                                                                 <Border
                                                                     Grid.Column="1"
-                                                                    Padding="5,0,5,0"
+                                                                    Padding="5,2,5,2"
                                                                     Background="#242C36"
                                                                     CornerRadius="2">
                                                                     <TextBlock
                                                                         HorizontalAlignment="Center"
                                                                         VerticalAlignment="Center"
-                                                                        FontSize="13"
+                                                                        FontSize="14"
                                                                         Foreground="White"
                                                                         Text="{Binding Price}" />
                                                                 </Border>
@@ -841,18 +867,22 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Button
+                                                        Height="Auto"
                                                         Margin="0,0,10,0"
                                                         Padding="0"
+                                                        VerticalAlignment="Top"
                                                         Background="Transparent"
                                                         BorderBrush="Transparent"
                                                         Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                         CommandParameter="{Binding}">
+
                                                         <StackPanel
-                                                            Height="Auto"
+                                                            MinHeight="212"
                                                             HorizontalAlignment="Stretch"
                                                             Background="#374351">
+
                                                             <Image
-                                                                Height="120"
+                                                                MinHeight="90"
                                                                 HorizontalAlignment="Stretch"
                                                                 RenderOptions.BitmapScalingMode="HighQuality"
                                                                 Source="{Binding HeaderImage.Bitmap}"
@@ -874,50 +904,54 @@
                                                                     Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                                     <TextBlock
                                                                         Margin="0,-1.5,0,0"
-                                                                        FontSize="16"
+                                                                        FontSize="17"
                                                                         FontWeight="Bold"
                                                                         Foreground="#a4d007"
                                                                         Text="{Binding DiscountPercent, StringFormat='-{0}%'}" />
                                                                 </Border>
+
                                                                 <Border
                                                                     Grid.Column="1"
                                                                     Padding="5,0,5,0"
-                                                                    Background="#242C36"
-                                                                    CornerRadius="0,2,2,0">
+                                                                    Background="#242C36">
+
                                                                     <TextBlock
                                                                         Margin="0,-1.5,0,0"
-                                                                        FontSize="15"
+                                                                        FontSize="16"
                                                                         FontWeight="SemiBold"
                                                                         Foreground="#a4d007"
                                                                         Text="{Binding Price}" />
                                                                 </Border>
                                                             </Grid>
+
                                                             <Rectangle
                                                                 Width="Auto"
                                                                 Height="1"
                                                                 Fill="#376A91" />
+                                                            <StackPanel Margin="6,5,0,8" Orientation="Vertical">
 
-                                                            <ItemsControl ItemsSource="{Binding FeaturedTags}">
-                                                                <ItemsControl.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <Grid
-                                                                            Height="18"
-                                                                            Margin="5,5,0,0"
-                                                                            HorizontalAlignment="Left">
-                                                                            <Border
-                                                                                Padding="5,0,5,0"
-                                                                                Background="#2D4557"
-                                                                                CornerRadius="2">
-                                                                                <TextBlock
-                                                                                    HorizontalAlignment="Center"
-                                                                                    FontSize="13"
-                                                                                    Foreground="#67C1F5"
-                                                                                    Text="{Binding}" />
-                                                                            </Border>
-                                                                        </Grid>
-                                                                    </DataTemplate>
-                                                                </ItemsControl.ItemTemplate>
-                                                            </ItemsControl>
+                                                                <ItemsControl ItemsSource="{Binding FeaturedTags}">
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <Grid
+                                                                                Height="18"
+                                                                                Margin="0,5,0,0"
+                                                                                HorizontalAlignment="Left">
+                                                                                <Border
+                                                                                    Padding="5,0,5,0"
+                                                                                    Background="#3D596F"
+                                                                                    CornerRadius="2">
+                                                                                    <TextBlock
+                                                                                        HorizontalAlignment="Center"
+                                                                                        FontSize="12"
+                                                                                        Foreground="#66BEF1"
+                                                                                        Text="{Binding}" />
+                                                                                </Border>
+                                                                            </Grid>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+                                                                </ItemsControl>
+                                                            </StackPanel>
                                                         </StackPanel>
                                                     </Button>
                                                 </DataTemplate>
@@ -933,121 +967,159 @@
                                         <ColumnDefinition Width="250" />
                                     </Grid.ColumnDefinitions>
 
-                                    <ItemsControl
-                                        Grid.Column="1"
-                                        Margin="0,70,0,0"
-                                        ItemsSource="{Binding MoreGames}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid Margin="0,5,0,0">
-                                                    <Button
-                                                        Padding="0"
-                                                        Background="Transparent"
-                                                        BorderBrush="Transparent"
-                                                        Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}">
-                                                        <DockPanel
-                                                            Height="85"
-                                                            HorizontalAlignment="Stretch"
-                                                            LastChildFill="True">
-                                                            <Border Background="#0A1B29">
-                                                                <Grid>
-                                                                    <Grid.ColumnDefinitions>
-                                                                        <ColumnDefinition Width="Auto" />
-                                                                        <ColumnDefinition Width="Auto" />
-                                                                        <ColumnDefinition Width="Auto" />
-                                                                        <ColumnDefinition Width="*" />
-                                                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="1">
 
-                                                                    <Image
-                                                                        Grid.Column="0"
-                                                                        Width="175"
-                                                                        Source="{Binding HeaderImage.Bitmap}"
-                                                                        Stretch="UniformToFill" />
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
-                                                                    <Grid Grid.Column="1" Margin="15,0,0,0">
-                                                                        <Grid.RowDefinitions>
-                                                                            <RowDefinition Height="*" />
-                                                                            <RowDefinition Height="*" />
-                                                                            <RowDefinition Height="*" />
-                                                                        </Grid.RowDefinitions>
-                                                                        <TextBlock
-                                                                            Grid.Row="0"
-                                                                            FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
-                                                                            FontSize="22"
-                                                                            Foreground="#CCDBE3"
-                                                                            Text="{Binding Name}" />
-                                                                        <materialIcons:MaterialIcon
-                                                                            Grid.Row="1"
-                                                                            Width="18"
-                                                                            Height="18"
-                                                                            Margin="2,3,0,0"
-                                                                            HorizontalAlignment="Left"
-                                                                            Foreground="#7C8E9C"
-                                                                            Kind="Steam" />
-                                                                        <TextBlock
-                                                                            Grid.Row="2"
-                                                                            Margin="2,10,5,0"
-                                                                            FontSize="11"
-                                                                            Foreground="#7C8E9C"
-                                                                            Text="{Binding GenresDisplay}" />
-                                                                    </Grid>
+                                        <Grid Grid.Row="0" Margin="0,60,0,0">
+                                            <TextBlock
+                                                Margin="2,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                FontSize="14"
+                                                Foreground="White"
+                                                Text="More of Games" />
+                                        </Grid>
+
+                                        <Grid Grid.Row="1">
+                                            <ItemsControl Margin="0,3,0,0" ItemsSource="{Binding MoreGames}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Margin="0,5,0,0">
+                                                            <Button
+                                                                Height="Auto"
+                                                                Margin="0"
+                                                                Padding="0"
+                                                                HorizontalAlignment="Left"
+                                                                Background="Transparent"
+                                                                BorderBrush="Transparent"
+                                                                Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                CommandParameter="{Binding}">
+
+                                                                <DockPanel
+                                                                    Height="92"
+                                                                    HorizontalAlignment="Stretch"
+                                                                    LastChildFill="True">
 
                                                                     <Border
-                                                                        Grid.Column="2"
-                                                                        Margin="15,-10,0,0"
-                                                                        Padding="5,5,5,5"
-                                                                        VerticalAlignment="Center"
-                                                                        Background="#4c6b22"
-                                                                        CornerRadius="2,2,2,2"
-                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                                        <TextBlock
-                                                                            VerticalAlignment="Center"
-                                                                            FontSize="20"
-                                                                            FontWeight="Bold"
-                                                                            Foreground="#a4d007"
-                                                                            Text="{Binding DiscountPercent, StringFormat='-{0}%'}" />
-                                                                    </Border>
+                                                                        MinWidth="695"
+                                                                        Padding="3"
+                                                                        Background="#0A2130"
+                                                                        CornerRadius="3">
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="Auto" />
+                                                                                <ColumnDefinition Width="Auto" />
+                                                                                <ColumnDefinition Width="*" />
+                                                                                <ColumnDefinition Width="*" />
+                                                                            </Grid.ColumnDefinitions>
 
-                                                                    <Grid Grid.Column="3" Margin="0,0,20,0">
-                                                                        <StackPanel
-                                                                            HorizontalAlignment="Right"
-                                                                            VerticalAlignment="Center"
-                                                                            Orientation="Vertical">
-                                                                            <TextBlock
+                                                                            <Image
+                                                                                Grid.Column="0"
+                                                                                Width="184"
+                                                                                Source="{Binding HeaderImage.Bitmap}"
+                                                                                Stretch="UniformToFill" />
+
+                                                                            <Grid Grid.Column="1" Margin="15,0,0,0">
+                                                                                <Grid.RowDefinitions>
+                                                                                    <RowDefinition Height="*" />
+                                                                                    <RowDefinition Height="*" />
+                                                                                    <RowDefinition Height="*" />
+                                                                                </Grid.RowDefinitions>
+
+                                                                                <TextBlock
+                                                                                    Grid.Row="0"
+                                                                                    Width="320"
+                                                                                    Margin="0,8,0,0"
+                                                                                    FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
+                                                                                    FontSize="22"
+                                                                                    Foreground="#CCDBE3"
+                                                                                    Text="{Binding Name}"
+                                                                                    TextWrapping="WrapWithOverflow" />
+
+                                                                                <materialIcons:MaterialIcon
+                                                                                    Grid.Row="1"
+                                                                                    Width="18"
+                                                                                    Height="18"
+                                                                                    Margin="2,5,0,0"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    Kind="Microsoft" />
+
+                                                                                <TextBlock
+                                                                                    Grid.Row="2"
+                                                                                    Margin="3,5,5,0"
+                                                                                    FontSize="11"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    Opacity="0.9"
+                                                                                    Text="{Binding GenresDisplay}" />
+                                                                            </Grid>
+
+                                                                            <Border
+                                                                                Grid.Column="2"
+                                                                                Margin="15,-10,0,0"
+                                                                                Padding="5,5,5,5"
                                                                                 HorizontalAlignment="Right"
-                                                                                FontSize="13.5"
-                                                                                Foreground="#738895"
-                                                                                Text="{Binding OriginalPrice}"
-                                                                                TextDecorations="Strikethrough"
-                                                                                Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                                                            <TextBlock
-                                                                                HorizontalAlignment="Right"
-                                                                                FontSize="18"
-                                                                                FontWeight="SemiBold"
-                                                                                Foreground="#a4d007"
-                                                                                Text="{Binding Price}">
-                                                                                <TextBlock.Style>
-                                                                                    <Style TargetType="TextBlock">
-                                                                                        <Setter Property="Foreground" Value="#CAD8DB" />
-                                                                                        <Style.Triggers>
-                                                                                            <DataTrigger Binding="{Binding HasDiscount}" Value="True">
-                                                                                                <Setter Property="Foreground" Value="#a4d007" />
-                                                                                            </DataTrigger>
-                                                                                        </Style.Triggers>
-                                                                                    </Style>
-                                                                                </TextBlock.Style>
-                                                                            </TextBlock>
-                                                                        </StackPanel>
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Border>
-                                                        </DockPanel>
-                                                    </Button>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                                                                VerticalAlignment="Center"
+                                                                                Background="#3E5536"
+                                                                                CornerRadius="2,2,2,2"
+                                                                                Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                                                                <TextBlock
+                                                                                    VerticalAlignment="Center"
+                                                                                    FontSize="19"
+                                                                                    FontWeight="Bold"
+                                                                                    Foreground="#BEEE11"
+                                                                                    Text="{Binding DiscountPercent, StringFormat='-{0}%'}" />
+                                                                            </Border>
+
+                                                                            <Grid Grid.Column="3" Margin="0,0,20,0">
+
+                                                                                <StackPanel
+                                                                                    HorizontalAlignment="Right"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Orientation="Vertical">
+
+                                                                                    <TextBlock
+                                                                                        HorizontalAlignment="Right"
+                                                                                        FontSize="13.5"
+                                                                                        Foreground="#738895"
+                                                                                        Text="{Binding OriginalPrice}"
+                                                                                        TextDecorations="Strikethrough"
+                                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                                                                    <TextBlock
+                                                                                        HorizontalAlignment="Right"
+                                                                                        FontSize="18"
+                                                                                        FontWeight="SemiBold"
+                                                                                        Foreground="#BEEE11"
+                                                                                        Text="{Binding Price}">
+
+                                                                                        <TextBlock.Style>
+                                                                                            <Style TargetType="TextBlock">
+                                                                                                <Setter Property="Foreground" Value="#CAD8DB" />
+                                                                                                <Style.Triggers>
+                                                                                                    <DataTrigger Binding="{Binding HasDiscount}" Value="True">
+                                                                                                        <Setter Property="Foreground" Value="#a4d007" />
+                                                                                                    </DataTrigger>
+                                                                                                </Style.Triggers>
+                                                                                            </Style>
+                                                                                        </TextBlock.Style>
+                                                                                    </TextBlock>
+                                                                                </StackPanel>
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </DockPanel>
+                                                            </Button>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
 
                                 <Grid
@@ -1055,9 +1127,9 @@
                                     Grid.Column="1"
                                     Visibility="{Binding HasMoreGames, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="25" />
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="250" />
+                                        <ColumnDefinition Width="189" />
                                     </Grid.ColumnDefinitions>
 
                                     <Grid Grid.Column="1" Margin="0,10,0,0">
@@ -1107,4 +1179,4 @@
             </Grid>
         </Border>
     </Grid>
-</UserControl>
+</UserControl> 

@@ -10,20 +10,10 @@ using System.Windows.Media.Imaging;
 
 namespace Rift_App.ViewModels
 {
-    /// <summary>
-    /// Wrapper pre obrázok hry — async načíta a uloží do ImageCacheService.
-    /// Wrapper for a game image — async loads and stores in ImageCacheService.
-    /// 
-    /// Použitie v XAML — Usage in XAML:
-    /// Source="{Binding GameImage.Bitmap}"
-    /// 
-    /// GameImage = new GameImageViewModel(url) — spustí async load
-    /// </summary>
     public class GameImageViewModel : INotifyPropertyChanged
     {
         private BitmapImage? _bitmap;
 
-        // Obrázok keď je načítaný — image when loaded
         public BitmapImage? Bitmap
         {
             get => _bitmap;

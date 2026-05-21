@@ -19,17 +19,16 @@ namespace Rift_App.Services
         public static int Count => _count;
         public static bool IsLoaded => _loaded;
 
-        // Zavolaj raz — ďalšie volania vracajú cached hodnotu
         public static async Task<int> GetAsync()
         {
             // Cache hit
             if (_loaded && DateTime.UtcNow - _loadedAt < TTL)
                 return _count;
 
-            // Len jeden request naraz
+            // Only 1 request at a time
             if (!await _lock.WaitAsync(0))
             {
-                // Iný task už fetchuje — počkaj na neho max 8s
+                // Another task is already fetching — wait for it max 8s
                 await _lock.WaitAsync(TimeSpan.FromSeconds(8));
                 _lock.Release();
                 return _count;
@@ -37,7 +36,7 @@ namespace Rift_App.Services
 
             try
             {
-                // Double-check po získaní locku
+                // Double-check after acquiring the lock
                 if (_loaded && DateTime.UtcNow - _loadedAt < TTL)
                     return _count;
 
@@ -56,7 +55,7 @@ namespace Rift_App.Services
             }
         }
 
-        // Zavolaj keď hráč pridá/odoberie hru z wishlistu
+        // Call when the player adds/removes a game from the wishlist
         public static void Invalidate()
         {
             _loaded = false;

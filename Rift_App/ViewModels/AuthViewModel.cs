@@ -25,7 +25,7 @@ namespace Rift_App.ViewModels
         // ─── WINDOW STATE ─────────────────────────────────────────────────
         public WindowStateViewModel WindowState { get; } = new();
 
-        // ─── CURRENT VIEW — prepína medzi UserControlmi ───────────────────
+        // ─── CURRENT VIEW — switches between UserControls ────────────────
         [ObservableProperty]
         private object _currentView = null!;
 
@@ -49,7 +49,7 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _steamHasError = false;
         [ObservableProperty] private bool _isConnecting = false;
 
-        // ─── DEVICE ACCOUNTS — zoznam účtov na tomto zariadení ───────────
+        // ─── DEVICE ACCOUNTS — list of accounts on this device ───────────
         // List of accounts on this device
         public ObservableCollection<AccountInfo> DeviceAccounts { get; } = new();
 
@@ -65,7 +65,7 @@ namespace Rift_App.ViewModels
         {
             ClearErrors();
             CurrentView = new AccountSelection();
-            _ = LoadAccountsAsync(); // nacitaj ucty hned — load accounts immediately
+            _ = LoadAccountsAsync(); // load accounts immediately
         }
 
         [RelayCommand]
@@ -89,9 +89,7 @@ namespace Rift_App.ViewModels
             CurrentView = new Register();
         }
 
-        // ─── NAČÍTAJ ÚČTY — volá sa pri otvorení AccountSelection ─────────
-        // Load device accounts — called when AccountSelection opens
-
+        // ─── LOAD DEVICE ACCOUNTS — called when AccountSelection opens ─────────
         public async Task LoadAccountsAsync()
         {
             try
@@ -111,9 +109,7 @@ namespace Rift_App.ViewModels
             catch { }
         }
 
-        // ─── VYBER ÚČET — klik na existujúci účet ────────────────────────
         // Select account — click on existing account tile
-
         [RelayCommand]
         private void SelectAccount(AccountInfo account)
         {
@@ -123,9 +119,7 @@ namespace Rift_App.ViewModels
             ViewNavigator.Instance?.ShowLoading();
         }
 
-        // ─── VYMAŽ ÚČET ZO ZARIADENIA — "Remove this Account" ────────────
-        // Remove account from device — does not delete the Rift account
-
+        // ─── REMOVE ACCOUNT — removes account from device ────────────────
         [RelayCommand]
         private async Task RemoveAccountAsync(AccountInfo account)
         {
@@ -138,8 +132,7 @@ namespace Rift_App.ViewModels
             catch { }
         }
 
-        // ─── PRE-FILL REGISTER — volá sa po Steam pripojení ──────────────
-        // Sets Steam username and switches to Register view
+        // ─── PRE-FILL REGISTER — sets Steam username and switches to Register view ──────────────
         public void PreFillRegister(string steamId, string steamName)
         {
             _steamId64 = steamId;
@@ -179,7 +172,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── LOGIN — Steam ─────────────────────────────────────────────────
-        // Ak účet neexistuje — zobrazí MessageBox
         // If account does not exist — shows MessageBox
 
         [RelayCommand]
@@ -260,7 +252,6 @@ namespace Rift_App.ViewModels
                     await Task.Delay(3000);
                 }
 
-                // FIX: Všetko čo mení UI musí bežať na UI threade
                 // Everything that touches UI must run on the UI thread
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -351,7 +342,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── HELPERS ──────────────────────────────────────────────────────
-
         private void ShowError(string message)
         {
             ErrorMessage = message;

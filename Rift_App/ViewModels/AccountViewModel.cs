@@ -20,23 +20,19 @@ namespace Rift_App.ViewModels
     public partial class AccountViewModel : ObservableObject
     {
         // ─── CACHE ────────────────────────────────────────────────────────
-        private static readonly string CacheFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "cache");
-
-        private static readonly string ImagesFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "account_headers");
-
-        private static string CachePath =>
-            Path.Combine(CacheFolder, $"account_{SessionManager.SteamId64}.json");
-
         private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(1);
 
         private static readonly HttpClient _http = new HttpClient
         {
             Timeout = TimeSpan.FromSeconds(15)
         };
+
+        // Paths — computed per call so they always use the current SteamId
+        private static string CachePath =>
+            Path.Combine(AppPaths.Ensure(AppPaths.Account(SessionManager.SteamId64)), "snapshot.json");
+
+        private static string HeadersFolder =>
+            AppPaths.Ensure(AppPaths.AccountHeaders(SessionManager.SteamId64));
 
         // ─── LOCK ─────────────────────────────────────────────────────────
         private readonly SemaphoreSlim _loadLock = new(1, 1);
@@ -153,15 +149,31 @@ namespace Rift_App.ViewModels
 
             var levelTask = ApiService.GetSteamLevelAsync(steamId);
             var friendsTask = ApiService.GetFriendsAsync(steamId);
-            var libraryTask = ApiService.GetLibraryAsync(steamId);
             var activityTask = ApiService.GetRecentActivityAsync(steamId);
             var wishlistCountTask = WishlistCountCache.GetAsync();
 
-            await Task.WhenAll(levelTask, friendsTask, libraryTask,
-                               activityTask, wishlistCountTask);
+            // Games count: prefer local library cache (includes F2P + installed),
+            // fall back to API (Steam-visible only).
+            var libCachedTask = LibraryCacheService.LoadAsync(steamId);
+
+            await Task.WhenAll(levelTask, friendsTask, activityTask,
+                               wishlistCountTask, libCachedTask);
 
             snap.Level = levelTask.Result;
-            snap.GamesOwnedCount = libraryTask.Result?.Count ?? 0;
+
+            // Use local library count when available — it matches what Library shows
+            var libCached = libCachedTask.Result;
+            if (libCached != null && libCached.Count > 0)
+            {
+                snap.GamesOwnedCount = libCached.Count;
+            }
+            else
+            {
+                // Fall back to API count
+                var apiLib = await ApiService.GetLibraryAsync(steamId);
+                snap.GamesOwnedCount = apiLib?.Count ?? 0;
+            }
+
             snap.WishlistCount = wishlistCountTask.Result;
             WishlistCountCache.Set(snap.WishlistCount);
 
@@ -173,8 +185,7 @@ namespace Rift_App.ViewModels
 
             var activity = activityTask.Result;
             snap.TotalHours2W = activity?.TotalHours ?? 0;
-            snap.RecentGames = await EnrichRecentGamesAsync(
-                                    activity?.Games ?? new(), steamId);
+            snap.RecentGames = await EnrichRecentGamesAsync(activity?.Games ?? new(), steamId);
 
             return snap;
         }
@@ -183,34 +194,41 @@ namespace Rift_App.ViewModels
         private static async Task<List<RecentActivityGame>> EnrichRecentGamesAsync(
             List<RecentActivityGame> games, string steamId)
         {
-            EnsureImageFolder();
+            var headersFolder = AppPaths.Ensure(AppPaths.AccountHeaders(steamId));
 
             foreach (var game in games)
             {
                 try
                 {
-                    // ── 1. Ensure header image on disk ────────────────────
-                    var localPath = GetHeaderPath(game.AppId);
+                    // 1. Header image — try shared hero first, then download to account headers
+                    var localPath = GetHeaderPath(game.AppId, headersFolder);
+
                     if (!File.Exists(localPath))
                     {
-                        // Try library_hero first, fallback to header.jpg
-                        var downloaded = await TryDownloadImageAsync(
-                            $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/library_hero.jpg",
-                            localPath);
-
-                        if (!downloaded)
-                            await TryDownloadImageAsync(
-                                $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/header.jpg",
+                        // Shared hero image already downloaded by library?
+                        var sharedHero = GameDetailCacheService.GetHeroPath(game.AppId);
+                        if (File.Exists(sharedHero))
+                        {
+                            localPath = sharedHero;
+                        }
+                        else
+                        {
+                            var downloaded = await TryDownloadImageAsync(
+                                $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/library_hero.jpg",
                                 localPath);
+
+                            if (!downloaded)
+                                await TryDownloadImageAsync(
+                                    $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/header.jpg",
+                                    localPath);
+                        }
                     }
 
-                    // Use local path if exists, otherwise keep URL
                     if (File.Exists(localPath))
                         game.HeaderImageUrl = localPath;
 
-                    // ── 2. Achievement data from local cache ──────────────
-                    var achs = await LibraryCacheService.LoadAchievementsAsync(
-                                   steamId, game.AppId);
+                    // 2. Achievement data from library cache
+                    var achs = await LibraryCacheService.LoadAchievementsAsync(steamId, game.AppId);
                     if (!achs.HasValue) continue;
 
                     var unlocked = achs.Value.Unlocked;
@@ -238,16 +256,12 @@ namespace Rift_App.ViewModels
                         .OrderByDescending(a => a.UnlockTime)
                         .ToList();
 
-                    var icons = new List<RecentAchIcon>();
-                    foreach (var a in recent.Take(5))
+                    var icons = recent.Take(5).Select(a => new RecentAchIcon
                     {
-                        icons.Add(new RecentAchIcon
-                        {
-                            IconUrl = !string.IsNullOrEmpty(a.LocalIconPath)
-                                      ? a.LocalIconPath : a.IconUrl,
-                            Name = a.Name
-                        });
-                    }
+                        IconUrl = !string.IsNullOrEmpty(a.LocalIconPath)
+                                  ? a.LocalIconPath : a.IconUrl,
+                        Name = a.Name
+                    }).ToList();
 
                     int extra = recent.Count - 5;
                     if (extra > 0)
@@ -264,7 +278,7 @@ namespace Rift_App.ViewModels
             return games;
         }
 
-        // ─── APPLY SNAPSHOT (ATOMIC) ──────────────────────────────────────
+        // ─── APPLY SNAPSHOT ───────────────────────────────────────────────
         private void ApplySnapshot(AccountSnapshot snap)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -298,14 +312,8 @@ namespace Rift_App.ViewModels
         }
 
         // ─── IMAGE HELPERS ────────────────────────────────────────────────
-        private static string GetHeaderPath(int appId) =>
-            Path.Combine(ImagesFolder, $"{appId}_header.jpg");
-
-        private static void EnsureImageFolder()
-        {
-            if (!Directory.Exists(ImagesFolder))
-                Directory.CreateDirectory(ImagesFolder);
-        }
+        private static string GetHeaderPath(int appId, string folder) =>
+            Path.Combine(folder, $"{appId}_header.jpg");
 
         private static async Task<bool> TryDownloadImageAsync(string url, string savePath)
         {
@@ -323,18 +331,27 @@ namespace Rift_App.ViewModels
         {
             try
             {
-                if (!File.Exists(CachePath)) return null;
-                var json = await File.ReadAllTextAsync(CachePath);
+                var path = CachePath;
+                if (!File.Exists(path)) return null;
+
+                var json = await File.ReadAllTextAsync(path);
                 var snap = JsonConvert.DeserializeObject<AccountSnapshot>(json);
                 if (snap == null) return null;
                 if (DateTime.UtcNow - snap.SavedAt > CacheTTL) return null;
 
-                // Restore local image paths for cached games
+                // Restore local image paths
+                var headersFolder = HeadersFolder;
                 foreach (var g in snap.RecentGames)
                 {
-                    var localPath = GetHeaderPath(g.AppId);
+                    var localPath = GetHeaderPath(g.AppId, headersFolder);
                     if (File.Exists(localPath))
                         g.HeaderImageUrl = localPath;
+                    else
+                    {
+                        var sharedHero = GameDetailCacheService.GetHeroPath(g.AppId);
+                        if (File.Exists(sharedHero))
+                            g.HeaderImageUrl = sharedHero;
+                    }
                 }
 
                 return snap;
@@ -346,8 +363,6 @@ namespace Rift_App.ViewModels
         {
             try
             {
-                if (!Directory.Exists(CacheFolder))
-                    Directory.CreateDirectory(CacheFolder);
                 var json = JsonConvert.SerializeObject(snap, Formatting.None);
                 await File.WriteAllTextAsync(CachePath, json);
             }

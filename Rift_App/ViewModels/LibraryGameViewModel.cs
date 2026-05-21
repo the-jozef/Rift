@@ -21,6 +21,7 @@ namespace Rift_App.ViewModels
     public partial class LibraryGameViewModel : ObservableObject
     {
         // ─── PROPERTIES ───────────────────────────────────────────────────
+
         [ObservableProperty] private GameModel? _game;
         [ObservableProperty] private GameDetailModel? _detail;
         [ObservableProperty] private BitmapImage? _heroImage;

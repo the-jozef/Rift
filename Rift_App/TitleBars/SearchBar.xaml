@@ -54,13 +54,9 @@
                        StaysOpen="False"
                        AllowsTransparency="True">
 
-                    <Border
-                        MinWidth="320"
-                        Background="#1A2B3A"
-                        BorderBrush="#2A4A5A"
-                        BorderThickness="1.5">
+                    <Border Background="#313641">
 
-                        <StackPanel>
+                        <StackPanel Margin="0,5,0,15">
 
                             <TextBlock
                                 Margin="12,8,12,4"
@@ -73,89 +69,94 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
 
-                                        <Button
-                                            Margin="0,5,0,0"
-                                            Padding="0"
-                                            HorizontalContentAlignment="Stretch"
-                                            Background="Transparent"
-                                            BorderBrush="Transparent"
-                                            Command="{Binding DataContext.SelectResultCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Cursor="Hand">
+                                        <Button Padding="0"
+                                                Margin="10,8,10,0"
+                                                Height="Auto"
+                                                MinWidth="400"
+                                                HorizontalContentAlignment="Stretch"
+                                                Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                Command="{Binding DataContext.SelectResultCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Cursor="Hand">
 
-                                            <Border Padding="8,6" Background="Transparent">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Background" Value="#243545" />
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
+                                            <Border  Background="#464D5A">
+                                                                                               
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="60" />
-                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Border
-                                                        Grid.Column="0"
-                                                        Width="56"
-                                                        Height="26"
-                                                        ClipToBounds="True"
-                                                        CornerRadius="2">
-                                                        <Image
-                                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                                            Source="{Binding HeaderImageUrl}"
-                                                            Stretch="UniformToFill" />
-                                                    </Border>
+                                                    <Grid Grid.Column="0">
+                                                        
+                                                        <Border Width="155"
+                                                                Margin="3"
+                                                                Height="70"
+                                                                ClipToBounds="True">
 
-                                                    <TextBlock
-                                                        Grid.Column="1"
-                                                        Margin="8,0,8,0"
-                                                        VerticalAlignment="Center"
-                                                        FontSize="13"
-                                                        Foreground="White"
-                                                        Text="{Binding Name}"
-                                                        TextTrimming="CharacterEllipsis" />
-
-                                                    <StackPanel
-                                                        Grid.Column="2"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Center"
-                                                        Orientation="Vertical">
-
-                                                        <Border
-                                                            Padding="4,1"
-                                                            HorizontalAlignment="Right"
-                                                            Background="#4C6B22"
-                                                            CornerRadius="2"
-                                                            Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                            <TextBlock
-                                                                FontSize="11"
-                                                                FontWeight="Bold"
-                                                                Foreground="#A4D85A"
-                                                                Text="{Binding DiscountDisplay}" />
+                                                            <Border.Background>
+                                                                <ImageBrush ImageSource="{Binding HeaderImageUrl}"
+                                                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                                                            Stretch="UniformToFill" />
+                                                            </Border.Background>
                                                         </Border>
+                                                    </Grid>
 
-                                                        <TextBlock
-                                                            HorizontalAlignment="Right"
-                                                            FontSize="12"
-                                                            Foreground="#C0BFC0"
-                                                            Text="{Binding PriceDisplay}">
-                                                            <TextBlock.Style>
-                                                                <Style TargetType="TextBlock">
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsFree}" Value="True">
-                                                                            <Setter Property="Foreground" Value="#90EE90" />
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </TextBlock.Style>
-                                                        </TextBlock>
-                                                    </StackPanel>
+                                                    <Grid Grid.Column="1">
+
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <Grid Grid.Row="0">
+
+                                                            <TextBlock Margin="8,14,8,0"
+                                                                       VerticalAlignment="Top"
+                                                                       FontSize="15"
+                                                                       Foreground="White"
+                                                                       Text="{Binding Name}"
+                                                                       TextTrimming="CharacterEllipsis" />
+                                                        </Grid>
+
+                                                        <Grid Grid.Row="1">
+
+                                                            <StackPanel HorizontalAlignment="Left"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="10,0,0,0"
+                                                                        Orientation="Horizontal">
+
+                                                                <Border Padding="5,2,5,2"
+                                                                        Background="#46593C"
+                                                                        CornerRadius="3"
+                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                    
+                                                                    <TextBlock FontSize="14"
+                                                                               FontWeight="Bold"
+                                                                               Foreground="#BBE912"
+                                                                               Text="{Binding DiscountDisplay}" />
+                                                                </Border>
+
+                                                                <TextBlock HorizontalAlignment="Right"
+                                                                           FontSize="13.5"
+                                                                           VerticalAlignment="Center"
+                                                                           Margin="5,0,0,0"
+                                                                           Foreground="#E0F5FF"
+                                                                           Text="{Binding PriceDisplay}">
+                                                                    <TextBlock.Style>
+                                                                        <Style TargetType="TextBlock">
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding IsFree}"
+                                                                                             Value="True">
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
                                             </Border>
                                         </Button>
@@ -193,7 +194,7 @@
                         Text="Wishlist" />
 
                     <TextBlock
-                        Margin="5,5,0,0"
+                        Margin="5,0,0,0"
                         VerticalAlignment="Bottom"
                         FontSize="13"
                         Text="{Binding WishlistCount}" />

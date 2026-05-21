@@ -7,47 +7,32 @@ using System.Windows;
 
 namespace Rift_App.Services
 {
-    // Launches Steam automatically if not running.
     public static class SteamStartupService
     {
-        private static bool _firstRun = !File.Exists(Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "initialized.flag"));
-
-        // ─── MAIN ENTRY POINT ─────────────────────────────────────────────
-        /// Call this at app startup (before showing any window).
-        /// Returns false if the app should shut down (Steam not installed).
+        private static bool _firstRun = !File.Exists(AppPaths.InitFlag);
 
         public static async Task<bool> CheckAndStartSteamAsync()
         {
-            // ── DEBUG: verify steam_appid.txt ──────────────────────────────────
             var txtPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "steam_appid.txt");
             Debug.WriteLine($"[Startup] steam_appid.txt exists: {File.Exists(txtPath)} at {txtPath}");
             Debug.WriteLine($"[Startup] Contents: '{(File.Exists(txtPath) ? File.ReadAllText(txtPath).Trim() : "MISSING")}'");
             Debug.WriteLine($"[Startup] CWD: {Directory.GetCurrentDirectory()}");
 
-            // Fix: make sure steam_appid.txt is also in the current working directory
-           var dst = Path.Combine(Directory.GetCurrentDirectory(), "steam_appid.txt");
+            var dst = Path.Combine(Directory.GetCurrentDirectory(), "steam_appid.txt");
             if (!File.Exists(dst) && File.Exists(txtPath))
                 File.Copy(txtPath, dst);
-            // ──────────────────────────────────────────────────────────────────
 
-            // 1. Check if Steam is installed
             if (!SteamworksService.IsSteamInstalled())
             {
                 MessageBox.Show(
                     "Steam is not installed on this computer.\n\n" +
                     "Rift requires Steam to be installed to work.\n" +
                     "Please install Steam from https://store.steampowered.com/about/",
-                    "Steam Not Found",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-
+                    "Steam Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
                 return false;
             }
 
-            // 2. First run — inform user that Steam is required
             if (_firstRun)
             {
                 var result = MessageBox.Show(
@@ -55,9 +40,7 @@ namespace Rift_App.Services
                     "Rift requires Steam to collect your game library and achievements.\n\n" +
                     "Steam will be launched automatically when needed.\n" +
                     "Click OK to continue.",
-                    "Steam Required",
-                    MessageBoxButton.OKCancel,
-                    MessageBoxImage.Information);
+                    "Steam Required", MessageBoxButton.OKCancel, MessageBoxImage.Information);
 
                 if (result == MessageBoxResult.Cancel)
                 {
@@ -68,36 +51,28 @@ namespace Rift_App.Services
                 MarkFirstRunComplete();
             }
 
-            // 3. Launch Steam if not running
             if (!SteamworksService.IsSteamRunning())
             {
                 MessageBox.Show(
                     "Steam is not running.\n\nRift will launch Steam automatically.",
-                    "Launching Steam",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                    "Launching Steam", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 bool launched = await SteamworksService.LaunchSteamAndWaitAsync();
                 if (!launched)
                 {
                     MessageBox.Show(
                         "Could not launch Steam.\n\nPlease start Steam manually and try again.",
-                        "Steam Launch Failed",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-
+                        "Steam Launch Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
                     Application.Current.Shutdown();
                     return false;
                 }
             }
 
-            // 4. Initialize Steamworks — retry a few times in case Steam is still starting up
             bool init = false;
             for (int attempt = 1; attempt <= 100; attempt++)
             {
                 init = SteamworksService.Initialize();
                 if (init) break;
-   
                 await Task.Delay(5000);
             }
 
@@ -110,10 +85,7 @@ namespace Rift_App.Services
                     "• You are not logged into Steam\n" +
                     "• steam_appid.txt is missing from the app folder\n\n" +
                     "Please resolve the issue and restart Rift.",
-                    "Steam Connection Failed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-
+                    "Steam Connection Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
                 return false;
             }
@@ -121,17 +93,12 @@ namespace Rift_App.Services
             return true;
         }
 
-        // ─── HELPERS ──────────────────────────────────────────────────────
-
         private static void MarkFirstRunComplete()
         {
             try
             {
-                var folder = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "RiftApp");
-                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-                File.WriteAllText(Path.Combine(folder, "initialized.flag"), "1");
+                AppPaths.Ensure(AppPaths.Root);
+                File.WriteAllText(AppPaths.InitFlag, "1");
                 _firstRun = false;
             }
             catch { }

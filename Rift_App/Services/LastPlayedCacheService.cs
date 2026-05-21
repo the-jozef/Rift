@@ -12,27 +12,39 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Services
 {
-    /// Reads localconfig.vdf ONCE → stores in memory + disk (TTL 2h).
     public static class LastPlayedCacheService
     {
-        private static readonly string CachePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "cache", "lastplayed.json");
-
         private static readonly TimeSpan TTL = TimeSpan.FromHours(2);
 
         private static Dictionary<int, DateTime?> _mem = new();
         private static DateTime _loadedAt = DateTime.MinValue;
         private static bool _initialized = false;
 
+        // ─── Cache path — resolved lazily so Steamworks is ready ─────────
+        private static string CachePath
+        {
+            get
+            {
+                // Prefer SessionManager (always set during normal use).
+                // Fall back to Steamworks for the rare early-init case.
+                string steamId = SessionManager.SteamId64;
+                if (string.IsNullOrEmpty(steamId))
+                {
+                    try { steamId = SteamUser.GetSteamID().m_SteamID.ToString(); }
+                    catch { steamId = "unknown"; }
+                }
+                return Path.Combine(AppPaths.UserCache(steamId), "lastplayed.json");
+            }
+        }
+
         private class CacheWrapper
         {
             public DateTime SavedAt { get; set; }
-            // Stored as unix seconds — DateTime? doesn't serialize cleanly
             public Dictionary<int, long> Data { get; set; } = new();
         }
 
         // ─── PUBLIC ───────────────────────────────────────────────────────
+
         public static async Task InitializeAsync()
         {
             if (_initialized && DateTime.UtcNow - _loadedAt < TTL) return;
@@ -40,26 +52,31 @@ namespace Rift_App.Services
             if (await TryLoadDiskAsync()) return;
             await LoadVdfAsync();
         }
+
         public static DateTime? Get(int appId)
         {
             _mem.TryGetValue(appId, out var v);
             return v;
         }
+
         public static async Task RefreshAsync()
         {
             await LoadVdfAsync();
             Debug.WriteLine("[LastPlayedCache] Refreshed from VDF.");
         }
+
         public static void Set(int appId, DateTime? value) => _mem[appId] = value;
 
         // ─── PRIVATE ──────────────────────────────────────────────────────
+
         private static async Task<bool> TryLoadDiskAsync()
         {
             try
             {
-                if (!File.Exists(CachePath)) return false;
+                var path = CachePath;
+                if (!File.Exists(path)) return false;
 
-                var json = await File.ReadAllTextAsync(CachePath);
+                var json = await File.ReadAllTextAsync(path);
                 var wrapper = JsonConvert.DeserializeObject<CacheWrapper>(json);
                 if (wrapper == null || DateTime.UtcNow - wrapper.SavedAt > TTL) return false;
 
@@ -76,6 +93,7 @@ namespace Rift_App.Services
             }
             catch { return false; }
         }
+
         private static async Task LoadVdfAsync()
         {
             try
@@ -122,12 +140,13 @@ namespace Rift_App.Services
                 Debug.WriteLine($"[LastPlayedCache] VDF error: {ex.Message}");
             }
         }
+
         private static async Task SaveDiskAsync()
         {
             try
             {
-                var dir = Path.GetDirectoryName(CachePath)!;
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                var path = CachePath;
+                AppPaths.Ensure(Path.GetDirectoryName(path)!);
 
                 var raw = _mem.ToDictionary(
                     k => k.Key,
@@ -136,10 +155,11 @@ namespace Rift_App.Services
                         : 0L);
 
                 var wrapper = new CacheWrapper { SavedAt = DateTime.UtcNow, Data = raw };
-                await File.WriteAllTextAsync(CachePath, JsonConvert.SerializeObject(wrapper));
+                await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(wrapper));
             }
             catch { }
         }
+
         private static string FindVdfSection(string content, string key)
         {
             var searchKey = $"\"{key}\"";

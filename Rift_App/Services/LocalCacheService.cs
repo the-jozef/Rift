@@ -9,24 +9,22 @@ namespace Rift_App.Services
 {
     public static class LocalCacheService
     {
-        private static readonly string CacheFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "cache");
+        private static readonly string CacheFolder = AppPaths.SharedCache;
 
-        // ─── TTL configuration ─────────────────────────────────────────────
-        public static readonly TimeSpan StoreTTL = TimeSpan.FromHours(6);   // Store
-        public static readonly TimeSpan LibraryTTL = TimeSpan.FromHours(24);  // Library
-        public static readonly TimeSpan WishlistTTL = TimeSpan.FromHours(24); // Wishlist
-        public static readonly TimeSpan AccountTTL = TimeSpan.FromHours(24);  // Account/Player
+        // ─── TTL ──────────────────────────────────────────────────────────
+        public static readonly TimeSpan StoreTTL = TimeSpan.FromHours(6);
+        public static readonly TimeSpan LibraryTTL = TimeSpan.FromHours(24);
+        public static readonly TimeSpan WishlistTTL = TimeSpan.FromHours(24);
+        public static readonly TimeSpan AccountTTL = TimeSpan.FromHours(24);
 
-        // ─── CACHE KEYS ─────────────────────────────────────────────────
+        // ─── KEYS ─────────────────────────────────────────────────────────
         public const string KeyFeatured = "store_featured";
         public const string KeyTrending = "store_trending";
         public const string KeyTopSellers = "store_topsellers";
         public const string KeySpecials = "store_specials";
-        public const string KeyLibrary = "library_{0}";    // {0} = steamId64
-        public const string KeyWishlist = "wishlist_{0}";   // {0} = steamId64
-        public const string KeyPlayer = "player_{0}";     // {0} = steamId64
+        public const string KeyLibrary = "library_{0}";   // {0} = steamId64
+        public const string KeyWishlist = "wishlist_{0}";  // {0} = steamId64
+        public const string KeyPlayer = "player_{0}";    // {0} = steamId64
         public const string KeyTags = "steam_tags";
 
         // ─── WRAPPER ──────────────────────────────────────────────────────
@@ -41,11 +39,10 @@ namespace Rift_App.Services
         {
             try
             {
-                EnsureFolder();
+                AppPaths.Ensure(CacheFolder);
                 var entry = new CacheEntry<T> { SavedAt = DateTime.UtcNow, Data = data };
                 var json = JsonConvert.SerializeObject(entry, Formatting.None);
-                var path = GetPath(key);
-                await File.WriteAllTextAsync(path, json);
+                await File.WriteAllTextAsync(GetPath(key), json);
             }
             catch { }
         }
@@ -62,7 +59,6 @@ namespace Rift_App.Services
                 var entry = JsonConvert.DeserializeObject<CacheEntry<T>>(json);
                 if (entry == null) return default;
 
-                // Skontroluj expiry — check expiry
                 if (DateTime.UtcNow - entry.SavedAt > ttl)
                 {
                     File.Delete(path);
@@ -80,12 +76,9 @@ namespace Rift_App.Services
             {
                 var path = GetPath(key);
                 if (!File.Exists(path)) return false;
-
                 var json = File.ReadAllText(path);
                 var entry = JsonConvert.DeserializeObject<CacheEntry<object>>(json);
-                if (entry == null) return false;
-
-                return DateTime.UtcNow - entry.SavedAt <= ttl;
+                return entry != null && DateTime.UtcNow - entry.SavedAt <= ttl;
             }
             catch { return false; }
         }
@@ -110,17 +103,11 @@ namespace Rift_App.Services
             catch { }
         }
 
-        // ─── HELPER ───────────────────────────────────────────────────────
+        // ─── HELPERS ──────────────────────────────────────────────────────
         private static string GetPath(string key) =>
             Path.Combine(CacheFolder, $"{SanitizeKey(key)}.json");
 
         private static string SanitizeKey(string key) =>
             string.Concat(key.Split(Path.GetInvalidFileNameChars()));
-
-        private static void EnsureFolder()
-        {
-            if (!Directory.Exists(CacheFolder))
-                Directory.CreateDirectory(CacheFolder);
-        }
     }
 }

@@ -13,9 +13,7 @@ namespace Rift_App.Services
 {
     public static class ImageCacheService
     {
-        private static readonly string DiskCacheFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "image_cache");
+        private static readonly string DiskCacheFolder = AppPaths.ImageCache;
 
         private static readonly ConcurrentDictionary<string, BitmapImage?> _memCache = new();
         private static readonly ConcurrentDictionary<string, SemaphoreSlim> _locks = new();
@@ -27,15 +25,13 @@ namespace Rift_App.Services
 
         static ImageCacheService()
         {
-            if (!Directory.Exists(DiskCacheFolder))
-                Directory.CreateDirectory(DiskCacheFolder);
+            AppPaths.Ensure(DiskCacheFolder);
         }
 
         public static async Task<BitmapImage?> GetAsync(string url)
         {
             if (string.IsNullOrEmpty(url)) return null;
 
-            // Memory cache
             if (_memCache.TryGetValue(url, out var cached)) return cached;
 
             var semaphore = _locks.GetOrAdd(url, _ => new SemaphoreSlim(1, 1));
@@ -53,12 +49,10 @@ namespace Rift_App.Services
                 }
                 else
                 {
-                    // Disk cache pre URL
                     var diskPath = GetDiskPath(url);
-                    if (File.Exists(diskPath))
-                        image = LoadFromDisk(diskPath);
-                    else
-                        image = await DownloadAsync(url, diskPath);
+                    image = File.Exists(diskPath)
+                        ? LoadFromDisk(diskPath)
+                        : await DownloadAsync(url, diskPath);
                 }
 
                 _memCache[url] = image;
@@ -80,6 +74,7 @@ namespace Rift_App.Services
         public static int Count => _memCache.Count;
 
         // ─── PRIVATE ──────────────────────────────────────────────────────
+
         private static string GetDiskPath(string url)
         {
             using var sha = System.Security.Cryptography.SHA256.Create();
@@ -103,6 +98,7 @@ namespace Rift_App.Services
             }
             catch { return null; }
         }
+
         private static async Task<BitmapImage?> DownloadAsync(string url, string savePath)
         {
             try

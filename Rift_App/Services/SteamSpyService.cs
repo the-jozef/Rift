@@ -10,13 +10,10 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Services
 {
-    /// Downloads F2P game list from SteamSpy once, caches 7 days.
-    /// Only stores AppId → Name, nothing else.
     public static class SteamSpyService
     {
-        private static readonly string CachePath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "RiftApp", "cache", "steamspy_f2p.json");
+        private static readonly string CachePath =
+            Path.Combine(AppPaths.SharedCache, "steamspy_f2p.json");
 
         private static readonly TimeSpan TTL = TimeSpan.FromDays(7);
 
@@ -27,10 +24,6 @@ namespace Rift_App.Services
 
         private static Dictionary<int, string>? _cache;
 
-        // ─── PUBLIC ───────────────────────────────────────────────────────
-
-        /// Returns AppId → Name for all F2P games on Steam.
-        /// Loads from disk if fresh, otherwise downloads.
         public static async Task<Dictionary<int, string>> GetFreeGamesAsync()
         {
             if (_cache != null) return _cache;
@@ -48,6 +41,7 @@ namespace Rift_App.Services
         {
             try
             {
+                AppPaths.Ensure(AppPaths.SharedCache);
                 if (!File.Exists(CachePath)) return null;
 
                 var info = new FileInfo(CachePath);
@@ -63,17 +57,16 @@ namespace Rift_App.Services
                 }
                 return result;
             }
-            catch {return null;}
-
-            
+            catch { return null; }
         }
 
         private static readonly string[] SteamSpyGenres =
-  {
-    "Free%20to%20Play",
-    "Early%20Access",        
-    "Massively%20Multiplayer",
-};
+        {
+            "Free%20to%20Play",
+            "Early%20Access",
+            "Massively%20Multiplayer",
+        };
+
         private static async Task<Dictionary<int, string>?> DownloadAsync()
         {
             try
@@ -86,7 +79,6 @@ namespace Rift_App.Services
                     {
                         var json = await _http.GetStringAsync(
                             $"https://steamspy.com/api.php?request=genre&genre={genre}");
-
                         var raw = JsonConvert.DeserializeObject<Dictionary<string, SteamSpyEntry>>(json);
                         if (raw == null) continue;
 
@@ -94,13 +86,11 @@ namespace Rift_App.Services
                         {
                             if (int.TryParse(kvp.Key, out int appId) && appId > 0
                                 && !string.IsNullOrEmpty(kvp.Value.Name))
-                            {
                                 result[appId] = kvp.Value.Name;
-                            }
                         }
 
                         Debug.WriteLine($"[SteamSpy] Genre '{genre}': {raw.Count} games");
-                        await Task.Delay(1000); // SteamSpy rate limit
+                        await Task.Delay(1000);
                     }
                     catch (Exception ex)
                     {
@@ -123,8 +113,7 @@ namespace Rift_App.Services
         {
             try
             {
-                var dir = Path.GetDirectoryName(CachePath)!;
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                AppPaths.Ensure(AppPaths.SharedCache);
                 await File.WriteAllTextAsync(CachePath,
                     JsonConvert.SerializeObject(data, Formatting.None));
             }

@@ -22,19 +22,14 @@ namespace Rift_App.ViewModels
 {
     public partial class StoreViewModel : ObservableObject
     {
-        // ═════════════════════════════════════════════════════════════════
-        //  FULL COLLECTIONS
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── FULL COLLECTIONS ─────────────────────────────────────────────────────
         public ObservableCollection<GameModel> FeaturedGames { get; } = new();
         public ObservableCollection<GameModel> DiscountGames { get; } = new();
         public ObservableCollection<GameModel> RecommendedGames { get; } = new();
         public ObservableCollection<GameModel> ByTagGames { get; } = new();
         public ObservableCollection<GameModel> MoreGames { get; } = new();
 
-        // ═════════════════════════════════════════════════════════════════
-        //  VISIBLE SLICES
-        // ═════════════════════════════════════════════════════════════════
+        //───── VISIBLE SLICES ─────────────────────────────────────────────────────
 
         // 8 of 24 discounts visible at once
         public ObservableCollection<GameModel> VisibleDiscounts { get; } = new();
@@ -45,26 +40,17 @@ namespace Rift_App.ViewModels
         // 4 of 12 by-tag visible at once
         public ObservableCollection<GameModel> VisibleByTag { get; } = new();
 
-        // ═════════════════════════════════════════════════════════════════
-        //  PAGE SIZES
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── PAGE SIZES ──────────────────────────────────────────────────────
         private const int DiscountPageSize = 8;
         private const int CardPageSize = 4;
         private const int MoreMaxPages = 5;
 
-        // ═════════════════════════════════════════════════════════════════
-        //  PAGE INDICES  (remembered — arrows go back to same position)
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── PAGE INDICES  (remembered — arrows go back to same position) ─────────────────────────────────────────────────────
         [ObservableProperty] private int _discountPageIndex;
         [ObservableProperty] private int _recommendedPageIndex;
         [ObservableProperty] private int _byTagPageIndex;
 
-        // ═════════════════════════════════════════════════════════════════
-        //  FEATURED CAROUSEL STATE
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── FEATURED CAROUSEL STATE ─────────────────────────────────────────────────────
         [ObservableProperty] private GameModel? _currentFeaturedGame;
         [ObservableProperty] private int _featuredIndex;
         [ObservableProperty] private GameImageViewModel? _featuredMainImage;
@@ -73,39 +59,24 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private GameImageViewModel? _featuredScreenshot3;
         [ObservableProperty] private GameImageViewModel? _featuredScreenshot4;
 
-        // ═════════════════════════════════════════════════════════════════
-        //  LOADING FLAGS
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── LOADING FLAGS ─────────────────────────────────────────────────────
         [ObservableProperty] private bool _isLoadingFeatured;
         [ObservableProperty] private bool _isLoadingDiscounts;
         [ObservableProperty] private bool _isLoadingRecommended;
         [ObservableProperty] private bool _isLoadingByTag;
 
-        // ═════════════════════════════════════════════════════════════════
-        //  MORE SECTION STATE
-        // ═════════════════════════════════════════════════════════════════
-
+        // MORE SECTION STATE═════════════════════════════════════════════════════════════════
         [ObservableProperty] private bool _hasMoreGames = true;
         [ObservableProperty] private bool _isLoadingMore = false;
         private int _morePage = -1;
 
-        // ═════════════════════════════════════════════════════════════════
-        //  BY-TAG HEADER
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── BY-TAG HEADER ─────────────────────────────────────────────────────
         [ObservableProperty] private string _byTagLabel = "Because You Play...";
 
-        // ═════════════════════════════════════════════════════════════════
-        //  EVENT
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── EVENT ─────────────────────────────────────────────────────
         public event Action<GameModel>? OnGameSelected;
 
-        // ═════════════════════════════════════════════════════════════════
-        //  MAIN LOAD — progressive, visible sections first
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── MAIN LOAD — progressive, visible sections first ─────────────────────────────────────────────────────
         [RelayCommand]
         public async Task LoadStoreAsync()
         {
@@ -125,10 +96,7 @@ namespace Rift_App.ViewModels
             _ = ApiService.SaveSessionAsync("Store");
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  FEATURED
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── FEATURED ─────────────────────────────────────────────────────
         private async Task LoadFeaturedAsync()
         {
             IsLoadingFeatured = true;
@@ -154,11 +122,8 @@ namespace Rift_App.ViewModels
             catch (Exception ex) { Debug.WriteLine($"[StoreVM] Featured: {ex.Message}"); }
             finally { IsLoadingFeatured = false; }
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        //  DISCOUNTS
-        // ═════════════════════════════════════════════════════════════════
-
+ 
+        //───── DISCOUNTS ─────────────────────────────────────────────────────
         private async Task LoadDiscountsAsync()
         {
             IsLoadingDiscounts = true;
@@ -185,10 +150,7 @@ namespace Rift_App.ViewModels
             finally { IsLoadingDiscounts = false; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  RECOMMENDED
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── RECOMMENDED ─────────────────────────────────────────────────────
         private async Task LoadRecommendedAsync(HashSet<string> genres)
         {
             IsLoadingRecommended = true;
@@ -218,10 +180,7 @@ namespace Rift_App.ViewModels
             finally { IsLoadingRecommended = false; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  BY TAG
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── BY TAG ─────────────────────────────────────────────────────
         private async Task LoadByTagAsync(HashSet<string> genres)
         {
             IsLoadingByTag = true;
@@ -255,10 +214,7 @@ namespace Rift_App.ViewModels
             finally { IsLoadingByTag = false; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  MORE
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── MORE ─────────────────────────────────────────────────────
         [RelayCommand]
         private async Task ShowMoreAsync()
         {
@@ -309,10 +265,7 @@ namespace Rift_App.ViewModels
             finally { IsLoadingMore = false; }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  CAROUSEL COMMANDS — DISCOUNTS
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── CAROUSEL COMMANDS — DISCOUNTS ─────────────────────────────────────────────────────
         [RelayCommand]
         private void NextDiscountPage()
         {
@@ -337,11 +290,8 @@ namespace Rift_App.ViewModels
             foreach (var g in DiscountGames.Skip(DiscountPageIndex * DiscountPageSize).Take(DiscountPageSize))
                 VisibleDiscounts.Add(g);
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        //  CAROUSEL COMMANDS — RECOMMENDED
-        // ═════════════════════════════════════════════════════════════════
-
+ 
+        //───── CAROUSEL COMMANDS — RECOMMENDED ─────────────────────────────────────────────────────
         [RelayCommand]
         private void NextRecommended()
         {
@@ -367,10 +317,7 @@ namespace Rift_App.ViewModels
                 VisibleRecommended.Add(g);
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  CAROUSEL COMMANDS — BY TAG
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── CAROUSEL COMMANDS — BY TAG ─────────────────────────────────────────────────────
         [RelayCommand]
         private void NextByTag()
         {
@@ -396,10 +343,7 @@ namespace Rift_App.ViewModels
                 VisibleByTag.Add(g);
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  CAROUSEL COMMANDS — FEATURED
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── CAROUSEL COMMANDS — FEATURED ─────────────────────────────────────────────────────
         [RelayCommand]
         private void NextFeatured()
         {
@@ -438,11 +382,8 @@ namespace Rift_App.ViewModels
             FeaturedScreenshot3 = new GameImageViewModel(shots.ElementAtOrDefault(2) ?? "");
             FeaturedScreenshot4 = new GameImageViewModel(shots.ElementAtOrDefault(3) ?? "");
         }
-
-        // ═════════════════════════════════════════════════════════════════
-        //  SELECT GAME
-        // ═════════════════════════════════════════════════════════════════
-
+ 
+        //───── SELECT GAME ─────────────────────────────────────────────────────
         [RelayCommand]
         private void SelectGame(GameModel game)
         {
@@ -462,10 +403,7 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  HELPERS
-        // ═════════════════════════════════════════════════════════════════
-
+        //───── HELPERS ─────────────────────────────────────────────────────
         private static void PopulateCollection(ObservableCollection<GameModel> col, List<GameModel> games)
         {
             col.Clear();

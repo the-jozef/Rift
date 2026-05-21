@@ -247,7 +247,7 @@ namespace SteamProxyBackend.Controllers
         }
         private bool IsRateLimited(string ip)
         {
-            // Kľúč = IP + endpoint path — paralelné volania na rôzne endpointy nie sú blokované
+            // Key = IP + endpoint path — parallel calls to different endpoints are not blocked
             var key = $"{ip}:{Request.Path}";
             if (_lastRequestTime.TryGetValue(key, out var last))
                 if ((DateTime.UtcNow - last).TotalMilliseconds < RateLimitMs) return true;
@@ -298,10 +298,7 @@ namespace SteamProxyBackend.Controllers
             public string ReviewCss { get; set; } = "";
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  CORE FETCH — single game, memory cached
-        // ═════════════════════════════════════════════════════════════════
-
+        // ─── CORE FETCH — single game, memory cached ──────────────────────────────────────────────────────
         private async Task<StoreGameDto?> FetchSingleAsync(int appId)
         {
             // Memory cache hit — instant return
@@ -437,12 +434,9 @@ namespace SteamProxyBackend.Controllers
             }
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  SECTION BUILDER — picks N unique games from a pool
+        // ─── SECTION BUILDER — picks N unique games from a pool ──────────────────────────────────────────────────────
         //  Uses a per-section seed so each section shows different games
-        //  Uses SectionCache so the same request doesn't re-shuffle
-        // ═════════════════════════════════════════════════════════════════
-
+        //  Uses SectionCache so the same request doesn't re-shuffle 
         private async Task<List<StoreGameDto>> BuildSectionAsync(
             string sectionKey,
             int[] pool,
@@ -481,10 +475,8 @@ namespace SteamProxyBackend.Controllers
             return result;
         }
 
-        /// <summary>
-        /// Returns a stable daily shuffle of the pool for a given section key.
-        /// Same section always gets the same order within a day → consistent pagination.
-        /// </summary>
+        // Returns a stable daily shuffle of the pool for a given section key.
+        // Same section always gets the same order within a day → consistent pagination.
         private List<int> GetOrBuildSectionOrder(string key, int[] pool)
         {
             if (_sectionCache.TryGetValue(key, out var sc) &&
@@ -500,9 +492,7 @@ namespace SteamProxyBackend.Controllers
             return ids;
         }
 
-        // ═════════════════════════════════════════════════════════════════
-        //  ENDPOINTS
-        // ═════════════════════════════════════════════════════════════════
+        // ─── ENDPOINTS ──────────────────────────────────────────────────────
 
         // ── Featured — 8 games, diverse, no filter ────────────────────────
         [HttpGet("store/featured")]
@@ -926,44 +916,84 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                // Steam search API — vracia zoznam { appid, name }
-                var searchUrl = $"https://steamcommunity.com/actions/SearchApps/{Uri.EscapeDataString(q)}";
-                var searchJson = await _http.GetStringAsync(searchUrl);
-                var searchArr = JArray.Parse(searchJson);
+                // Use Steam Store search API — returns pricing inline, no second call needed.
+                // This fixes games like "Rust" that were silently dropped by the old two-step flow.
+                var searchUrl =
+                    $"https://store.steampowered.com/api/storesearch/" +
+                    $"?term={Uri.EscapeDataString(q)}&l=english&cc=US&ignore_preferences=1";
 
-                // Zoberieme top 5
-                var top5 = searchArr.Take(5).ToList();
-                if (!top5.Any())
+                var searchJson = await _http.GetStringAsync(searchUrl);
+                var searchData = JObject.Parse(searchJson);
+                var items = searchData["items"] as JArray;
+
+                if (items == null || !items.Any())
                     return Ok(new { Results = new List<object>() });
 
-                var appIds = top5
-                    .Select(x => x["appid"]?.Value<int>() ?? 0)
-                    .Where(id => id > 0)
-                    .ToList();
-
-                // Batch fetch cez appdetails (s memory cache)
                 var results = new List<object>();
-                foreach (var appId in appIds)
+
+                foreach (var item in items.Take(8))
                 {
-                    var dto = await FetchSingleAsync(appId);
-                    if (dto == null) continue;
+                    int appId = item["id"]?.Value<int>() ?? 0;
+                    if (appId <= 0) continue;
+
+                    string name = item["name"]?.Value<string>() ?? "";
+                    if (string.IsNullOrEmpty(name)) continue;
+                    if (HasAdultName(name)) continue;
+
+                    // Build price info from search result (no extra API call required)
+                    var priceObj = item["price"];
+                    bool isFree = priceObj == null;
+                    string price = "N/A";
+                    string origPrice = "";
+                    int discount = 0;
+
+                    if (priceObj != null)
+                    {
+                        discount = priceObj["discount_percent"]?.Value<int>() ?? 0;
+                        int finalCents = priceObj["final"]?.Value<int>() ?? -1;
+
+                        if (finalCents == 0)
+                        {
+                            isFree = true;
+                            price = "Free To Play";
+                        }
+                        else
+                        {
+                            price = priceObj["final_formatted"]?.Value<string>() ?? "N/A";
+                            if (discount > 0)
+                                origPrice = priceObj["initial_formatted"]?.Value<string>() ?? "";
+                        }
+                    }
+                    else
+                    {
+                        // No price block — game is free to play
+                        isFree = true;
+                        price = "Free To Play";
+                    }
+
+                    string headerUrl =
+                        $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg";
 
                     results.Add(new
                     {
-                        AppId = dto.AppId,
-                        Name = dto.Name,
-                        HeaderImageUrl = dto.HeaderImageUrl,
-                        Price = dto.Price,
-                        OriginalPrice = dto.OriginalPrice,
-                        DiscountPercent = dto.DiscountPercent,
-                        IsFree = dto.IsFree,
-                        HasDiscount = dto.HasDiscount
+                        AppId = appId,
+                        Name = name,
+                        HeaderImageUrl = headerUrl,
+                        Price = price,
+                        OriginalPrice = origPrice,
+                        DiscountPercent = discount,
+                        IsFree = isFree,
+                        HasDiscount = discount > 0
                     });
                 }
 
                 return Ok(new { Results = results });
             }
-            catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Search] Error: {ex.Message}");
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpGet("library/{steamId}")]
@@ -1292,7 +1322,6 @@ namespace SteamProxyBackend.Controllers
         }
 
         // ─── PRIVATE HELPERS ──────────────────────────────────────────────
-
         private async Task<(string desc, string css)> FetchReviewsAsync(int appId)
         {
             try
@@ -1464,7 +1493,6 @@ namespace SteamProxyBackend.Controllers
     }
 
     // ─── REQUEST TYPES ────────────────────────────────────────────────────
-
     public class WishlistBatchRequest
     {
         public List<int> AppIds { get; set; } = new();

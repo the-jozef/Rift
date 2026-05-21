@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace Rift_App.Services
 {
-    /// <summary>
-    /// Steam tag dictionary — stiahne raz pri štarte a uloží do local cache.
-    /// Steam tag dictionary — downloaded once at startup and saved to local cache.
-    /// Použitie: TagService.GetName(tagId) → "Action", "RPG", atď.
-    /// Usage: TagService.GetName(tagId) → "Action", "RPG", etc.
-    /// </summary>
+    // Steam tag dictionary — downloaded once at startup and saved to local cache.
+    // Usage: TagService.GetName(tagId) → "Action", "RPG", etc.
     public static class TagService
     {
         private static Dictionary<int, string> _tags = new();
@@ -23,7 +19,6 @@ namespace Rift_App.Services
             Timeout = TimeSpan.FromSeconds(30)
         };
 
-        // 18+ tag IDs — presné IDs ktoré Steam používa pre explicitný obsah
         // 18+ tag IDs — exact IDs Steam uses for explicit content
         private static readonly HashSet<int> AdultTagIds = new()
         {
@@ -37,11 +32,6 @@ namespace Rift_App.Services
         };
 
         // ─── INIT ─────────────────────────────────────────────────────────
-
-        /// <summary>
-        /// Inicializuj tag slovník — zavolaj pri štarte apky.
-        /// Initialize tag dictionary — call at app startup.
-        /// </summary>
         public static async Task InitAsync()
         {
             // Skús z local cache — try from local cache
@@ -61,24 +51,14 @@ namespace Rift_App.Services
         }
 
         // ─── PUBLIC API ───────────────────────────────────────────────────
-
-        /// <summary>
-        /// Vráti meno tagu podľa ID alebo prázdny string.
-        /// Returns tag name by ID or empty string.
-        /// </summary>
+        // Returns tag name by ID or empty string.
         public static string GetName(int tagId) =>
             _tags.TryGetValue(tagId, out var name) ? name : string.Empty;
 
-        /// <summary>
-        /// Skontroluje či tag je 18+ obsah.
-        /// Checks if tag ID is adult content.
-        /// </summary>
+        // Checks if tag ID is 18+ content.
         public static bool IsAdultTag(int tagId) => AdultTagIds.Contains(tagId);
 
-        /// <summary>
-        /// Skontroluje či meno tagu (string) signalizuje 18+ obsah.
-        /// Checks if tag name (string) signals adult content.
-        /// </summary>
+        // Checks if tag name (string) signals 18+ content.
         public static bool IsAdultTagName(string tagName)
         {
             if (string.IsNullOrEmpty(tagName)) return false;

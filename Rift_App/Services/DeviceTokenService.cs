@@ -9,9 +9,7 @@ namespace Rift_App.Services
 {
     public static class DeviceTokenService
     {
-        private static readonly string FolderPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RiftApp");
-        private static readonly string TokenFilePath = Path.Combine(FolderPath, "device.token");
+        private static readonly string TokenFilePath = AppPaths.DeviceToken;
         private static string? _cachedToken;
 
         public static string GetOrCreate()
@@ -33,12 +31,13 @@ namespace Rift_App.Services
                 return _cachedToken;
             }
         }
+
         private static string CreateNew()
         {
             _cachedToken = Guid.NewGuid().ToString();
             try
             {
-                if (!Directory.Exists(FolderPath)) Directory.CreateDirectory(FolderPath);
+                AppPaths.Ensure(AppPaths.Root);
                 File.WriteAllText(TokenFilePath, _cachedToken);
             }
             catch { }

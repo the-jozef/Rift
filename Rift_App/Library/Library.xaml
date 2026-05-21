@@ -102,17 +102,17 @@
                                                                                     <Border x:Name="Root" Background="Transparent">
                                                                                         <Grid Width="253.2">
 
-                                                                                            <StackPanel Margin="25,0,0,0"
-                                                                                                        Orientation="Horizontal">
+                                                                                            <StackPanel Margin="25,0,0,0" Orientation="Horizontal">
 
-                                                                                                <Image Width="20"
-                                                                                                           Height="20"
-                                                                                                       Margin="0,0,4,0"
-                                                                                                       Visibility="{Binding IconPath,Converter={StaticResource StringToVisibilityConverter}}"
-                                                                                                           RenderOptions.BitmapScalingMode="HighQuality"
-                                                                                                           Source="{Binding IconPath}"
-                                                                                                           Stretch="UniformToFill" />
-                                                                                            
+                                                                                                <Image
+                                                                                                    Width="20"
+                                                                                                    Height="20"
+                                                                                                    Margin="0,0,4,0"
+                                                                                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                                                                                    Source="{Binding IconPath}"
+                                                                                                    Stretch="UniformToFill"
+                                                                                                    Visibility="{Binding IconPath, Converter={StaticResource StringToVisibilityConverter}}" />
+
                                                                                                 <TextBlock
                                                                                                     x:Name="Text"
                                                                                                     VerticalAlignment="Center"
