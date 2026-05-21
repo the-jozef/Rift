@@ -1,5 +1,4 @@
 <Solution>
   <Project Path="Rift_App/Rift_App.csproj" />
   <Project Path="SteamProxyBackend/SteamProxyBackend.csproj" Id="7cf0a0af-2402-4d8a-8c4c-aed58e854303" />
-  <Project Path="SteamWorker/SteamWorker.csproj" Id="9cd505bf-f5f3-4301-8524-2011d3205cbb" />
 </Solution>
