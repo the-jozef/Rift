@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using Rift_App.Models;
 using Rift_App.Services;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Threading;
-using System.Net.Http;
 
 namespace Rift_App.ViewModels
 {
     public partial class AccountViewModel : ObservableObject
     {
-        // ─── CACHE ────────────────────────────────────────────────────────
+        // ─── CACHE TTL ────────────────────────────────────────────────────
         private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(1);
 
         private static readonly HttpClient _http = new HttpClient
@@ -27,7 +28,6 @@ namespace Rift_App.ViewModels
             Timeout = TimeSpan.FromSeconds(15)
         };
 
-        // Paths — computed per call so they always use the current SteamId
         private static string CachePath =>
             Path.Combine(AppPaths.Ensure(AppPaths.Account(SessionManager.SteamId64)), "snapshot.json");
 
@@ -109,11 +109,43 @@ namespace Rift_App.ViewModels
             IsLoading = false;
         }
 
+        // ─── OPEN ACHIEVEMENTS for a recent game ──────────────────────────
+        [RelayCommand]
+        private void OpenGameAchievements(RecentActivityGame game)
+        {
+            if (game == null) return;
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = $"steam://url/GameStatsPage/{game.AppId}",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[AccountVM] OpenGameAchievements error: {ex.Message}");
+            }
+        }
+
         // ─── NAVIGATION ───────────────────────────────────────────────────
         [RelayCommand] private void GoToLibrary() => ViewNavigator.Instance?.MainViewModel?.ShowLibrary();
         [RelayCommand] private void GoToWishlist() => ViewNavigator.Instance?.MainViewModel?.ShowWishlist();
         [RelayCommand] private void GoToStore() => ViewNavigator.Instance?.MainViewModel?.ShowStore();
         [RelayCommand] private void SwitchAccount() => ViewNavigator.Instance?.MainViewModel?.SwitchAccount();
+
+        // ─── COMMAND ───────────────────────────────────────────────────
+        [RelayCommand]
+        private void ShowSteamFriends()
+        {
+            OpenSteamUrl("steam://open/friends");
+        }
+        [RelayCommand]
+        private void OpenAchievements(GameModel game)
+        {
+            if (game == null) return;
+            OpenSteamUrl($"steam://openurl/https://steamcommunity.com/stats/{game.AppId}/achievements");
+        }
 
         // ─── BACKGROUND REFRESH ───────────────────────────────────────────
         private async Task RefreshInBackgroundAsync()
@@ -140,6 +172,7 @@ namespace Rift_App.ViewModels
         private async Task<AccountSnapshot> BuildSnapshotAsync()
         {
             var steamId = SessionManager.SteamId64;
+
             var snap = new AccountSnapshot
             {
                 SavedAt = DateTime.UtcNow,
@@ -147,32 +180,18 @@ namespace Rift_App.ViewModels
                 AvatarUrl = SessionManager.AvatarUrl,
             };
 
+            // Run all network calls in parallel
             var levelTask = ApiService.GetSteamLevelAsync(steamId);
             var friendsTask = ApiService.GetFriendsAsync(steamId);
             var activityTask = ApiService.GetRecentActivityAsync(steamId);
             var wishlistCountTask = WishlistCountCache.GetAsync();
 
-            // Games count: prefer local library cache (includes F2P + installed),
-            // fall back to API (Steam-visible only).
-            var libCachedTask = LibraryCacheService.LoadAsync(steamId);
-
-            await Task.WhenAll(levelTask, friendsTask, activityTask,
-                               wishlistCountTask, libCachedTask);
+            await Task.WhenAll(levelTask, friendsTask, activityTask, wishlistCountTask);
 
             snap.Level = levelTask.Result;
 
-            // Use local library count when available — it matches what Library shows
-            var libCached = libCachedTask.Result;
-            if (libCached != null && libCached.Count > 0)
-            {
-                snap.GamesOwnedCount = libCached.Count;
-            }
-            else
-            {
-                // Fall back to API count
-                var apiLib = await ApiService.GetLibraryAsync(steamId);
-                snap.GamesOwnedCount = apiLib?.Count ?? 0;
-            }
+            // ── Game count: prefer local library (includes F2P + installed) ──
+            snap.GamesOwnedCount = await GetBestGameCountAsync(steamId);
 
             snap.WishlistCount = wishlistCountTask.Result;
             WishlistCountCache.Set(snap.WishlistCount);
@@ -185,9 +204,39 @@ namespace Rift_App.ViewModels
 
             var activity = activityTask.Result;
             snap.TotalHours2W = activity?.TotalHours ?? 0;
-            snap.RecentGames = await EnrichRecentGamesAsync(activity?.Games ?? new(), steamId);
+            snap.RecentGames = await EnrichRecentGamesAsync(
+                                    activity?.Games ?? new(), steamId);
 
             return snap;
+        }
+
+        // ─── GAME COUNT — best available source ──────────────────────────
+        private static async Task<int> GetBestGameCountAsync(string steamId)
+        {
+            // 1. Local library cache (most complete — includes F2P, installed, registry)
+            var libCached = await LibraryCacheService.LoadAsync(steamId);
+            if (libCached != null && libCached.Count > 0)
+                return libCached.Count;
+
+            // 2. Steamworks installed games count as lower bound
+            int installedCount = 0;
+            try
+            {
+                var installed = SteamInstallService.GetAllGames();
+                installedCount = installed.Count;
+            }
+            catch { }
+
+            // 3. Steam API
+            try
+            {
+                var apiLib = await ApiService.GetLibraryAsync(steamId);
+                return Math.Max(apiLib?.Count ?? 0, installedCount);
+            }
+            catch
+            {
+                return installedCount;
+            }
         }
 
         // ─── ENRICH RECENT GAMES ─────────────────────────────────────────
@@ -196,28 +245,28 @@ namespace Rift_App.ViewModels
         {
             var headersFolder = AppPaths.Ensure(AppPaths.AccountHeaders(steamId));
 
+            // Ensure LastPlayed cache is ready
+            await LastPlayedCacheService.InitializeAsync();
+
             foreach (var game in games)
             {
                 try
                 {
-                    // 1. Header image — try shared hero first, then download to account headers
-                    var localPath = GetHeaderPath(game.AppId, headersFolder);
+                    // ── 1. Header image ───────────────────────────────────
+                    var localPath = Path.Combine(headersFolder, $"{game.AppId}_header.jpg");
 
                     if (!File.Exists(localPath))
                     {
-                        // Shared hero image already downloaded by library?
+                        // Reuse shared hero if it was downloaded for Library
                         var sharedHero = GameDetailCacheService.GetHeroPath(game.AppId);
                         if (File.Exists(sharedHero))
-                        {
                             localPath = sharedHero;
-                        }
                         else
                         {
-                            var downloaded = await TryDownloadImageAsync(
+                            bool ok = await TryDownloadImageAsync(
                                 $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/library_hero.jpg",
                                 localPath);
-
-                            if (!downloaded)
+                            if (!ok)
                                 await TryDownloadImageAsync(
                                     $"https://cdn.akamai.steamstatic.com/steam/apps/{game.AppId}/header.jpg",
                                     localPath);
@@ -227,17 +276,7 @@ namespace Rift_App.ViewModels
                     if (File.Exists(localPath))
                         game.HeaderImageUrl = localPath;
 
-                    // 2. Achievement data from library cache
-                    var achs = await LibraryCacheService.LoadAchievementsAsync(steamId, game.AppId);
-                    if (!achs.HasValue) continue;
-
-                    var unlocked = achs.Value.Unlocked;
-                    var total = unlocked.Count + achs.Value.Locked.Count;
-
-                    game.AchievementsUnlocked = unlocked.Count;
-                    game.AchievementsTotal = total;
-
-                    // Last played
+                    // ── 2. Last played ────────────────────────────────────
                     var lastPlayed = LastPlayedCacheService.Get(game.AppId);
                     if (lastPlayed.HasValue)
                     {
@@ -246,28 +285,58 @@ namespace Rift_App.ViewModels
                         {
                             0 => "last played today",
                             1 => "last played yesterday",
-                            _ => $"last played on {lastPlayed.Value:d MMM}"
+                            _ => $"last played on {lastPlayed.Value.ToString("d MMM", CultureInfo.InvariantCulture)}"
                         };
                     }
 
-                    // Recent achievement icons — newest first
-                    var recent = unlocked
-                        .Where(a => a.UnlockTime.HasValue)
-                        .OrderByDescending(a => a.UnlockTime)
-                        .ToList();
+                    // ── 3. Achievements ───────────────────────────────────
+                    // Try local cache first
+                    var achs = await LibraryCacheService.LoadAchievementsAsync(steamId, game.AppId);
 
-                    var icons = recent.Take(5).Select(a => new RecentAchIcon
+                    if (!achs.HasValue && SteamworksService.IsInitialized)
                     {
-                        IconUrl = !string.IsNullOrEmpty(a.LocalIconPath)
-                                  ? a.LocalIconPath : a.IconUrl,
-                        Name = a.Name
-                    }).ToList();
+                        // Not in library cache — fetch independently and save so
+                        // Library can reuse it later without re-downloading
+                        Debug.WriteLine($"[AccountVM] Fetching achievements for {game.AppId} independently.");
+                        var detail = await SteamworksService.GetAchievementsForAppAsync(game.AppId);
+                        if (detail != null)
+                        {
+                            var unlockedList = detail.Achievements.Where(a => a.Unlocked).ToList();
+                            var lockedList = detail.Achievements.Where(a => !a.Unlocked).ToList();
+                            await LibraryCacheService.SaveAchievementsAsync(
+                                steamId, game.AppId, lockedList, unlockedList);
+                            // Re-read from cache so we use the same path
+                            achs = await LibraryCacheService.LoadAchievementsAsync(steamId, game.AppId);
+                        }
+                    }
 
-                    int extra = recent.Count - 5;
-                    if (extra > 0)
-                        icons.Add(new RecentAchIcon { ExtraCount = extra });
+                    if (achs.HasValue)
+                    {
+                        var unlocked = achs.Value.Unlocked;
+                        var total = unlocked.Count + achs.Value.Locked.Count;
 
-                    game.RecentIcons = icons;
+                        game.AchievementsUnlocked = unlocked.Count;
+                        game.AchievementsTotal = total;
+
+                        // Recent achievement icons — newest first, max 5 + overflow badge
+                        var recent = unlocked
+                            .Where(a => a.UnlockTime.HasValue)
+                            .OrderByDescending(a => a.UnlockTime)
+                            .ToList();
+
+                        var icons = recent.Take(5).Select(a => new RecentAchIcon
+                        {
+                            IconUrl = !string.IsNullOrEmpty(a.LocalIconPath)
+                                      ? a.LocalIconPath : a.IconUrl,
+                            Name = a.Name
+                        }).ToList();
+
+                        int extra = recent.Count - 5;
+                        if (extra > 0)
+                            icons.Add(new RecentAchIcon { ExtraCount = extra });
+
+                        game.RecentIcons = icons;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -293,6 +362,7 @@ namespace Rift_App.ViewModels
                 FriendsPrivate = snap.FriendsPrivate;
                 TotalHours2W = snap.TotalHours2W;
 
+                // Only rebuild lists when content actually changed
                 var newFriendIds = snap.Friends.Select(f => f.SteamId).ToList();
                 var currFriendIds = Friends.Select(f => f.SteamId).ToList();
                 if (!newFriendIds.SequenceEqual(currFriendIds))
@@ -312,9 +382,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── IMAGE HELPERS ────────────────────────────────────────────────
-        private static string GetHeaderPath(int appId, string folder) =>
-            Path.Combine(folder, $"{appId}_header.jpg");
-
         private static async Task<bool> TryDownloadImageAsync(string url, string savePath)
         {
             try
@@ -336,21 +403,19 @@ namespace Rift_App.ViewModels
 
                 var json = await File.ReadAllTextAsync(path);
                 var snap = JsonConvert.DeserializeObject<AccountSnapshot>(json);
-                if (snap == null) return null;
-                if (DateTime.UtcNow - snap.SavedAt > CacheTTL) return null;
+                if (snap == null || DateTime.UtcNow - snap.SavedAt > CacheTTL) return null;
 
                 // Restore local image paths
                 var headersFolder = HeadersFolder;
                 foreach (var g in snap.RecentGames)
                 {
-                    var localPath = GetHeaderPath(g.AppId, headersFolder);
-                    if (File.Exists(localPath))
-                        g.HeaderImageUrl = localPath;
+                    var local = Path.Combine(headersFolder, $"{g.AppId}_header.jpg");
+                    if (File.Exists(local))
+                        g.HeaderImageUrl = local;
                     else
                     {
-                        var sharedHero = GameDetailCacheService.GetHeroPath(g.AppId);
-                        if (File.Exists(sharedHero))
-                            g.HeaderImageUrl = sharedHero;
+                        var shared = GameDetailCacheService.GetHeroPath(g.AppId);
+                        if (File.Exists(shared)) g.HeaderImageUrl = shared;
                     }
                 }
 
@@ -363,13 +428,33 @@ namespace Rift_App.ViewModels
         {
             try
             {
-                var json = JsonConvert.SerializeObject(snap, Formatting.None);
-                await File.WriteAllTextAsync(CachePath, json);
+                await File.WriteAllTextAsync(CachePath,
+                    JsonConvert.SerializeObject(snap, Formatting.None));
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[AccountVM] Cache save: {ex.Message}");
             }
+        }
+
+        // ─── HELPER ───────────────────────────────────────────────────────
+        private static void OpenSteamUrl(string url)
+        {
+            if (!SteamworksService.IsSteamInstalled())
+            {
+                MessageBox.Show(
+                    "Steam is not installed on this computer.",
+                    "Steam Not Found",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
     }
 }

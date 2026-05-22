@@ -1028,4 +1028,147 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--  Account  -->
+    <Style x:Key="ScrollBarThumbStyle5"
+           TargetType="Thumb">
+
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="IsTabStop"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+
+                    <Border x:Name="ThumbBorder"
+                            Width="8"
+                            Height="100"
+                            Margin="1,-50"
+                            VerticalAlignment="Center"
+                            Background="#FF5A6068"
+                            CornerRadius="3" />
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="ThumbBorder"
+                                    Property="Background"
+                                    Value="#FF7A8088" />
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                 Value="True">
+                            <Setter TargetName="ThumbBorder"
+                                    Property="Background"
+                                    Value="#FF7A8088" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollBarPageButtonStyle5"
+           TargetType="RepeatButton">
+
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="IsTabStop"
+                Value="False" />
+        <Setter Property="Focusable"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SlimScrollBarStyle5"
+           TargetType="ScrollBar">
+
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Margin="0,50">
+
+                        <Border Width="10"
+                                Margin="0,-50"
+                                Background="#FF3A3E44"
+                                CornerRadius="3"
+                                Opacity="0.2" />
+
+                        <Track x:Name="PART_Track"
+                               IsDirectionReversed="True">
+
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageUpCommand"
+                                              Style="{StaticResource ScrollBarPageButtonStyle5}" />
+                            </Track.DecreaseRepeatButton>
+
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource ScrollBarThumbStyle5}" />
+                            </Track.Thumb>
+
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageDownCommand"
+                                              Style="{StaticResource ScrollBarPageButtonStyle5}" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="Orientation"
+                                 Value="Horizontal">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SlimScrollViewerStyle5"
+           TargetType="ScrollViewer">
+
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="HorizontalScrollBarVisibility"
+                Value="Disabled" />
+        <Setter Property="VerticalScrollBarVisibility"
+                Value="Auto" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="13" />
+                        </Grid.ColumnDefinitions>
+
+                        <ScrollContentPresenter Grid.Column="0"
+                                                Margin="0"
+                                                CanContentScroll="{TemplateBinding CanContentScroll}"
+                                                Content="{TemplateBinding Content}"
+                                                ContentTemplate="{TemplateBinding ContentTemplate}" />
+
+                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                                   Grid.Column="1"
+                                   HorizontalAlignment="Center"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   Style="{StaticResource SlimScrollBarStyle5}"
+                                   ViewportSize="0"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                   Value="{TemplateBinding VerticalOffset}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

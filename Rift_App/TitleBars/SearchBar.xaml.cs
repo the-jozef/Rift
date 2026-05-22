@@ -26,11 +26,11 @@ namespace Rift_App.TitleBars
             InitializeComponent();
             DataContext = ViewModel;
 
-            // Wire-up TextChanged pre debounced search
+            // Debounced search — fires on every keystroke
             SearchBox.TextChanged += async (_, _) =>
                 await ViewModel.OnSearchTextChangedAsync(SearchBox.Text);
 
-            // Wishlist count z centrálneho cache
+            // Wishlist count loaded independently of WishlistViewModel
             Loaded += async (_, _) =>
                 ViewModel.WishlistCount = await WishlistCountCache.GetAsync();
         }

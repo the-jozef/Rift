@@ -20,11 +20,12 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isSearching = false;
         [ObservableProperty] private bool _showDropdown = false;
         [ObservableProperty] private int _wishlistCount = 0;
+        [ObservableProperty] private bool _isRefreshing = false;
 
         public ObservableCollection<SearchResultModel> Results { get; } = new();
 
         private CancellationTokenSource? _debounceCts;
-        private const int DebounceMs = 320;
+        private const int DebounceMs = 350;
 
         // ─── SEARCH ───────────────────────────────────────────────────────
         public async Task OnSearchTextChangedAsync(string text)
@@ -33,10 +34,11 @@ namespace Rift_App.ViewModels
             _debounceCts = new CancellationTokenSource();
             var token = _debounceCts.Token;
 
-            if (string.IsNullOrWhiteSpace(text) || text.Length < 2)
+            if (string.IsNullOrWhiteSpace(text) || text.Length < 1)
             {
                 ShowDropdown = false;
                 Results.Clear();
+                IsSearching = false;
                 return;
             }
 
@@ -48,7 +50,23 @@ namespace Rift_App.ViewModels
                 IsSearching = true;
                 ShowDropdown = true;
 
-                var results = await ApiService.SearchGamesAsync(text);
+                // 12-second cap so the spinner never hangs
+                using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(12));
+                using var linked = CancellationTokenSource
+                    .CreateLinkedTokenSource(token, timeoutCts.Token);
+
+                List<SearchResultModel> results;
+                try
+                {
+                    results = await ApiService.SearchGamesAsync(text)
+                                              .WaitAsync(linked.Token);
+                }
+                catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
+                {
+                    Debug.WriteLine("[SearchBar] Search timed out.");
+                    results = new();
+                }
+
                 if (token.IsCancellationRequested) return;
 
                 Application.Current.Dispatcher.Invoke(() =>
@@ -58,7 +76,7 @@ namespace Rift_App.ViewModels
                     ShowDropdown = Results.Count > 0;
                 });
             }
-            catch (OperationCanceledException) { }
+            catch (OperationCanceledException) { /* user typed again — normal */ }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[SearchBar] Error: {ex.Message}");
@@ -69,7 +87,54 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── COMMANDS ─────────────────────────────────────────────────────
+        // ─── REFRESH ──────────────────────────────────────────────────────
+        /// <summary>
+        /// Clears volatile caches and shows the loading screen so library,
+        /// wishlist and profile get fresh data. Store is NOT cleared (shared cache).
+        /// </summary>
+        [RelayCommand]
+        private async Task RefreshAsync()
+        {
+            if (IsRefreshing) return;
+            IsRefreshing = true;
+
+            try
+            {
+                var steamId = SessionManager.SteamId64;
+
+                // 1. Force LastPlayed re-read from VDF
+                await LastPlayedCacheService.RefreshAsync();
+
+                // 2. Invalidate account snapshot so profile re-fetches
+                try
+                {
+                    var snap = System.IO.Path.Combine(
+                        AppPaths.Account(steamId), "snapshot.json");
+                    if (System.IO.File.Exists(snap))
+                        System.IO.File.Delete(snap);
+                }
+                catch { }
+
+                // 3. Wishlist count will re-fetch on next request
+                WishlistCountCache.Invalidate();
+
+                // 4. Show loading screen → navigates back to last location
+                ViewNavigator.Instance?.ShowLoading();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SearchBar] Refresh error: {ex.Message}");
+            }
+            finally
+            {
+                // IsRefreshing stays true until loading screen takes over,
+                // so the button stays dimmed (window hides during loading).
+                // It resets to false when SearchBar is next constructed.
+                IsRefreshing = false;
+            }
+        }
+
+        // ─── OTHER COMMANDS ───────────────────────────────────────────────
         [RelayCommand]
         public void SelectResult(SearchResultModel result)
         {
@@ -80,11 +145,12 @@ namespace Rift_App.ViewModels
 
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = $"steam://store/{result.AppId}",
-                    UseShellExecute = true
-                });
+                System.Diagnostics.Process.Start(
+                    new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = $"steam://store/{result.AppId}",
+                        UseShellExecute = true
+                    });
             }
             catch (Exception ex)
             {
@@ -95,8 +161,10 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public void ClearSearch()
         {
+            _debounceCts?.Cancel();
             SearchText = string.Empty;
             ShowDropdown = false;
+            IsSearching = false;
             Results.Clear();
         }
 
@@ -107,17 +175,14 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         public void CloseDropdown() => ShowDropdown = false;
 
-        // ─── WISHLIST COUNT — z centrálneho cache ─────────────────────────
-        // No API call — just reads what WishlistVM or AccountVM already loaded
+        // ─── WISHLIST COUNT ───────────────────────────────────────────────
         public async Task LoadWishlistCountAsync()
         {
-            WishlistCount = await WishlistCountCache.GetAsync();
+            try { WishlistCount = await WishlistCountCache.GetAsync(); }
+            catch { }
         }
 
-        // Call this after every wishlist change (add/remove)
-        public void RefreshWishlistCount()
-        {
+        public void RefreshWishlistCount() =>
             WishlistCount = WishlistCountCache.Count;
-        }
     }
 }

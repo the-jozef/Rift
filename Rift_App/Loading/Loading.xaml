@@ -89,7 +89,7 @@
         <Border
             Background="Gray"
             CornerRadius="7.5,7.5,0,0"
-            Opacity="0.15" />
+            Opacity="0.13" />
 
         <Grid>
 

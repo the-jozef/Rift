@@ -24,39 +24,51 @@ namespace Rift_App.ViewModels
         public WindowStateViewModel WindowState { get; } = new();
 
         // ─── CURRENT VIEW ─────────────────────────────────────────────────
-        [ObservableProperty]
-        private object _currentView = null!;
+        [ObservableProperty] private object _currentView = null!;
 
         // ─── SEARCH BAR ───────────────────────────────────────────────────
-        [ObservableProperty]
-        private bool _showSearchBar = true;
+        [ObservableProperty] private bool _showSearchBar = true;
 
-        // ─── PLAYER INFO ──────────────────────────────────────────────────
-        public string Username => SessionManager.Username;
-        public string AvatarUrl => SessionManager.AvatarUrl;
+        // ─── PLAYER INFO ─────────────────────────────────────────────────
+        // IMPORTANT: must be [ObservableProperty] — NOT a plain get => SessionManager.X
+        // because plain computed properties never notify the UI when the session changes.
+        [ObservableProperty] private string _username = string.Empty;
+        [ObservableProperty] private string _avatarUrl = string.Empty;
 
         // ─── STEAM TIMER ──────────────────────────────────────────────────
         private readonly DispatcherTimer _steamTimer;
 
         // ─── CONSTRUCTOR ──────────────────────────────────────────────────
-
         public WindowViewModel()
         {
-            _steamTimer = BuildSteamTimer();
+            _steamTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+
+            // Subscribe so name/avatar update on every account switch
+            SessionManager.OnSessionReady += OnSessionReady;
+
             InitializeSteam();
             ShowStore();
         }
 
-        // ─── STEAM ────────────────────────────────────────────────────────
-
-        private static DispatcherTimer BuildSteamTimer() => new()
+        // ─── SESSION CHANGE ───────────────────────────────────────────────
+        private void OnSessionReady()
         {
-            Interval = TimeSpan.FromMilliseconds(100)
-        };
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Username = SessionManager.Username;
+                AvatarUrl = SessionManager.AvatarUrl;
+            });
+        }
 
+        public void ApplySession()
+        {
+            Username = SessionManager.Username;
+            AvatarUrl = SessionManager.AvatarUrl;
+        }
+
+        // ─── STEAM ────────────────────────────────────────────────────────
         private void InitializeSteam()
         {
-            // RunCallbacks must be called regularly for ALL Steamworks events to fire
             _steamTimer.Tick += (_, _) =>
             {
                 if (SteamworksService.IsInitialized)
@@ -64,22 +76,19 @@ namespace Rift_App.ViewModels
             };
             _steamTimer.Start();
 
-            // FileSystemWatcher on localconfig.vdf + Steamworks achievement callbacks
             SteamCallbackService.Register();
-
-            // Pre-load LastPlayed cache (reads localconfig.vdf once)
             _ = LastPlayedCacheService.InitializeAsync();
         }
 
-        // Called from App.xaml.cs OnExit — no need to touch MainWindow.xaml.cs
+        // Call from App.xaml.cs OnExit
         public void Cleanup()
         {
+            SessionManager.OnSessionReady -= OnSessionReady;
             _steamTimer.Stop();
             SteamCallbackService.Unregister();
         }
 
         // ─── NAVIGATION ───────────────────────────────────────────────────
-
         [RelayCommand]
         public void ShowStore()
         {
@@ -111,34 +120,26 @@ namespace Rift_App.ViewModels
             CurrentView = new Account.Account();
             ShowSearchBar = false;
         }
+
         [RelayCommand]
-        public void ShowGamePage(Models.GameModel game)
+        public void ShowGamePage(GameModel game)
         {
             var page = new StoreGamePage.GamePage();
             page.LoadGame(game);
             CurrentView = page;
             ShowSearchBar = false;
         }
-        [RelayCommand]
-        public void ShowSteam()
-        {
-            OpenSteamUrl("steam://open/main");
-        }
-        [RelayCommand]
-        public void ShowSteamFriends()
-        {
-            OpenSteamUrl("steam://open/friends");
-        }
 
         [RelayCommand]
-        public void ShowSteamAccount()
-        {
-            var steamId = SessionManager.SteamId64;
-            OpenSteamUrl($"steam://url/SteamIDPage/{steamId}");
-        }
+        public void ShowSteam() => OpenSteamUrl("steam://store");
+
+        [RelayCommand]
+        public void ShowSteamFriends() => OpenSteamUrl("steam://open/friends");
+
+        [RelayCommand]
+        public void ShowSteamAccount() => OpenSteamUrl($"steam://url/SteamIDPage/{SessionManager.SteamId64}");
 
         // ─── SWITCH ACCOUNT ───────────────────────────────────────────────
-
         [RelayCommand]
         public void SwitchAccount()
         {
@@ -146,10 +147,12 @@ namespace Rift_App.ViewModels
             ViewNavigator.Instance?.SwitchToAuth();
         }
 
-        // ─── NAVIGATE TO LAST LOCATION ────────────────────────────────────
-
+        // ─── LAST LOCATION ────────────────────────────────────────────────
         public void NavigateToLastLocation(string location)
         {
+            // Apply session FIRST — top bar shows correct user before any view loads
+            ApplySession();
+
             switch (location)
             {
                 case "Library": ShowLibrary(); break;
@@ -158,25 +161,19 @@ namespace Rift_App.ViewModels
                 default: ShowStore(); break;
             }
         }
-        // ─── HELPER ───────────────────────────────────────────────────────
 
+        // ─── HELPER ───────────────────────────────────────────────────────
         private static void OpenSteamUrl(string url)
         {
             if (!SteamworksService.IsSteamInstalled())
             {
-                MessageBox.Show(
-                    "Steam is not installed on this computer.",
-                    "Steam Not Found",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                MessageBox.Show("Steam is not installed on this computer.",
+                    "Steam Not Found", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo
+                { FileName = url, UseShellExecute = true });
         }
     }
 }

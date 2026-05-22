@@ -7,6 +7,7 @@ using Rift_App.Services;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Rift_App.ViewModels
 {
@@ -14,12 +15,12 @@ namespace Rift_App.ViewModels
     {
         [ObservableProperty] private string _loadingText = "Loading";
 
-        private System.Threading.CancellationTokenSource? _dotsCts;
+        private CancellationTokenSource? _dotsCts;
 
         private void StartDotsAnimation()
         {
             _dotsCts?.Cancel();
-            _dotsCts = new System.Threading.CancellationTokenSource();
+            _dotsCts = new CancellationTokenSource();
             var token = _dotsCts.Token;
 
             Task.Run(async () =>
@@ -36,13 +37,9 @@ namespace Rift_App.ViewModels
             });
         }
 
-        private void StopDotsAnimation()
-        {
-            _dotsCts?.Cancel();
-        }
+        private void StopDotsAnimation() => _dotsCts?.Cancel();
 
-
-        // ─── MODE 1: Startup ──────────────────────────────────────────────
+        // ─── MODE 1: App startup ──────────────────────────────────────────
         public async Task StartupAsync()
         {
             StartDotsAnimation();
@@ -77,12 +74,13 @@ namespace Rift_App.ViewModels
             }
         }
 
+        // ─── MODE 2: After login / account switch ─────────────────────────
         public async Task LoadSteamDataAsync()
         {
             StartDotsAnimation();
             PlayerInfo? playerInfo = null;
 
-            var minimumDelay = Task.Delay(TimeSpan.FromSeconds(5));    //Change to 15-20 sec
+            var minimumDelay = Task.Delay(TimeSpan.FromSeconds(5));
 
             try
             {
@@ -90,6 +88,7 @@ namespace Rift_App.ViewModels
 
                 if (!string.IsNullOrEmpty(steamId))
                 {
+                    // ── Player info ───────────────────────────────────────
                     var cacheKey = string.Format(LocalCacheService.KeyPlayer, steamId);
                     playerInfo = await LocalCacheService.LoadAsync<PlayerInfo>(
                         cacheKey, LocalCacheService.AccountTTL);
@@ -103,6 +102,17 @@ namespace Rift_App.ViewModels
 
                     if (playerInfo != null)
                         SessionManager.SetAvatar(playerInfo.AvatarUrl);
+
+                    // ── Preload store featured section in background ───────
+                    // This warms the backend cache so the Store page opens fast.
+                    // Fire-and-forget: we don't wait for it and it won't block login.
+                    _ = PreloadStoreFeaturedAsync();
+
+                    // ── Preload wishlist count independently ──────────────
+                    _ = WishlistCountCache.GetAsync();
+
+                    // ── Ensure LastPlayed cache is ready ──────────────────
+                    _ = LastPlayedCacheService.InitializeAsync();
                 }
             }
             catch (Exception ex)
@@ -118,6 +128,36 @@ namespace Rift_App.ViewModels
                 try { ViewNavigator.Instance?.ShowMain(playerInfo, SessionManager.LastLocation); }
                 catch { }
             });
+        }
+
+        // ─── STORE PRE-WARM ───────────────────────────────────────────────
+        private static async Task PreloadStoreFeaturedAsync()
+        {
+            try
+            {
+                // Only preload if the section list cache is stale
+                var cached = await StoreGameCacheService.LoadSectionAsync(
+                    StoreGameCacheService.KeyFeatured);
+
+                if (cached != null && cached.Count >= 6)
+                {
+                    Debug.WriteLine("[Loading] Store featured cache is warm — skipping preload.");
+                    return;
+                }
+
+                Debug.WriteLine("[Loading] Pre-warming store featured section...");
+                var games = await ApiService.GetFeaturedAsync();
+                if (games.Count > 0)
+                    await StoreGameCacheService.SaveSectionAsync(
+                        StoreGameCacheService.KeyFeatured, games);
+
+                Debug.WriteLine($"[Loading] Pre-warm done: {games.Count} featured games cached.");
+            }
+            catch (Exception ex)
+            {
+                // Non-critical — store will load normally if this fails
+                Debug.WriteLine($"[Loading] PreloadStore error: {ex.Message}");
+            }
         }
     }
 }

@@ -32,7 +32,7 @@
         <Setter Property="CornerRadius" Value="7.5,7.5,0,0" />
         <Setter Property="Background" Value="#505050" />
         <Setter Property="IsHitTestVisible" Value="False" />
-        <Setter Property="Opacity" Value="0.15" />
+        <Setter Property="Opacity" Value="0.13" />
         <Setter Property="Panel.ZIndex" Value="2" />
     </Style>
 

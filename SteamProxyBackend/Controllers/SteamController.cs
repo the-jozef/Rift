@@ -17,7 +17,7 @@ namespace SteamProxyBackend.Controllers
 
         // ─── RATE LIMIT ───────────────────────────────────────────────────
         private static readonly ConcurrentDictionary<string, DateTime> _lastRequestTime = new();
-        private const int RateLimitMs = 500; 
+        private const int RateLimitMs = 500;
 
         // ─── GAME DETAIL MEMORY CACHE ─────────────────────────────────────
         // Shared across ALL section endpoints — fetch once, serve everywhere
@@ -31,11 +31,19 @@ namespace SteamProxyBackend.Controllers
 
         // ─── 18+ FILTER ───────────────────────────────────────────────────
         private static readonly string[] AdultKeywords =
-        {
-            "hentai", "nude", "naked", "erotic", "xxx", "porn",
-            "lewd", "nsfw", "18+", "adult", "fuck", "futa",
-            "cumming", "horny", "🔞", "ecchi"
-        };
+   {
+    "hentai", "nude", "naked", "erotic", "erotica", "eroge", "erogi",
+    "xxx", "porn", "pornographic", "lewd", "nsfw", "18+", "adult only",
+    "fuck", "futa", "futanari", "cumming", "horny", "🔞", "ecchi",
+    "ahegao", "oppai", "yuri harem", "yaoi",
+    " sex ", " sex:", "sex game", "sexy girl", "sexy waifu",
+    "lust ", "lustful", "lust awakened",
+    "strip poker", "strip club", "bikini",
+    "dating sim 18", "adult dating", "adult visual",
+    "visual novel 18", "harem 18", "harem sex",
+    "waifu simulator", "girlfriend simulator",
+    "perverted", "naughty ",
+};
 
         // ─── EXPANDED CURATED APP IDS ─────────────────────────────────────
         // 200 well-known games — mix of evergreens, recent hits, F2P, discounted
@@ -260,7 +268,8 @@ namespace SteamProxyBackend.Controllers
 
         private static bool HasAdultName(string name)
         {
-            var lower = name.ToLowerInvariant();
+            if (string.IsNullOrEmpty(name)) return false;
+            var lower = " " + name.ToLowerInvariant() + " ";
             return AdultKeywords.Any(k => lower.Contains(k));
         }
 
@@ -437,39 +446,62 @@ namespace SteamProxyBackend.Controllers
         // ─── SECTION BUILDER — picks N unique games from a pool ──────────────────────────────────────────────────────
         //  Uses a per-section seed so each section shows different games
         //  Uses SectionCache so the same request doesn't re-shuffle 
-        private async Task<List<StoreGameDto>> BuildSectionAsync(
-            string sectionKey,
-            int[] pool,
-            int count,
-            int skip = 0,
-            bool discountedOnly = false,
-            bool withDelay = true)
+        private async Task<List<StoreGameDto>> BuildSectionAsync(string sectionKey, int[] pool, int count, int skip = 0, bool discountedOnly = false)
         {
-            // Get or build the shuffled order for this section (stable for the day)
             var orderedIds = GetOrBuildSectionOrder(sectionKey, pool);
-
             var result = new List<StoreGameDto>();
             int skipped = 0;
+            int batchSize = 10; // fetch 10 at a time in parallel
 
-            foreach (var id in orderedIds)
+            using var semaphore = new SemaphoreSlim(4, 4); // max 4 concurrent Steam API calls
+
+            for (int i = 0; i < orderedIds.Count && result.Count < count; i += batchSize)
             {
-                if (result.Count >= count) break;
+                var batch = orderedIds.Skip(i).Take(batchSize).ToList();
 
-                bool isCached = _detailCache.TryGetValue(id, out var ce) &&
-                                DateTime.UtcNow - ce.At < DetailCacheTTL;
+                // Separate already-cached from needs-fetch
+                var cached = new Dictionary<int, StoreGameDto>();
+                var toFetch = new List<int>();
 
-                var dto = await FetchSingleAsync(id);
-                if (dto == null) continue;
+                foreach (var id in batch)
+                {
+                    if (_detailCache.TryGetValue(id, out var ce) &&
+                        DateTime.UtcNow - ce.At < DetailCacheTTL)
+                        cached[id] = ce.Data;
+                    else
+                        toFetch.Add(id);
+                }
 
-                // Only add delay when we actually hit the Steam API
-                if (!isCached && withDelay)
-                    await Task.Delay(120);
+                // Fetch non-cached in parallel
+                var fetchedMap = new System.Collections.Concurrent.ConcurrentDictionary<int, StoreGameDto>();
+                if (toFetch.Count > 0)
+                {
+                    var tasks = toFetch.Select(async id =>
+                    {
+                        await semaphore.WaitAsync();
+                        try
+                        {
+                            await Task.Delay(60); // small polite delay per concurrent request
+                            var dto = await FetchSingleAsync(id);
+                            if (dto != null) fetchedMap[id] = dto;
+                        }
+                        finally { semaphore.Release(); }
+                    });
+                    await Task.WhenAll(tasks);
+                }
 
-                if (discountedOnly && !dto.HasDiscount && !dto.IsFree) continue;
-
-                if (skipped < skip) { skipped++; continue; }
-
-                result.Add(dto);
+                // Merge results in original order
+                foreach (var id in batch)
+                {
+                    if (result.Count >= count) break;
+                    var dto = cached.TryGetValue(id, out var c) ? c
+                            : fetchedMap.TryGetValue(id, out var f) ? f
+                            : null;
+                    if (dto == null) continue;
+                    if (discountedOnly && !dto.HasDiscount && !dto.IsFree) continue;
+                    if (skipped < skip) { skipped++; continue; }
+                    result.Add(dto);
+                }
             }
 
             return result;
@@ -916,35 +948,45 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                // Use Steam Store search API — returns pricing inline, no second call needed.
-                // This fixes games like "Rust" that were silently dropped by the old two-step flow.
-                var searchUrl =
-                    $"https://store.steampowered.com/api/storesearch/" +
-                    $"?term={Uri.EscapeDataString(q)}&l=english&cc=US&ignore_preferences=1";
+                // Primary: Steam Store search API — name + price in ONE call, no second request needed.
+                // Fallback: Steam Community search API (older, returns only names).
+                List<object> results = await SearchViaStoreApiAsync(q);
 
-                var searchJson = await _http.GetStringAsync(searchUrl);
-                var searchData = JObject.Parse(searchJson);
-                var items = searchData["items"] as JArray;
+                if (results.Count == 0)
+                    results = await SearchViaCommunityAsync(q);
 
-                if (items == null || !items.Any())
-                    return Ok(new { Results = new List<object>() });
+                return Ok(new { Results = results });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Search] Error: {ex.Message}");
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
+        private async Task<List<object>> SearchViaStoreApiAsync(string q)
+        {
+            try
+            {
+                var url = $"https://store.steampowered.com/api/storesearch/" +
+                          $"?term={Uri.EscapeDataString(q)}&l=english&cc=sk&ignore_preferences=1";
+                var json = await _http.GetStringAsync(url);
+                var data = JObject.Parse(json);
+                var items = data["items"] as JArray;
+                if (items == null || !items.Any()) return new();
 
                 var results = new List<object>();
-
                 foreach (var item in items.Take(8))
                 {
                     int appId = item["id"]?.Value<int>() ?? 0;
                     if (appId <= 0) continue;
 
                     string name = item["name"]?.Value<string>() ?? "";
-                    if (string.IsNullOrEmpty(name)) continue;
-                    if (HasAdultName(name)) continue;
+                    if (string.IsNullOrEmpty(name) || HasAdultName(name)) continue;
 
-                    // Build price info from search result (no extra API call required)
                     var priceObj = item["price"];
                     bool isFree = priceObj == null;
-                    string price = "N/A";
-                    string origPrice = "";
+                    string price = "N/A", origPrice = "";
                     int discount = 0;
 
                     if (priceObj != null)
@@ -966,19 +1008,15 @@ namespace SteamProxyBackend.Controllers
                     }
                     else
                     {
-                        // No price block — game is free to play
                         isFree = true;
                         price = "Free To Play";
                     }
-
-                    string headerUrl =
-                        $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg";
 
                     results.Add(new
                     {
                         AppId = appId,
                         Name = name,
-                        HeaderImageUrl = headerUrl,
+                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
                         Price = price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
@@ -986,13 +1024,60 @@ namespace SteamProxyBackend.Controllers
                         HasDiscount = discount > 0
                     });
                 }
-
-                return Ok(new { Results = results });
+                return results;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Search] Error: {ex.Message}");
-                return StatusCode(500, new { Message = ex.Message });
+                Debug.WriteLine($"[Search] storesearch failed: {ex.Message}");
+                return new();
+            }
+        }
+
+        private async Task<List<object>> SearchViaCommunityAsync(string q)
+        {
+            try
+            {
+                var url = $"https://steamcommunity.com/actions/SearchApps/{Uri.EscapeDataString(q)}";
+                var json = await _http.GetStringAsync(url);
+                var arr = JArray.Parse(json);
+
+                var results = new List<object>();
+                foreach (var item in arr.Take(6))
+                {
+                    int appId = item["appid"]?.Value<int>() ?? 0;
+                    if (appId <= 0) continue;
+
+                    string name = item["name"]?.Value<string>() ?? "";
+                    if (string.IsNullOrEmpty(name) || HasAdultName(name)) continue;
+
+                    // Try memory cache first for price, skip extra API call if not cached
+                    string price = "N/A"; bool isFree = false; int discount = 0; string orig = "";
+                    if (_detailCache.TryGetValue(appId, out var ce) && DateTime.UtcNow - ce.At < DetailCacheTTL)
+                    {
+                        price = ce.Data.Price;
+                        isFree = ce.Data.IsFree;
+                        discount = ce.Data.DiscountPercent;
+                        orig = ce.Data.OriginalPrice;
+                    }
+
+                    results.Add(new
+                    {
+                        AppId = appId,
+                        Name = name,
+                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                        Price = price,
+                        OriginalPrice = orig,
+                        DiscountPercent = discount,
+                        IsFree = isFree,
+                        HasDiscount = discount > 0
+                    });
+                }
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Search] community fallback failed: {ex.Message}");
+                return new();
             }
         }
 
@@ -1363,49 +1448,52 @@ namespace SteamProxyBackend.Controllers
             catch { return ("No Reviews", ""); }
         }
 
-        private async Task<List<object>> FetchBatchAppDetailsAsync(
-            List<int> appIds, Dictionary<int, long> dateAddedLookup)
+        private async Task<List<object>> FetchBatchAppDetailsAsync(List<int> appIds, Dictionary<int, long> dateAddedLookup)
         {
-            var result = new List<object>();
-            var usedTags = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var result = new System.Collections.Concurrent.ConcurrentBag<(int order, object item)>();
+            var usedTags = new System.Collections.Concurrent.ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var appId in appIds)
+            using var semaphore = new SemaphoreSlim(3, 3); // 3 concurrent — respect Steam rate limit
+
+            var tasks = appIds.Select(async (appId, idx) =>
             {
+                await semaphore.WaitAsync();
                 try
                 {
+                    await Task.Delay(150); // polite delay
                     var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=sk&l=en";
                     var response = await _http.GetStringAsync(url);
                     var json = JObject.Parse(response);
                     var entry = json[appId.ToString()];
-                    if (entry?["success"]?.Value<bool>() != true) continue;
 
+                    if (entry?["success"]?.Value<bool>() != true) return;
                     var data = entry["data"];
-                    if (data == null) continue;
+                    if (data == null) return;
 
                     string name = data["name"]?.Value<string>() ?? "";
-                    if (HasAdultName(name) || HasExplicitContent(data)) continue;
+                    if (string.IsNullOrEmpty(name) || HasAdultName(name) || HasExplicitContent(data)) return;
 
+                    // ── Tags ──
                     var popularCats = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        "Single-player", "Multi-player", "Co-op", "Online Co-op",
-                        "Tactical", "PvP", "Online PvP", "Co-op Campaign"
-                    };
-
+            {
+                "Single-player", "Multi-player", "Co-op", "Online Co-op", "PvP", "Online PvP", "Co-op Campaign"
+            };
                     var genreTags = (data["genres"] as JArray)?
                         .Select(g => g["description"]?.Value<string>() ?? "")
                         .Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new();
-
                     var catTags = (data["categories"] as JArray)?
                         .Select(c => c["description"]?.Value<string>() ?? "")
                         .Where(t => !string.IsNullOrEmpty(t) && popularCats.Contains(t)).ToList() ?? new();
 
-                    var tags = genreTags.Concat(catTags).Distinct(StringComparer.OrdinalIgnoreCase)
+                    var tags = genreTags.Concat(catTags)
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
                         .OrderBy(t => usedTags.TryGetValue(t, out var c) ? c : 0)
                         .Take(4).ToList();
 
                     foreach (var tag in tags)
-                        usedTags[tag] = (usedTags.TryGetValue(tag, out var c) ? c : 0) + 1;
+                        usedTags.AddOrUpdate(tag, 1, (_, v) => v + 1);
 
+                    // ── Reviews ──
                     string reviewDesc = "", reviewCss = "";
                     int reviewScore = data["review_score"]?.Value<int>() ?? -1;
                     if (reviewScore > 0)
@@ -1426,7 +1514,9 @@ namespace SteamProxyBackend.Controllers
                     if (string.IsNullOrEmpty(reviewDesc))
                         reviewDesc = "No Reviews";
 
-                    bool isReleased = !(data["release_date"]?["coming_soon"]?.Value<bool>() ?? false);
+                    // ── Release / Pre-order ──
+                    bool comingSoon = data["release_date"]?["coming_soon"]?.Value<bool>() ?? false;
+                    bool isReleased = !comingSoon;
                     string releaseStr = data["release_date"]?["date"]?.Value<string>() ?? "";
                     long relDateUnix = 0;
                     string relDateDisplay;
@@ -1441,11 +1531,15 @@ namespace SteamProxyBackend.Controllers
                     else
                         relDateDisplay = releaseStr;
 
+                    // ── Price ──
                     bool isFree = data["is_free"]?.Value<bool>() ?? false;
                     string price = "N/A", origPrice = "";
                     int discount = 0;
 
-                    if (isFree) price = "Free";
+                    if (isFree)
+                    {
+                        price = "Free";
+                    }
                     else
                     {
                         var po = data["price_overview"];
@@ -1453,24 +1547,32 @@ namespace SteamProxyBackend.Controllers
                         {
                             price = po["final_formatted"]?.Value<string>() ?? "N/A";
                             discount = po["discount_percent"]?.Value<int>() ?? 0;
-                            if (discount > 0) origPrice = po["initial_formatted"]?.Value<string>() ?? "";
+                            if (discount > 0)
+                                origPrice = po["initial_formatted"]?.Value<string>() ?? "";
                         }
                     }
 
+                    // ── IsPreOrder — game has a price but isn't released yet ──
+                    bool isPreOrder = comingSoon
+                                   && !isFree
+                                   && price != "N/A"
+                                   && !string.IsNullOrEmpty(price);
+
                     long dateAdded = dateAddedLookup.TryGetValue(appId, out var da) ? da : 0;
 
-                    result.Add(new
+                    result.Add((idx, (object)new
                     {
                         AppId = appId,
                         Name = name,
                         HeaderImageUrl = data["header_image"]?.Value<string>()
-                                             ?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                                           ?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
                         Tags = tags,
                         ReviewDesc = reviewDesc,
                         ReviewCss = reviewCss,
                         ReleaseDateUnix = relDateUnix,
                         ReleaseDateDisplay = relDateDisplay,
                         IsReleased = isReleased,
+                        IsPreOrder = isPreOrder,     // ← FIXED
                         DateAddedUnix = dateAdded,
                         PlatformWindows = data["platforms"]?["windows"]?.Value<bool>() ?? true,
                         PlatformMac = data["platforms"]?["mac"]?.Value<bool>() ?? false,
@@ -1478,29 +1580,34 @@ namespace SteamProxyBackend.Controllers
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree
-                    });
-
-                    await Task.Delay(400);
+                    }));
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[Batch] Error {appId}: {ex.Message}");
                 }
-            }
+                finally
+                {
+                    semaphore.Release();
+                }
+            });
 
-            return result;
+            await Task.WhenAll(tasks);
+
+            // Return in original order
+            return result.OrderBy(r => r.order).Select(r => r.item).ToList();
         }
-    }
 
-    // ─── REQUEST TYPES ────────────────────────────────────────────────────
-    public class WishlistBatchRequest
-    {
-        public List<int> AppIds { get; set; } = new();
-    }
+        // ─── REQUEST TYPES ────────────────────────────────────────────────────
+        public class WishlistBatchRequest
+        {
+            public List<int> AppIds { get; set; } = new();
+        }
 
-    public class WishlistItemRef
-    {
-        public int AppId { get; set; }
-        public long DateAdded { get; set; }
+        public class WishlistItemRef
+        {
+            public int AppId { get; set; }
+            public long DateAdded { get; set; }
+        }
     }
 }

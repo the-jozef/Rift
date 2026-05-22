@@ -19,6 +19,74 @@
 
             <Grid Grid.Column="0">
 
+                <Button HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="18,0,0,0"
+                        Padding="10,5"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding RefreshCommand}"
+                        Cursor="Hand"
+                        Foreground="White"
+                        ToolTip="Refresh library, wishlist and profile">
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="Root"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="4"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver"
+                                                     Value="True">
+                                                <Setter TargetName="Root"
+                                                        Property="Background"
+                                                        Value="#1A3A52" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed"
+                                                     Value="True">
+                                                <Setter TargetName="Root"
+                                                        Property="Background"
+                                                        Value="#0F2A3D" />
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding IsRefreshing}"
+                                                         Value="True">
+                                                <Setter Property="IsEnabled"
+                                                        Value="False" />
+                                                <Setter TargetName="Root"
+                                                        Property="Opacity"
+                                                        Value="0.5" />
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <materialIcons:MaterialIcon Kind="Refresh"
+                                                    Width="16"
+                                                    Height="16"
+                                                    Margin="0,1,0,0"
+                                                    Foreground="#99C5DE" />
+                        <TextBlock Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Foreground="#99C5DE"
+                                   Text="Refresh" />
+                    </StackPanel>
+                </Button>
+
+
+
+
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 
                     <Border
@@ -115,6 +183,7 @@
                                                             <TextBlock Margin="8,14,8,0"
                                                                        VerticalAlignment="Top"
                                                                        FontSize="15"
+                                                                       Width="220"
                                                                        Foreground="White"
                                                                        Text="{Binding Name}"
                                                                        TextTrimming="CharacterEllipsis" />
