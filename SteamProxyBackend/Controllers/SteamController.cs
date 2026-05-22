@@ -259,7 +259,6 @@ namespace SteamProxyBackend.Controllers
             raw = raw.Trim();
             string symbol = raw.Contains("$") ? "$" : raw.Contains("€") ? "€" : "";
             string number = raw.Replace("$", "").Replace("€", "").Trim();
-            number = number.Replace(".", ",");
             return string.IsNullOrEmpty(symbol) ? number : $"{number}{symbol}";
         }
         private bool IsRateLimited(string ip)
@@ -326,7 +325,7 @@ namespace SteamProxyBackend.Controllers
 
             try
             {
-                var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=us&l=en";
+                var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=sk&l=en";
                 var response = await _http.GetStringAsync(url);
                 var json = JObject.Parse(response);
                 var entry = json[appId.ToString()];
@@ -1470,7 +1469,7 @@ namespace SteamProxyBackend.Controllers
                 try
                 {
                     await Task.Delay(150); // polite delay
-                    var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=us&l=en";
+                    var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=sk&l=en";
                     var response = await _http.GetStringAsync(url);
                     var json = JObject.Parse(response);
                     var entry = json[appId.ToString()];
