@@ -206,33 +206,52 @@
     </Style>
 
     <!--  PopupBox for Notifications  -->
-    <Style x:Key="Rift_MenuBar_PopupBox_Notifications" TargetType="materialDesign:PopupBox">
-
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="6,0,0,6" />
-        <Setter Property="MinHeight" Value="0" />
-        <Setter Property="MinWidth" Value="0" />
-        <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Background" Value="#272A33" />
-        <Setter Property="materialDesign:RippleAssist.IsDisabled" Value="True" />
-        <Setter Property="PopupAnimation" Value="None" />
-        <Setter Property="StaysOpen" Value="False" />
-        <Setter Property="PopupMode" Value="MouseOverEager" />
-        <Setter Property="PopupVerticalOffset" Value="6" />
-        <Setter Property="PopupHorizontalOffset" Value="-23" />
-        <Setter Property="Height" Value="23" />
-
+    <Style x:Key="Rift_MenuBar_PopupBox_Notifications"
+           TargetType="materialDesign:PopupBox">
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Margin"
+                Value="6,0,0,6" />
+        <Setter Property="MinHeight"
+                Value="0" />
+        <Setter Property="MinWidth"
+                Value="0" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="Background"
+                Value="#272A33" />
+        <Setter Property="materialDesign:RippleAssist.IsDisabled"
+                Value="True" />
+        <Setter Property="PopupAnimation"
+                Value="None" />
+        <Setter Property="StaysOpen"
+                Value="False" />
+        <Setter Property="PopupMode"
+                Value="MouseOverEager" />
+        <Setter Property="PopupVerticalOffset"
+                Value="6" />
+        <Setter Property="PopupHorizontalOffset"
+                Value="-23" />
+        <Setter Property="Height"
+                Value="23" />
         <Style.Resources>
             <Style TargetType="ToggleButton">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Command"
+                        Value="{Binding Tag,RelativeSource={RelativeSource AncestorType=materialDesign:PopupBox}}" />
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
                 <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#2A2F38" />
-
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="#2A2F38" />
                     </Trigger>
-                    <Trigger Property="IsChecked" Value="True">
-                        <Setter Property="Background" Value="#2A2F38" />
+                    <Trigger Property="IsChecked"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="#2A2F38" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -262,10 +281,12 @@
     <Style x:Key="Rift_MenuBar_Items_PopupBox_Notifications" TargetType="Button">
 
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Foreground" Value="#2E2E2E" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Padding"
+                Value="5" />
         <Setter Property="FontSize" Value="12.5" />
-        <Setter Property="FontFamily" Value="Arial" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontFamily"
+                Value="Arial" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="MinWidth" Value="0" />

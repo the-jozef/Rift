@@ -332,6 +332,7 @@ namespace Rift_App.ViewModels
                 if (g.IsFree || g.Price is "Free" or "N/A") return 0;
                 var cleaned = g.Price
                     .Replace("$", "").Replace("€", "")
+                    .Replace(" ", "")
                     .Replace(",", ".").Trim();
                 return decimal.TryParse(cleaned,
                     System.Globalization.NumberStyles.Any,

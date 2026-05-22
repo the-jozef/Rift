@@ -88,10 +88,6 @@ namespace Rift_App.ViewModels
         }
 
         // ─── REFRESH ──────────────────────────────────────────────────────
-        /// <summary>
-        /// Clears volatile caches and shows the loading screen so library,
-        /// wishlist and profile get fresh data. Store is NOT cleared (shared cache).
-        /// </summary>
         [RelayCommand]
         private async Task RefreshAsync()
         {
@@ -127,9 +123,7 @@ namespace Rift_App.ViewModels
             }
             finally
             {
-                // IsRefreshing stays true until loading screen takes over,
-                // so the button stays dimmed (window hides during loading).
-                // It resets to false when SearchBar is next constructed.
+                // IsRefreshing stays true until loading screen
                 IsRefreshing = false;
             }
         }

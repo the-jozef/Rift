@@ -49,6 +49,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 		<PackageReference Include="Material.Icons.WPF" Version="3.0.2" />
 		<PackageReference Include="MaterialDesignThemes" Version="5.3.1" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="Steamworks.NET" Version="2024.8.0" />
 	</ItemGroup>

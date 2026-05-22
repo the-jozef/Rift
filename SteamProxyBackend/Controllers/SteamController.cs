@@ -253,6 +253,15 @@ namespace SteamProxyBackend.Controllers
             double h = minutes / 60.0;
             return h % 1 == 0 ? $"{(int)h} hrs" : $"{h:F1} hrs";
         }
+        private static string FormatPrice(string raw)
+        {
+            if (string.IsNullOrEmpty(raw) || raw == "N/A") return raw;
+            raw = raw.Trim();
+            string symbol = raw.Contains("$") ? "$" : raw.Contains("€") ? "€" : "";
+            string number = raw.Replace("$", "").Replace("€", "").Trim();
+            number = number.Replace(".", ",");
+            return string.IsNullOrEmpty(symbol) ? number : $"{number}{symbol}";
+        }
         private bool IsRateLimited(string ip)
         {
             // Key = IP + endpoint path — parallel calls to different endpoints are not blocked
@@ -317,7 +326,7 @@ namespace SteamProxyBackend.Controllers
 
             try
             {
-                var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=sk&l=en";
+                var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=us&l=en";
                 var response = await _http.GetStringAsync(url);
                 var json = JObject.Parse(response);
                 var entry = json[appId.ToString()];
@@ -351,10 +360,10 @@ namespace SteamProxyBackend.Controllers
                     var po = data["price_overview"];
                     if (po != null)
                     {
-                        price = po["final_formatted"]?.Value<string>() ?? "N/A";
+                        price = FormatPrice(po["final_formatted"]?.Value<string>() ?? "N/A");
                         discount = po["discount_percent"]?.Value<int>() ?? 0;
                         if (discount > 0)
-                            origPrice = po["initial_formatted"]?.Value<string>() ?? "";
+                            origPrice = FormatPrice(po["initial_formatted"]?.Value<string>() ?? "");
                     }
                 }
 
@@ -1461,7 +1470,7 @@ namespace SteamProxyBackend.Controllers
                 try
                 {
                     await Task.Delay(150); // polite delay
-                    var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=sk&l=en";
+                    var url = $"https://store.steampowered.com/api/appdetails?appids={appId}&cc=us&l=en";
                     var response = await _http.GetStringAsync(url);
                     var json = JObject.Parse(response);
                     var entry = json[appId.ToString()];
@@ -1473,6 +1482,8 @@ namespace SteamProxyBackend.Controllers
                     string name = data["name"]?.Value<string>() ?? "";
                     if (string.IsNullOrEmpty(name) || HasAdultName(name) || HasExplicitContent(data)) return;
 
+                    string appType = data["type"]?.Value<string>()?.ToLower() ?? "game";
+                    bool isDlc = appType == "dlc";
                     // ── Tags ──
                     var popularCats = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -1538,17 +1549,17 @@ namespace SteamProxyBackend.Controllers
 
                     if (isFree)
                     {
-                        price = "Free";
+                        price = "Free To Play";
                     }
                     else
                     {
                         var po = data["price_overview"];
                         if (po != null)
                         {
-                            price = po["final_formatted"]?.Value<string>() ?? "N/A";
+                            price = FormatPrice(po["final_formatted"]?.Value<string>() ?? "N/A");
                             discount = po["discount_percent"]?.Value<int>() ?? 0;
                             if (discount > 0)
-                                origPrice = po["initial_formatted"]?.Value<string>() ?? "";
+                                origPrice = FormatPrice(po["initial_formatted"]?.Value<string>() ?? "");
                         }
                     }
 
@@ -1564,22 +1575,22 @@ namespace SteamProxyBackend.Controllers
                     {
                         AppId = appId,
                         Name = name,
-                        HeaderImageUrl = data["header_image"]?.Value<string>()
-                                           ?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                        HeaderImageUrl = data["header_image"]?.Value<string>()?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
                         Tags = tags,
                         ReviewDesc = reviewDesc,
                         ReviewCss = reviewCss,
                         ReleaseDateUnix = relDateUnix,
                         ReleaseDateDisplay = relDateDisplay,
                         IsReleased = isReleased,
-                        IsPreOrder = isPreOrder,     // ← FIXED
+                        IsPreOrder = isPreOrder,
                         DateAddedUnix = dateAdded,
                         PlatformWindows = data["platforms"]?["windows"]?.Value<bool>() ?? true,
                         PlatformMac = data["platforms"]?["mac"]?.Value<bool>() ?? false,
                         Price = price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
-                        IsFree = isFree
+                        IsFree = isFree,
+                        IsDlc = isDlc      
                     }));
                 }
                 catch (Exception ex)

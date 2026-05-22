@@ -28,11 +28,11 @@
                                                          RadiusX="0.5"
                                                          RadiusY="0.5">
                                         <GradientStop Offset="0"
-                                                      Color="#1AFFFFFF" />
-                                       <GradientStop Offset="0.5"
-                                                      Color="#0DFFFFFF" />
+                                                      Color="#264478C8" />
+                                        <GradientStop Offset="0.5"
+                                                      Color="#1A3A6BB0" />
                                         <GradientStop Offset="1"
-                                                      Color="#00FFFFFF" />
+                                                      Color="#003A6B00" />
                                     </RadialGradientBrush>
                                 </Ellipse.Fill>
                                 <Ellipse.Effect>
@@ -103,7 +103,7 @@
 
                                                 <Grid Grid.Column="0"
                                                       VerticalAlignment="Top">
-                                                    <Border BorderBrush="#6DCFF6"
+                                                    <Border BorderBrush="#5B9BD5"
                                                             BorderThickness="2">
                                                         <Image Width="168"
                                                                Height="168"
@@ -184,26 +184,36 @@
 
                                                                     <Border Grid.Column="0"
                                                                             Width="201"
+                                                                            Background="#666666"
                                                                             Height="65"
                                                                             ClipToBounds="True">
 
-                                                                        <Image RenderOptions.BitmapScalingMode="HighQuality"
-                                                                               Stretch="UniformToFill">
+                                                                        <Grid>
 
-                                                                            <Image.Style>
-                                                                                <Style TargetType="Image">
-                                                                                    <Setter Property="Source"
-                                                                                            Value="{Binding HeaderImageUrl}" />
-                                                                                    <Style.Triggers>
-                                                                                        <DataTrigger Binding="{Binding HeaderImageUrl}"
-                                                                                                     Value="">
-                                                                                            <Setter Property="Source"
-                                                                                                    Value="{Binding AppId, StringFormat='https://cdn.akamai.steamstatic.com/steam/apps/{0}/header.jpg'}" />
-                                                                                        </DataTrigger>
-                                                                                    </Style.Triggers>
-                                                                                </Style>
-                                                                            </Image.Style>
-                                                                        </Image>
+                                                                            <TextBlock Text="No image"
+                                                                                       VerticalAlignment="Center"
+                                                                                       HorizontalAlignment="Center"
+                                                                                       FontSize="16"
+                                                                                       Foreground="White" />
+
+                                                                            <Image RenderOptions.BitmapScalingMode="HighQuality"
+                                                                                   Stretch="UniformToFill">
+
+                                                                                <Image.Style>
+                                                                                    <Style TargetType="Image">
+                                                                                        <Setter Property="Source"
+                                                                                                Value="{Binding HeaderImageUrl}" />
+                                                                                        <Style.Triggers>
+                                                                                            <DataTrigger Binding="{Binding HeaderImageUrl}"
+                                                                                                         Value="">
+                                                                                                <Setter Property="Source"
+                                                                                                        Value="{Binding AppId, StringFormat='https://cdn.akamai.steamstatic.com/steam/apps/{0}/header.jpg'}" />
+                                                                                            </DataTrigger>
+                                                                                        </Style.Triggers>
+                                                                                    </Style>
+                                                                                </Image.Style>
+                                                                            </Image>
+                                                                        </Grid>
                                                                     </Border>
 
                                                                     <Grid Grid.Column="1"
@@ -325,38 +335,38 @@
                                                                                                        Source="{Binding IconUrl}"
                                                                                                        Stretch="UniformToFill" />
                                                                                             </Border>
-
-                                                                                            <Button Width="35"
-                                                                                                    Height="35"
-                                                                                                    Padding="0"
-                                                                                                    Command="{Binding DataContext.OpenAchievementsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                                                    BorderBrush="Transparent"
-                                                                                                    Background="Transparent"
-                                                                                                    Margin="0">
-                                                                                                
-                                                                                                <Border Width="35"
-                                                                                                        Height="35"
-                                                                                                        Background="#2B3036"
-                                                                                                        CornerRadius="2"
-                                                                                                        Visibility="{Binding IsExtra, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                                                                                                    <TextBlock HorizontalAlignment="Center"
-                                                                                                               VerticalAlignment="Center"
-                                                                                                               FontSize="14"
-                                                                                                               FontWeight="SemiBold"
-                                                                                                               Foreground="#E3E3E3">
-                                                                                                        <TextBlock.Text>
-                                                                                                            <MultiBinding StringFormat="+{0}">
-                                                                                                                <Binding Path="ExtraCount" />
-                                                                                                            </MultiBinding>
-                                                                                                        </TextBlock.Text>
-                                                                                                    </TextBlock>
-                                                                                                </Border>
-                                                                                            </Button>
                                                                                         </StackPanel>
                                                                                     </DataTemplate>
                                                                                 </ItemsControl.ItemTemplate>
                                                                             </ItemsControl>
+
+                                                                            <Button Width="35"
+                                                                                    Height="35"
+                                                                                    Padding="0"
+                                                                                    VerticalAlignment="Bottom"
+                                                                                    Command="{Binding OpenAchievementsCommand}"
+                                                                                    BorderBrush="Transparent"
+                                                                                    Background="Transparent">
+
+                                                                                <Border Width="35"
+                                                                                        Height="35"
+                                                                                        Background="#2B3036"
+                                                                                        CornerRadius="2"
+                                                                                        Visibility="{Binding IsExtra, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                                                                    <TextBlock HorizontalAlignment="Center"
+                                                                                               VerticalAlignment="Center"
+                                                                                               FontSize="14"
+                                                                                               FontWeight="SemiBold"
+                                                                                               Foreground="#E3E3E3">
+                                                                                        <TextBlock.Text>
+                                                                                            <MultiBinding StringFormat="+{0}">
+                                                                                                <Binding Path="ExtraCount" />
+                                                                                            </MultiBinding>
+                                                                                        </TextBlock.Text>
+                                                                                    </TextBlock>
+                                                                                </Border>
+                                                                            </Button>
                                                                         </StackPanel>
                                                                     </Grid>
                                                                 </Border>
@@ -434,7 +444,7 @@
                                                                 <TextBlock Margin="8,-4,0,0"
                                                                            FontSize="22"
                                                                            FontWeight="Thin"
-                                                                           Foreground="#C0BFC0"
+                                                                           Foreground="#A8B8C8"
                                                                            Text="{Binding GamesOwnedCount}" />
                                                             </StackPanel>
                                                         </Button>
@@ -456,7 +466,7 @@
                                                                 <TextBlock Margin="8,-4,0,0"
                                                                            FontSize="22"
                                                                            FontWeight="Thin"
-                                                                           Foreground="#C0BFC0"
+                                                                           Foreground="#A8B8C8"
                                                                            Text="{Binding WishlistCount}" />
                                                             </StackPanel>
                                                         </Button>
@@ -493,7 +503,7 @@
                                                             <TextBlock Margin="8,-4,0,0"
                                                                        FontSize="22"
                                                                        FontWeight="Thin"
-                                                                       Foreground="#C0BFC0"
+                                                                       Foreground="#A8B8C8"
                                                                        Text="{Binding FriendsCount}" />
                                                         </StackPanel>
 
@@ -506,7 +516,7 @@
 
                                                             <TextBlock Margin="0,6,0,0"
                                                                        FontSize="12"
-                                                                       Foreground="#C0BFC0"
+                                                                       Foreground="#A8B8C8"
                                                                        Text="Set your friends list to Public in Steam → Profile → Edit Profile → Privacy Settings."
                                                                        TextWrapping="Wrap" />
                                                         </StackPanel>
@@ -587,7 +597,7 @@
                                                                                                     <DataTrigger Binding="{Binding Status}"
                                                                                                                  Value="Away">
                                                                                                         <Setter Property="Foreground"
-                                                                                                                Value="#C0BFC0" />
+                                                                                                                Value="#A8B8C8" />
                                                                                                     </DataTrigger>
                                                                                                     <DataTrigger Binding="{Binding Status}"
                                                                                                                  Value="Busy">

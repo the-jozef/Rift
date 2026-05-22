@@ -109,25 +109,6 @@ namespace Rift_App.ViewModels
             IsLoading = false;
         }
 
-        // ─── OPEN ACHIEVEMENTS for a recent game ──────────────────────────
-        [RelayCommand]
-        private void OpenGameAchievements(RecentActivityGame game)
-        {
-            if (game == null) return;
-            try
-            {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = $"steam://url/GameStatsPage/{game.AppId}",
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[AccountVM] OpenGameAchievements error: {ex.Message}");
-            }
-        }
-
         // ─── NAVIGATION ───────────────────────────────────────────────────
         [RelayCommand] private void GoToLibrary() => ViewNavigator.Instance?.MainViewModel?.ShowLibrary();
         [RelayCommand] private void GoToWishlist() => ViewNavigator.Instance?.MainViewModel?.ShowWishlist();
@@ -140,11 +121,19 @@ namespace Rift_App.ViewModels
         {
             OpenSteamUrl("steam://open/friends");
         }
+
         [RelayCommand]
-        private void OpenAchievements(GameModel game)
+        private void OpenAchievements(RecentActivityGame game)
         {
             if (game == null) return;
-            OpenSteamUrl($"steam://openurl/https://steamcommunity.com/stats/{game.AppId}/achievements");
+            try
+            {
+                OpenSteamUrl($"steam://openurl/https://steamcommunity.com/stats/{game.AppId}/achievements");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[AccountVM] OpenGameAchievements error: {ex.Message}");
+            }
         }
 
         // ─── BACKGROUND REFRESH ───────────────────────────────────────────

@@ -134,6 +134,9 @@ namespace Rift_App.ViewModels
         public void ShowSteam() => OpenSteamUrl("steam://store");
 
         [RelayCommand]
+        public void ShowNotifications() => OpenSteamUrl($"steam://openurl/https://steamcommunity.com/profiles/{SessionManager.SteamId64}/notifications");
+
+        [RelayCommand]
         public void ShowSteamFriends() => OpenSteamUrl("steam://open/friends");
 
         [RelayCommand]
