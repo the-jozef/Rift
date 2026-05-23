@@ -1007,7 +1007,7 @@ namespace SteamProxyBackend.Controllers
                     string price = "";
                     string origPrice = "";
                     int discount = 0;
-                    Debug.WriteLine($"[Search] {name} | final={priceObj?["final"]} | formatted={priceObj?["final_formatted"]} | discount={discount}");
+                    
                     if (priceObj == null)
                     {
                         isFree = true;
@@ -1021,6 +1021,16 @@ namespace SteamProxyBackend.Controllers
                         string currency = priceObj["currency"]?.Value<string>() ?? "EUR";
                         string symbol = currency == "USD" ? "$" : "€";
 
+                        if (discount == 0
+                            && initialCents.HasValue
+                            && finalCents.HasValue
+                            && initialCents > finalCents
+                            && initialCents > 0)
+                        {
+                            discount = (int)Math.Round(
+                                (1.0 - (double)finalCents.Value / initialCents.Value) * 100);
+                        }
+
                         if (finalCents == null || finalCents == 0)
                         {
                             isFree = true;
@@ -1028,22 +1038,10 @@ namespace SteamProxyBackend.Controllers
                         }
                         else
                         {
-                            // final_formatted je často prázdny — stavaj z centov
-                            string finalFmt = priceObj["final_formatted"]?.Value<string>() ?? "";
-                            string initialFmt = priceObj["initial_formatted"]?.Value<string>() ?? "";
+                            price = $"{(finalCents.Value / 100.0):F2}{symbol}".Replace(".", ",");
 
-                            if (string.IsNullOrEmpty(finalFmt))
-                                finalFmt = $"{(finalCents.Value / 100.0):F2}{symbol}".Replace(".", ",");
-
-                            price = FormatPrice(finalFmt);
-
-                            if (discount > 0)
-                            {
-                                if (string.IsNullOrEmpty(initialFmt) && initialCents.HasValue)
-                                    initialFmt = $"{(initialCents.Value / 100.0):F2}{symbol}".Replace(".", ",");
-
-                                origPrice = FormatPrice(initialFmt);
-                            }
+                            if (discount > 0 && initialCents.HasValue)
+                                origPrice = $"{(initialCents.Value / 100.0):F2}{symbol}".Replace(".", ",");
                         }
                     }
 
@@ -1056,7 +1054,7 @@ namespace SteamProxyBackend.Controllers
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree,
-                        IsComingSoon = false,         
+                        IsComingSoon = false,
                         HasDiscount = discount > 0 && !isFree
                     });
                 }
