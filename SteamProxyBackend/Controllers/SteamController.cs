@@ -429,8 +429,7 @@ namespace SteamProxyBackend.Controllers
                 {
                     AppId = appId,
                     Name = name,
-                    HeaderImageUrl = data["header_image"]?.Value<string>()
-                                     ?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
+                    HeaderImageUrl = data["header_image"]?.Value<string>()?? $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
                     Screenshots = screenshots,
                     Tags = tags,
                     FeaturedTags = tags,
@@ -1049,7 +1048,7 @@ namespace SteamProxyBackend.Controllers
                     {
                         AppId = appId,
                         Name = name,
-                        HeaderImageUrl = headerUrl,
+                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
                         FallbackImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/capsule_sm_120.jpg",
                         Price = price,
                         OriginalPrice = origPrice,

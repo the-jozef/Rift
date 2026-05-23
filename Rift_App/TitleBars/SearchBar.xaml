@@ -161,14 +161,10 @@
                                                                 ClipToBounds="True">
                                                             <Border.Background>
                                                                 
-                                                                <ImageBrush ImageSource="{Binding FallbackImageUrl}"
+                                                                <ImageBrush ImageSource="{Binding DisplayImageUrl}"
                                                                             RenderOptions.BitmapScalingMode="HighQuality"
                                                                             Stretch="UniformToFill" />
                                                             </Border.Background>
-
-                                                            <Image Source="{Binding HeaderImageUrl}"
-                                                                   Stretch="UniformToFill"
-                                                                   RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                     </Grid>
 

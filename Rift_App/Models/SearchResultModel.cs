@@ -18,6 +18,10 @@ namespace Rift_App.Models
         public bool IsComingSoon { get; set; }
         public string DiscountDisplay => $"-{DiscountPercent}%";
 
+        public string DisplayImageUrl =>
+    !string.IsNullOrEmpty(HeaderImageUrl) ? HeaderImageUrl :
+    !string.IsNullOrEmpty(FallbackImageUrl) ? FallbackImageUrl :
+    string.Empty;
 
         public string PriceDisplay =>
             IsFree ? "Free To Play" :
