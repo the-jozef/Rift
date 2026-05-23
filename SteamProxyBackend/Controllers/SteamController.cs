@@ -1011,26 +1011,24 @@ namespace SteamProxyBackend.Controllers
 
                     if (priceObj == null)
                     {
-                        price = "";
-                        isComingSoon = true;   // pridaj túto premennú do metódy
+                        isFree = true;
+                        price = "Free To Play";
                     }
                     else
                     {
-                        int finalCents = priceObj["final"]?.Value<int>() ?? -1;
+                        int? finalCents = priceObj["final"]?.Value<int>();
                         discount = priceObj["discount_percent"]?.Value<int>() ?? 0;
 
-                        if (finalCents <= 0)
+                        if (finalCents == null || finalCents == 0)
                         {
-                            // final = 0  → definitively free
                             isFree = true;
                             price = "Free To Play";
                         }
                         else
                         {
-                            // Paid game — may or may not have a discount
-                            price = priceObj["final_formatted"]?.Value<string>() ?? "";
+                            price = FormatPrice(priceObj["final_formatted"]?.Value<string>() ?? "");
                             if (discount > 0)
-                                origPrice = priceObj["initial_formatted"]?.Value<string>() ?? "";
+                                origPrice = FormatPrice(priceObj["initial_formatted"]?.Value<string>() ?? "");
                         }
                     }
 
@@ -1043,7 +1041,7 @@ namespace SteamProxyBackend.Controllers
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree,
-                        IsComingSoon = isComingSoon,
+                        IsComingSoon = false,         
                         HasDiscount = discount > 0 && !isFree
                     });
                 }

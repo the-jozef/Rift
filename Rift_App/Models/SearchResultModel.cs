@@ -21,11 +21,7 @@ namespace Rift_App.Models
         // ── Display helpers ──────────────────────────────────────────────
         public string DiscountDisplay => $"-{DiscountPercent}%";
 
-        public string PriceDisplay =>
-            IsFree ? "Free To Play" :
-            !string.IsNullOrEmpty(Price) && Price != "N/A" ? Price :
-            IsComingSoon ? "Coming Soon" :
-            string.Empty;
+        public string PriceDisplay => IsFree ? "Free To Play" :!string.IsNullOrEmpty(Price) && Price != "N/A" ? Price :IsComingSoon ? "Coming Soon" :string.Empty;
     }
 
     public class SearchResponse
