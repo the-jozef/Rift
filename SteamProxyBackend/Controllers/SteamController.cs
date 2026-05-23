@@ -980,8 +980,7 @@ namespace SteamProxyBackend.Controllers
         {
             try
             {
-                var url = $"https://store.steampowered.com/api/storesearch/" +
-                          $"?term={Uri.EscapeDataString(q)}&l=english&cc=sk&ignore_preferences=1";
+                var url = $"https://store.steampowered.com/api/storesearch/" + $"?term={Uri.EscapeDataString(q)}&l=english&cc=sk&ignore_preferences=1";
                 var json = await _http.GetStringAsync(url);
                 var data = JObject.Parse(json);
                 var items = data["items"] as JArray;
@@ -989,7 +988,7 @@ namespace SteamProxyBackend.Controllers
 
                 var results = new List<object>();
 
-                foreach (var item in items.Take(8))
+                foreach (var item in items.Take(6))
                 {
                     bool isComingSoon = false;
 
@@ -1017,7 +1016,10 @@ namespace SteamProxyBackend.Controllers
                     else
                     {
                         int? finalCents = priceObj["final"]?.Value<int>();
+                        int? initialCents = priceObj["initial"]?.Value<int>();
                         discount = priceObj["discount_percent"]?.Value<int>() ?? 0;
+                        string currency = priceObj["currency"]?.Value<string>() ?? "EUR";
+                        string symbol = currency == "USD" ? "$" : "€";
 
                         if (finalCents == null || finalCents == 0)
                         {
@@ -1026,9 +1028,22 @@ namespace SteamProxyBackend.Controllers
                         }
                         else
                         {
-                            price = FormatPrice(priceObj["final_formatted"]?.Value<string>() ?? "");
+                            // final_formatted je často prázdny — stavaj z centov
+                            string finalFmt = priceObj["final_formatted"]?.Value<string>() ?? "";
+                            string initialFmt = priceObj["initial_formatted"]?.Value<string>() ?? "";
+
+                            if (string.IsNullOrEmpty(finalFmt))
+                                finalFmt = $"{(finalCents.Value / 100.0):F2}{symbol}".Replace(".", ",");
+
+                            price = FormatPrice(finalFmt);
+
                             if (discount > 0)
-                                origPrice = FormatPrice(priceObj["initial_formatted"]?.Value<string>() ?? "");
+                            {
+                                if (string.IsNullOrEmpty(initialFmt) && initialCents.HasValue)
+                                    initialFmt = $"{(initialCents.Value / 100.0):F2}{symbol}".Replace(".", ",");
+
+                                origPrice = FormatPrice(initialFmt);
+                            }
                         }
                     }
 
