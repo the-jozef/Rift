@@ -1003,12 +1003,12 @@ namespace SteamProxyBackend.Controllers
                     string headerUrl =
                         $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg";
 
-                    var priceObj = item["price"];
+                    var priceObj = item["price"];               
                     bool isFree = false;
                     string price = "";
                     string origPrice = "";
                     int discount = 0;
-
+                    Debug.WriteLine($"[Search] {name} | final={priceObj?["final"]} | formatted={priceObj?["final_formatted"]} | discount={discount}");
                     if (priceObj == null)
                     {
                         isFree = true;
