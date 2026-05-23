@@ -1050,6 +1050,7 @@ namespace SteamProxyBackend.Controllers
                         AppId = appId,
                         Name = name,
                         HeaderImageUrl = headerUrl,
+                        FallbackImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/capsule_sm_120.jpg",
                         Price = price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,

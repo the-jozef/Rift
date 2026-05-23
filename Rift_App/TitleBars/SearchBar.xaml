@@ -154,17 +154,21 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <Grid Grid.Column="0">
-                                                        
+
                                                         <Border Width="155"
                                                                 Margin="3"
                                                                 Height="70"
                                                                 ClipToBounds="True">
-
                                                             <Border.Background>
-                                                                <ImageBrush ImageSource="{Binding HeaderImageUrl}"
+                                                                
+                                                                <ImageBrush ImageSource="{Binding FallbackImageUrl}"
                                                                             RenderOptions.BitmapScalingMode="HighQuality"
                                                                             Stretch="UniformToFill" />
                                                             </Border.Background>
+
+                                                            <Image Source="{Binding HeaderImageUrl}"
+                                                                   Stretch="UniformToFill"
+                                                                   RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                     </Grid>
 
