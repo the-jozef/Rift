@@ -30,9 +30,14 @@ namespace Rift_App.TitleBars
             SearchBox.TextChanged += async (_, _) =>
                 await ViewModel.OnSearchTextChangedAsync(SearchBox.Text);
 
-            // Wishlist count loaded independently of WishlistViewModel
+            // Load wishlist count when searchbar first appears
             Loaded += async (_, _) =>
-                ViewModel.WishlistCount = await WishlistCountCache.GetAsync();
+                await ViewModel.LoadWishlistCountAsync();
+
+            // Reload wishlist count whenever a new session is active
+            // (covers first login AND every subsequent account switch)
+            SessionManager.OnSessionReady += async () =>
+                await ViewModel.LoadWishlistCountAsync();
         }
     }
 }

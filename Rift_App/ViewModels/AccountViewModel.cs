@@ -229,8 +229,7 @@ namespace Rift_App.ViewModels
         }
 
         // ─── ENRICH RECENT GAMES ─────────────────────────────────────────
-        private static async Task<List<RecentActivityGame>> EnrichRecentGamesAsync(
-            List<RecentActivityGame> games, string steamId)
+        private static async Task<List<RecentActivityGame>> EnrichRecentGamesAsync(List<RecentActivityGame> games, string steamId)
         {
             var headersFolder = AppPaths.Ensure(AppPaths.AccountHeaders(steamId));
 
@@ -313,18 +312,14 @@ namespace Rift_App.ViewModels
                             .OrderByDescending(a => a.UnlockTime)
                             .ToList();
 
-                        var icons = recent.Take(5).Select(a => new RecentAchIcon
+                        game.RecentIcons = recent.Take(5).Select(a => new RecentAchIcon
                         {
                             IconUrl = !string.IsNullOrEmpty(a.LocalIconPath)
-                                      ? a.LocalIconPath : a.IconUrl,
+                                         ? a.LocalIconPath : a.IconUrl,
                             Name = a.Name
                         }).ToList();
 
-                        int extra = recent.Count - 5;
-                        if (extra > 0)
-                            icons.Add(new RecentAchIcon { ExtraCount = extra });
-
-                        game.RecentIcons = icons;
+                        game.ExtraIconCount = Math.Max(0, recent.Count - 5);
                     }
                 }
                 catch (Exception ex)

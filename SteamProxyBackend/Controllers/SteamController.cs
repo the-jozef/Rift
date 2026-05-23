@@ -30,20 +30,23 @@ namespace SteamProxyBackend.Controllers
         private static readonly TimeSpan SectionCacheTTL = TimeSpan.FromHours(6);
 
         // ─── 18+ FILTER ───────────────────────────────────────────────────
-        private static readonly string[] AdultKeywords =
-   {
-    "hentai", "nude", "naked", "erotic", "erotica", "eroge", "erogi",
-    "xxx", "porn", "pornographic", "lewd", "nsfw", "18+", "adult only",
-    "fuck", "futa", "futanari", "cumming", "horny", "🔞", "ecchi",
-    "ahegao", "oppai", "yuri harem", "yaoi",
-    " sex ", " sex:", "sex game", "sexy girl", "sexy waifu",
-    "lust ", "lustful", "lust awakened",
-    "strip poker", "strip club", "bikini",
-    "dating sim 18", "adult dating", "adult visual",
-    "visual novel 18", "harem 18", "harem sex",
-    "waifu simulator", "girlfriend simulator",
-    "perverted", "naughty ",
+        private static readonly HashSet<string> _adultExact = new(StringComparer.OrdinalIgnoreCase)
+{
+    "hentai","nude","naked","erotic","erotica","eroge","erogi",
+    "xxx","porn","pornographic","lewd","nsfw","18+","adult only",
+    "fuck","futa","futanari","cumming","horny","🔞","ecchi",
+    "ahegao","oppai","yaoi","yuri harem",
+    "strip poker","strip club","adult dating","adult visual",
+    "dating sim","waifu simulator","girlfriend simulator",
+    "visual novel 18","harem sex","perverted",
 };
+        private static readonly HashSet<string> _adultWords = new(StringComparer.OrdinalIgnoreCase)
+{
+    "lust","harem","sex","sexy","erotic","naughty",
+    "boobs","boob","busty","bikini",
+};
+        private static readonly System.Text.RegularExpressions.Regex _wordSplit =
+    new(@"[^a-zA-Z0-9]+", System.Text.RegularExpressions.RegexOptions.Compiled);
 
         // ─── EXPANDED CURATED APP IDS ─────────────────────────────────────
         // 200 well-known games — mix of evergreens, recent hits, F2P, discounted
@@ -277,8 +280,18 @@ namespace SteamProxyBackend.Controllers
         private static bool HasAdultName(string name)
         {
             if (string.IsNullOrEmpty(name)) return false;
-            var lower = " " + name.ToLowerInvariant() + " ";
-            return AdultKeywords.Any(k => lower.Contains(k));
+
+            // Fast exact substring check (handles multi-word phrases too)
+            var lower = name.ToLowerInvariant();
+            foreach (var kw in _adultExact)
+                if (lower.Contains(kw)) return true;
+
+            // Whole-word check so "sex" doesn't block "Sexsmith County" but does block "Sex Game"
+            var words = _wordSplit.Split(lower);
+            foreach (var word in words)
+                if (_adultWords.Contains(word)) return true;
+
+            return false;
         }
 
         private static bool HasExplicitContent(JToken? data)
@@ -629,12 +642,12 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                // Use tag-specific pool or fall back to full list
                 var pool = TagAppIds.TryGetValue(tag, out var tagIds)
                     ? tagIds.Concat(CuratedAppIds).Distinct().ToArray()
                     : CuratedAppIds;
 
-                var games = await BuildSectionAsync($"bytag_{tag}", pool, count: 12);
+                // Return 16 — client filters used IDs, leaving ≥12 after overlap removal
+                var games = await BuildSectionAsync($"bytag_{tag}", pool, count: 16);
                 return Ok(new { Games = games, Tag = tag });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -650,25 +663,16 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                const int pageSize = 5;
-                const int maxPages = 5;
+                const int pageSize = 8;   // backend returns 8, client shows ~5 after filtering
+                const int maxPages = 4;   // 4 × 8 = 32 total candidates
 
                 if (page < 0 || page >= maxPages)
-                    return Ok(new { Games = new List<object>(), HasMore = false });
+                    return Ok(new { Games = new List<object>(), HasMore = false, Page = page });
 
-                // Exclude appIds already used in other sections
-                var usedIds = new HashSet<int>(
-                    CuratedAppIds.Take(8 + 24 + 12 + 12)); // rough exclusion
-
-                var morePool = CuratedAppIds
-                    .Skip(60)  // start after typical featured/discount/recommended range
-                    .ToArray();
-
+                // "more" key → same stable daily shuffle for every page
+                // skip = page × pageSize so pages are non-overlapping slices
                 var games = await BuildSectionAsync(
-                    "more",
-                    morePool,
-                    count: pageSize,
-                    skip: page * pageSize);
+                    "more", CuratedAppIds, count: pageSize, skip: page * pageSize);
 
                 bool hasMore = (page + 1) < maxPages;
                 return Ok(new { Games = games, HasMore = hasMore, Page = page });
@@ -984,6 +988,7 @@ namespace SteamProxyBackend.Controllers
                 if (items == null || !items.Any()) return new();
 
                 var results = new List<object>();
+
                 foreach (var item in items.Take(8))
                 {
                     int appId = item["id"]?.Value<int>() ?? 0;
@@ -992,46 +997,64 @@ namespace SteamProxyBackend.Controllers
                     string name = item["name"]?.Value<string>() ?? "";
                     if (string.IsNullOrEmpty(name) || HasAdultName(name)) continue;
 
+                    // Always use CDN header URL — storesearch tiny_image is too small
+                    string headerUrl =
+                        $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg";
+
                     var priceObj = item["price"];
-                    bool isFree = priceObj == null;
-                    string price = "N/A", origPrice = "";
+                    bool isFree = false;
+                    bool isComingSoon = false;
+                    string price = "";
+                    string origPrice = "";
                     int discount = 0;
 
-                    if (priceObj != null)
+                    if (priceObj == null)
                     {
-                        discount = priceObj["discount_percent"]?.Value<int>() ?? 0;
+                        // No price block — either F2P or Coming Soon.
+                        // Heuristic: if "type" is "app" with no price it's usually coming soon;
+                        // actual F2P games have price.final = 0 in most regions.
+                        string type = item["type"]?.Value<string>() ?? "app";
+                        if (type == "app")
+                            isComingSoon = true;
+                        else
+                            isFree = true;
+                    }
+                    else
+                    {
                         int finalCents = priceObj["final"]?.Value<int>() ?? -1;
+                        discount = priceObj["discount_percent"]?.Value<int>() ?? 0;
 
                         if (finalCents == 0)
                         {
                             isFree = true;
                             price = "Free To Play";
                         }
-                        else
+                        else if (finalCents > 0)
                         {
-                            price = priceObj["final_formatted"]?.Value<string>() ?? "N/A";
+                            price = priceObj["final_formatted"]?.Value<string>() ?? "";
                             if (discount > 0)
                                 origPrice = priceObj["initial_formatted"]?.Value<string>() ?? "";
                         }
-                    }
-                    else
-                    {
-                        isFree = true;
-                        price = "Free To Play";
+                        else
+                        {
+                            isComingSoon = true; // finalCents = -1 → not yet for sale
+                        }
                     }
 
                     results.Add(new
                     {
                         AppId = appId,
                         Name = name,
-                        HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
-                        Price = price,
+                        HeaderImageUrl = headerUrl,
+                        Price = isComingSoon ? "Coming Soon" : isFree ? "Free To Play" : price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree,
-                        HasDiscount = discount > 0
+                        IsComingSoon = isComingSoon,
+                        HasDiscount = discount > 0 && !isComingSoon
                     });
                 }
+
                 return results;
             }
             catch (Exception ex)

@@ -124,12 +124,31 @@ namespace Rift_App.ViewModels
         private async Task RemoveAccountAsync(AccountInfo account)
         {
             if (account == null) return;
+
             try
             {
+                // 1. Remove device↔account link from backend
                 await ApiService.RemoveAccountFromDeviceAsync(account.UserId);
                 DeviceAccounts.Remove(account);
             }
             catch { }
+
+            // 2. Delete all local data for this Steam account
+            //    This includes library, achievements, wishlist, account snapshot, etc.
+            if (!string.IsNullOrEmpty(account.SteamId64))
+            {
+                try
+                {
+                    var userFolder = AppPaths.User(account.SteamId64);
+                    if (System.IO.Directory.Exists(userFolder))
+                        System.IO.Directory.Delete(userFolder, recursive: true);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"[AuthVM] Could not delete user folder: {ex.Message}");
+                }
+            }
         }
 
         // ─── PRE-FILL REGISTER — sets Steam username and switches to Register view ──────────────

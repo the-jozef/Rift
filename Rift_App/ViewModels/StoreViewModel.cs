@@ -214,7 +214,7 @@ namespace Rift_App.ViewModels
             finally { IsLoadingByTag = false; }
         }
 
-        //───── MORE ─────────────────────────────────────────────────────
+        // ─── SHOW MORE ────────────────────────────────────────────────────
         [RelayCommand]
         private async Task ShowMoreAsync()
         {
@@ -226,6 +226,8 @@ namespace Rift_App.ViewModels
                 if (_morePage >= MoreMaxPages) { HasMoreGames = false; return; }
 
                 var cacheKey = $"{StoreGameCacheService.KeyMore}_p{_morePage}";
+
+                // Try cache first
                 var cached = await StoreGameCacheService.LoadSectionAsync(cacheKey);
 
                 List<GameModel> games;
@@ -245,10 +247,13 @@ namespace Rift_App.ViewModels
 
                 if (games.Count == 0) { HasMoreGames = false; return; }
 
-                var usedIds = GetAllUsedIds();
-                games = games.Where(g => !usedIds.Contains(g.AppId)).ToList();
+                // Only exclude Featured and Discounts — NOT Recommended/ByTag.
+                // This keeps More well-populated even if the tag/recommended games overlap.
+                var exclusions = GetMoreExclusions();
+                games = games.Where(g => !exclusions.Contains(g.AppId)).ToList();
 
-                foreach (var g in games) MoreGames.Add(g);
+                foreach (var g in games)
+                    MoreGames.Add(g);
 
                 if (fromApi)
                     await StoreGameCacheService.SaveSectionAsync(cacheKey, games);
@@ -260,7 +265,7 @@ namespace Rift_App.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"[StoreVM] ShowMore: {ex.Message}");
-                _morePage--;
+                _morePage--; // allow retry
             }
             finally { IsLoadingMore = false; }
         }
@@ -404,12 +409,12 @@ namespace Rift_App.ViewModels
         }
 
         //───── HELPERS ─────────────────────────────────────────────────────
-        private static void PopulateCollection(ObservableCollection<GameModel> col, List<GameModel> games)
-        {
-            col.Clear();
-            foreach (var g in games) col.Add(g);
-        }
 
+        private HashSet<int> GetMoreExclusions() =>
+            new(FeaturedGames.Select(g => g.AppId)
+                .Concat(DiscountGames.Select(g => g.AppId)));
+
+        // Keep these existing helpers unchanged:
         private HashSet<int> GetUsedIds() =>
             new(FeaturedGames.Select(g => g.AppId)
                 .Concat(DiscountGames.Select(g => g.AppId)));
@@ -420,7 +425,11 @@ namespace Rift_App.ViewModels
                 .Concat(RecommendedGames.Select(g => g.AppId))
                 .Concat(ByTagGames.Select(g => g.AppId))
                 .Concat(MoreGames.Select(g => g.AppId)));
-
+        private static void PopulateCollection(ObservableCollection<GameModel> col, List<GameModel> games)
+        {
+            col.Clear();
+            foreach (var g in games) col.Add(g);
+        }
         private static async Task<HashSet<string>> GetLibraryGenresAsync()
         {
             var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

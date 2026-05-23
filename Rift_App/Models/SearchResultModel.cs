@@ -14,11 +14,19 @@ namespace Rift_App.Models
         public int DiscountPercent { get; set; }
         public bool IsFree { get; set; }
         public bool HasDiscount { get; set; }
+        public bool IsComingSoon { get; set; }
 
-        // Display helpers
+        // ── Display helpers ──────────────────────────────────────────────
         public string DiscountDisplay => $"-{DiscountPercent}%";
-        public string PriceDisplay => IsFree ? "Free To Play" : Price;
+
+        public string PriceDisplay =>
+            IsComingSoon ? "Coming Soon" :
+            IsFree ? "Free To Play" :
+            string.IsNullOrEmpty(Price) || Price == "N/A"
+                              ? "Coming Soon" :   // fallback if backend missed it
+            Price;
     }
+
     public class SearchResponse
     {
         public List<SearchResultModel> Results { get; set; } = new();

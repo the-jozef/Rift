@@ -1,70 +1,64 @@
-﻿<UserControl x:Class="Rift_App.Account.Account"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Rift_App.Account"
-             xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DesignHeight="1500"
-             d:DesignWidth="1600"
-             mc:Ignorable="d">
+﻿<UserControl
+    x:Class="Rift_App.Account.Account"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Rift_App.Account"
+    xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1500"
+    d:DesignWidth="1600"
+    mc:Ignorable="d">
     <Grid>
-        <Border CornerRadius="0,0,7.5,7.5"
-                Background="#15181F">
+        <Border Background="#15181F" CornerRadius="0,0,7.5,7.5">
 
             <Grid>
                 <ScrollViewer Style="{StaticResource SlimScrollViewerStyle5}">
 
                     <Grid>
                         <Canvas>
-                            <Ellipse Width="1250"
-                                     Height="1100"
-                                     Canvas.Left="125"
-                                     Canvas.Top="-150"
-                                     Panel.ZIndex="0">
+                            <Ellipse
+                                Canvas.Left="125"
+                                Canvas.Top="-150"
+                                Width="1250"
+                                Height="1100"
+                                Panel.ZIndex="0">
                                 <Ellipse.Fill>
-                                    <RadialGradientBrush Center="0.5,0.5"
-                                                         RadiusX="0.5"
-                                                         RadiusY="0.5">
-                                        <GradientStop Offset="0"
-                                                      Color="#264478C8" />
-                                        <GradientStop Offset="0.5"
-                                                      Color="#1A3A6BB0" />
-                                        <GradientStop Offset="1"
-                                                      Color="#003A6B00" />
+                                    <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                        <GradientStop Offset="0" Color="#264478C8" />
+                                        <GradientStop Offset="0.5" Color="#1A3A6BB0" />
+                                        <GradientStop Offset="1" Color="#003A6B00" />
                                     </RadialGradientBrush>
                                 </Ellipse.Fill>
                                 <Ellipse.Effect>
-                                    <DropShadowEffect BlurRadius="250"
-                                                      ShadowDepth="0"
-                                                      Color="White"
-                                                      Opacity="0.15" />
+                                    <DropShadowEffect
+                                        BlurRadius="250"
+                                        Opacity="0.15"
+                                        ShadowDepth="0"
+                                        Color="White" />
                                 </Ellipse.Effect>
                             </Ellipse>
 
-                            <Ellipse Width="650"
-                                     Height="550"
-                                     Canvas.Left="430"
+                            <Ellipse Canvas.Left="430"
                                      Canvas.Top="30"
+                                     Width="650"
+                                     Height="550"
                                      Panel.ZIndex="1">
+
                                 <Ellipse.Fill>
-                                    <RadialGradientBrush Center="0.5,0.5"
-                                                         RadiusX="0.5"
-                                                         RadiusY="0.5">
-                                        <GradientStop Offset="0"
-                                                      Color="#26FFFFFF" />
-                                        <GradientStop Offset="0.6"
-                                                      Color="#08FFFFFF" />
-                                        <GradientStop Offset="1"
-                                                      Color="#00FFFFFF" />
+                                    <RadialGradientBrush Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                        <GradientStop Offset="0" Color="#26FFFFFF" />
+                                        <GradientStop Offset="0.6" Color="#08FFFFFF" />
+                                        <GradientStop Offset="1" Color="#00FFFFFF" />
                                     </RadialGradientBrush>
                                 </Ellipse.Fill>
                                 <Ellipse.Effect>
+                                    
                                     <DropShadowEffect BlurRadius="180"
+                                                      Opacity="0.1"
                                                       ShadowDepth="0"
-                                                      Color="White"
-                                                      Opacity="0.1" />
+                                                      Color="White" />
                                 </Ellipse.Effect>
                             </Ellipse>
                         </Canvas>
@@ -79,7 +73,7 @@
                             <Grid Grid.Column="1">
 
                                 <Border Background="#1C213E">
-                                  
+
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="660" />
@@ -88,23 +82,25 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Grid Grid.Column="0">
+                                            
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
 
-                                            <Grid Grid.Row="0"
+                                            <Grid Grid.Row="0" 
                                                   Margin="20,35,0,0">
+                                                
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <Grid Grid.Column="0"
-                                                      VerticalAlignment="Top">
-                                                    <Border BorderBrush="#5B9BD5"
+                                                <Grid Grid.Column="0" VerticalAlignment="Top">
+                                                    <Border BorderBrush="#5B9BD5" 
                                                             BorderThickness="2">
+                                                        
                                                         <Image Width="168"
                                                                Height="168"
                                                                RenderOptions.BitmapScalingMode="HighQuality"
@@ -122,8 +118,8 @@
                                                                Foreground="White"
                                                                Text="{Binding Username}" />
 
-                                                    <StackPanel Orientation="Horizontal"
-                                                                Margin="8,4,0,0">
+                                                    <StackPanel Margin="8,4,0,0" 
+                                                                Orientation="Horizontal">
 
                                                         <Ellipse Width="9"
                                                                  Height="9"
@@ -139,11 +135,9 @@
                                                 </StackPanel>
                                             </Grid>
 
-                                            <Grid Grid.Row="1"
-                                                  Margin="10,28,10,0">
+                                            <Grid Grid.Row="1" Margin="10,28,10,0">
 
-                                                <Border Background="#0D1E30"
-                                                        CornerRadius="5,5,0,0">
+                                                <Border Background="#0D1E30" CornerRadius="5,5,0,0">
 
                                                     <Grid Margin="12,8">
 
@@ -151,6 +145,7 @@
                                                                    FontSize="17"
                                                                    Foreground="White"
                                                                    Text="Recent Activity" />
+                                                        
                                                         <TextBlock HorizontalAlignment="Right"
                                                                    VerticalAlignment="Center"
                                                                    FontSize="14"
@@ -163,19 +158,21 @@
                                             <ItemsControl Grid.Row="2"
                                                           Margin="10,0,10,20"
                                                           ItemsSource="{Binding RecentGames}">
+                                                
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Border Margin="0,1,0,0"
-                                                                Background="#0D1E30"
-                                                                CornerRadius="0,0,4,4">
+                                                        <Border
+                                                            Margin="0,1,0,0"
+                                                            Background="#0D1E30"
+                                                            CornerRadius="0,0,4,4">
+
                                                             <Grid>
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition Height="Auto" />
                                                                     <RowDefinition Height="Auto" />
                                                                 </Grid.RowDefinitions>
 
-                                                                <Grid Grid.Row="0"
-                                                                      Margin="10,10,10,6">
+                                                                <Grid Grid.Row="0" Margin="10,10,10,6">
 
                                                                     <Grid.ColumnDefinitions>
                                                                         <ColumnDefinition Width="Auto" />
@@ -184,30 +181,26 @@
 
                                                                     <Border Grid.Column="0"
                                                                             Width="201"
-                                                                            Background="#666666"
                                                                             Height="65"
+                                                                            Background="#666666"
                                                                             ClipToBounds="True">
 
                                                                         <Grid>
-
-                                                                            <TextBlock Text="No image"
+                                                                            <TextBlock HorizontalAlignment="Center"
                                                                                        VerticalAlignment="Center"
-                                                                                       HorizontalAlignment="Center"
                                                                                        FontSize="16"
-                                                                                       Foreground="White" />
+                                                                                       Foreground="White"
+                                                                                       Text="No image" />
 
                                                                             <Image RenderOptions.BitmapScalingMode="HighQuality"
                                                                                    Stretch="UniformToFill">
 
                                                                                 <Image.Style>
                                                                                     <Style TargetType="Image">
-                                                                                        <Setter Property="Source"
-                                                                                                Value="{Binding HeaderImageUrl}" />
+                                                                                        <Setter Property="Source" Value="{Binding HeaderImageUrl}" />
                                                                                         <Style.Triggers>
-                                                                                            <DataTrigger Binding="{Binding HeaderImageUrl}"
-                                                                                                         Value="">
-                                                                                                <Setter Property="Source"
-                                                                                                        Value="{Binding AppId, StringFormat='https://cdn.akamai.steamstatic.com/steam/apps/{0}/header.jpg'}" />
+                                                                                            <DataTrigger Binding="{Binding HeaderImageUrl}" Value="">
+                                                                                                <Setter Property="Source" Value="{Binding AppId, StringFormat='https://cdn.akamai.steamstatic.com/steam/apps/{0}/header.jpg'}" />
                                                                                             </DataTrigger>
                                                                                         </Style.Triggers>
                                                                                     </Style>
@@ -216,8 +209,7 @@
                                                                         </Grid>
                                                                     </Border>
 
-                                                                    <Grid Grid.Column="1"
-                                                                          Margin="14,4,0,0">
+                                                                    <Grid Grid.Column="1" Margin="14,4,0,0">
 
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="Auto" />
@@ -226,31 +218,30 @@
 
                                                                         <Grid Grid.Column="0">
 
-                                                                            <TextBlock FontSize="16"
-                                                                                       TextWrapping="Wrap"
-                                                                                       Width="230"
+                                                                            <TextBlock Width="230"
+                                                                                       FontSize="16"
                                                                                        Foreground="White"
                                                                                        Text="{Binding Name}"
-                                                                                       TextTrimming="CharacterEllipsis" />
+                                                                                       TextTrimming="CharacterEllipsis"
+                                                                                       TextWrapping="Wrap" />
                                                                         </Grid>
 
                                                                         <Grid Grid.Column="1">
-                                                                            <StackPanel VerticalAlignment="Bottom"
-                                                                                        HorizontalAlignment="Right"
+                                                                            <StackPanel HorizontalAlignment="Right"
+                                                                                        VerticalAlignment="Bottom"
                                                                                         TextElement.FontSize="13.5"
                                                                                         TextElement.Foreground="#CCCCCC">
 
                                                                                 <TextBlock HorizontalAlignment="Right"
                                                                                            Text="{Binding PlaytimeTotalDisplay, StringFormat='{}{0} on record'}" />
 
-                                                                                <TextBlock Text="{Binding LastPlayedDisplay}"
-                                                                                           Margin="0,2,0,2"
-                                                                                           HorizontalAlignment="Right" />
+                                                                                <TextBlock Margin="0,2,0,2"
+                                                                                           HorizontalAlignment="Right"
+                                                                                           Text="{Binding LastPlayedDisplay}" />
                                                                             </StackPanel>
                                                                         </Grid>
                                                                     </Grid>
                                                                 </Grid>
-
                                                                 <Border Grid.Row="1"
                                                                         Margin="10,0,10,10"
                                                                         Padding="12,8"
@@ -279,15 +270,10 @@
                                                                                          Value="{Binding AchievementsProgress, Mode=OneWay}">
 
                                                                                 <ProgressBar.Foreground>
-
-                                                                                    <LinearGradientBrush StartPoint="0.5,0"
-                                                                                                         EndPoint="0.5,1">
-                                                                                        <GradientStop Offset="0"
-                                                                                                      Color="#79A9D9" />
-                                                                                        <GradientStop Offset="0.4"
-                                                                                                      Color="#31699E" />
-                                                                                        <GradientStop Offset="0.85"
-                                                                                                      Color="#103152" />
+                                                                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                                                        <GradientStop Offset="0" Color="#79A9D9" />
+                                                                                        <GradientStop Offset="0.4" Color="#31699E" />
+                                                                                        <GradientStop Offset="0.85" Color="#103152" />
                                                                                     </LinearGradientBrush>
                                                                                 </ProgressBar.Foreground>
                                                                                 <ProgressBar.Style>
@@ -295,10 +281,10 @@
                                                                                         <Setter Property="Template">
                                                                                             <Setter.Value>
                                                                                                 <ControlTemplate TargetType="ProgressBar">
-
                                                                                                     <Border Background="#050C14"
                                                                                                             ClipToBounds="True"
                                                                                                             CornerRadius="5">
+
                                                                                                         <Grid x:Name="PART_Track">
                                                                                                             <Border x:Name="PART_Indicator"
                                                                                                                     Margin="0,1.5,0,1.5"
@@ -314,7 +300,8 @@
                                                                                 </ProgressBar.Style>
                                                                             </ProgressBar>
 
-                                                                            <ItemsControl Margin="0,6,0,0"
+                                                                            <ItemsControl Margin="0,0,4,0"
+                                                                                          VerticalAlignment="Center"
                                                                                           ItemsSource="{Binding RecentIcons}">
                                                                                 <ItemsControl.ItemsPanel>
                                                                                     <ItemsPanelTemplate>
@@ -323,19 +310,15 @@
                                                                                 </ItemsControl.ItemsPanel>
                                                                                 <ItemsControl.ItemTemplate>
                                                                                     <DataTemplate>
-                                                                                        <StackPanel>
+                                                                                        <Border Width="34"
+                                                                                                Height="34"
+                                                                                                Margin="0,0,4,0"
+                                                                                                ToolTip="{Binding Name}">
 
-                                                                                            <Border Width="34"
-                                                                                                    Height="34"
-                                                                                                    Margin="0,0,4,0"
-                                                                                                    ToolTip="{Binding Name}"
-                                                                                                    Visibility="{Binding IsExtra, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-
-                                                                                                <Image RenderOptions.BitmapScalingMode="HighQuality"
-                                                                                                       Source="{Binding IconUrl}"
-                                                                                                       Stretch="UniformToFill" />
-                                                                                            </Border>
-                                                                                        </StackPanel>
+                                                                                            <Image RenderOptions.BitmapScalingMode="HighQuality"
+                                                                                                   Source="{Binding IconUrl}"
+                                                                                                   Stretch="UniformToFill" />
+                                                                                        </Border>
                                                                                     </DataTemplate>
                                                                                 </ItemsControl.ItemTemplate>
                                                                             </ItemsControl>
@@ -343,28 +326,25 @@
                                                                             <Button Width="35"
                                                                                     Height="35"
                                                                                     Padding="0"
-                                                                                    VerticalAlignment="Bottom"
-                                                                                    Command="{Binding OpenAchievementsCommand}"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Background="Transparent"
                                                                                     BorderBrush="Transparent"
-                                                                                    Background="Transparent">
+                                                                                    Command="{Binding DataContext.OpenAchievementsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                                    CommandParameter="{Binding}"
+                                                                                    Cursor="Hand"
+                                                                                    Visibility="{Binding HasExtraIcons, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                                                                 <Border Width="35"
                                                                                         Height="35"
                                                                                         Background="#2B3036"
-                                                                                        CornerRadius="2"
-                                                                                        Visibility="{Binding IsExtra, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                                        CornerRadius="2">
 
                                                                                     <TextBlock HorizontalAlignment="Center"
                                                                                                VerticalAlignment="Center"
                                                                                                FontSize="14"
                                                                                                FontWeight="SemiBold"
-                                                                                               Foreground="#E3E3E3">
-                                                                                        <TextBlock.Text>
-                                                                                            <MultiBinding StringFormat="+{0}">
-                                                                                                <Binding Path="ExtraCount" />
-                                                                                            </MultiBinding>
-                                                                                        </TextBlock.Text>
-                                                                                    </TextBlock>
+                                                                                               Foreground="#E3E3E3"
+                                                                                               Text="{Binding ExtraIconCount, StringFormat='+{0}'}" />
                                                                                 </Border>
                                                                             </Button>
                                                                         </StackPanel>
@@ -377,9 +357,8 @@
                                             </ItemsControl>
                                         </Grid>
 
-                                        <Grid Grid.Column="2"
-                                              Margin="0,35,10,20">
-                                         
+                                        <Grid Grid.Column="2" Margin="0,35,10,20">
+
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="148" />
@@ -387,161 +366,171 @@
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
 
-                                            <StackPanel Grid.Row="0"
-                                                        Margin="4,0,0,16"
-                                                        Orientation="Horizontal">
-                                                
-                                                <TextBlock FontSize="26"
-                                                           FontWeight="Thin"
-                                                           Foreground="White"
-                                                           Text="Level" />
-                                                
-                                                <Viewbox Width="30"
-                                                         Height="30"
-                                                         Margin="9,6,0,0"
-                                                         VerticalAlignment="Center">
-                                                    
-                                                    <Grid Width="30"
-                                                          Height="30">
-                                                        
-                                                        <Ellipse Stroke="#989798"
-                                                                 StrokeThickness="2" />
-                                                        <TextBlock Margin="0,-2,0,0"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center"
-                                                                   FontSize="18"
-                                                                   Foreground="White"
-                                                                   Text="{Binding Level}"
-                                                                   TextAlignment="Center" />
+                                            <StackPanel
+                                                Grid.Row="0"
+                                                Margin="4,0,0,16"
+                                                Orientation="Horizontal">
+
+                                                <TextBlock
+                                                    FontSize="26"
+                                                    FontWeight="Thin"
+                                                    Foreground="White"
+                                                    Text="Level" />
+
+                                                <Viewbox
+                                                    Width="30"
+                                                    Height="30"
+                                                    Margin="9,6,0,0"
+                                                    VerticalAlignment="Center">
+
+                                                    <Grid Width="30" Height="30">
+
+                                                        <Ellipse Stroke="#989798" StrokeThickness="2" />
+                                                        <TextBlock
+                                                            Margin="0,-2,0,0"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="18"
+                                                            Foreground="White"
+                                                            Text="{Binding Level}"
+                                                            TextAlignment="Center" />
                                                     </Grid>
                                                 </Viewbox>
                                             </StackPanel>
 
-                                            <Border Grid.Row="2"
-                                                    Padding="0,0,0,4"
-                                                    Background="#0D1E30"
-                                                    CornerRadius="5">
+                                            <Border
+                                                Grid.Row="2"
+                                                Padding="0,0,0,4"
+                                                Background="#0D1E30"
+                                                CornerRadius="5">
 
                                                 <Grid Margin="10,8,10,8">
 
-                                                    <StackPanel Orientation="Vertical"
-                                                                HorizontalAlignment="Left">
+                                                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
 
-                                                        <Button Padding="0"
-                                                                Margin="0"
-                                                                HorizontalContentAlignment="Left"
-                                                                Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Command="{Binding GoToLibraryCommand}"
-                                                                Cursor="Hand">
-
-                                                            <StackPanel Orientation="Horizontal">
-
-                                                                <TextBlock FontSize="17"
-                                                                           Foreground="White"
-                                                                           Text="Games" />
-
-                                                                <TextBlock Margin="8,-4,0,0"
-                                                                           FontSize="22"
-                                                                           FontWeight="Thin"
-                                                                           Foreground="#A8B8C8"
-                                                                           Text="{Binding GamesOwnedCount}" />
-                                                            </StackPanel>
-                                                        </Button>
-
-                                                        <Button Padding="0"
-                                                                Margin="0,5,0,0"
-                                                                HorizontalContentAlignment="Left"
-                                                                Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Command="{Binding GoToWishlistCommand}"
-                                                                Cursor="Hand">
+                                                        <Button
+                                                            Margin="0"
+                                                            Padding="0"
+                                                            HorizontalContentAlignment="Left"
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Command="{Binding GoToLibraryCommand}"
+                                                            Cursor="Hand">
 
                                                             <StackPanel Orientation="Horizontal">
 
-                                                                <TextBlock FontSize="17"
-                                                                           Foreground="White"
-                                                                           Text="Wishlist" />
+                                                                <TextBlock
+                                                                    FontSize="17"
+                                                                    Foreground="White"
+                                                                    Text="Games" />
 
-                                                                <TextBlock Margin="8,-4,0,0"
-                                                                           FontSize="22"
-                                                                           FontWeight="Thin"
-                                                                           Foreground="#A8B8C8"
-                                                                           Text="{Binding WishlistCount}" />
+                                                                <TextBlock
+                                                                    Margin="8,-4,0,0"
+                                                                    FontSize="22"
+                                                                    FontWeight="Thin"
+                                                                    Foreground="#A8B8C8"
+                                                                    Text="{Binding GamesOwnedCount}" />
                                                             </StackPanel>
                                                         </Button>
 
-                                                        <Button Padding="0"
-                                                                Margin="0,5,0,0"
-                                                                HorizontalContentAlignment="Left"
-                                                                Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Command="{Binding SwitchAccountCommand}"
-                                                                Content="Change Account"
-                                                                Cursor="Hand"
+                                                        <Button
+                                                            Margin="0,5,0,0"
+                                                            Padding="0"
+                                                            HorizontalContentAlignment="Left"
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Command="{Binding GoToWishlistCommand}"
+                                                            Cursor="Hand">
+
+                                                            <StackPanel Orientation="Horizontal">
+
+                                                                <TextBlock
+                                                                    FontSize="17"
+                                                                    Foreground="White"
+                                                                    Text="Wishlist" />
+
+                                                                <TextBlock
+                                                                    Margin="8,-4,0,0"
+                                                                    FontSize="22"
+                                                                    FontWeight="Thin"
+                                                                    Foreground="#A8B8C8"
+                                                                    Text="{Binding WishlistCount}" />
+                                                            </StackPanel>
+                                                        </Button>
+
+                                                        <Button
+                                                            Margin="0,5,0,0"
+                                                            Padding="0"
+                                                            HorizontalContentAlignment="Left"
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Command="{Binding SwitchAccountCommand}"
+                                                            Content="Change Account"
+                                                            Cursor="Hand"
+                                                            FontSize="17"
+                                                            Foreground="White" />
+
+                                                        <Button
+                                                            Margin="0,5,0,0"
+                                                            Padding="0"
+                                                            HorizontalContentAlignment="Left"
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Command="{Binding GoToStoreCommand}"
+                                                            Content="Store"
+                                                            Cursor="Hand"
+                                                            FontSize="17"
+                                                            Foreground="White" />
+
+                                                        <StackPanel Margin="0,10,0,4" Orientation="Horizontal">
+
+                                                            <TextBlock
                                                                 FontSize="17"
-                                                                Foreground="White" />
+                                                                Foreground="White"
+                                                                Text="Friends" />
 
-                                                        <Button Padding="0"
-                                                                Margin="0,5,0,0"
-                                                                HorizontalContentAlignment="Left"
-                                                                Background="Transparent"
-                                                                BorderBrush="Transparent"
-                                                                Command="{Binding GoToStoreCommand}"
-                                                                Content="Store"
-                                                                Cursor="Hand"
-                                                                FontSize="17"
-                                                                Foreground="White" />
-
-                                                        <StackPanel Margin="0,10,0,4"
-                                                                    Orientation="Horizontal">
-
-                                                            <TextBlock FontSize="17"
-                                                                       Foreground="White"
-                                                                       Text="Friends" />
-
-                                                            <TextBlock Margin="8,-4,0,0"
-                                                                       FontSize="22"
-                                                                       FontWeight="Thin"
-                                                                       Foreground="#A8B8C8"
-                                                                       Text="{Binding FriendsCount}" />
+                                                            <TextBlock
+                                                                Margin="8,-4,0,0"
+                                                                FontSize="22"
+                                                                FontWeight="Thin"
+                                                                Foreground="#A8B8C8"
+                                                                Text="{Binding FriendsCount}" />
                                                         </StackPanel>
 
-                                                        <StackPanel Margin="5,8,0,5"
-                                                                    Visibility="{Binding FriendsPrivate, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                            <TextBlock FontSize="13"
-                                                                       Foreground="#F4C430"
-                                                                       Text="⚠ Friends list is private"
-                                                                       TextWrapping="Wrap" />
+                                                        <StackPanel Margin="5,8,0,5" Visibility="{Binding FriendsPrivate, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                            <TextBlock
+                                                                FontSize="13"
+                                                                Foreground="#F4C430"
+                                                                Text="⚠ Friends list is private"
+                                                                TextWrapping="Wrap" />
 
-                                                            <TextBlock Margin="0,6,0,0"
-                                                                       FontSize="12"
-                                                                       Foreground="#A8B8C8"
-                                                                       Text="Set your friends list to Public in Steam → Profile → Edit Profile → Privacy Settings."
-                                                                       TextWrapping="Wrap" />
+                                                            <TextBlock
+                                                                Margin="0,6,0,0"
+                                                                FontSize="12"
+                                                                Foreground="#A8B8C8"
+                                                                Text="Set your friends list to Public in Steam → Profile → Edit Profile → Privacy Settings."
+                                                                TextWrapping="Wrap" />
                                                         </StackPanel>
 
-                                                        <ItemsControl ItemsSource="{Binding Friends}"
-                                                                      Visibility="{Binding FriendsPrivate, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                                        <ItemsControl ItemsSource="{Binding Friends}" Visibility="{Binding FriendsPrivate, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
 
-                                                                    <Button Padding="0"
-                                                                            Width="Auto"
-                                                                            Height="Auto"
-                                                                            Margin="0,3,0,0"
-                                                                            BorderBrush="Transparent"
-                                                                            Background="Transparent"
-                                                                            Command="{Binding DataContext.ShowSteamFriendsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                            Cursor="Hand"
-                                                                            HorizontalAlignment="Left">
+                                                                    <Button
+                                                                        Width="Auto"
+                                                                        Height="Auto"
+                                                                        Margin="0,3,0,0"
+                                                                        Padding="0"
+                                                                        HorizontalAlignment="Left"
+                                                                        Background="Transparent"
+                                                                        BorderBrush="Transparent"
+                                                                        Command="{Binding DataContext.ShowSteamFriendsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                        Cursor="Hand">
 
-                                                                        <Border Padding="7,5,6,5"
-                                                                                CornerRadius="2">
+                                                                        <Border Padding="7,5,6,5" CornerRadius="2">
 
                                                                             <Border.Background>
-                                                                                <SolidColorBrush Color="#0B1A29"
-                                                                                                 Opacity="0.65" />
+                                                                                <SolidColorBrush Opacity="0.65" Color="#0B1A29" />
                                                                             </Border.Background>
 
                                                                             <Grid>
@@ -551,58 +540,52 @@
                                                                                     <ColumnDefinition Width="*" />
                                                                                 </Grid.ColumnDefinitions>
 
-                                                                                <Border Grid.Column="0"
-                                                                                        Width="34"
-                                                                                        Height="34"
-                                                                                        ClipToBounds="True">
+                                                                                <Border
+                                                                                    Grid.Column="0"
+                                                                                    Width="34"
+                                                                                    Height="34"
+                                                                                    ClipToBounds="True">
 
-                                                                                    <Image RenderOptions.BitmapScalingMode="HighQuality"
-                                                                                           Source="{Binding AvatarUrl}"
-                                                                                           Stretch="UniformToFill" />
+                                                                                    <Image
+                                                                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                                                                        Source="{Binding AvatarUrl}"
+                                                                                        Stretch="UniformToFill" />
                                                                                 </Border>
 
-                                                                                <StackPanel Grid.Column="1"
-                                                                                            Margin="9,0,27,0"
-                                                                                            VerticalAlignment="Center">
+                                                                                <StackPanel
+                                                                                    Grid.Column="1"
+                                                                                    Margin="9,0,27,0"
+                                                                                    VerticalAlignment="Center">
 
-                                                                                    <TextBlock FontSize="13"
-                                                                                               Foreground="White"
-                                                                                               Text="{Binding Username}"
-                                                                                               Width="150"
-                                                                                               TextTrimming="CharacterEllipsis" />
+                                                                                    <TextBlock
+                                                                                        Width="150"
+                                                                                        FontSize="13"
+                                                                                        Foreground="White"
+                                                                                        Text="{Binding Username}"
+                                                                                        TextTrimming="CharacterEllipsis" />
 
-                                                                                    <TextBlock FontSize="11"
-                                                                                               Width="150"
-                                                                                               TextTrimming="CharacterEllipsis">
+                                                                                    <TextBlock
+                                                                                        Width="150"
+                                                                                        FontSize="11"
+                                                                                        TextTrimming="CharacterEllipsis">
 
                                                                                         <TextBlock.Style>
                                                                                             <Style TargetType="TextBlock">
-                                                                                                <Setter Property="Text"
-                                                                                                        Value="{Binding Status}" />
-                                                                                                <Setter Property="Foreground"
-                                                                                                        Value="#7A8A9A" />
+                                                                                                <Setter Property="Text" Value="{Binding Status}" />
+                                                                                                <Setter Property="Foreground" Value="#7A8A9A" />
                                                                                                 <Style.Triggers>
-                                                                                                    <DataTrigger Binding="{Binding Status}"
-                                                                                                                 Value="In-Game">
-                                                                                                        <Setter Property="Foreground"
-                                                                                                                Value="#90EE90" />
-                                                                                                        <Setter Property="Text"
-                                                                                                                Value="{Binding CurrentGame}" />
+                                                                                                    <DataTrigger Binding="{Binding Status}" Value="In-Game">
+                                                                                                        <Setter Property="Foreground" Value="#90EE90" />
+                                                                                                        <Setter Property="Text" Value="{Binding CurrentGame}" />
                                                                                                     </DataTrigger>
-                                                                                                    <DataTrigger Binding="{Binding Status}"
-                                                                                                                 Value="Online">
-                                                                                                        <Setter Property="Foreground"
-                                                                                                                Value="#57CBB7" />
+                                                                                                    <DataTrigger Binding="{Binding Status}" Value="Online">
+                                                                                                        <Setter Property="Foreground" Value="#57CBB7" />
                                                                                                     </DataTrigger>
-                                                                                                    <DataTrigger Binding="{Binding Status}"
-                                                                                                                 Value="Away">
-                                                                                                        <Setter Property="Foreground"
-                                                                                                                Value="#A8B8C8" />
+                                                                                                    <DataTrigger Binding="{Binding Status}" Value="Away">
+                                                                                                        <Setter Property="Foreground" Value="#A8B8C8" />
                                                                                                     </DataTrigger>
-                                                                                                    <DataTrigger Binding="{Binding Status}"
-                                                                                                                 Value="Busy">
-                                                                                                        <Setter Property="Foreground"
-                                                                                                                Value="#E05252" />
+                                                                                                    <DataTrigger Binding="{Binding Status}" Value="Busy">
+                                                                                                        <Setter Property="Foreground" Value="#E05252" />
                                                                                                     </DataTrigger>
                                                                                                 </Style.Triggers>
                                                                                             </Style>
@@ -610,36 +593,28 @@
                                                                                     </TextBlock>
                                                                                 </StackPanel>
 
-                                                                                <Ellipse Grid.Column="2"
-                                                                                         Width="9"
-                                                                                         Height="9"
-                                                                                         Margin="0,-1,1,0"
-                                                                                         HorizontalAlignment="Right"
-                                                                                         VerticalAlignment="Center">
+                                                                                <Ellipse
+                                                                                    Grid.Column="2"
+                                                                                    Width="9"
+                                                                                    Height="9"
+                                                                                    Margin="0,-1,1,0"
+                                                                                    HorizontalAlignment="Right"
+                                                                                    VerticalAlignment="Center">
                                                                                     <Ellipse.Style>
                                                                                         <Style TargetType="Ellipse">
-                                                                                            <Setter Property="Fill"
-                                                                                                    Value="#555555" />
+                                                                                            <Setter Property="Fill" Value="#555555" />
                                                                                             <Style.Triggers>
-                                                                                                <DataTrigger Binding="{Binding Status}"
-                                                                                                             Value="Online">
-                                                                                                    <Setter Property="Fill"
-                                                                                                            Value="#57CBB7" />
+                                                                                                <DataTrigger Binding="{Binding Status}" Value="Online">
+                                                                                                    <Setter Property="Fill" Value="#57CBB7" />
                                                                                                 </DataTrigger>
-                                                                                                <DataTrigger Binding="{Binding Status}"
-                                                                                                             Value="In-Game">
-                                                                                                    <Setter Property="Fill"
-                                                                                                            Value="#90EE90" />
+                                                                                                <DataTrigger Binding="{Binding Status}" Value="In-Game">
+                                                                                                    <Setter Property="Fill" Value="#90EE90" />
                                                                                                 </DataTrigger>
-                                                                                                <DataTrigger Binding="{Binding Status}"
-                                                                                                             Value="Away">
-                                                                                                    <Setter Property="Fill"
-                                                                                                            Value="#F4C430" />
+                                                                                                <DataTrigger Binding="{Binding Status}" Value="Away">
+                                                                                                    <Setter Property="Fill" Value="#F4C430" />
                                                                                                 </DataTrigger>
-                                                                                                <DataTrigger Binding="{Binding Status}"
-                                                                                                             Value="Busy">
-                                                                                                    <Setter Property="Fill"
-                                                                                                            Value="#E05252" />
+                                                                                                <DataTrigger Binding="{Binding Status}" Value="Busy">
+                                                                                                    <Setter Property="Fill" Value="#E05252" />
                                                                                                 </DataTrigger>
                                                                                             </Style.Triggers>
                                                                                         </Style>
