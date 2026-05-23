@@ -196,7 +196,7 @@
                                                                 <Border Padding="5,2,5,2"
                                                                         Background="#46593C"
                                                                         CornerRadius="3"
-                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                        Visibility="{Binding HasDiscount,Converter={StaticResource BooleanToVisibilityConverter}}">
                                                                     
                                                                     <TextBlock FontSize="14"
                                                                                FontWeight="Bold"
@@ -204,17 +204,39 @@
                                                                                Text="{Binding DiscountDisplay}" />
                                                                 </Border>
 
-                                                                <TextBlock HorizontalAlignment="Right"
+                                                                <TextBlock VerticalAlignment="Center"
+                                                                           Margin="0,0,5,0"
+                                                                           FontSize="12"
+                                                                           Foreground="#7A8A9A"
+                                                                           TextDecorations="Strikethrough"
+                                                                           Text="{Binding OriginalPrice}"
+                                                                           Visibility="{Binding HasDiscount,Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                                                <TextBlock VerticalAlignment="Center"
                                                                            FontSize="13.5"
-                                                                           VerticalAlignment="Center"
-                                                                           Margin="5,0,0,0"
-                                                                           Foreground="#E0F5FF"
-                                                                           Text="{Binding PriceDisplay}">
+                                                                           FontWeight="SemiBold">
+                                                                    
                                                                     <TextBlock.Style>
                                                                         <Style TargetType="TextBlock">
+                                                                            <Setter Property="Text"
+                                                                                    Value="{Binding PriceDisplay}" />
+                                                                            <Setter Property="Foreground"
+                                                                                    Value="#E0F5FF" />
                                                                             <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding HasDiscount}"
+                                                                                             Value="True">
+                                                                                    <Setter Property="Foreground"
+                                                                                            Value="#BBE912" />
+                                                                                </DataTrigger>
                                                                                 <DataTrigger Binding="{Binding IsFree}"
                                                                                              Value="True">
+                                                                                    <Setter Property="Foreground"
+                                                                                            Value="#57CBB7" />
+                                                                                </DataTrigger>
+                                                                                <DataTrigger Binding="{Binding IsComingSoon}"
+                                                                                             Value="True">
+                                                                                    <Setter Property="Foreground"
+                                                                                            Value="#7A8A9A" />
                                                                                 </DataTrigger>
                                                                             </Style.Triggers>
                                                                         </Style>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using System.Collections.Generic;
+
 namespace Rift_App.Models
 {
     public class SearchResultModel
@@ -14,7 +16,7 @@ namespace Rift_App.Models
         public int DiscountPercent { get; set; }
         public bool IsFree { get; set; }
         public bool HasDiscount { get; set; }
-        public bool IsComingSoon { get; set; }
+        public bool IsComingSoon { get; set; }   // reserved, currently always false
 
         // ── Display helpers ──────────────────────────────────────────────
         public string DiscountDisplay => $"-{DiscountPercent}%";
@@ -22,9 +24,9 @@ namespace Rift_App.Models
         public string PriceDisplay =>
             IsComingSoon ? "Coming Soon" :
             IsFree ? "Free To Play" :
-            string.IsNullOrEmpty(Price) || Price == "N/A"
-                              ? "Coming Soon" :   // fallback if backend missed it
-            Price;
+            !string.IsNullOrEmpty(Price) && Price != "N/A"
+                                                     ? Price :
+            string.Empty;   // no label — image alone is enough
     }
 
     public class SearchResponse

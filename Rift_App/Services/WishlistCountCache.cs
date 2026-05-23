@@ -12,6 +12,7 @@ namespace Rift_App.Services
     {
         private static int _count = 0;
         private static bool _loaded = false;
+        private static string _steamId = string.Empty;  
         private static DateTime _loadedAt = DateTime.MinValue;
         private static readonly SemaphoreSlim _lock = new(1, 1);
         private static readonly TimeSpan TTL = TimeSpan.FromMinutes(10);
@@ -21,14 +22,18 @@ namespace Rift_App.Services
 
         public static async Task<int> GetAsync()
         {
-            // Cache hit
-            if (_loaded && DateTime.UtcNow - _loadedAt < TTL)
+            var currentSteamId = SessionManager.SteamId64;
+
+            // Cache hit: same account, still fresh
+            if (_loaded
+                && _steamId == currentSteamId
+                && DateTime.UtcNow - _loadedAt < TTL)
                 return _count;
 
-            // Only 1 request at a time
+            // Only one fetch at a time
             if (!await _lock.WaitAsync(0))
             {
-                // Another task is already fetching — wait for it max 8s
+                // Another task is already fetching — wait for it to finish
                 await _lock.WaitAsync(TimeSpan.FromSeconds(8));
                 _lock.Release();
                 return _count;
@@ -37,15 +42,24 @@ namespace Rift_App.Services
             try
             {
                 // Double-check after acquiring the lock
-                if (_loaded && DateTime.UtcNow - _loadedAt < TTL)
+                if (_loaded
+                    && _steamId == currentSteamId
+                    && DateTime.UtcNow - _loadedAt < TTL)
                     return _count;
 
-                var steamId = SessionManager.SteamId64;
-                if (string.IsNullOrEmpty(steamId)) return 0;
+                if (string.IsNullOrEmpty(currentSteamId))
+                {
+                    _count = 0;
+                    _loaded = true;
+                    _steamId = string.Empty;
+                    _loadedAt = DateTime.UtcNow;
+                    return 0;
+                }
 
-                var refs = await ApiService.GetWishlistIdsAsync(steamId);
+                var refs = await ApiService.GetWishlistIdsAsync(currentSteamId);
                 _count = refs?.Count ?? 0;
                 _loaded = true;
+                _steamId = currentSteamId;
                 _loadedAt = DateTime.UtcNow;
                 return _count;
             }
@@ -55,16 +69,17 @@ namespace Rift_App.Services
             }
         }
 
-        // Call when the player adds/removes a game from the wishlist
         public static void Invalidate()
         {
             _loaded = false;
+            _steamId = string.Empty;
         }
 
         public static void Set(int count)
         {
             _count = count;
             _loaded = true;
+            _steamId = SessionManager.SteamId64;
             _loadedAt = DateTime.UtcNow;
         }
     }

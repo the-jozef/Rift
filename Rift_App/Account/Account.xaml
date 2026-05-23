@@ -190,7 +190,7 @@
                                                                                        VerticalAlignment="Center"
                                                                                        FontSize="16"
                                                                                        Foreground="White"
-                                                                                       Text="No image" />
+                                                                                       Text="Image Error" />
 
                                                                             <Image RenderOptions.BitmapScalingMode="HighQuality"
                                                                                    Stretch="UniformToFill">

@@ -997,47 +997,41 @@ namespace SteamProxyBackend.Controllers
                     string name = item["name"]?.Value<string>() ?? "";
                     if (string.IsNullOrEmpty(name) || HasAdultName(name)) continue;
 
-                    // Always use CDN header URL — storesearch tiny_image is too small
+                    // Always build from CDN — storesearch tiny_image is too small
                     string headerUrl =
                         $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg";
 
                     var priceObj = item["price"];
                     bool isFree = false;
-                    bool isComingSoon = false;
                     string price = "";
                     string origPrice = "";
                     int discount = 0;
 
                     if (priceObj == null)
                     {
-                        // No price block — either F2P or Coming Soon.
-                        // Heuristic: if "type" is "app" with no price it's usually coming soon;
-                        // actual F2P games have price.final = 0 in most regions.
-                        string type = item["type"]?.Value<string>() ?? "app";
-                        if (type == "app")
-                            isComingSoon = true;
-                        else
-                            isFree = true;
+                        // price = null means either F2P or not-yet-released.
+                        // We cannot tell them apart from storesearch alone, so default
+                        // to Free To Play (overwhelmingly the more common case).
+                        isFree = true;
+                        price = "Free To Play";
                     }
                     else
                     {
                         int finalCents = priceObj["final"]?.Value<int>() ?? -1;
                         discount = priceObj["discount_percent"]?.Value<int>() ?? 0;
 
-                        if (finalCents == 0)
+                        if (finalCents <= 0)
                         {
+                            // final = 0  → definitively free
                             isFree = true;
                             price = "Free To Play";
                         }
-                        else if (finalCents > 0)
+                        else
                         {
+                            // Paid game — may or may not have a discount
                             price = priceObj["final_formatted"]?.Value<string>() ?? "";
                             if (discount > 0)
                                 origPrice = priceObj["initial_formatted"]?.Value<string>() ?? "";
-                        }
-                        else
-                        {
-                            isComingSoon = true; // finalCents = -1 → not yet for sale
                         }
                     }
 
@@ -1046,12 +1040,12 @@ namespace SteamProxyBackend.Controllers
                         AppId = appId,
                         Name = name,
                         HeaderImageUrl = headerUrl,
-                        Price = isComingSoon ? "Coming Soon" : isFree ? "Free To Play" : price,
+                        Price = price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree,
-                        IsComingSoon = isComingSoon,
-                        HasDiscount = discount > 0 && !isComingSoon
+                        IsComingSoon = false,   // never set from search — no reliable signal
+                        HasDiscount = discount > 0 && !isFree
                     });
                 }
 

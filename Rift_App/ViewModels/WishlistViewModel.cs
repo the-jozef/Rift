@@ -23,7 +23,6 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isFetching = false;
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private bool _isEmpty = false;
-        [ObservableProperty] private string _loadingMessage = "Loading wishlist...";
         private CancellationTokenSource? _syncCts;
 
         public string WishlistTitle =>
@@ -43,7 +42,6 @@ namespace Rift_App.ViewModels
             IsFetching = false;
             Games.Clear();
             IsEmpty = false;
-            LoadingMessage = "Loading wishlist...";
 
             try
             {
