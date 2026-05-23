@@ -1025,11 +1025,12 @@ namespace SteamProxyBackend.Controllers
                     string price = "";
                     string origPrice = "";
                     int discount = 0;
-                    
+
                     if (priceObj == null)
                     {
-                        isFree = true;
-                        price = "Free To Play";
+                        isComingSoon = true;
+                        isFree = false;
+                        price = "";
                     }
                     else
                     {
@@ -1073,7 +1074,7 @@ namespace SteamProxyBackend.Controllers
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree,
-                        IsComingSoon = false,
+                        IsComingSoon = isComingSoon,
                         HasDiscount = discount > 0 && !isFree
                     });
                 }

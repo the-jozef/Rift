@@ -86,6 +86,7 @@
                         BorderBrush="#1B5680"
                         BorderThickness="1"
                         CornerRadius="4">
+                        
                         <Grid>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox
@@ -196,57 +197,66 @@
 
                                                         <Grid Grid.Row="1">
 
-                                                            <StackPanel
-                                                                Margin="10,0,0,0"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Center"
-                                                                Orientation="Horizontal">
+                                                            <StackPanel Margin="10,0,0,0"
+                                                                        HorizontalAlignment="Left"
+                                                                        VerticalAlignment="Center"
+                                                                        Orientation="Horizontal">
 
-                                                                <Border
-                                                                    Padding="5,2,5,2"
-                                                                    Background="#46593C"
-                                                                    CornerRadius="3"
-                                                                    Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                <Border Padding="5,2,5,2"
+                                                                        VerticalAlignment="Center"
+                                                                        Background="#46593C"
+                                                                        CornerRadius="3"
+                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                                                                    <TextBlock
-                                                                        FontSize="14"
-                                                                        FontWeight="Bold"
-                                                                        Foreground="#BBE912"
-                                                                        Text="{Binding DiscountDisplay}" />
+                                                                    <TextBlock FontSize="14"
+                                                                               FontWeight="Bold"
+                                                                               Foreground="#BBE912"
+                                                                               Text="{Binding DiscountDisplay}" />
                                                                 </Border>
+                                                                
+                                                                <StackPanel Orientation="Vertical">
+                                                                    
+                                                                    <TextBlock Margin="8,0,5,0"
+                                                                               VerticalAlignment="Center"
+                                                                               FontSize="11.6"
+                                                                               Foreground="#7A8A9A"
+                                                                               Text="{Binding OriginalPrice}"
+                                                                               TextDecorations="Strikethrough"
+                                                                               Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                                                                <TextBlock
-                                                                    Margin="0,0,5,0"
-                                                                    VerticalAlignment="Center"
-                                                                    FontSize="12"
-                                                                    Foreground="#7A8A9A"
-                                                                    Text="{Binding OriginalPrice}"
-                                                                    TextDecorations="Strikethrough"
-                                                                    Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                                    <TextBlock VerticalAlignment="Center"
+                                                                               FontSize="14"
+                                                                               FontWeight="SemiBold">
 
-                                                                <TextBlock
-                                                                    VerticalAlignment="Center"
-                                                                    FontSize="13.5"
-                                                                    FontWeight="SemiBold">
-
-                                                                    <TextBlock.Style>
-                                                                        <Style TargetType="TextBlock">
-                                                                            <Setter Property="Text" Value="{Binding PriceDisplay}" />
-                                                                            <Setter Property="Foreground" Value="#E0F5FF" />
-                                                                            <Style.Triggers>
-                                                                                <DataTrigger Binding="{Binding HasDiscount}" Value="True">
-                                                                                    <Setter Property="Foreground" Value="#BBE912" />
-                                                                                </DataTrigger>
-                                                                                <DataTrigger Binding="{Binding IsFree}" Value="True">
-                                                                                    <Setter Property="Foreground" Value="#57CBB7" />
-                                                                                </DataTrigger>
-                                                                                <DataTrigger Binding="{Binding IsComingSoon}" Value="True">
-                                                                                    <Setter Property="Foreground" Value="#7A8A9A" />
-                                                                                </DataTrigger>
-                                                                            </Style.Triggers>
-                                                                        </Style>
-                                                                    </TextBlock.Style>
-                                                                </TextBlock>
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="TextBlock">
+                                                                                <Setter Property="Text"
+                                                                                        Value="{Binding PriceDisplay}" />
+                                                                                <Setter Property="Foreground"
+                                                                                        Value="#E0F5FF" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding HasDiscount}"
+                                                                                                 Value="True">
+                                                                                        <Setter Property="Foreground"
+                                                                                                Value="#BBE912" />
+                                                                                        <Setter Property="Margin"
+                                                                                                Value="6,0,0,0" />
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger Binding="{Binding IsFree}"
+                                                                                                 Value="True">
+                                                                                        <Setter Property="Foreground"
+                                                                                                Value="#57CBB7" />
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger Binding="{Binding IsComingSoon}"
+                                                                                                 Value="True">
+                                                                                        <Setter Property="Foreground"
+                                                                                                Value="#7A8A9A" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                </StackPanel>
                                                             </StackPanel>
                                                         </Grid>
                                                     </Grid>
