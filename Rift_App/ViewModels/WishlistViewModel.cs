@@ -131,10 +131,8 @@ namespace Rift_App.ViewModels
                 WishlistGameCacheService.Delete(game.AppId);
 
             IsFetching = true;
-            LoadingMessage = "Refreshing...";
             await FetchMissingAsync(allIds);
             IsFetching = false;
-            LoadingMessage = string.Empty;
         }
 
         // ─── FETCH ────────────────────────────────────────────
@@ -151,7 +149,7 @@ namespace Rift_App.ViewModels
                 var appIds = chunk.Select(r => r.AppId).ToList();
 
                 int remaining = total - i;
-                LoadingMessage = $"Fetching {remaining} games...";
+                Debug.WriteLine($"[Wishlist] Fetching {remaining} games...");
                 Debug.WriteLine($"[Wishlist] Fetching chunk: {string.Join(",", appIds)}");
 
                 List<WishlistGameModel> fetched;
@@ -176,8 +174,6 @@ namespace Rift_App.ViewModels
                     InsertSorted(game);
                 }
             }
-
-            LoadingMessage = string.Empty;
         }
 
         // ─── BACKGROUND SYNC ──────────────────────────────────────────────

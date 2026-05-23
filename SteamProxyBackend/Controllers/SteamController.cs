@@ -991,6 +991,8 @@ namespace SteamProxyBackend.Controllers
 
                 foreach (var item in items.Take(8))
                 {
+                    bool isComingSoon = false;
+
                     int appId = item["id"]?.Value<int>() ?? 0;
                     if (appId <= 0) continue;
 
@@ -1009,11 +1011,8 @@ namespace SteamProxyBackend.Controllers
 
                     if (priceObj == null)
                     {
-                        // price = null means either F2P or not-yet-released.
-                        // We cannot tell them apart from storesearch alone, so default
-                        // to Free To Play (overwhelmingly the more common case).
-                        isFree = true;
-                        price = "Free To Play";
+                        price = "";
+                        isComingSoon = true;   // pridaj túto premennú do metódy
                     }
                     else
                     {
@@ -1044,11 +1043,10 @@ namespace SteamProxyBackend.Controllers
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,
                         IsFree = isFree,
-                        IsComingSoon = false,   // never set from search — no reliable signal
+                        IsComingSoon = isComingSoon,
                         HasDiscount = discount > 0 && !isFree
                     });
                 }
-
                 return results;
             }
             catch (Exception ex)

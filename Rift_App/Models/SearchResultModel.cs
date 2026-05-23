@@ -22,11 +22,10 @@ namespace Rift_App.Models
         public string DiscountDisplay => $"-{DiscountPercent}%";
 
         public string PriceDisplay =>
-            IsComingSoon ? "Coming Soon" :
             IsFree ? "Free To Play" :
-            !string.IsNullOrEmpty(Price) && Price != "N/A"
-                                                     ? Price :
-            string.Empty;   // no label — image alone is enough
+            !string.IsNullOrEmpty(Price) && Price != "N/A" ? Price :
+            IsComingSoon ? "Coming Soon" :
+            string.Empty;
     }
 
     public class SearchResponse
