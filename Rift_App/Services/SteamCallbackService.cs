@@ -97,10 +97,11 @@ namespace Rift_App.Services
                 DateTime _lastFire = DateTime.MinValue;
                 _vdfWatcher.Changed += async (_, _) =>
                 {
+                    if (_vdfWatcher == null) return;
                     if ((DateTime.UtcNow - _lastFire).TotalSeconds < 5) return;
                     _lastFire = DateTime.UtcNow;
-
-                    await Task.Delay(1500); // Wait for Steam to finish writing
+                    await Task.Delay(1500);
+                    if (_vdfWatcher == null) return; 
                     await LastPlayedCacheService.RefreshAsync();
                     LibraryChanged?.Invoke();
                     Debug.WriteLine("[SteamCallbacks] localconfig.vdf changed → Library notified.");

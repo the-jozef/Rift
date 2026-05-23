@@ -70,35 +70,12 @@ namespace Rift_App.Services
             catch { return default; }
         }
 
-        public static bool IsValid(string key, TimeSpan ttl)
-        {
-            try
-            {
-                var path = GetPath(key);
-                if (!File.Exists(path)) return false;
-                var json = File.ReadAllText(path);
-                var entry = JsonConvert.DeserializeObject<CacheEntry<object>>(json);
-                return entry != null && DateTime.UtcNow - entry.SavedAt <= ttl;
-            }
-            catch { return false; }
-        }
-
         public static void Invalidate(string key)
         {
             try
             {
                 var path = GetPath(key);
                 if (File.Exists(path)) File.Delete(path);
-            }
-            catch { }
-        }
-
-        public static void ClearAll()
-        {
-            try
-            {
-                if (Directory.Exists(CacheFolder))
-                    Directory.Delete(CacheFolder, recursive: true);
             }
             catch { }
         }

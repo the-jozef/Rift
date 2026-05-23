@@ -22,7 +22,6 @@ namespace Rift_App.Authorization
             InitializeComponent();
         }
 
-        // PasswordBox cannot bind Password directly — solved via event
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is AuthViewModel vm && sender is PasswordBox pb)

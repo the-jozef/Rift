@@ -23,8 +23,12 @@ namespace Rift_App.ViewModels
         // ─── WINDOW STATE ─────────────────────────────────────────────────
         public WindowStateViewModel WindowState { get; } = new();
 
-        // ─── CURRENT VIEW ─────────────────────────────────────────────────
+        // ─── VIEW ─────────────────────────────────────────────────
         [ObservableProperty] private object _currentView = null!;
+
+        private Library.Library? _libraryView;
+        private Wishlist.Wishlist? _wishlistView;
+        private Account.Account? _accountView;
 
         // ─── SEARCH BAR ───────────────────────────────────────────────────
         [ObservableProperty] private bool _showSearchBar = true;
@@ -101,7 +105,8 @@ namespace Rift_App.ViewModels
         public void ShowLibrary()
         {
             _ = ApiService.SaveSessionAsync("Library");
-            CurrentView = new Library.Library();
+            _libraryView ??= new Library.Library();
+            CurrentView = _libraryView;
             ShowSearchBar = false;
         }
 
@@ -109,7 +114,8 @@ namespace Rift_App.ViewModels
         public void ShowWishlist()
         {
             _ = ApiService.SaveSessionAsync("Wishlist");
-            CurrentView = new Wishlist.Wishlist();
+            _wishlistView ??= new Wishlist.Wishlist();
+            CurrentView = _wishlistView;
             ShowSearchBar = false;
         }
 
@@ -117,7 +123,8 @@ namespace Rift_App.ViewModels
         public void ShowAccount()
         {
             _ = ApiService.SaveSessionAsync("Account");
-            CurrentView = new Account.Account();
+            _accountView ??= new Account.Account();
+            CurrentView = _accountView;
             ShowSearchBar = false;
         }
 
@@ -131,6 +138,16 @@ namespace Rift_App.ViewModels
         }
 
         [RelayCommand]
+        public void SwitchAccount()
+        {
+            _libraryView = null;
+            _wishlistView = null;
+            _accountView = null;
+            SessionManager.Clear();
+            ViewNavigator.Instance?.SwitchToAuth();
+        }
+
+        [RelayCommand]
         public void ShowSteam() => OpenSteamUrl("steam://store");
 
         [RelayCommand]
@@ -141,14 +158,6 @@ namespace Rift_App.ViewModels
 
         [RelayCommand]
         public void ShowSteamAccount() => OpenSteamUrl($"steam://url/SteamIDPage/{SessionManager.SteamId64}");
-
-        // ─── SWITCH ACCOUNT ───────────────────────────────────────────────
-        [RelayCommand]
-        public void SwitchAccount()
-        {
-            SessionManager.Clear();
-            ViewNavigator.Instance?.SwitchToAuth();
-        }
 
         // ─── LAST LOCATION ────────────────────────────────────────────────
         public void NavigateToLastLocation(string location)

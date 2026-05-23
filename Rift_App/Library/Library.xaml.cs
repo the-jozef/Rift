@@ -17,10 +17,12 @@ namespace Rift_App.Library
             InitializeComponent();
             DataContext = _viewModel;
 
-            // Wire game selection event to the right panel — no logic here
             _viewModel.OnGameSelected += game => GameDetailPanel.LoadGame(game);
 
             Loaded += Library_Loaded;
+
+            // Dispose GameDetailPanel viewmodel pri unloade
+            Unloaded += (_, _) => GameDetailPanel.ViewModel.Dispose();
         }
 
         private async void Library_Loaded(object sender, RoutedEventArgs e)

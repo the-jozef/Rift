@@ -17,7 +17,7 @@ namespace Rift_App.Services
 
         private static readonly HttpClient _http = new HttpClient
         {
-            Timeout = TimeSpan.FromSeconds(90)
+            Timeout = TimeSpan.FromSeconds(30)
         };
 
         private static StringContent ToJson(object obj) =>
@@ -34,14 +34,22 @@ namespace Rift_App.Services
             {
                 try
                 {
-                    return await _http.GetStringAsync(url);
+                    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+                    return await _http.GetStringAsync(url, cts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    if (i == maxRetries - 1) return null;
+                    Debug.WriteLine($"[API] Timeout on {url}, retry {i + 1}");
+                    await Task.Delay(delay);
+                    delay *= 2;
                 }
                 catch (HttpRequestException ex) when (ex.Message.Contains("429"))
                 {
                     if (i == maxRetries - 1) throw;
                     Debug.WriteLine($"[API] 429 on {url}, retry {i + 1} after {delay}ms");
                     await Task.Delay(delay);
-                    delay *= 2; 
+                    delay *= 2;
                 }
             }
             return null;

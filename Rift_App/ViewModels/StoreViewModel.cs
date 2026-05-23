@@ -76,21 +76,33 @@ namespace Rift_App.ViewModels
         //───── EVENT ─────────────────────────────────────────────────────
         public event Action<GameModel>? OnGameSelected;
 
+        private CancellationTokenSource? _loadCts;
+
         //───── MAIN LOAD — progressive, visible sections first ─────────────────────────────────────────────────────
         [RelayCommand]
         public async Task LoadStoreAsync()
         {
+            _loadCts?.Cancel();
+            _loadCts = new CancellationTokenSource();
+            var token = _loadCts.Token;
+
             await TagService.InitAsync();
+            if (token.IsCancellationRequested) return;
 
             await LoadFeaturedAsync();
+            if (token.IsCancellationRequested) return;
+
             await LoadDiscountsAsync();
+            if (token.IsCancellationRequested) return;
 
             var genres = await GetLibraryGenresAsync();
+            if (token.IsCancellationRequested) return;
+
             await Task.WhenAll(
                 LoadRecommendedAsync(genres),
                 LoadByTagAsync(genres));
+            if (token.IsCancellationRequested) return;
 
-            // Pre-load first 5 "more" games so the section isn't empty on open
             await ShowMoreAsync();
 
             _ = ApiService.SaveSessionAsync("Store");
@@ -419,12 +431,6 @@ namespace Rift_App.ViewModels
             new(FeaturedGames.Select(g => g.AppId)
                 .Concat(DiscountGames.Select(g => g.AppId)));
 
-        private HashSet<int> GetAllUsedIds() =>
-            new(FeaturedGames.Select(g => g.AppId)
-                .Concat(DiscountGames.Select(g => g.AppId))
-                .Concat(RecommendedGames.Select(g => g.AppId))
-                .Concat(ByTagGames.Select(g => g.AppId))
-                .Concat(MoreGames.Select(g => g.AppId)));
         private static void PopulateCollection(ObservableCollection<GameModel> col, List<GameModel> games)
         {
             col.Clear();
@@ -460,22 +466,25 @@ namespace Rift_App.ViewModels
 
         private static async Task PreloadImagesAsync(List<GameModel> games)
         {
-            foreach (var g in games)
+            using var semaphore = new SemaphoreSlim(4, 4);
+
+            var tasks = games.Select(async game =>
             {
+                await semaphore.WaitAsync();
                 try
                 {
-                    if (!string.IsNullOrEmpty(g.HeaderImageUrl))
-                        await ImageCacheService.GetAsync(g.HeaderImageUrl);
-                    foreach (var shot in (g.Screenshots ?? new()).Take(4))
-                    {
+                    if (!string.IsNullOrEmpty(game.HeaderImageUrl))
+                        await ImageCacheService.GetAsync(game.HeaderImageUrl);
+
+                    foreach (var shot in (game.Screenshots ?? new()).Take(4))
                         if (!string.IsNullOrEmpty(shot))
                             await ImageCacheService.GetAsync(shot);
-                        await Task.Delay(60);
-                    }
                 }
                 catch { }
-                await Task.Delay(80);
-            }
+                finally { semaphore.Release(); }
+            });
+
+            await Task.WhenAll(tasks);
         }
     }
 }

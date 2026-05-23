@@ -1,4 +1,5 @@
-﻿using Rift_App.ViewModels;
+﻿using Rift_App.Services;
+using Rift_App.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,12 @@ namespace Rift_App
         {
             InitializeComponent();
             DataContext = ViewModel;
-            Closing += (s, e) => { e.Cancel = true; Hide(); };
+            Closing += (s, e) =>
+            {
+                e.Cancel = true;
+                SteamAuthService.Cancel();
+                Hide();
+            };
         }
     }
 }

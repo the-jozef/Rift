@@ -19,6 +19,14 @@ namespace SteamProxyBackend.Controllers
         private static readonly ConcurrentDictionary<string, DateTime> _lastRequestTime = new();
         private const int RateLimitMs = 500;
 
+        private static readonly System.Threading.Timer _cleanupTimer = new(_ =>
+        {
+            var cutoff = DateTime.UtcNow.AddMinutes(-5);
+            foreach (var key in _lastRequestTime.Keys)
+                if (_lastRequestTime.TryGetValue(key, out var t) && t < cutoff)
+                    _lastRequestTime.TryRemove(key, out DateTime _);
+        }, null, TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5));
+
         // ─── GAME DETAIL MEMORY CACHE ─────────────────────────────────────
         // Shared across ALL section endpoints — fetch once, serve everywhere
         private static readonly ConcurrentDictionary<int, (StoreGameDto Data, DateTime At)> _detailCache = new();
@@ -466,16 +474,15 @@ namespace SteamProxyBackend.Controllers
         // ─── SECTION BUILDER — picks N unique games from a pool ──────────────────────────────────────────────────────
         //  Uses a per-section seed so each section shows different games
         //  Uses SectionCache so the same request doesn't re-shuffle 
-        private async Task<List<StoreGameDto>> BuildSectionAsync(string sectionKey, int[] pool, int count, int skip = 0, bool discountedOnly = false)
+        private async Task<List<StoreGameDto>> BuildSectionAsync(string sectionKey, int[] pool, int count, int poolOffset = 0, bool discountedOnly = false)
         {
             var orderedIds = GetOrBuildSectionOrder(sectionKey, pool);
             var result = new List<StoreGameDto>();
-            int skipped = 0;
             int batchSize = 10; // fetch 10 at a time in parallel
 
             using var semaphore = new SemaphoreSlim(4, 4); // max 4 concurrent Steam API calls
 
-            for (int i = 0; i < orderedIds.Count && result.Count < count; i += batchSize)
+            for (int i = poolOffset; i < orderedIds.Count && result.Count < count; i += batchSize)
             {
                 var batch = orderedIds.Skip(i).Take(batchSize).ToList();
 
@@ -519,7 +526,6 @@ namespace SteamProxyBackend.Controllers
                             : null;
                     if (dto == null) continue;
                     if (discountedOnly && !dto.HasDiscount && !dto.IsFree) continue;
-                    if (skipped < skip) { skipped++; continue; }
                     result.Add(dto);
                 }
             }
@@ -572,8 +578,7 @@ namespace SteamProxyBackend.Controllers
                     return StatusCode(429, new { Message = "Too many requests." });
 
                 // Try discounted-only first
-                var games = await BuildSectionAsync(
-                    "discounts", CuratedAppIds, count: 24, discountedOnly: true);
+                var games = await BuildSectionAsync("discounts", CuratedAppIds, count: 24, discountedOnly: true);
 
                 // Pad with non-discounted if not enough
                 if (games.Count < 24)
@@ -617,8 +622,7 @@ namespace SteamProxyBackend.Controllers
                 if (pool.Count < 12)
                     pool.AddRange(CuratedAppIds);
 
-                var games = await BuildSectionAsync(
-                    "recommended", pool.Distinct().ToArray(), count: 12);
+                var games = await BuildSectionAsync("recommended", pool.Distinct().ToArray(), count: 12);
 
                 // Mark as recommended
                 foreach (var g in games)
@@ -670,8 +674,7 @@ namespace SteamProxyBackend.Controllers
 
                 // "more" key → same stable daily shuffle for every page
                 // skip = page × pageSize so pages are non-overlapping slices
-                var games = await BuildSectionAsync(
-                    "more", CuratedAppIds, count: pageSize, skip: page * pageSize);
+                var games = await BuildSectionAsync("more", CuratedAppIds, count: pageSize, poolOffset: page * pageSize);
 
                 bool hasMore = (page + 1) < maxPages;
                 return Ok(new { Games = games, HasMore = hasMore, Page = page });
@@ -688,8 +691,8 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                var games = await BuildSectionAsync(
-                    "newtrending", CuratedAppIds, count: 8, skip: page * 8);
+                var games = await BuildSectionAsync("newtrending", CuratedAppIds, count: 8, poolOffset: page * 8);
+
                 return Ok(new { Games = games });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -704,8 +707,8 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                var games = await BuildSectionAsync(
-                    "topsellers", CuratedAppIds, count: 8, skip: page * 8);
+                var games = await BuildSectionAsync("topsellers", CuratedAppIds, count: 8, poolOffset: page * 8);
+
                 return Ok(new { Games = games });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -720,9 +723,8 @@ namespace SteamProxyBackend.Controllers
                 if (IsRateLimited(GetClientIp()))
                     return StatusCode(429, new { Message = "Too many requests." });
 
-                var games = await BuildSectionAsync(
-                    "specials", CuratedAppIds, count: 8,
-                    skip: page * 8, discountedOnly: true);
+                var games = await BuildSectionAsync("specials", CuratedAppIds, count: 8, poolOffset: page * 8, discountedOnly: true);
+
                 return Ok(new { Games = games });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
@@ -777,16 +779,33 @@ namespace SteamProxyBackend.Controllers
                     return NotFound(new { Message = "Steam player not found." });
 
                 var player = players[0];
+
+                // Mapuj personastate na string
+                int state = (int)(player.personastate ?? 0);
+                string? gameId = (string?)player.gameid;
+                string onlineStatus = (!string.IsNullOrEmpty(gameId) && gameId != "0") ? "In-Game" :
+                    state switch
+                    {
+                        1 => "Online",
+                        2 => "Busy",
+                        3 => "Away",
+                        4 => "Snooze",
+                        _ => "Offline"
+                    };
+
                 return Ok(new
                 {
                     SteamId = (string)player.steamid,
                     Username = (string)player.personaname,
                     AvatarUrl = (string)player.avatarfull,
-                    ProfileUrl = (string)player.profileurl
+                    ProfileUrl = (string)player.profileurl,
+                    OnlineStatus = onlineStatus,          
+                    CurrentGame = (string?)player.gameextrainfo ?? ""
                 });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
         }
+
         // GET /api/steam/player/{steamId}/level
         [HttpGet("player/{steamId}/level")]
         public async Task<IActionResult> GetSteamLevel(string steamId)
@@ -1317,55 +1336,6 @@ namespace SteamProxyBackend.Controllers
                 return Ok(new { Achievements = result, Total = result.Count, Unlocked = unlocked });
             }
             catch (Exception ex) { return StatusCode(500, new { Message = ex.Message }); }
-        }
-
-        [HttpGet("schema/{appId}")]
-        public async Task<IActionResult> GetGameSchema(int appId)
-        {
-            try
-            {
-                var url = $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={_steamApiKey}&appid={appId}&l=en";
-                var response = await _http.GetStringAsync(url);
-                var data = JObject.Parse(response);
-                var achs = data["game"]?["availableGameStats"]?["achievements"];
-
-                if (achs == null) return Ok(new { Achievements = new List<object>() });
-
-                var result = achs.Select(a => new
-                {
-                    ApiName = a["name"]?.Value<string>() ?? "",
-                    DisplayName = a["displayName"]?.Value<string>() ?? "",
-                    Description = a["description"]?.Value<string>() ?? "",
-                    IconUrl = a["icon"]?.Value<string>() ?? "",
-                    IconGrayUrl = a["icongray"]?.Value<string>() ?? ""
-                }).ToList();
-
-                return Ok(new { Achievements = result });
-            }
-            catch { return Ok(new { Achievements = new List<object>() }); }
-        }
-
-        [HttpGet("playerstats/{appId}/{steamId}")]
-        public async Task<IActionResult> GetPlayerStats(int appId, string steamId)
-        {
-            try
-            {
-                var url = $"https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key={_steamApiKey}&appid={appId}&steamid={steamId}&l=en";
-                var response = await _http.GetStringAsync(url);
-                var data = JObject.Parse(response);
-                var achs = data["playerstats"]?["achievements"];
-                if (achs == null) return Ok(new { Achievements = new List<object>() });
-
-                var result = achs.Select(a => new
-                {
-                    ApiName = a["apiname"]?.Value<string>() ?? "",
-                    Achieved = a["achieved"]?.Value<int>() == 1,
-                    UnlockTime = a["unlocktime"]?.Value<long>() ?? 0
-                }).ToList();
-
-                return Ok(new { Achievements = result });
-            }
-            catch { return Ok(new { Achievements = new List<object>() }); }
         }
 
         [HttpGet("wishlist/{steamId}/ids")]

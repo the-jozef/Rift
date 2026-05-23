@@ -47,7 +47,6 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0" Margin="20,0,0,0">
@@ -103,52 +102,33 @@
                                 </materialDesign:PopupBox>
                             </Grid>
 
-                            <Grid Grid.Column="1" Margin="15,0,0,0">
+                            <Grid Grid.Column="1"
+                                  Margin="15,0,0,0">
 
-                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}" WindowChrome.IsHitTestVisibleInChrome="True">
+                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
+                                                         WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialDesign:PopupBox.ToggleContent>
-                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="Games" />
+                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}"
+                                                   Text="Games" />
 
                                     </materialDesign:PopupBox.ToggleContent>
 
                                     <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <Button
-                                            Command="{Binding ShowLibraryCommand}"
-                                            Content="View Games Library"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Command="{Binding ShowLibraryCommand}"
+                                                Content="View Games Library"
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
-                                        <Button
-                                            Command="{Binding ShowWishlistCommand}"
-                                            Content="View Games Wishlist"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Command="{Binding ShowWishlistCommand}"
+                                                Content="View Games Wishlist"
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
-                                        <Button
-                                            Command="{Binding ShowStoreCommand}"
-                                            Content="View Store"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
-                                    </StackPanel>
-                                </materialDesign:PopupBox>
-                            </Grid>
-
-                            <Grid Grid.Column="2" Margin="16,0,0,0">
-
-                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}" WindowChrome.IsHitTestVisibleInChrome="True">
-
-                                    <materialDesign:PopupBox.ToggleContent>
-                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="Help" />
-
-                                    </materialDesign:PopupBox.ToggleContent>
-
-                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
-
-                                        <Button
-                                            Command=""
-                                            Content="About RIFT"
-                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button Command="{Binding ShowStoreCommand}"
+                                                Content="View Store"
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>

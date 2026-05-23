@@ -20,7 +20,6 @@ namespace Rift_App.Authorization
     {
         public Login() => InitializeComponent();
 
-        // PasswordBox cannot use binding
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is AuthViewModel vm && sender is PasswordBox pb)

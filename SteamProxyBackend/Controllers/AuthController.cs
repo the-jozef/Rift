@@ -26,6 +26,11 @@ namespace SteamProxyBackend.Controllers
                     string.IsNullOrWhiteSpace(request.SteamId64))
                     return BadRequest(new AuthResponse { Success = false, Message = "All fields are required." });
 
+                if (request.SteamId64.Length != 17 ||
+                    !request.SteamId64.All(char.IsDigit) ||
+                    !request.SteamId64.StartsWith("7656119"))
+                    return BadRequest(new AuthResponse { Success = false, Message = "Invalid Steam account." });
+
                 if (request.Password.Length < 6)
                     return BadRequest(new AuthResponse { Success = false, Message = "Password must be at least 6 characters." });
 

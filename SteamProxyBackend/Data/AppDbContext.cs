@@ -23,8 +23,6 @@ namespace SteamProxyBackend.Data
 
             modelBuilder.Entity<Device>().ToTable("Devices")
                 .HasIndex(d => d.DeviceToken).IsUnique();
-
-            // ← PRIDANÉ:
             modelBuilder.Entity<Device>()
                 .HasMany(d => d.DeviceAccounts)
                 .WithOne()

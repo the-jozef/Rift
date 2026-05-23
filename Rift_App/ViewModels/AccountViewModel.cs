@@ -76,9 +76,9 @@ namespace Rift_App.ViewModels
             OnPropertyChanged(nameof(StatusColor));
 
         public string TotalHours2WDisplay =>
-            TotalHours2W > 0
-                ? $"{TotalHours2W} hours past 2 weeks"
-                : "0 hours past 2 weeks";
+      TotalHours2W == 1
+          ? "1 hour past 2 weeks"
+          : $"{TotalHours2W} hours past 2 weeks";
 
         partial void OnTotalHours2WChanged(double value) =>
             OnPropertyChanged(nameof(TotalHours2WDisplay));
@@ -169,19 +169,16 @@ namespace Rift_App.ViewModels
                 AvatarUrl = SessionManager.AvatarUrl,
             };
 
-            // Run all network calls in parallel
             var levelTask = ApiService.GetSteamLevelAsync(steamId);
             var friendsTask = ApiService.GetFriendsAsync(steamId);
             var activityTask = ApiService.GetRecentActivityAsync(steamId);
             var wishlistCountTask = WishlistCountCache.GetAsync();
+            var playerTask = ApiService.GetPlayerInfoAsync(steamId);
 
-            await Task.WhenAll(levelTask, friendsTask, activityTask, wishlistCountTask);
+            await Task.WhenAll(levelTask, friendsTask, activityTask, wishlistCountTask, playerTask);
 
             snap.Level = levelTask.Result;
-
-            // ── Game count: prefer local library (includes F2P + installed) ──
             snap.GamesOwnedCount = await GetBestGameCountAsync(steamId);
-
             snap.WishlistCount = wishlistCountTask.Result;
             WishlistCountCache.Set(snap.WishlistCount);
 
@@ -189,7 +186,14 @@ namespace Rift_App.ViewModels
             snap.FriendsPrivate = fr?.IsPrivate ?? false;
             snap.FriendsCount = fr?.Friends?.Count ?? 0;
             snap.Friends = fr?.Friends ?? new();
-            snap.OnlineStatus = "Online";
+
+            var player = playerTask.Result;
+            snap.OnlineStatus = player?.OnlineStatus ?? "Offline";
+            if (player != null)
+            {
+                snap.AvatarUrl = player.AvatarUrl;
+                SessionManager.SetAvatar(player.AvatarUrl);
+            }
 
             var activity = activityTask.Result;
             snap.TotalHours2W = activity?.TotalHours ?? 0;

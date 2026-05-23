@@ -19,49 +19,40 @@
 
             <Grid Grid.Column="0">
 
-                <Button HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="18,0,0,0"
-                        Padding="5,5"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        Command="{Binding RefreshCommand}"
-                        Cursor="Hand"
-                        Foreground="White"
-                        ToolTip="Refresh library, wishlist and profile">
+                <Button
+                    Margin="18,0,0,0"
+                    Padding="5,5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding RefreshCommand}"
+                    Cursor="Hand"
+                    Foreground="White"
+                    ToolTip="Refresh library, wishlist and profile">
 
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
-                                        <Border x:Name="Root"
-                                                Background="{TemplateBinding Background}"
-                                                CornerRadius="4"
-                                                Padding="{TemplateBinding Padding}">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center" />
+                                        <Border
+                                            x:Name="Root"
+                                            Padding="{TemplateBinding Padding}"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="4">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         </Border>
                                         <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver"
-                                                     Value="True">
-                                                <Setter TargetName="Root"
-                                                        Property="Background"
-                                                        Value="#1A3A52" />
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Root" Property="Background" Value="#1A3A52" />
                                             </Trigger>
-                                            <Trigger Property="IsPressed"
-                                                     Value="True">
-                                                <Setter TargetName="Root"
-                                                        Property="Background"
-                                                        Value="#0F2A3D" />
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="Root" Property="Background" Value="#0F2A3D" />
                                             </Trigger>
-                                            <DataTrigger Binding="{Binding IsRefreshing}"
-                                                         Value="True">
-                                                <Setter Property="IsEnabled"
-                                                        Value="False" />
-                                                <Setter TargetName="Root"
-                                                        Property="Opacity"
-                                                        Value="0.5" />
+                                            <DataTrigger Binding="{Binding IsRefreshing}" Value="True">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter TargetName="Root" Property="Opacity" Value="0.5" />
                                             </DataTrigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -71,16 +62,18 @@
                     </Button.Style>
 
                     <StackPanel Orientation="Horizontal">
-                        <materialIcons:MaterialIcon Kind="Refresh"
-                                                    Width="16"
-                                                    Height="16"
-                                                    Margin="0,1,0,0"
-                                                    Foreground="#99C5DE" />
-                        <TextBlock Margin="5,0,0,0"
-                                   VerticalAlignment="Center"
-                                   FontSize="14"
-                                   Foreground="#99C5DE"
-                                   Text="Refresh" />
+                        <materialIcons:MaterialIcon
+                            Width="16"
+                            Height="16"
+                            Margin="0,1,0,0"
+                            Foreground="#99C5DE"
+                            Kind="Refresh" />
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="#99C5DE"
+                            Text="Refresh" />
                     </StackPanel>
                 </Button>
 
@@ -112,12 +105,13 @@
 
             <Grid>
 
-                <Popup x:Name="SearchPopup"
-                       IsOpen="{Binding ShowDropdown}"
-                       PlacementTarget="{Binding ElementName=SearchBox}"
-                       Placement="Bottom"
-                       StaysOpen="False"
-                       AllowsTransparency="True">
+                <Popup
+                    x:Name="SearchPopup"
+                    AllowsTransparency="True"
+                    IsOpen="{Binding ShowDropdown}"
+                    Placement="Bottom"
+                    PlacementTarget="{Binding ElementName=SearchBox}"
+                    StaysOpen="False">
 
                     <Border Background="#313641">
 
@@ -134,19 +128,20 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
 
-                                        <Button Padding="0"
-                                                Margin="10,8,10,0"
-                                                Height="Auto"
-                                                MinWidth="400"
-                                                HorizontalContentAlignment="Stretch"
-                                                Background="Transparent"
-                                                BorderBrush="Transparent"
-                                                Command="{Binding DataContext.SelectResultCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"
-                                                Cursor="Hand">
+                                        <Button
+                                            Height="Auto"
+                                            MinWidth="400"
+                                            Margin="10,8,10,0"
+                                            Padding="0"
+                                            HorizontalContentAlignment="Stretch"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding DataContext.SelectResultCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Cursor="Hand">
 
-                                            <Border  Background="#464D5A">
-                                                                                               
+                                            <Border Background="#464D5A">
+
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto" />
@@ -155,16 +150,28 @@
 
                                                     <Grid Grid.Column="0">
 
-                                                        <Border Width="155"
-                                                                Margin="3"
-                                                                Height="70"
-                                                                ClipToBounds="True">
-                                                            <Border.Background>
-                                                                
-                                                                <ImageBrush ImageSource="{Binding DisplayImageUrl}"
-                                                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                                                            Stretch="UniformToFill" />
-                                                            </Border.Background>
+                                                        <Border
+                                                            Width="155"
+                                                            Height="70"
+                                                            Margin="3"
+                                                            Background="#969696"
+                                                            ClipToBounds="True">
+
+                                                            <Grid>
+
+                                                                <TextBlock
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    FontSize="12"
+                                                                    Foreground="White"
+                                                                    Text="Couldn't load image"
+                                                                    Visibility="{Binding DisplayImageUrl, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}" />
+
+                                                                <Image
+                                                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                                                    Source="{Binding DisplayImageUrl}"
+                                                                    Stretch="UniformToFill" />
+                                                            </Grid>
                                                         </Border>
                                                     </Grid>
 
@@ -177,66 +184,64 @@
 
                                                         <Grid Grid.Row="0">
 
-                                                            <TextBlock Margin="8,14,8,0"
-                                                                       VerticalAlignment="Top"
-                                                                       FontSize="15"
-                                                                       Width="220"
-                                                                       Foreground="White"
-                                                                       Text="{Binding Name}"
-                                                                       TextTrimming="CharacterEllipsis" />
+                                                            <TextBlock
+                                                                Width="220"
+                                                                Margin="8,14,8,0"
+                                                                VerticalAlignment="Top"
+                                                                FontSize="15"
+                                                                Foreground="White"
+                                                                Text="{Binding Name}"
+                                                                TextTrimming="CharacterEllipsis" />
                                                         </Grid>
 
                                                         <Grid Grid.Row="1">
 
-                                                            <StackPanel HorizontalAlignment="Left"
-                                                                        VerticalAlignment="Center"
-                                                                        Margin="10,0,0,0"
-                                                                        Orientation="Horizontal">
+                                                            <StackPanel
+                                                                Margin="10,0,0,0"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Center"
+                                                                Orientation="Horizontal">
 
-                                                                <Border Padding="5,2,5,2"
-                                                                        Background="#46593C"
-                                                                        CornerRadius="3"
-                                                                        Visibility="{Binding HasDiscount,Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                                    
-                                                                    <TextBlock FontSize="14"
-                                                                               FontWeight="Bold"
-                                                                               Foreground="#BBE912"
-                                                                               Text="{Binding DiscountDisplay}" />
+                                                                <Border
+                                                                    Padding="5,2,5,2"
+                                                                    Background="#46593C"
+                                                                    CornerRadius="3"
+                                                                    Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                                                    <TextBlock
+                                                                        FontSize="14"
+                                                                        FontWeight="Bold"
+                                                                        Foreground="#BBE912"
+                                                                        Text="{Binding DiscountDisplay}" />
                                                                 </Border>
 
-                                                                <TextBlock VerticalAlignment="Center"
-                                                                           Margin="0,0,5,0"
-                                                                           FontSize="12"
-                                                                           Foreground="#7A8A9A"
-                                                                           TextDecorations="Strikethrough"
-                                                                           Text="{Binding OriginalPrice}"
-                                                                           Visibility="{Binding HasDiscount,Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                                <TextBlock
+                                                                    Margin="0,0,5,0"
+                                                                    VerticalAlignment="Center"
+                                                                    FontSize="12"
+                                                                    Foreground="#7A8A9A"
+                                                                    Text="{Binding OriginalPrice}"
+                                                                    TextDecorations="Strikethrough"
+                                                                    Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                                                                <TextBlock VerticalAlignment="Center"
-                                                                           FontSize="13.5"
-                                                                           FontWeight="SemiBold">
-                                                                    
+                                                                <TextBlock
+                                                                    VerticalAlignment="Center"
+                                                                    FontSize="13.5"
+                                                                    FontWeight="SemiBold">
+
                                                                     <TextBlock.Style>
                                                                         <Style TargetType="TextBlock">
-                                                                            <Setter Property="Text"
-                                                                                    Value="{Binding PriceDisplay}" />
-                                                                            <Setter Property="Foreground"
-                                                                                    Value="#E0F5FF" />
+                                                                            <Setter Property="Text" Value="{Binding PriceDisplay}" />
+                                                                            <Setter Property="Foreground" Value="#E0F5FF" />
                                                                             <Style.Triggers>
-                                                                                <DataTrigger Binding="{Binding HasDiscount}"
-                                                                                             Value="True">
-                                                                                    <Setter Property="Foreground"
-                                                                                            Value="#BBE912" />
+                                                                                <DataTrigger Binding="{Binding HasDiscount}" Value="True">
+                                                                                    <Setter Property="Foreground" Value="#BBE912" />
                                                                                 </DataTrigger>
-                                                                                <DataTrigger Binding="{Binding IsFree}"
-                                                                                             Value="True">
-                                                                                    <Setter Property="Foreground"
-                                                                                            Value="#57CBB7" />
+                                                                                <DataTrigger Binding="{Binding IsFree}" Value="True">
+                                                                                    <Setter Property="Foreground" Value="#57CBB7" />
                                                                                 </DataTrigger>
-                                                                                <DataTrigger Binding="{Binding IsComingSoon}"
-                                                                                             Value="True">
-                                                                                    <Setter Property="Foreground"
-                                                                                            Value="#7A8A9A" />
+                                                                                <DataTrigger Binding="{Binding IsComingSoon}" Value="True">
+                                                                                    <Setter Property="Foreground" Value="#7A8A9A" />
                                                                                 </DataTrigger>
                                                                             </Style.Triggers>
                                                                         </Style>

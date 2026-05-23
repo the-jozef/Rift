@@ -83,17 +83,6 @@ namespace Rift_App.Services
             }
         }
 
-        public static bool IsGameCached(int appId)
-        {
-            try
-            {
-                var path = GetInfoPath(appId);
-                if (!File.Exists(path)) return false;
-                return DateTime.UtcNow - new FileInfo(path).LastWriteTimeUtc < GameInfoTTL;
-            }
-            catch { return false; }
-        }
-
         // ─── IMAGES ─────────────────────────────────────────────────────
         public static async Task EnsureImagesAsync(GameModel game)
         {
@@ -109,12 +98,6 @@ namespace Rift_App.Services
         public static string? GetLocalHeaderPath(int appId)
         {
             var path = GetHeaderPath(appId);
-            return File.Exists(path) ? path : null;
-        }
-
-        public static string? GetLocalScreenshotPath(int appId, int index)
-        {
-            var path = GetScreenshotPath(appId, index);
             return File.Exists(path) ? path : null;
         }
 

@@ -219,13 +219,13 @@ namespace Rift_App.ViewModels
                     .Select(r => r.game!)
                     .ToList();
 
-                foreach (var ((_, isBlacklisted), originalGame) in results.Zip(chunk))
+                for (int idx = 0; idx < results.Length && idx < chunk.Count; idx++)
                 {
-                    if (isBlacklisted)
+                    if (results[idx].blacklist)
                     {
                         lock (blacklist)
                         {
-                            blacklist.Add(originalGame.AppId);
+                            blacklist.Add(chunk[idx].AppId);
                             blacklistChanged = true;
                         }
                     }
@@ -259,8 +259,7 @@ namespace Rift_App.ViewModels
         {
             for (int i = 0; i < Games.Count; i++)
             {
-                if (string.Compare(game.Name, Games[i].Name,
-                        StringComparison.OrdinalIgnoreCase) <= 0)
+                if (string.Compare(game.Name, Games[i].Name, StringComparison.OrdinalIgnoreCase) <= 0)
                 {
                     Games.Insert(i, game);
                     return;
@@ -370,7 +369,7 @@ namespace Rift_App.ViewModels
 
         private void PopulateGames(List<GameModel> games)
         {
-            var sorted = games.OrderBy(g => g.Name).ToList();
+            var sorted = games.OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase).ToList();
             foreach (var game in sorted)
                 Games.Add(game);
 

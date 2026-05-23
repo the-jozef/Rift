@@ -98,10 +98,8 @@ namespace Rift_App.ViewModels
             {
                 var steamId = SessionManager.SteamId64;
 
-                // 1. Force LastPlayed re-read from VDF
                 await LastPlayedCacheService.RefreshAsync();
 
-                // 2. Invalidate account snapshot so profile re-fetches
                 try
                 {
                     var snap = System.IO.Path.Combine(
@@ -111,19 +109,13 @@ namespace Rift_App.ViewModels
                 }
                 catch { }
 
-                // 3. Wishlist count will re-fetch on next request
                 WishlistCountCache.Invalidate();
 
-                // 4. Show loading screen → navigates back to last location
                 ViewNavigator.Instance?.ShowLoading();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[SearchBar] Refresh error: {ex.Message}");
-            }
-            finally
-            {
-                // IsRefreshing stays true until loading screen
                 IsRefreshing = false;
             }
         }

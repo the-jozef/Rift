@@ -23,7 +23,11 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isFetching = false;
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private bool _isEmpty = false;
+
         private CancellationTokenSource? _syncCts;
+
+        private DateTime _lastVisibleRefresh = DateTime.MinValue;
+        private const int VisibleRefreshMinutes = 30;
 
         public string WishlistTitle =>
             string.IsNullOrEmpty(SessionManager.Username)
@@ -50,25 +54,20 @@ namespace Rift_App.ViewModels
 
                 if (string.IsNullOrEmpty(steamId))
                 {
-                    Debug.WriteLine("[Wishlist] No SteamId — abort");
                     IsEmpty = true;
                     return;
                 }
 
-                // 1. Get Id list
                 var refs = await ApiService.GetWishlistIdsAsync(steamId);
                 if (refs == null || refs.Count == 0)
                 {
-                    Debug.WriteLine("[Wishlist] No wishlist items");
                     IsEmpty = true;
                     return;
                 }
 
                 refs = refs.OrderByDescending(r => r.DateAdded).ToList();
                 TotalGames = refs.Count;
-                Debug.WriteLine($"[Wishlist] Total items: {refs.Count}");
 
-                // 2. Show cached games IMMEDIATELY
                 var toFetch = new List<WishlistItemRef>();
                 foreach (var r in refs)
                 {
@@ -84,12 +83,8 @@ namespace Rift_App.ViewModels
                     }
                 }
 
-                Debug.WriteLine($"[Wishlist] From cache: {Games.Count}, to fetch: {toFetch.Count}");
-
-                // 3. IsLoading = false, so UI can display and the user can see at least something while missing data is being fetched.
                 IsLoading = false;
 
-                // 4. Fetch
                 if (toFetch.Count > 0)
                 {
                     IsFetching = true;
@@ -98,13 +93,12 @@ namespace Rift_App.ViewModels
                 }
 
                 IsEmpty = Games.Count == 0;
-                Debug.WriteLine($"[Wishlist] Final count: {Games.Count}");
 
                 _syncCts?.Cancel();
                 _syncCts = new CancellationTokenSource();
-
-                // 5. Sync in background every 15 minutes to keep wishlist up-to-date
                 _ = SyncInBackgroundAsync(steamId, refs, _syncCts.Token);
+
+                _lastVisibleRefresh = DateTime.UtcNow;
             }
             catch (Exception ex)
             {
@@ -116,41 +110,29 @@ namespace Rift_App.ViewModels
         }
 
         [RelayCommand]
-        public async Task RefreshAsync()
+        public async Task RefreshIfStaleAsync()
         {
+            if ((DateTime.UtcNow - _lastVisibleRefresh).TotalMinutes < VisibleRefreshMinutes)
+                return;
+
             if (Games.Count == 0) return;
 
-            var steamId = SessionManager.SteamId64;
-            var allIds = Games.Select(g => new WishlistItemRef
-            {
-                AppId = g.AppId,
-                DateAdded = g.DateAddedUnix
-            }).ToList();
-
-            foreach (var game in Games)
-                WishlistGameCacheService.Delete(game.AppId);
-
-            IsFetching = true;
-            await FetchMissingAsync(allIds);
-            IsFetching = false;
+            await SyncOnceAsync();
+            _lastVisibleRefresh = DateTime.UtcNow;
         }
 
-        // ─── FETCH ────────────────────────────────────────────
+        // ─── FETCH MISSING ────────────────────────────────────────────────
 
         private async Task FetchMissingAsync(List<WishlistItemRef> toFetch)
         {
             var dateMap = toFetch.ToDictionary(r => r.AppId, r => r.DateAdded);
             const int chunkSize = 10;
-            int total = toFetch.Count;
+            var allFetched = new List<WishlistGameModel>();
 
             for (int i = 0; i < toFetch.Count; i += chunkSize)
             {
                 var chunk = toFetch.Skip(i).Take(chunkSize).ToList();
                 var appIds = chunk.Select(r => r.AppId).ToList();
-
-                int remaining = total - i;
-                Debug.WriteLine($"[Wishlist] Fetching {remaining} games...");
-                Debug.WriteLine($"[Wishlist] Fetching chunk: {string.Join(",", appIds)}");
 
                 List<WishlistGameModel> fetched;
                 try
@@ -160,25 +142,65 @@ namespace Rift_App.ViewModels
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[Wishlist] Batch error: {ex.Message}");
-                    fetched = new List<WishlistGameModel>();
+                    fetched = new();
                 }
 
-                Debug.WriteLine($"[Wishlist] Chunk returned: {fetched.Count} games");
+                var fetchedIds = new HashSet<int>(fetched.Select(g => g.AppId));
+                var missingIds = appIds.Where(id => !fetchedIds.Contains(id)).ToList();
+
+                foreach (var missingId in missingIds)
+                {
+                    Debug.WriteLine($"[Wishlist] Game {missingId} not found — removing");
+                    WishlistGameCacheService.Delete(missingId);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var existing = Games.FirstOrDefault(g => g.AppId == missingId);
+                        if (existing != null)
+                        {
+                            Games.Remove(existing);
+                            TotalGames = Games.Count;
+                        }
+                    });
+                }
 
                 foreach (var game in fetched)
                 {
                     if (dateMap.TryGetValue(game.AppId, out var dateAdded))
                         game.DateAddedUnix = dateAdded;
-
                     await WishlistGameCacheService.SaveAsync(game);
-                    InsertSorted(game);
+                    allFetched.Add(game);
                 }
+            }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var all = Games.Concat(allFetched).ToList();
+                RebuildSorted(all);
+            });
+        }
+
+        // ─── SYNC ONCE — jednorázový sync pre RefreshIfStale ──────────────
+        private async Task SyncOnceAsync()
+        {
+            try
+            {
+                var steamId = SessionManager.SteamId64;
+                var freshRefs = await ApiService.GetWishlistIdsAsync(steamId);
+                if (freshRefs == null) return;
+
+                await ApplySyncDiff(steamId, freshRefs);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Wishlist] SyncOnce error: {ex.Message}");
             }
         }
 
         // ─── BACKGROUND SYNC ──────────────────────────────────────────────
 
-        private async Task SyncInBackgroundAsync(string steamId, List<WishlistItemRef> currentRefs, CancellationToken token)
+        private async Task SyncInBackgroundAsync(
+            string steamId,
+            List<WishlistItemRef> currentRefs,
+            CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
@@ -187,59 +209,83 @@ namespace Rift_App.ViewModels
                     await Task.Delay(TimeSpan.FromMinutes(15), token);
                     if (token.IsCancellationRequested) break;
 
-                    Debug.WriteLine("[Wishlist] Sync started");
-
                     var freshRefs = await ApiService.GetWishlistIdsAsync(steamId);
                     if (freshRefs == null) continue;
 
-                    var currentIds = currentRefs.Select(r => r.AppId).ToHashSet();
-                    var freshIds = freshRefs.Select(r => r.AppId).ToHashSet();
-
-                    // Delete from wishlist
-                    foreach (var removed in currentIds.Except(freshIds))
-                    {
-                        WishlistGameCacheService.Delete(removed);
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            var g = Games.FirstOrDefault(x => x.AppId == removed);
-                            if (g != null) { Games.Remove(g); TotalGames = Games.Count; }
-                        });
-                        Debug.WriteLine($"[Wishlist] Sync removed: {removed}");
-                    }
-
-                    // New in wishlist
-                    var newRefs = freshRefs.Where(r => !currentIds.Contains(r.AppId)).ToList();
-                    if (newRefs.Any())
-                    {
-                        var dateMap = newRefs.ToDictionary(r => r.AppId, r => r.DateAdded);
-                        var fetched = await ApiService.GetWishlistBatchAsync(
-                            newRefs.Select(r => r.AppId).ToList());
-
-                        foreach (var game in fetched)
-                        {
-                            if (dateMap.TryGetValue(game.AppId, out var da))
-                                game.DateAddedUnix = da;
-
-                            await WishlistGameCacheService.SaveAsync(game);
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                InsertSorted(game);
-                                TotalGames = Games.Count;
-                                IsEmpty = false;
-                            });
-                            Debug.WriteLine($"[Wishlist] Sync added: {game.Name}");
-                        }
-                    }
-
-                    // Update currentRefs for next cycle
+                    await ApplySyncDiff(steamId, freshRefs);
                     currentRefs = freshRefs;
 
-                    Debug.WriteLine("[Wishlist] Sync done");
+                    Debug.WriteLine("[Wishlist] Background sync done");
                 }
+                catch (OperationCanceledException) { break; }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"[Wishlist] Sync error: {ex.Message}");
                 }
+            }
+        }
+
+        // ─── APPLY SYNC ──────────────────────────────────────────────────────────────────────
+
+        private async Task ApplySyncDiff(string steamId, List<WishlistItemRef> freshRefs)
+        {
+            var currentIds = Games.Select(g => g.AppId).ToHashSet();
+            var freshIds = freshRefs.Select(r => r.AppId).ToHashSet();
+
+            var removedIds = currentIds.Except(freshIds).ToList();
+            foreach (var removedId in removedIds)
+            {
+                WishlistGameCacheService.Delete(removedId);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var g = Games.FirstOrDefault(x => x.AppId == removedId);
+                    if (g != null)
+                    {
+                        Games.Remove(g);
+                        TotalGames = Games.Count;
+                        IsEmpty = Games.Count == 0;
+                    }
+                });
+                Debug.WriteLine($"[Wishlist] Sync removed: {removedId}");
+            }
+
+            var newRefs = freshRefs.Where(r => !currentIds.Contains(r.AppId)).ToList();
+            if (!newRefs.Any()) return;
+
+            var dateMap = newRefs.ToDictionary(r => r.AppId, r => r.DateAdded);
+            var appIds = newRefs.Select(r => r.AppId).ToList();
+
+            List<WishlistGameModel> fetched;
+            try
+            {
+                fetched = await ApiService.GetWishlistBatchAsync(appIds);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Wishlist] Sync fetch error: {ex.Message}");
+                return;
+            }
+
+            var fetchedIds = new HashSet<int>(fetched.Select(g => g.AppId));
+            foreach (var missingId in appIds.Where(id => !fetchedIds.Contains(id)))
+            {
+                Debug.WriteLine($"[Wishlist] Sync: game {missingId} not found — skipping");
+                WishlistGameCacheService.Delete(missingId);
+            }
+
+            foreach (var game in fetched)
+            {
+                if (dateMap.TryGetValue(game.AppId, out var da))
+                    game.DateAddedUnix = da;
+
+                await WishlistGameCacheService.SaveAsync(game);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InsertSorted(game);
+                    TotalGames = Games.Count;
+                    IsEmpty = false;
+                });
+                Debug.WriteLine($"[Wishlist] Sync added: {game.Name}");
             }
         }
 
@@ -256,7 +302,6 @@ namespace Rift_App.ViewModels
             WishlistGameCacheService.Delete(game.AppId);
             await ApiService.RemoveFromWishlistAsync(SessionManager.SteamId64, game.AppId);
 
-            // Open Steam wishlist page for this game 
             try
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -307,18 +352,55 @@ namespace Rift_App.ViewModels
             }
         }
 
-        // ─── INSERT SORTED ────────────────────────────────────────────────
+        // ─── SORTING ────────────────────────────────────────────────
+        private void RebuildSorted(IEnumerable<WishlistGameModel> games)
+        {
+            var sorted = games
+                .OrderBy(GetGroup)
+                .ThenBy(GetPrice)
+                .ToList();
+
+            Games.Clear();
+            foreach (var g in sorted)
+                Games.Add(g);
+
+            TotalGames = Games.Count;
+            IsEmpty = Games.Count == 0;
+        }
+
+        private static int GetGroup(WishlistGameModel g)
+        {
+            if (!g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 0;
+            if (g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 1;
+            if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2;
+            if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 3;
+            if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4;
+            return 5;
+        }
+
+        private static decimal GetPrice(WishlistGameModel g)
+        {
+            if (g.IsFree || g.Price is "Free" or "N/A") return 0;
+            var cleaned = g.Price
+                .Replace("$", "").Replace("€", "")
+                .Replace(" ", "")
+                .Replace(",", ".").Trim();
+            return decimal.TryParse(cleaned,
+                System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out var val) ? val : 0;
+        }
 
         private void InsertSorted(WishlistGameModel game)
         {
             int GetGroup(WishlistGameModel g)
             {
-                if (!g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 0; // released game on sale
-                if (g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 1; // released DLC on sale
-                if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2; // pre-order game
-                if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 3; // released game
-                if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4; // released DLC
-                return 5;                                                           // unreleased
+                if (!g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 0;
+                if (g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 1;
+                if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2;
+                if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 3;
+                if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4;
+                return 5;
             }
 
             decimal GetPrice(WishlistGameModel g)

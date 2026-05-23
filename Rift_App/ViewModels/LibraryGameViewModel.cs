@@ -53,6 +53,13 @@ namespace Rift_App.ViewModels
             SteamCallbackService.LibraryChanged += OnSteamLibraryChanged;
             SteamCallbackService.AchievementUnlocked += OnAchievementUnlocked;
         }
+        public void Dispose()
+        {
+            SteamCallbackService.LibraryChanged -= OnSteamLibraryChanged;
+            SteamCallbackService.AchievementUnlocked -= OnAchievementUnlocked;
+            _loadCts?.Cancel();
+            _loadCts?.Dispose();
+        }
 
         // ─── LOAD ─────────────────────────────────────────────────────────
         public async Task LoadAsync(GameModel game)

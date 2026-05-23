@@ -16,12 +16,13 @@ namespace Rift_App.Services
         private static readonly string DiskCacheFolder = AppPaths.ImageCache;
 
         private static readonly ConcurrentDictionary<string, BitmapImage?> _memCache = new();
-        private static readonly ConcurrentDictionary<string, SemaphoreSlim> _locks = new();
 
         private static readonly HttpClient _http = new HttpClient
         {
             Timeout = TimeSpan.FromSeconds(15)
         };
+
+        private static readonly ConcurrentDictionary<string, SemaphoreSlim> _locks = new();
 
         static ImageCacheService()
         {
@@ -36,7 +37,6 @@ namespace Rift_App.Services
 
             var semaphore = _locks.GetOrAdd(url, _ => new SemaphoreSlim(1, 1));
             await semaphore.WaitAsync();
-
             try
             {
                 if (_memCache.TryGetValue(url, out cached)) return cached;
@@ -61,6 +61,9 @@ namespace Rift_App.Services
             finally
             {
                 semaphore.Release();
+
+                if (_locks.TryRemove(url, out var removed))
+                    removed.Dispose();
             }
         }
 

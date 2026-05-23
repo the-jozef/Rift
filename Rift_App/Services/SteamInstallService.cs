@@ -141,7 +141,6 @@ namespace Rift_App.Services
                             }
                         }
                     }
-
                     Debug.WriteLine($"[SteamInstall] localconfig+sharedconfig apps: {result.Count}");
                     break;
                 }

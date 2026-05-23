@@ -13,5 +13,7 @@ namespace Rift_App.Models
         public string Username { get; set; } = string.Empty;
         public string AvatarUrl { get; set; } = string.Empty;
         public string ProfileUrl { get; set; } = string.Empty;
+        public string OnlineStatus { get; set; } = "Online";   
+        public string CurrentGame { get; set; } = string.Empty; 
     }
 }

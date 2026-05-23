@@ -80,7 +80,7 @@ namespace Rift_App.ViewModels
             StartDotsAnimation();
             PlayerInfo? playerInfo = null;
 
-            var minimumDelay = Task.Delay(TimeSpan.FromSeconds(5));
+            var minimumDelay = Task.Delay(TimeSpan.FromSeconds(3));
 
             try
             {
