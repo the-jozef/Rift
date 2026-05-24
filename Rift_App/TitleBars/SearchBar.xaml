@@ -168,10 +168,9 @@
                                                                     Text="Couldn't load image"
                                                                     Visibility="{Binding DisplayImageUrl, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}" />
 
-                                                                <Image
-                                                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                                                    Source="{Binding DisplayImageUrl}"
-                                                                    Stretch="UniformToFill" />
+                                                                <Image Source="{Binding Image.Bitmap}"
+                                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                                       Stretch="UniformToFill" />
                                                             </Grid>
                                                         </Border>
                                                     </Grid>

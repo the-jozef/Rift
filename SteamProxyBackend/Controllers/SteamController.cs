@@ -1069,7 +1069,7 @@ namespace SteamProxyBackend.Controllers
                         AppId = appId,
                         Name = name,
                         HeaderImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/header.jpg",
-                        FallbackImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/capsule_sm_120.jpg",
+                        FallbackImageUrl = $"https://cdn.akamai.steamstatic.com/steam/apps/{appId}/capsule_616x353.jpg",
                         Price = price,
                         OriginalPrice = origPrice,
                         DiscountPercent = discount,

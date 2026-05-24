@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Rift_App.ViewModels;
+using Newtonsoft.Json;
 
 namespace Rift_App.Models
 {
@@ -18,10 +20,12 @@ namespace Rift_App.Models
         public bool IsComingSoon { get; set; }
         public string DiscountDisplay => $"-{DiscountPercent}%";
 
-        public string DisplayImageUrl =>
-    !string.IsNullOrEmpty(HeaderImageUrl) ? HeaderImageUrl :
-    !string.IsNullOrEmpty(FallbackImageUrl) ? FallbackImageUrl :
-    string.Empty;
+        [JsonIgnore]
+        private SearchResultImageViewModel? _image;
+
+        [JsonIgnore]
+        public SearchResultImageViewModel Image =>
+            _image ??= new SearchResultImageViewModel(AppId);
 
         public string PriceDisplay =>
             IsFree ? "Free To Play" :
