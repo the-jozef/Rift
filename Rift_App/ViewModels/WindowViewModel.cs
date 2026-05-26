@@ -10,6 +10,7 @@ using Steamworks;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -158,6 +159,87 @@ namespace Rift_App.ViewModels
 
         [RelayCommand]
         public void ShowSteamAccount() => OpenSteamUrl($"steam://url/SteamIDPage/{SessionManager.SteamId64}");
+
+        [RelayCommand]
+        private void OpenDocumentSK()
+        {
+            try
+            {
+                var sourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Documents", "RIFT_SK.docx");
+
+                if (!File.Exists(sourcePath))
+                {
+                    MessageBox.Show("Document was not found.", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Copy to Temp as read-only — user cannot delete from original
+                var tempPath = Path.Combine(Path.GetTempPath(), "rift_manual_sk.docx");
+
+                // if exists, remove read-only attribute so it can be overwritten
+                if (File.Exists(tempPath))
+                    File.SetAttributes(tempPath, FileAttributes.Normal);
+
+                File.Copy(sourcePath, tempPath, overwrite: true);
+                File.SetAttributes(tempPath, FileAttributes.ReadOnly);
+
+                // Open in Word / default program
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = tempPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Document] Open error: {ex.Message}");
+                MessageBox.Show("Document could not be opened.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        [RelayCommand]
+        private void OpenDocumentEN()
+        {
+            try
+            {
+                //Path
+                var sourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Documents", "RIFT_EN.docx");
+
+                if (!File.Exists(sourcePath))
+                {
+                    MessageBox.Show("Document was not found.", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Copy to Temp as read-only — user cannot delete from original
+                var tempPath = Path.Combine(Path.GetTempPath(), "rift_manual_en.docx");
+
+                // if exists, remove read-only attribute so it can be overwritten
+                if (File.Exists(tempPath))
+                    File.SetAttributes(tempPath, FileAttributes.Normal);
+
+                File.Copy(sourcePath, tempPath, overwrite: true);
+
+                // Set read-only attribute
+                File.SetAttributes(tempPath, FileAttributes.ReadOnly);
+
+                // Open in Word / default program
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = tempPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Document] Open error: {ex.Message}");
+                MessageBox.Show("Document could not be opened.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         // ─── LAST LOCATION ────────────────────────────────────────────────
         public void NavigateToLastLocation(string location)

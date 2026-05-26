@@ -47,6 +47,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0" Margin="20,0,0,0">
@@ -128,6 +129,33 @@
 
                                         <Button Command="{Binding ShowStoreCommand}"
                                                 Content="View Store"
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </Grid>
+                            
+                            <Grid Grid.Column="2"
+                                  Margin="15,0,0,0">
+
+                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
+                                                         WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}"
+                                                   Text="About Rift" />
+
+                                    </materialDesign:PopupBox.ToggleContent>
+
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
+
+                                        <Button Command="{Binding OpenDocumentSKCommand}"
+                                                Content="SK version"
+                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+
+                                        <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+
+                                        <Button Command="{Binding OpenDocumentENCommand}"
+                                                Content="EN version"
                                                 Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>
