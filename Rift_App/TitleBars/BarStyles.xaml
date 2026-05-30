@@ -469,8 +469,6 @@
 
     <!--  SearchBar  -->
 
-
-
     <!--  Fix from here  -->
     <Style
         x:Key="Rift_Button3"
@@ -500,7 +498,7 @@
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0.5" />
 
-        <Setter Property="materialDesign:HintAssist.Hint" Value="Search the Store" />
+        <Setter Property="materialDesign:HintAssist.Hint" Value="{DynamicResource seachbar_search_hint}" />
         <Setter Property="materialDesign:HintAssist.IsFloating" Value="False" />
     </Style>
 

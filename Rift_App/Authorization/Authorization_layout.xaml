@@ -5,6 +5,7 @@
     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
 
     <!--  Account Selection  -->
+
     <!--  Image in Background  -->
     <Style x:Key="Rift_AccountSelection_Image_Background" TargetType="Image">
 
@@ -132,10 +133,10 @@
         </Setter>
     </Style>
 
-    <!--  TextBlock for  -->
+    <!--  TextBlock for Title  -->
     <Style x:Key="Rift_AccountSelection_Textblock_Text" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Who's playing?" />
+        <Setter Property="Text" Value="{DynamicResource account_selection_title}" />
         <Setter Property="FontSize" Value="27" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="White" />
@@ -157,8 +158,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="MinHeight" Value="0" />
-        <Setter Property="MinWidth" Value="0" />
         <Setter Property="Width" Value="100" />
         <Setter Property="Height" Value="140" />
         <Setter Property="Cursor" Value="Hand" />
@@ -226,7 +225,7 @@
                                         Margin="5,4,0,0"
                                         Command="{Binding DataContext.RemoveAccountCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
-                                        Content="Remove this Account?"
+                                        Content="{DynamicResource account_selection_remove}"
                                         Cursor="Hand"
                                         WindowChrome.IsHitTestVisibleInChrome="True">
 
@@ -284,7 +283,6 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <!--  Zväčšenie  -->
                                         <DoubleAnimation
                                             Storyboard.TargetName="AccountScale"
                                             Storyboard.TargetProperty="ScaleX"
@@ -296,19 +294,16 @@
                                             To="1.2"
                                             Duration="0:0:0.15" />
 
-                                        <!--  Text posuň dole aby nebol medzi  -->
                                         <ThicknessAnimation
                                             Storyboard.TargetName="AccountNameLabel"
                                             Storyboard.TargetProperty="Margin"
                                             To="0,25,0,0"
                                             Duration="0:0:0.15" />
-                                        <!--  "..." fade in  -->
                                         <DoubleAnimation
                                             Storyboard.TargetName="OptionsBox"
                                             Storyboard.TargetProperty="Opacity"
                                             To="1"
                                             Duration="0:0:0.15" />
-                                        <!--  Text fade in  -->
                                         <DoubleAnimation
                                             Storyboard.TargetName="AccountNameLabel"
                                             Storyboard.TargetProperty="Opacity"
@@ -362,8 +357,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="MinHeight" Value="0" />
-        <Setter Property="MinWidth" Value="0" />
         <Setter Property="Width" Value="100" />
         <Setter Property="Height" Value="100" />
         <Setter Property="Cursor" Value="Hand" />
@@ -399,7 +392,7 @@
                             FontSize="12"
                             Foreground="White"
                             Opacity="0"
-                            Text="Add Account" />
+                            Text="{DynamicResource account_selection_add}" />
                     </StackPanel>
 
                     <ControlTemplate.Triggers>
@@ -479,6 +472,7 @@
     </Style>
 
     <!--  Login  -->
+
     <!--  Ellipse animation  -->
     <Storyboard
         x:Key="PulseAnimation"
@@ -574,8 +568,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="MinHeight" Value="0" />
-        <Setter Property="MinWidth" Value="0" />
         <Setter Property="Margin" Value="0,0,-5,0" />
         <Setter Property="Height" Value="55" />
         <Setter Property="Width" Value="37" />
@@ -640,7 +632,7 @@
         <Setter Property="Foreground" Value="#9E9E9E" />
         <Setter Property="Margin" Value="1,-5,0,0" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="Text" Value="Profile" />
+        <Setter Property="Text" Value="{DynamicResource login_title}" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
     </Style>
 
@@ -654,7 +646,7 @@
     <!--  Textblock for Title_sign in  -->
     <Style x:Key="Rift_Login_TextBlock_Layout" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="SIGN IN WITH ACCOUNT NAME" />
+        <Setter Property="Text" Value="{DynamicResource login_signin_title}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Foreground" Value="#CD66FF" />
         <Setter Property="FontSize" Value="13" />
@@ -697,7 +689,7 @@
     <!--  Textblock for Title_password  -->
     <Style x:Key="Rift_Login_TextBlock_Layout_Password" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="PASSWORD" />
+        <Setter Property="Text" Value="{DynamicResource auth_password}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Margin" Value="0,15,0,0" />
         <Setter Property="Foreground" Value="#AAAAAA" />
@@ -744,7 +736,7 @@
     <!--  Button for Sign in  -->
     <Style x:Key="Rift_Login_Button_Layout_SignIn" TargetType="Button">
 
-        <Setter Property="Content" Value="Sign in" />
+        <Setter Property="Content" Value="{DynamicResource login_signin}" />
         <Setter Property="Width" Value="190" />
         <Setter Property="Height" Value="35" />
         <Setter Property="Padding" Value="0" />
@@ -822,7 +814,7 @@
     <!--  Textblock for OR  -->
     <Style x:Key="Rift_Login_TextBlock_or" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="or" />
+        <Setter Property="Text" Value="{DynamicResource login_or}" />
         <Setter Property="Height" Value="16" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,1,0,0" />
@@ -865,7 +857,7 @@
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
                                 FontSize="13"
-                                Text="Sign in with Steam" />
+                                Text="{DynamicResource login_signin_steam}" />
 
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </StackPanel>
@@ -954,7 +946,7 @@
     <!--  TextBlock for Don't have RIFT account  -->
     <Style x:Key="Rift_Login_TextBlock_CreateAccount" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Don't have a RIFT account?" />
+        <Setter Property="Text" Value="{DynamicResource login_dont_have_account}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Foreground" Value="#B0B0B0" />
         <Setter Property="FontSize" Value="12" />
@@ -965,11 +957,10 @@
     <!--  Button for Create new RIFT account  -->
     <Style x:Key="Rift_Login_Button_CreateAccount" TargetType="Button">
 
-        <Setter Property="Content" Value="Create a Free Account" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#B0B0B0" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="5,0,0,1.4" />
+        <Setter Property="Margin" Value="6,0,0,1.4" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
@@ -981,7 +972,7 @@
                         x:Name="text"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Create a Free Account"
+                        Text="{DynamicResource login_create_account}"
                         TextDecorations="Underline" />
 
                     <ControlTemplate.Triggers>
@@ -1044,6 +1035,7 @@
     </Style>
 
     <!--  Steam Connection  -->
+
     <!--  Animations  -->
     <Storyboard
         x:Key="LoadingAnimation"
@@ -1165,6 +1157,7 @@
         <Setter Property="Orientation" Value="Vertical" />
         <Setter Property="Margin" Value="8,13,0,0" />
     </Style>
+
     <!--  TextBlock in Login_Title  -->
     <Style x:Key="Rift_SteamConnection_TextBlock_Title" TargetType="TextBlock">
 
@@ -1182,7 +1175,7 @@
     <!--  Textblock Profile  -->
     <Style x:Key="Rift_SteamConnection_TextBlock_Profile" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="New Account" />
+        <Setter Property="Text" Value="{DynamicResource auth_newaccount}" />
         <Setter Property="Foreground" Value="#9E9E9E" />
         <Setter Property="Margin" Value="1,-5,0,0" />
         <Setter Property="FontSize" Value="16" />
@@ -1192,7 +1185,7 @@
     <!--  Textblock for Connect with Steam  -->
     <Style x:Key="Rift_SteamConnection_Textblock_Connection" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Connect With Steam" />
+        <Setter Property="Text" Value="{DynamicResource steam_connect_title}" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="23.5" />
         <Setter Property="FontWeight" Value="SemiBold" />
@@ -1203,7 +1196,7 @@
     <!--  Textblock for Link Account  -->
     <Style x:Key="Rift_SteamConnection_Textblock_AccountLink" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Link your Steam account to get started" />
+        <Setter Property="Text" Value="{DynamicResource steam_connect_description}" />
         <Setter Property="Margin" Value="3,0,0,0" />
         <Setter Property="Foreground" Value="#9E9E9E" />
         <Setter Property="FontSize" Value="13.2" />
@@ -1246,7 +1239,7 @@
                                 VerticalAlignment="Center"
                                 FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                 FontSize="14.8"
-                                Text="Sign in with Steam" />
+                                Text="{DynamicResource steam_connect_signup}" />
 
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </StackPanel>
@@ -1433,6 +1426,7 @@
     </Style>
 
     <!--  REGISTER  -->
+
     <!--  Main Border  -->
     <Style x:Key="Rift_Register_Main_Border" TargetType="Border">
 
@@ -1507,6 +1501,7 @@
         <Setter Property="Orientation" Value="Vertical" />
         <Setter Property="Margin" Value="8,13,0,0" />
     </Style>
+
     <!--  TextBlock in Register_Title  -->
     <Style x:Key="Rift_Register_TextBlock_Title" TargetType="TextBlock">
 
@@ -1527,17 +1522,16 @@
         <Setter Property="Foreground" Value="#9E9E9E" />
         <Setter Property="Margin" Value="1,-5,0,0" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="Text" Value="New Account" />
+        <Setter Property="Text" Value="{DynamicResource auth_newaccount}" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
     </Style>
 
     <!--  Textblock for Create your Account  -->
     <Style x:Key="Rift_Register_Textblock_Create" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Create your Account" />
+        <Setter Property="Text" Value="{DynamicResource register_title}" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="23.5" />
-
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontFamily" Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
@@ -1553,7 +1547,7 @@
     <!--  Textblock for Title_Account_Name  -->
     <Style x:Key="Rift_Register_TextBlock_Layout" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Account name" />
+        <Setter Property="Text" Value="{DynamicResource register_username}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Foreground" Value="#CD66FF" />
         <Setter Property="FontSize" Value="14" />
@@ -1596,7 +1590,7 @@
     <!--  Textblock for Title_password  -->
     <Style x:Key="Rift_Register_TextBlock_Layout_Password" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="PASSWORD" />
+        <Setter Property="Text" Value="{DynamicResource auth_password}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="Margin" Value="0,16,0,0" />
         <Setter Property="Foreground" Value="#AAAAAA" />
@@ -1639,6 +1633,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <!--
        Textblock for Title_email
     <Style x:Key="Rift_Register_TextBlock_Layout_Email"
@@ -1725,7 +1720,6 @@
     <!--  TextBlock for ErrorMessage  -->
     <Style x:Key="Rift_Register_TextBlock_Layout_ErrorMessage" TargetType="TextBlock">
 
-
         <Setter Property="Foreground" Value="#FF6B6B" />
         <Setter Property="FontSize" Value="11" />
         <Setter Property="Margin" Value="2,6,0,0" />
@@ -1736,7 +1730,7 @@
     <!--  Button for Sign up  -->
     <Style x:Key="Rift_Register_Button_Layout_SignUp" TargetType="Button">
 
-        <Setter Property="Content" Value="Create Account" />
+        <Setter Property="Content" Value="{DynamicResource register_signup}" />
         <Setter Property="Width" Value="190" />
         <Setter Property="Height" Value="35" />
         <Setter Property="Padding" Value="0" />
@@ -1837,7 +1831,7 @@
     <!--  TextBlock Join_Rift  -->
     <Style x:Key="Rift_Register_TextBlock_Join_Rift" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Join RIFT" />
+        <Setter Property="Text" Value="{DynamicResource register_join_rift}" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="25" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -1848,7 +1842,7 @@
     <!--  TextBlock Experience_Everything  -->
     <Style x:Key="Rift_Register_TextBlock_Experience_Everything" TargetType="TextBlock">
 
-        <Setter Property="Text" Value="Experience Everything you need" />
+        <Setter Property="Text" Value="{DynamicResource register_experience}" />
         <Setter Property="Foreground" Value="#B0B0B0" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans" />

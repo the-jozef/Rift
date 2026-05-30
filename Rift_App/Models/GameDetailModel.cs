@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Rift_App.Services;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Newtonsoft.Json;
+using Rift_App.Languages;
 
 namespace Rift_App.Models
 {
@@ -23,7 +25,7 @@ namespace Rift_App.Models
         {
             get
             {
-                if (!LastPlayed.HasValue) return "Never";
+                if (!LastPlayed.HasValue) return L.Get("date_never");
 
                 var now = DateTime.UtcNow;
                 var played = LastPlayed.Value.ToUniversalTime();
@@ -31,13 +33,32 @@ namespace Rift_App.Models
 
                 return diff switch
                 {
-                    0 => "Today",
-                    1 => "Yesterday",
-                    _ when played.Year == now.Year => played.ToString("MMM d", CultureInfo.InvariantCulture),
-                    _ => played.ToString("MMM d, yyyy", CultureInfo.InvariantCulture)
+                    0 => L.Get("date_today"),
+                    1 => L.Get("date_yesterday"),
+                    _ when played.Year == now.Year =>
+                        CapitalizeFirstLetter(
+                            played.ToString("d. MMMM", LanguageService.Current)),
+                    _ =>
+                        CapitalizeFirstLetter(
+                            played.ToString("d. MMMM yyyy", LanguageService.Current))
                 };
             }
         }
+
+        private static string CapitalizeFirstLetter(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return s;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (char.IsLetter(s[i]))
+                    return s.Substring(0, i)
+                         + char.ToUpper(s[i])
+                         + s.Substring(i + 1);
+            }
+            return s;
+        }
+
         public int AchievementsPercent =>
             AchievementsTotal > 0
                 ? (int)((double)AchievementsUnlocked / AchievementsTotal * 100)

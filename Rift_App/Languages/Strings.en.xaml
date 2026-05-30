@@ -1,0 +1,222 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ─── NAVIGATION ─────────────────────────────────────────────────── -->
+    <sys:String x:Key="nav_view">View</sys:String>
+    <sys:String x:Key="nav_store">Store</sys:String>
+    <sys:String x:Key="nav_library">Library</sys:String>
+    <sys:String x:Key="nav_wishlist">Wishlist</sys:String>
+    <sys:String x:Key="nav_profile">Profile</sys:String>
+    <sys:String x:Key="nav_friends">Friends</sys:String>
+    <sys:String x:Key="nav_steam_store">Steam Store</sys:String>
+    <sys:String x:Key="nav_steam_profile">Steam Profile</sys:String>
+    <sys:String x:Key="nav_steam_friends">Steam Friends</sys:String>
+    <sys:String x:Key="nav_featured">Featured</sys:String>
+    <sys:String x:Key="nav_home">Home</sys:String>
+    <sys:String x:Key="nav_games">Games</sys:String>
+    <sys:String x:Key="nav_change_account">Change Account</sys:String>
+    <sys:String x:Key="nav_view_my_profile">My Profile</sys:String>
+    <sys:String x:Key="nav_view_my_wishlist">My Wishlist</sys:String>
+    <sys:String x:Key="nav_view_profile_on_steam">My Steam Profile</sys:String>
+
+    <!-- ─── BUTTONS ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="btn_view_notifications">View Notifications</sys:String>
+
+    <!-- ─── MenuBar ──────────────────────────────────────────────────────── -->
+    <sys:String x:Key="menubar_about">About Rift</sys:String>
+    <sys:String x:Key="menubar_aboutskversion">SK version</sys:String>
+    <sys:String x:Key="menubar_aboutenversion">EN version</sys:String>
+    <sys:String x:Key="menubar_sklanguage">SK language</sys:String>
+    <sys:String x:Key="menubar_enlanguage">EN language</sys:String>
+    <sys:String x:Key="menubar_changeaccount">Change account</sys:String>
+    <sys:String x:Key="menubar_more">More</sys:String>
+    <sys:String x:Key="menubar_store">STORE</sys:String>
+    <sys:String x:Key="menubar_library">LIBRARY</sys:String>
+
+    <!-- ─── SeachBar ──────────────────────────────────────────────────────── -->
+    <sys:String x:Key="seachbar_refresh">Refresh</sys:String>
+    <sys:String x:Key="seachbar_search_hint">Search in Store</sys:String>
+    <sys:String x:Key="seachbar_searching">Searching...</sys:String>
+    <sys:String x:Key="search_image_error">Image failed to load</sys:String>
+
+    <!-- ─── STORE ────────────────────────────────────────────────────────── -->
+    <sys:String x:Key="store_featured_recommended">Popular &amp; Recommended</sys:String>
+    <sys:String x:Key="store_discounts_free">Discounts &amp; Free Offers</sys:String>
+    <sys:String x:Key="store_recommended_title">Recommended Based on Your Games</sys:String>
+    <sys:String x:Key="store_more_title">More Games</sys:String>
+    <sys:String x:Key="store_explore">Explore:</sys:String>
+    <sys:String x:Key="store_show_more">Show More</sys:String>
+
+    <!-- ─── ACCOUNT ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="account_recent_activity">Recent Activity</sys:String>
+    <sys:String x:Key="account_image_error">Image Error</sys:String>
+    <sys:String x:Key="account_on_record">{}{0} on record</sys:String>
+    <sys:String x:Key="account_achievement_progress">Achievement Progress</sys:String>
+    <sys:String x:Key="account_level">Level</sys:String>
+    <sys:String x:Key="account_friends_private">⚠ Friends list is private</sys:String>
+    <sys:String x:Key="account_friends_private_hint">Set your friends list to Public in Steam → Profile → Edit Profile → Privacy Settings.</sys:String>
+
+    <!-- ─── AUTH ────────────────────────────────────── -->
+    <sys:String x:Key="auth_username">Username</sys:String>
+    <sys:String x:Key="auth_password">Password</sys:String>
+    <sys:String x:Key="auth_newaccount">New Account</sys:String>
+
+    <!-- ─── AUTH — ACCOUNT SELECTION ────────────────────────────────────── -->
+    <sys:String x:Key="account_selection_title">Who's playing?</sys:String>
+    <sys:String x:Key="account_selection_add">Add Account</sys:String>
+    <sys:String x:Key="account_selection_remove">Remove Account</sys:String>
+
+    <!-- ─── AUTH — LOGIN ─────────────────────────────────────────────────── -->
+    <sys:String x:Key="login_title">Profile</sys:String>
+    <sys:String x:Key="login_signin_title">Sign in with Account Name</sys:String>
+    <sys:String x:Key="login_signin">Sign in</sys:String>
+    <sys:String x:Key="login_or">or</sys:String>
+    <sys:String x:Key="login_signin_steam">Sign in with Steam</sys:String>
+    <sys:String x:Key="login_dont_have_account">Don't have a RIFT account?</sys:String>
+    <sys:String x:Key="login_create_account">Create an Account</sys:String>
+
+    <!-- ─── AUTH — REGISTER ──────────────────────────────────────────────── -->
+    <sys:String x:Key="register_title">Create your Account</sys:String>
+    <sys:String x:Key="register_username">Account Username</sys:String>
+    <sys:String x:Key="register_signup">Create Account</sys:String>
+    <sys:String x:Key="register_join_rift">Join Rift</sys:String>
+    <sys:String x:Key="register_experience">Experience Everything you need</sys:String>
+    <sys:String x:Key="register_secure">Secure &amp; Protected</sys:String>
+    <sys:String x:Key="register_secure_desc">advanced encryption</sys:String>
+    <sys:String x:Key="register_library">Your Entire Steam library</sys:String>
+    <sys:String x:Key="register_library_desc">games in one place</sys:String>
+    <sys:String x:Key="register_design">Clean and Modern design</sys:String>
+    <sys:String x:Key="register_design_desc">simple and modern</sys:String>
+    
+    <!-- ─── AUTH — STEAM CONNECTION ─────────────────────────────────────── -->
+    <sys:String x:Key="steam_connect_title">Connect with Steam</sys:String>
+    <sys:String x:Key="steam_connect_description">Connect your Steam account to get started</sys:String>
+    <sys:String x:Key="steam_connect_signup">Link Steam account</sys:String>
+
+    <!-- ─── ERROR MESSAGES ───────────────────────────────────────────────── -->
+    <sys:String x:Key="err_username_empty">Please enter your username.</sys:String>
+    <sys:String x:Key="err_password_empty">Please enter your password.</sys:String>
+    <sys:String x:Key="err_username_password_wrong">Incorrect username or password.</sys:String>
+    <sys:String x:Key="err_server_connection">Failed to connect to the server. Please check your connection.</sys:String>
+    <sys:String x:Key="err_steam_cancelled">Steam login was cancelled. Please try again.</sys:String>
+    <sys:String x:Key="err_steam_already_registered">This Steam account already has a Rift account. Please log in.</sys:String>
+    <sys:String x:Key="err_username_too_short">Username must be at least 3 characters long.</sys:String>
+    <sys:String x:Key="err_username_too_long">Username cannot be longer than 20 characters.</sys:String>
+    <sys:String x:Key="err_username_spaces">Username cannot contain spaces.</sys:String>
+    <sys:String x:Key="err_password_too_short">Password must be at least 6 characters long.</sys:String>
+    <sys:String x:Key="err_password_too_long">Password cannot be longer than 40 characters.</sys:String>
+
+    <!-- ─── LIBRARY ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="library_all">All</sys:String>
+
+    <!-- ─── LIBRARY GamePage ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="library_page_select_game">Select a game from the list</sys:String>
+    <sys:String x:Key="library_page_last_played">LAST PLAYED</sys:String>
+    <sys:String x:Key="library_page_playtime">PLAY TIME</sys:String>
+    <sys:String x:Key="library_page_achievements">ACHIEVEMENTS</sys:String>
+    <sys:String x:Key="library_page_store_page">Store Page</sys:String>
+    <sys:String x:Key="library_page_no_achievements">This game has no achievements.</sys:String>
+    <sys:String x:Key="library_page_locked_achievements">Locked Achievements</sys:String>
+    <sys:String x:Key="library_page_all_achievements">View All Achievements</sys:String>
+    <sys:String x:Key="library_play">PLAY</sys:String>
+    <sys:String x:Key="library_install">INSTALL</sys:String>
+    <sys:String x:Key="library_update">UPDATE</sys:String>
+
+    <!-- ─── LOADING ────────────────────────────────────────────────────── -->
+    <sys:String x:Key="loading_text">Loading</sys:String>
+
+    <!-- ─── WISHLIST ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="wishlist_title_user">{0}'s Wishlist</sys:String>
+    <sys:String x:Key="wishlist_items">items</sys:String>
+    <sys:String x:Key="wishlist_overall_reviews">OVERALL REVIEWS:</sys:String>
+    <sys:String x:Key="wishlist_release_date">RELEASE DATE:</sys:String>
+    <sys:String x:Key="wishlist_remove">remove</sys:String>
+    <sys:String x:Key="wishlist_pre_order">Pre-Order</sys:String>
+    <sys:String x:Key="wishlist_add_to_cart">Add to Cart</sys:String>
+
+    <!-- ─── DATES ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="date_today">Today</sys:String>
+    <sys:String x:Key="date_yesterday">Yesterday</sys:String>
+    <sys:String x:Key="date_never">Never</sys:String>
+    <sys:String x:Key="date_last_played_today">last played today</sys:String>
+    <sys:String x:Key="date_last_played_yesterday">last played yesterday</sys:String>
+    <sys:String x:Key="date_last_played_on">last played on {0}</sys:String>
+
+    <!-- ─── TOOLTIP ──────────────────────────────────────────────────────── -->
+    <sys:String x:Key="tooltip_refresh">Refresh library, wishlist and profile</sys:String>
+
+
+
+
+
+
+
+
+    <sys:String x:Key="time_just_now">Just now</sys:String>
+    <sys:String x:Key="time_min_ago">{0} min ago</sys:String>
+    <sys:String x:Key="time_days_ago">{0} days ago</sys:String>
+    <sys:String x:Key="status_online">Online</sys:String>
+    <sys:String x:Key="status_ingame">In-Game</sys:String>
+    <sys:String x:Key="status_away">Away</sys:String>
+    <sys:String x:Key="status_busy">Busy</sys:String>
+    <sys:String x:Key="status_offline">Offline</sys:String>
+    <sys:String x:Key="status_snooze">Snooze</sys:String>
+    <sys:String x:Key="status_trade">Looking to Trade</sys:String>
+    <sys:String x:Key="status_play">Looking to Play</sys:String>
+    <sys:String x:Key="playtime_on_record">on record</sys:String>
+    <sys:String x:Key="store_by_tag_label">Because You Play {0}</sys:String>
+
+
+
+
+    <sys:String x:Key="date_format_short">M/d/yyyy</sys:String>
+    <sys:String x:Key="wishlist_added_on">Added on {0}</sys:String>
+    <sys:String x:Key="account_one_hour_2w">1 hour past 2 weeks</sys:String>
+    <sys:String x:Key="account_hours_2w">{0} hours past 2 weeks</sys:String>
+
+
+    <sys:String x:Key="review_very_positive">Very Positive</sys:String>
+    <sys:String x:Key="review_positive">Positive</sys:String>
+    <sys:String x:Key="review_mostly_positive">Mostly Positive</sys:String>
+    <sys:String x:Key="review_mixed">Mixed</sys:String>
+    <sys:String x:Key="review_mostly_negative">Mostly Negative</sys:String>
+    <sys:String x:Key="review_negative">Negative</sys:String>
+    <sys:String x:Key="review_very_negative">Very Negative</sys:String>
+    <sys:String x:Key="review_no_reviews">No Reviews</sys:String>
+
+    <sys:String x:Key="store_free_to_play">Free To Play</sys:String>
+
+    <sys:String x:Key="store_available_now">Available Now</sys:String>
+    <sys:String x:Key="store_recommended">Recommended</sys:String>
+
+
+
+    <!-- ─── PLAYTIME ───────────────────────────────────────────────────── -->
+    <sys:String x:Key="playtime_never">Never played</sys:String>
+    <sys:String x:Key="playtime_mins">mins</sys:String>
+    <sys:String x:Key="playtime_hrs">hrs</sys:String>
+
+    <!-- ─── MESSAGEBOXES — STEAM STARTUP ────────────────────────────────── -->
+    <sys:String x:Key="msg_steam_not_installed">Steam is not installed on this computer.&#x0a;&#x0a;Rift requires Steam to be installed to work.&#x0a;Please install Steam from https://store.steampowered.com/about/</sys:String>
+    <sys:String x:Key="msg_steam_not_installed_title">Steam Not Found</sys:String>
+    <sys:String x:Key="msg_welcome">Welcome to Rift!&#x0a;&#x0a;Rift requires Steam to collect your game library and achievements.&#x0a;&#x0a;Steam will be launched automatically when needed.&#x0a;Click OK to continue.</sys:String>
+    <sys:String x:Key="msg_welcome_title">Steam Required</sys:String>
+    <sys:String x:Key="msg_steam_not_running">Steam is not running.&#x0a;&#x0a;Rift will launch Steam automatically.</sys:String>
+    <sys:String x:Key="msg_steam_launching_title">Launching Steam</sys:String>
+    <sys:String x:Key="msg_steam_launch_failed">Could not launch Steam.&#x0a;&#x0a;Please start Steam manually and try again.</sys:String>
+    <sys:String x:Key="msg_steam_launch_failed_title">Steam Launch Failed</sys:String>
+    <sys:String x:Key="msg_steam_connect_failed">Could not connect to Steam after several attempts.&#x0a;&#x0a;Possible causes:&#x0a;• Steam is still updating — wait for it to finish&#x0a;• You are not logged into Steam&#x0a;• steam_appid.txt is missing from the app folder&#x0a;&#x0a;Please resolve the issue and restart Rift.</sys:String>
+    <sys:String x:Key="msg_steam_connect_failed_title">Steam Connection Failed</sys:String>
+
+    <!-- ─── MESSAGEBOXES — GAME ACTIONS ─────────────────────────────────── -->
+    <sys:String x:Key="msg_update_game">Do you want to update {0}?</sys:String>
+    <sys:String x:Key="msg_update_title">Update Available</sys:String>
+    <sys:String x:Key="msg_install_game">Do you want to install {0}?</sys:String>
+    <sys:String x:Key="msg_install_title">Install Game</sys:String>
+    <sys:String x:Key="msg_steam_not_found">Steam is not installed on this computer.</sys:String>
+    <sys:String x:Key="msg_steam_not_found_title">Steam Not Found</sys:String>
+
+  
+
+</ResourceDictionary>

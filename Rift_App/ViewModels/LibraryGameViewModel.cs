@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using Rift_App.Languages;
 
 namespace Rift_App.ViewModels
 {
@@ -57,16 +58,22 @@ namespace Rift_App.ViewModels
         {
             SteamCallbackService.LibraryChanged -= OnSteamLibraryChanged;
             SteamCallbackService.AchievementUnlocked -= OnAchievementUnlocked;
-            _loadCts?.Cancel();
-            _loadCts?.Dispose();
+
+            var cts = _loadCts;
+            _loadCts = null;        
+            cts?.Cancel();
+            cts?.Dispose();
         }
 
         // ─── LOAD ─────────────────────────────────────────────────────────
         public async Task LoadAsync(GameModel game)
         {
             // Cancel any in-progress load for the previous game
-            _loadCts?.Cancel();
+            var oldCts = _loadCts;
             _loadCts = new CancellationTokenSource();
+            try { oldCts?.Cancel(); } catch (ObjectDisposedException) { }
+            oldCts?.Dispose();
+
             var token = _loadCts.Token;
 
             HasGame = true;
@@ -320,9 +327,12 @@ namespace Rift_App.ViewModels
                 .Take(3)
                 .Select(g => new AchievementDateGroup
                 {
-                    DateLabel = g.Key == DateTime.UtcNow.Date ? "Today"
-                              : g.Key == DateTime.UtcNow.Date.AddDays(-1) ? "Yesterday"
-                              : g.Key.ToString("MMMM d", CultureInfo.InvariantCulture),
+                    DateLabel = g.Key == DateTime.UtcNow.Date
+                ? L.Get("date_today")
+          : g.Key == DateTime.UtcNow.Date.AddDays(-1)
+                ? L.Get("date_yesterday")
+          : CapitalizeFirstLetter(
+                g.Key.ToString("d. MMMM", LanguageService.Current)),
                     Items = g.ToList()
                 });
 
@@ -389,6 +399,18 @@ namespace Rift_App.ViewModels
                 return bmp;
             }
             catch { return null; }
+        }
+        private static string CapitalizeFirstLetter(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return s;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (char.IsLetter(s[i]))
+                    return s.Substring(0, i)
+                         + char.ToUpper(s[i])
+                         + s.Substring(i + 1);
+            }
+            return s;
         }
     }
 }

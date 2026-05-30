@@ -11,10 +11,10 @@
     xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
     xmlns:vm="clr-namespace:Rift_App.ViewModels"
     Title="MainWindow"
-    Icon="/Image/Rift_icon.ico"
     MinWidth="1110"
     MinHeight="550"
     AllowsTransparency="False"
+    Icon="/Image/Rift_icon.ico"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 

@@ -125,9 +125,9 @@
                                         </Border>
                                         <StackPanel Margin="10,0,0,0" Orientation="Vertical">
 
-                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="Secure &amp; Protected" />
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="{DynamicResource register_secure}" />
 
-                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="Advanced encryption" />
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="{DynamicResource register_secure_desc}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -143,9 +143,9 @@
 
                                         <StackPanel Margin="10,0,0,0" Orientation="Vertical">
 
-                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="Your entire Steam library" />
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="{DynamicResource register_library}" />
 
-                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="Games in one place" />
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="{DynamicResource register_library_desc}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -161,9 +161,9 @@
 
                                         <StackPanel Margin="10,0,0,0" Orientation="Vertical">
 
-                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="Clean and modern design" />
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Main_Information}" Text="{DynamicResource register_design}" />
 
-                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="Simple, modern and minimal" />
+                                            <TextBlock Style="{StaticResource Rift_Register_TextBlock_Second_Information}" Text="{DynamicResource register_design_desc}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>

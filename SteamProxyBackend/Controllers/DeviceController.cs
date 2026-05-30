@@ -24,8 +24,7 @@ namespace SteamProxyBackend.Controllers
                 if (string.IsNullOrWhiteSpace(request.DeviceToken))
                     return BadRequest(new { Success = false, Message = "Device token is required." });
 
-                var device = await _db.Devices
-                    .FirstOrDefaultAsync(d => d.DeviceToken == request.DeviceToken);
+                var device = await _db.Devices.FirstOrDefaultAsync(d => d.DeviceToken == request.DeviceToken);
 
                 if (device == null)
                 {

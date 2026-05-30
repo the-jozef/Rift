@@ -8,14 +8,26 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
+using Rift_App.Languages;
 
 namespace Rift_App.ViewModels
 {
     public partial class LoadingViewModel : ObservableObject
     {
-        [ObservableProperty] private string _loadingText = "Loading";
+        [ObservableProperty] private string _loadingText = L.Get("loading_text");
 
         private CancellationTokenSource? _dotsCts;
+        public LoadingViewModel()
+        {
+            LanguageService.LanguageChanged += RefreshTexts;
+        }
+
+        private void RefreshTexts()
+        {
+            //Restart animation with new language
+            StopDotsAnimation();
+            StartDotsAnimation();
+        }
 
         private void StartDotsAnimation()
         {
@@ -25,10 +37,17 @@ namespace Rift_App.ViewModels
 
             Task.Run(async () =>
             {
-                string[] frames = { "Loading", "Loading .", "Loading ..", "Loading ..." };
                 int i = 0;
                 while (!token.IsCancellationRequested)
                 {
+                    string base_ = L.Get("loading_text");
+                    string[] frames =
+                    {
+                    base_,
+                    base_ + " .",
+                    base_ + " ..",
+                    base_ + " ..."
+                };
                     var frame = frames[i % frames.Length];
                     Application.Current.Dispatcher.Invoke(() => LoadingText = frame);
                     i++;
@@ -36,7 +55,7 @@ namespace Rift_App.ViewModels
                 }
             });
         }
-
+    
         private void StopDotsAnimation() => _dotsCts?.Cancel();
 
         // ─── MODE 1: App startup ──────────────────────────────────────────

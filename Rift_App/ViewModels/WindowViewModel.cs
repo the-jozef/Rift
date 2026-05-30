@@ -43,6 +43,10 @@ namespace Rift_App.ViewModels
         // ─── STEAM TIMER ──────────────────────────────────────────────────
         private readonly DispatcherTimer _steamTimer;
 
+        // ─── LANGUAGE ──────────────────────────────────────────────────
+        [ObservableProperty]
+        private string _currentLanguage = LanguageService.CurrentLanguage;
+
         // ─── CONSTRUCTOR ──────────────────────────────────────────────────
         public WindowViewModel()
         {
@@ -50,6 +54,11 @@ namespace Rift_App.ViewModels
 
             // Subscribe so name/avatar update on every account switch
             SessionManager.OnSessionReady += OnSessionReady;
+
+            LanguageService.LanguageChanged += () =>
+            {
+                CurrentLanguage = LanguageService.CurrentLanguage;
+            };
 
             InitializeSteam();
             ShowStore();
@@ -159,6 +168,19 @@ namespace Rift_App.ViewModels
 
         [RelayCommand]
         public void ShowSteamAccount() => OpenSteamUrl($"steam://url/SteamIDPage/{SessionManager.SteamId64}");
+
+        [RelayCommand]
+        private async Task SwitchLanguageAsync(string lang)
+        {
+            //If we are already in this language → ignore command, do nothing
+            if (LanguageService.CurrentLanguage == lang) return;
+
+            // Switch language and save
+            LanguageService.Switch(lang);
+
+            //Show loading — it will reload all data in the new language
+            ViewNavigator.Instance?.ShowLoading();
+        }
 
         [RelayCommand]
         private void OpenDocumentSK()

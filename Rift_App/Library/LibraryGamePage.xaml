@@ -17,7 +17,7 @@
             VerticalAlignment="Center"
             FontSize="18"
             Foreground="#999CA3"
-            Text="Select a game from the list"
+            Text="{DynamicResource library_page_select_game}"
             Visibility="{Binding HasGame, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
 
         <ScrollViewer Style="{StaticResource SlimScrollViewerStyle}" Visibility="{Binding HasGame, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -196,19 +196,18 @@
                                                     Foreground="White">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
-                                                            <Setter Property="Text" Value="PLAY" />
+                                                            <Setter Property="Text" Value="{DynamicResource library_play}" />
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding NeedsUpdate}" Value="True">
-                                                                    <Setter Property="Text" Value="UPDATE" />
+                                                                    <Setter Property="Text" Value="{DynamicResource library_update}" />
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding IsInstalled}" Value="False">
-                                                                    <Setter Property="Text" Value="INSTALL" />
+                                                                    <Setter Property="Text" Value="{DynamicResource library_install}" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-
                                             </StackPanel>
                                         </Button>
 
@@ -220,11 +219,12 @@
                                                     FontFamily="Arial"
                                                     FontSize="14"
                                                     Foreground="#B6BBBF"
-                                                    Text="LAST PLAYED" />
+                                                    Text="{DynamicResource library_page_last_played}" />
 
                                                 <TextBlock
                                                     FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                     FontSize="13.2"
+                                                    HorizontalAlignment="Center"
                                                     FontWeight="Medium"
                                                     Foreground="#92969C"
                                                     Opacity="0.7">
@@ -236,11 +236,13 @@
                                                             <Setter Property="Margin" Value="2,3,0,0" />
                                                             <Style.Triggers>
 
-                                                                <DataTrigger Binding="{Binding Detail.LastPlayed}" Value="{x:Null}">
+                                                                <DataTrigger Binding="{Binding Detail.LastPlayed}"
+                                                                             Value="{x:Null}">
 
-                                                                    <Setter Property="Text" Value="Never" />
-                                                                    <Setter Property="Margin" Value="3,3,0,0" />
-                                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                                    <Setter Property="Text"
+                                                                            Value="{DynamicResource date_never}" />
+                                                                    <Setter Property="Margin"
+                                                                            Value="3,3,0,0" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -264,9 +266,10 @@
                                                         FontFamily="Arial"
                                                         FontSize="14"
                                                         Foreground="#B6BBBF"
-                                                        Text="PLAY TIME" />
+                                                        Text="{DynamicResource library_page_playtime}" />
 
                                                     <TextBlock
+                                                        HorizontalAlignment="Center"
                                                         Margin="2,3,0,0"
                                                         FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                         FontSize="13.2"
@@ -290,10 +293,11 @@
                                                 <StackPanel Margin="10,0,0,0" Orientation="Vertical">
 
                                                     <TextBlock
+                                                        HorizontalAlignment="Center"
                                                         FontFamily="Arial"
                                                         FontSize="14"
                                                         Foreground="#B6BBBF"
-                                                        Text="ACHIEVEMENTS" />
+                                                        Text="{DynamicResource library_page_achievements}" />
 
                                                     <StackPanel Orientation="Horizontal">
 
@@ -387,7 +391,7 @@
                                                     VerticalAlignment="Center"
                                                     FontFamily="Arial"
                                                     FontSize="14"
-                                                    Text="Store Page" />
+                                                    Text="{DynamicResource library_page_store_page}" />
                                             </StackPanel>
                                         </Button>
                                     </Border>
@@ -413,7 +417,7 @@
                             HorizontalAlignment="Center"
                             FontSize="13"
                             Foreground="#555B63"
-                            Text="This game has no achievements."
+                            Text="{DynamicResource library_page_no_achievements}"
                             Visibility="{Binding HasNoAchievements, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                         <ItemsControl ItemsSource="{Binding RecentActivity}" Visibility="{Binding HasAchievements, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -556,7 +560,7 @@
                                 FontSize="15"
                                 FontWeight="Medium"
                                 Foreground="#AFB8BD"
-                                Text="ACHIEVEMENTS" />
+                                Text="{DynamicResource library_page_achievements}" />
                         </Grid>
 
                         <Grid Grid.Row="1">
@@ -798,7 +802,7 @@
                                         Margin="15,10,0,0"
                                         FontSize="13.4"
                                         Foreground="#C0C1C4"
-                                        Text="Locked Achievements" />
+                                        Text="{DynamicResource library_page_locked_achievements}" />
 
                                     <StackPanel
                                         Grid.Row="4"
@@ -886,7 +890,7 @@
                                                 Padding="2"
                                                 FontSize="13"
                                                 Foreground="#818A91"
-                                                Text="View All Achievements">
+                                                Text="{DynamicResource library_page_all_achievements}">
 
                                                 <TextBlock.Background>
                                                     <SolidColorBrush Opacity="0.08" Color="Black" />

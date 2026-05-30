@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Rift_App.Languages;
 
 namespace Rift_App.ViewModels
 {
@@ -72,19 +73,32 @@ namespace Rift_App.ViewModels
             _ => "#888888"
         };
 
-        partial void OnOnlineStatusChanged(string value) =>
+        partial void OnOnlineStatusChanged(string value)
+        {
             OnPropertyChanged(nameof(StatusColor));
+            OnPropertyChanged(nameof(OnlineStatusDisplay));
+        }
 
         public string TotalHours2WDisplay =>
-      TotalHours2W == 1
-          ? "1 hour past 2 weeks"
-          : $"{TotalHours2W} hours past 2 weeks";
+    TotalHours2W == 1
+        ? L.Get("account_one_hour_2w")
+        : string.Format(L.Get("account_hours_2w"), TotalHours2W);
 
-        partial void OnTotalHours2WChanged(double value) =>
-            OnPropertyChanged(nameof(TotalHours2WDisplay));
+        partial void OnTotalHours2WChanged(double value) => OnPropertyChanged(nameof(TotalHours2WDisplay));
 
         public ObservableCollection<FriendModel> Friends { get; } = new();
         public ObservableCollection<RecentActivityGame> RecentGames { get; } = new();
+
+        // ─── STATUS ─────────────────────────────────────────────────────────
+        public string OnlineStatusDisplay => OnlineStatus switch
+        {
+            "Online" => L.Get("status_online"),
+            "In-Game" => L.Get("status_ingame"),
+            "Away" => L.Get("status_away"),
+            "Busy" => L.Get("status_busy"),
+            "Offline" => L.Get("status_offline"),
+            _ => L.Get("status_offline")
+        };
 
         // ─── LOAD ─────────────────────────────────────────────────────────
         [RelayCommand]
@@ -275,9 +289,12 @@ namespace Rift_App.ViewModels
                         var diff = (DateTime.UtcNow.Date - lastPlayed.Value.Date).Days;
                         game.LastPlayedDisplay = diff switch
                         {
-                            0 => "last played today",
-                            1 => "last played yesterday",
-                            _ => $"last played on {lastPlayed.Value.ToString("d MMM", CultureInfo.InvariantCulture)}"
+                            0 => L.Get("date_last_played_today"),
+                            1 => L.Get("date_last_played_yesterday"),
+                            _ => string.Format(
+                                    L.Get("date_last_played_on"),
+                                    CapitalizeMonth(
+                                        lastPlayed.Value.ToString("d MMM", LanguageService.Current)))
                         };
                     }
 
@@ -443,6 +460,14 @@ namespace Rift_App.ViewModels
                 FileName = url,
                 UseShellExecute = true
             });
+        }
+        private static string CapitalizeMonth(string s)
+        {
+            return string.Join(" ",
+                s.Split(' ').Select(word =>
+                    word.Length > 0 && char.IsLetter(word[0])
+                        ? char.ToUpper(word[0]) + word.Substring(1)
+                        : word));
         }
     }
 }

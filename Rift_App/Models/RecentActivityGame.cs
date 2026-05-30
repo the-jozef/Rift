@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rift_App.Languages;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -36,6 +37,8 @@ namespace Rift_App.Models
                 : 0;
 
         public bool HasAchievements => AchievementsTotal > 0;
+
+        public string PlaytimeTotalWithRecord => $"{PlaytimeTotalDisplay} {L.Get("playtime_on_record")}";
     }
 
     public class RecentAchIcon

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Rift_App.Languages;
 
 namespace Rift_App.Models
 {
@@ -23,12 +24,12 @@ namespace Rift_App.Models
             get
             {
                 var diff = DateTime.UtcNow - LastLoginAt;
-                if (diff.TotalMinutes < 1) return "Just now";
-                if (diff.TotalHours < 1) return $"{(int)diff.TotalMinutes} min ago";
-                if (diff.TotalDays < 1) return "Today";
-                if (diff.TotalDays < 2) return "Yesterday";
-                if (diff.TotalDays < 7) return $"{(int)diff.TotalDays} days ago";
-                return LastLoginAt.ToString("dd.MM.yyyy");
+                if (diff.TotalMinutes < 1) return L.Get("time_just_now");
+                if (diff.TotalHours < 1) return string.Format(L.Get("time_min_ago"), (int)diff.TotalMinutes);
+                if (diff.TotalDays < 1) return L.Get("date_today");
+                if (diff.TotalDays < 2) return L.Get("date_yesterday");
+                if (diff.TotalDays < 7) return string.Format(L.Get("time_days_ago"), (int)diff.TotalDays);
+                return LastLoginAt.ToString("dd.MM.yyyy", LanguageService.Current);
             }
         }
     }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Rift_App.Services;
+using Rift_App.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Rift_App.ViewModels;
 
 namespace Rift_App.Models
 {
@@ -22,7 +23,9 @@ namespace Rift_App.Models
         public bool IsFirst { get; set; }
 
         public string UnlockTimeDisplay =>
-            UnlockTime.HasValue ? UnlockTime.Value.ToString("MMM d, yyyy") : string.Empty;
+         UnlockTime.HasValue
+             ? UnlockTime.Value.ToString("MMM d, yyyy", LanguageService.Current)
+             : string.Empty;
 
         [Newtonsoft.Json.JsonIgnore]
         public string? LocalIconPath { get; set; }

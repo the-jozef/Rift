@@ -69,7 +69,7 @@
                                             FontSize="10"
                                             Foreground="#959BA6">
                                             <Run Text="{Binding TotalGames}" />
-                                            <Run Text="items" />
+                                            <Run Text="{DynamicResource wishlist_items}" />
                                         </TextBlock>
                                     </StackPanel>
                                 </StackPanel>
@@ -162,7 +162,7 @@
 
                                                             <Grid Grid.Row="1" Margin="2,5,0,0">
 
-                                                                <ItemsControl ItemsSource="{Binding DisplayTags}">
+                                                                <ItemsControl ItemsSource="{Binding TranslatedDisplayTags}">
                                                                     <ItemsControl.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <WrapPanel Orientation="Horizontal" />
@@ -178,10 +178,9 @@
                                                                                 BorderThickness="0.6"
                                                                                 CornerRadius="2">
 
-                                                                                <TextBlock
-                                                                                    FontSize="12"
-                                                                                    Foreground="#8794A1"
-                                                                                    Text="{Binding}" />
+                                                                                <TextBlock FontSize="12"
+                                                                                           Foreground="#8794A1"
+                                                                                           Text="{Binding}" />
                                                                             </Border>
                                                                         </DataTemplate>
                                                                     </ItemsControl.ItemTemplate>
@@ -202,9 +201,9 @@
                                                                         TextElement.FontSize="11.8"
                                                                         TextElement.Foreground="#A7ACB8">
 
-                                                                        <TextBlock Text="OVERALL REVIEWS:" />
+                                                                        <TextBlock Text="{DynamicResource wishlist_overall_reviews}" />
 
-                                                                        <TextBlock Margin="0,2,0,0" Text="RELEASE DATE:" />
+                                                                        <TextBlock Margin="0,2,0,0" Text="{DynamicResource wishlist_release_date}" />
                                                                     </StackPanel>
                                                                 </Grid>
 
@@ -212,7 +211,8 @@
 
                                                                     <StackPanel Orientation="Vertical" TextElement.FontSize="12.5">
 
-                                                                        <TextBlock Foreground="{Binding ReviewBrush}" Text="{Binding ReviewDesc}" />
+                                                                        <TextBlock Foreground="{Binding ReviewBrush}" 
+                                                                                   Text="{Binding ReviewDescDisplay}" />
 
                                                                         <TextBlock
                                                                             Margin="0,2,0,0"
@@ -270,7 +270,7 @@
                                                                         FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                                         FontSize="11.8"
                                                                         Foreground="#9EA4AD"
-                                                                        Text="{Binding DateAddedDisplay, StringFormat='Added on {0}'}" />
+                                                                        Text="{Binding DateAddedDisplay}" />
                                                                 </Grid>
 
                                                                 <Grid Grid.Column="1">
@@ -293,7 +293,7 @@
                                                                             <TextBlock
                                                                                 FontSize="12"
                                                                                 Foreground="#A9AFB6"
-                                                                                Text="remove" />
+                                                                                Text="{DynamicResource wishlist_remove}" />
                                                                         </Button>
                                                                     </Border>
                                                                 </Grid>
@@ -394,10 +394,10 @@
 
                                                                                         <TextBlock.Style>
                                                                                             <Style TargetType="TextBlock">
-                                                                                                <Setter Property="Text" Value="Add to Cart" />
+                                                                                                <Setter Property="Text" Value="{DynamicResource wishlist_add_to_cart}" />
                                                                                                 <Style.Triggers>
                                                                                                     <DataTrigger Binding="{Binding IsPreOrder}" Value="True">
-                                                                                                        <Setter Property="Text" Value="Pre-order" />
+                                                                                                        <Setter Property="Text" Value="{DynamicResource wishlist_pre_order}" />
                                                                                                     </DataTrigger>
                                                                                                 </Style.Triggers>
                                                                                             </Style>

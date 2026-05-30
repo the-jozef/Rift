@@ -29,7 +29,7 @@
                     Command="{Binding RefreshCommand}"
                     Cursor="Hand"
                     Foreground="White"
-                    ToolTip="Refresh library, wishlist and profile">
+                    ToolTip="{DynamicResource tooltip_refresh}">
 
                     <Button.Style>
                         <Style TargetType="Button">
@@ -41,8 +41,10 @@
                                             Padding="{TemplateBinding Padding}"
                                             Background="{TemplateBinding Background}"
                                             CornerRadius="4">
+
                                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         </Border>
+
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="Root" Property="Background" Value="#1A3A52" />
@@ -62,18 +64,20 @@
                     </Button.Style>
 
                     <StackPanel Orientation="Horizontal">
+
                         <materialIcons:MaterialIcon
                             Width="16"
                             Height="16"
                             Margin="0,1,0,0"
                             Foreground="#99C5DE"
                             Kind="Refresh" />
+
                         <TextBlock
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
                             FontSize="14"
                             Foreground="#99C5DE"
-                            Text="Refresh" />
+                            Text="{DynamicResource seachbar_refresh}" />
                     </StackPanel>
                 </Button>
 
@@ -122,7 +126,7 @@
                                 Margin="12,8,12,4"
                                 FontSize="13"
                                 Foreground="#7A8A9A"
-                                Text="Searching..."
+                                Text="{DynamicResource seachbar_searching}"
                                 Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                             <ItemsControl ItemsSource="{Binding Results}">
@@ -165,7 +169,7 @@
                                                                     VerticalAlignment="Center"
                                                                     FontSize="12"
                                                                     Foreground="White"
-                                                                    Text="Couldn't load image"
+                                                                    Text="{DynamicResource search_image_error}"
                                                                     Visibility="{Binding DisplayImageUrl, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}" />
 
                                                                 <Image
@@ -269,7 +273,7 @@
 
             <Button
                 Grid.Column="2"
-                Width="105"
+                Width="Auto"
                 Margin="10,0,0,0"
                 Padding="0"
                 HorizontalAlignment="Left"
@@ -286,16 +290,17 @@
                         Height="17"
                         Margin="0,1.5,0,0"
                         Kind="Star" />
-                    <TextBlock
-                        Margin="5,0,0,0"
-                        VerticalAlignment="Center"
-                        FontSize="15"
-                        Text="Wishlist" />
 
                     <TextBlock
-                        Margin="5,0,0,0"
+                        Margin="5,0.1,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="15"
+                        Text="{DynamicResource nav_wishlist}" />
+
+                    <TextBlock
+                        Margin="4,1,0,0"
                         VerticalAlignment="Bottom"
-                        FontSize="13"
+                        FontSize="13.1"
                         Text="{Binding WishlistCount}" />
                 </StackPanel>
             </Button>

@@ -1576,7 +1576,7 @@ namespace SteamProxyBackend.Controllers
                         ReviewDesc = reviewDesc,
                         ReviewCss = reviewCss,
                         ReleaseDateUnix = relDateUnix,
-                        ReleaseDateDisplay = relDateDisplay,
+                        ReleaseDateDisplay_Raw = relDateDisplay,
                         IsReleased = isReleased,
                         IsPreOrder = isPreOrder,
                         DateAddedUnix = dateAdded,

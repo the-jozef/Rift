@@ -50,22 +50,28 @@ namespace Rift_App.ViewModels
                 IsSearching = true;
                 ShowDropdown = true;
 
-                // 12-second cap so the spinner never hangs
                 using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(12));
                 using var linked = CancellationTokenSource
                     .CreateLinkedTokenSource(token, timeoutCts.Token);
 
+                var searchTask = ApiService.SearchGamesAsync(text)
+                                           .WaitAsync(linked.Token);
+
+                var minimumDisplayTask = Task.Delay(
+                    TimeSpan.FromSeconds(3), token);
+
                 List<SearchResultModel> results;
                 try
                 {
-                    results = await ApiService.SearchGamesAsync(text)
-                                              .WaitAsync(linked.Token);
+                    results = await searchTask;
                 }
                 catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
                 {
-                    Debug.WriteLine("[SearchBar] Search timed out.");
                     results = new();
                 }
+
+                await minimumDisplayTask;
+                // ───────────────────────────────────────────────────────
 
                 if (token.IsCancellationRequested) return;
 
@@ -76,7 +82,7 @@ namespace Rift_App.ViewModels
                     ShowDropdown = Results.Count > 0;
                 });
             }
-            catch (OperationCanceledException) { /* user typed again — normal */ }
+            catch (OperationCanceledException) { }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[SearchBar] Error: {ex.Message}");
@@ -102,8 +108,7 @@ namespace Rift_App.ViewModels
 
                 try
                 {
-                    var snap = System.IO.Path.Combine(
-                        AppPaths.Account(steamId), "snapshot.json");
+                    var snap = System.IO.Path.Combine(AppPaths.Account(steamId), "snapshot.json");
                     if (System.IO.File.Exists(snap))
                         System.IO.File.Delete(snap);
                 }

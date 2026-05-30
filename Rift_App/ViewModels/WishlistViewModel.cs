@@ -1,17 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Rift_App.Languages;
 using Rift_App.Models;
 using Rift_App.Services;
 using Rift_App.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Diagnostics;
 
 namespace Rift_App.ViewModels
 {
@@ -24,15 +25,21 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private bool _isEmpty = false;
 
+        [RelayCommand]
+        private void SwitchToSk() => LanguageService.Switch("sk");
+
+        [RelayCommand]
+        private void SwitchToEn() => LanguageService.Switch("en");
+
         private CancellationTokenSource? _syncCts;
 
         private DateTime _lastVisibleRefresh = DateTime.MinValue;
         private const int VisibleRefreshMinutes = 30;
 
-        public string WishlistTitle =>
-            string.IsNullOrEmpty(SessionManager.Username)
-                ? "MY WISHLIST"
-                : $"{SessionManager.Username.ToUpper()}'S WISHLIST";
+        public string WishlistTitle => string.IsNullOrEmpty(SessionManager.Username)
+         ? L.Get("wishlist_title_my")
+         : string.Format(L.Get("wishlist_title_user"),
+             SessionManager.Username.ToUpper());
 
         public event Action<GameModel>? OnGameSelected;
         public string AvatarUrl => SessionManager.AvatarUrl;

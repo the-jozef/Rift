@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:Rift_App.TitleBars"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:Rift_App.TitleBars"
     xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -48,6 +48,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0" Margin="20,0,0,0">
@@ -56,107 +57,136 @@
 
                                     <materialDesign:PopupBox.ToggleContent>
 
-                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="View" />
+                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="{DynamicResource nav_view}" />
                                     </materialDesign:PopupBox.ToggleContent>
 
                                     <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
                                         <Button
                                             Command="{Binding ShowLibraryCommand}"
-                                            Content="Library"
+                                            Content="{DynamicResource nav_library}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Button
                                             Command="{Binding ShowStoreCommand}"
-                                            Content="Store"
+                                            Content="{DynamicResource nav_store}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Button
                                             Command="{Binding ShowWishlistCommand}"
-                                            Content="Wishlist"
+                                            Content="{DynamicResource nav_wishlist}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
                                         <Button
                                             Command="{Binding ShowAccountCommand}"
-                                            Content="Profile"
+                                            Content="{DynamicResource nav_profile}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Button
                                             Command="{Binding ShowSteamAccountCommand}"
-                                            Content="Steam Profile"
+                                            Content="{DynamicResource nav_steam_profile}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
                                         <Button
                                             Command="{Binding ShowSteamCommand}"
-                                            Content="Steam Store"
+                                            Content="{DynamicResource nav_steam_store}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Button
                                             Command="{Binding ShowSteamFriendsCommand}"
-                                            Content="Steam Friends"
+                                            Content="{DynamicResource nav_steam_friends}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>
 
-                            <Grid Grid.Column="1"
-                                  Margin="15,0,0,0">
+                            <Grid Grid.Column="1" Margin="15,0,0,0">
 
-                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
-                                                         WindowChrome.IsHitTestVisibleInChrome="True">
+                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}" WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialDesign:PopupBox.ToggleContent>
-                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}"
-                                                   Text="Games" />
+                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="{DynamicResource nav_games}" />
 
                                     </materialDesign:PopupBox.ToggleContent>
 
                                     <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <Button Command="{Binding ShowLibraryCommand}"
-                                                Content="View Games Library"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button
+                                            Command="{Binding ShowLibraryCommand}"
+                                            Content="{DynamicResource nav_library}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
-                                        <Button Command="{Binding ShowWishlistCommand}"
-                                                Content="View Games Wishlist"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button
+                                            Command="{Binding ShowWishlistCommand}"
+                                            Content="{DynamicResource nav_wishlist}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
-                                        <Button Command="{Binding ShowStoreCommand}"
-                                                Content="View Store"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button
+                                            Command="{Binding ShowStoreCommand}"
+                                            Content="{DynamicResource nav_store}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>
-                            
-                            <Grid Grid.Column="2"
-                                  Margin="15,0,0,0">
 
-                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}"
-                                                         WindowChrome.IsHitTestVisibleInChrome="True">
+                            <Grid Grid.Column="2" Margin="15,0,0,0">
+
+                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}" WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <materialDesign:PopupBox.ToggleContent>
-                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}"
-                                                   Text="About Rift" />
+                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="{DynamicResource menubar_about}" />
 
                                     </materialDesign:PopupBox.ToggleContent>
 
                                     <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
 
-                                        <Button Command="{Binding OpenDocumentSKCommand}"
-                                                Content="SK version"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button
+                                            Command="{Binding OpenDocumentSKCommand}"
+                                            Content="{DynamicResource menubar_aboutskversion}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                         <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
-                                        <Button Command="{Binding OpenDocumentENCommand}"
-                                                Content="EN version"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                        <Button
+                                            Command="{Binding OpenDocumentENCommand}"
+                                            Content="{DynamicResource menubar_aboutenversion}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </Grid>
+
+                            <Grid Grid.Column="3" Margin="15,0,0,0">
+
+                                <materialDesign:PopupBox Style="{StaticResource Rift_Menubar_PopupBox_Tools}" WindowChrome.IsHitTestVisibleInChrome="True">
+
+                                    <materialDesign:PopupBox.ToggleContent>
+                                        <TextBlock Style="{StaticResource Rift_Menubar_Textblock_PopupBox_Tools}" Text="{DynamicResource menubar_more}" />
+
+                                    </materialDesign:PopupBox.ToggleContent>
+
+                                    <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
+
+                                        <Button
+                                            Command="{Binding SwitchLanguageCommand}"
+                                            CommandParameter="sk"
+                                            Content="{DynamicResource menubar_sklanguage}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}"
+                                            ToolTip="Slovenčina" />
+
+                                        <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
+
+                                        <Button
+                                            Command="{Binding SwitchLanguageCommand}"
+                                            CommandParameter="en"
+                                            Content="{DynamicResource menubar_enlanguage}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}"
+                                            ToolTip="English" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>
                             </Grid>
@@ -177,7 +207,7 @@
 
                                 <materialDesign:PopupBox.ToggleContent>
 
-                                    <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" Text="STORE" />
+                                    <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" Text="{DynamicResource menubar_store}" />
 
                                 </materialDesign:PopupBox.ToggleContent>
 
@@ -185,14 +215,14 @@
 
                                     <Button
                                         Command="{Binding ShowStoreCommand}"
-                                        Content="Featured"
+                                        Content="{DynamicResource nav_featured}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                     <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
                                     <Button
                                         Command="{Binding ShowWishlistCommand}"
-                                        Content="Wishlist"
+                                        Content="{DynamicResource nav_wishlist}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 </StackPanel>
                             </materialDesign:PopupBox>
@@ -203,7 +233,7 @@
                             <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Options}" WindowChrome.IsHitTestVisibleInChrome="True">
 
                                 <materialDesign:PopupBox.ToggleContent>
-                                    <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" Text="LIBRARY" />
+                                    <TextBlock Style="{StaticResource Rift_MenuBar_Textblock_PopupBox_Options}" Text="{DynamicResource menubar_library}" />
 
                                 </materialDesign:PopupBox.ToggleContent>
 
@@ -211,12 +241,12 @@
 
                                     <Button
                                         Command="{Binding ShowLibraryCommand}"
-                                        Content="Library games"
+                                        Content="{DynamicResource nav_library}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                     <Button
                                         Command="{Binding ShowStoreCommand}"
-                                        Content="Home"
+                                        Content="{DynamicResource nav_home}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 </StackPanel>
                             </materialDesign:PopupBox>
@@ -235,17 +265,17 @@
 
                                     <Button
                                         Command="{Binding ShowAccountCommand}"
-                                        Content="Profile"
+                                        Content="{DynamicResource nav_profile}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                     <Button
                                         Command="{Binding ShowLibraryCommand}"
-                                        Content="Library"
+                                        Content="{DynamicResource nav_library}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
 
                                     <Button
                                         Command="{Binding ShowWishlistCommand}"
-                                        Content="Wishlist"
+                                        Content="{DynamicResource nav_wishlist}"
                                         Style="{StaticResource Rift_MenuBar_Items_PopupBox_Tools_Options}" />
                                 </StackPanel>
                             </materialDesign:PopupBox>
@@ -271,13 +301,11 @@
 
                             <StackPanel Orientation="Horizontal">
 
-                                <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Notifications}"
-                                                         WindowChrome.IsHitTestVisibleInChrome="True">
-                                    
+                                <materialDesign:PopupBox Style="{StaticResource Rift_MenuBar_PopupBox_Notifications}" WindowChrome.IsHitTestVisibleInChrome="True">
+
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                            <i:InvokeCommandAction Command="{Binding ShowNotificationsCommand}"
-                                                                   CommandParameter="{Binding}" />
+                                            <i:InvokeCommandAction Command="{Binding ShowNotificationsCommand}" CommandParameter="{Binding}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
 
@@ -286,10 +314,11 @@
                                     </materialDesign:PopupBox.ToggleContent>
 
                                     <StackPanel Style="{StaticResource Rift_MenuBar_StackPanel_PopupBox_Tools_Options_Notifications}">
-                                        
-                                        <Button Content="View Notifications"
-                                                Background="#3D4450"
-                                                Style="{StaticResource Rift_MenuBar_Items_PopupBox_Notifications}" />
+
+                                        <Button
+                                            Background="#3D4450"
+                                            Content="{DynamicResource btn_view_notifications}"
+                                            Style="{StaticResource Rift_MenuBar_Items_PopupBox_Notifications}" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>
 
@@ -331,24 +360,24 @@
 
                                         <Button
                                             Command="{Binding ShowAccountCommand}"
-                                            Content="View my Profile"
+                                            Content="{DynamicResource nav_view_my_profile}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
                                         <Button
                                             Command="{Binding ShowWishlistCommand}"
-                                            Content="View my Wishlist"
+                                            Content="{DynamicResource nav_view_my_wishlist}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
                                         <Separator Style="{StaticResource Rift_MenuBar_Separator_PopupBox_Account}" />
 
                                         <Button
                                             Command="{Binding SwitchAccountCommand}"
-                                            Content="Change Account"
+                                            Content="{DynamicResource nav_change_account}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
 
                                         <Button
                                             Command="{Binding ShowSteamAccountCommand}"
-                                            Content="View Profile on Steam"
+                                            Content="{DynamicResource nav_view_profile_on_steam}"
                                             Style="{StaticResource Rift_MenuBar_Items_PopupBox_Account}" />
                                     </StackPanel>
                                 </materialDesign:PopupBox>

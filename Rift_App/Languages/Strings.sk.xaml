@@ -1,0 +1,235 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ─── NAVIGATION ─────────────────────────────────────────────────── -->
+    <sys:String x:Key="nav_view">Zobraziť</sys:String>
+    <sys:String x:Key="nav_store">Obchod</sys:String>
+    <sys:String x:Key="nav_library">Knižnica</sys:String>
+    <sys:String x:Key="nav_wishlist">Zoznam prianí</sys:String>
+    <sys:String x:Key="nav_profile">Profil</sys:String>
+    <sys:String x:Key="nav_friends">Priatelia</sys:String>
+    <sys:String x:Key="nav_steam_store">Steam Obchod</sys:String>
+    <sys:String x:Key="nav_steam_profile">Steam Profil</sys:String>
+    <sys:String x:Key="nav_steam_friends">Steam Priatelia</sys:String>
+    <sys:String x:Key="nav_featured">Odporúčané</sys:String>
+    <sys:String x:Key="nav_home">Domov</sys:String>
+    <sys:String x:Key="nav_games">Hry</sys:String>
+    <sys:String x:Key="nav_change_account">Zmeniť účet</sys:String>
+    <sys:String x:Key="nav_view_my_profile">Môj profil</sys:String>
+    <sys:String x:Key="nav_view_my_wishlist">Môj zoznam prianí</sys:String>
+    <sys:String x:Key="nav_view_profile_on_steam">Môj Steam profil</sys:String>
+
+    <!-- ─── BUTTONS ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="btn_view_notifications">Zobraziť oznámenia</sys:String>
+    <sys:String x:Key="btn_add_to_cart">Pridať do košíka</sys:String>
+    
+    <!-- ─── MenuBar ──────────────────────────────────────────────────────── -->    
+    <sys:String x:Key="menubar_about">O Rifte</sys:String>
+    <sys:String x:Key="menubar_aboutskversion">SK verzia</sys:String>
+    <sys:String x:Key="menubar_aboutenversion">EN verzia</sys:String>
+    <sys:String x:Key="menubar_sklanguage">SK jazyk</sys:String>
+    <sys:String x:Key="menubar_enlanguage">EN jazyk</sys:String>
+    <sys:String x:Key="menubar_changeaccount">Zmeniť Účet</sys:String>
+    <sys:String x:Key="menubar_more">Viac</sys:String>
+    <sys:String x:Key="menubar_store">OBCHOD</sys:String>
+    <sys:String x:Key="menubar_library">KNIŽNICA</sys:String>
+
+    <!-- ─── SeachBar Refresh ──────────────────────────────────────────────────────── -->
+    <sys:String x:Key="seachbar_refresh">Obnoviť</sys:String>
+    <sys:String x:Key="seachbar_search_hint">Hľadať v obchode</sys:String>
+    <sys:String x:Key="seachbar_searching">Hľadá sa...</sys:String>
+    <sys:String x:Key="search_image_error">Obrázok sa nenačítal</sys:String>
+
+    <!-- ─── STORE ────────────────────────────────────────────────────────── -->
+    <sys:String x:Key="store_featured_recommended">Populárne &amp; Odporúčané</sys:String>
+    <sys:String x:Key="store_discounts_free">Zľavy &amp; Zadarmo ponuky</sys:String>
+    <sys:String x:Key="store_recommended_title">Odporúčané podľa hier ktoré hráš</sys:String>
+    <sys:String x:Key="store_more_title">Ďalšie hry</sys:String>
+    <sys:String x:Key="store_explore">Preskúmať:</sys:String>
+    <sys:String x:Key="store_show_more">Zobraziť viac</sys:String>
+
+    <!-- ─── ACCOUNT ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="account_recent_activity">Nedávna aktivita</sys:String>
+    <sys:String x:Key="account_image_error">Chyba obrázka</sys:String>
+    <sys:String x:Key="account_achievement_progress">Odomknuté úspechy</sys:String>
+    <sys:String x:Key="account_level">Úroveň</sys:String>
+    <sys:String x:Key="account_friends_private">⚠ Zoznam priateľov je súkromný</sys:String>
+    <sys:String x:Key="account_friends_private_hint">Nastav svoj zoznam priateľov na Verejný v Steam → Profil → Upraviť profil → Nastavenia súkromia.</sys:String>
+
+    <!-- ─── AUTH ────────────────────────────────────── -->
+    <sys:String x:Key="auth_username">Používateľské meno</sys:String>
+    <sys:String x:Key="auth_password">Heslo</sys:String>
+    <sys:String x:Key="auth_newaccount">Nový účet</sys:String>
+    
+    <!-- ─── AUTH — ACCOUNT SELECTION ────────────────────────────────────── -->
+    <sys:String x:Key="account_selection_title">Kto hrá?</sys:String>
+    <sys:String x:Key="account_selection_add">Pridať účet</sys:String>
+    <sys:String x:Key="account_selection_remove">Odstrániť účet</sys:String>
+    
+    <!-- ─── AUTH — LOGIN ─────────────────────────────────────────────────── -->
+    <sys:String x:Key="login_title">Profil</sys:String>
+    <sys:String x:Key="login_signin_title">Prihlásiť sa s Používateľským Menom</sys:String>
+    <sys:String x:Key="login_signin">Prihlásiť sa</sys:String>
+    <sys:String x:Key="login_or">alebo</sys:String>
+    <sys:String x:Key="login_signin_steam">Prihlásiť cez Steam</sys:String>
+    <sys:String x:Key="login_dont_have_account">Nemáš ešte RIFT účet?</sys:String>
+    <sys:String x:Key="login_create_account">Vytvoriť si účet</sys:String>
+
+    <!-- ─── AUTH — REGISTER ──────────────────────────────────────────────── -->
+    <sys:String x:Key="register_title">Vytvor si svoj účet</sys:String>
+    <sys:String x:Key="register_username">Používateľské meno</sys:String>
+    <sys:String x:Key="register_signup">Prihlásiť sa</sys:String>
+    <sys:String x:Key="register_join_rift">Pridaj sa do Riftu</sys:String>
+    <sys:String x:Key="register_experience">Zaži všetko čo potrebuješ</sys:String>
+    <sys:String x:Key="register_secure">Bezpečné a chránené</sys:String>
+    <sys:String x:Key="register_secure_desc">pokročilé šifrovanie</sys:String>
+    <sys:String x:Key="register_library">Celá tvoja Steam knižnica</sys:String>
+    <sys:String x:Key="register_library_desc">hry na jednom mieste</sys:String>
+    <sys:String x:Key="register_design">Čistý a Moderný dizajn</sys:String>
+    <sys:String x:Key="register_design_desc">jednoduchý a moderný</sys:String>
+
+    <!-- ─── AUTH — STEAM CONNECTION ─────────────────────────────────────── -->
+    <sys:String x:Key="steam_connect_title">Prepojiť Steam</sys:String>
+    <sys:String x:Key="steam_connect_description">Prepoj svoj Steam účet a začni</sys:String>
+    <sys:String x:Key="steam_connect_signup">Prepojiť Steam účet</sys:String>
+    
+    <!-- ─── ERROR MESSAGES ───────────────────────────────────────────────── -->
+    <sys:String x:Key="err_username_empty">Prosím zadajte používateľské meno.</sys:String>
+    <sys:String x:Key="err_password_empty">Prosím zadajte heslo.</sys:String>
+    <sys:String x:Key="err_username_password_wrong">Nesprávne používateľské meno alebo heslo.</sys:String>
+    <sys:String x:Key="err_server_connection">Nepodarilo sa pripojiť k serveru. Skontrolujte váše pripojenie.</sys:String>
+    <sys:String x:Key="err_steam_cancelled">Prihlásenie cez Steam bolo zrušené. Skús to znova.</sys:String>
+    <sys:String x:Key="err_steam_already_registered">Tento Steam účet už má Rift účet. Prosím prihlás sa.</sys:String>
+    <sys:String x:Key="err_username_too_short">Používateľské meno musí mať aspoň 3 znaky.</sys:String>
+    <sys:String x:Key="err_username_too_long">Používateľské meno nemôže byť dlhšie ako 20 znakov.</sys:String>
+    <sys:String x:Key="err_username_spaces">Používateľské meno nemôže obsahovať medzery.</sys:String>
+    <sys:String x:Key="err_password_too_short">Heslo musí mať aspoň 6 znakov.</sys:String>
+    <sys:String x:Key="err_password_too_long">Heslo nemôže byť dlhšie ako 40 znakov.</sys:String>
+
+    <!-- ─── LIBRARY ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="library_all">Všetky</sys:String>
+
+    <!-- ─── LIBRARY GamePage ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="library_page_select_game">Vyber hru zo zoznamu</sys:String>
+    <sys:String x:Key="library_page_last_played">NAPOSLEDY HRANÉ</sys:String>
+    <sys:String x:Key="library_page_playtime">ODOHRANÝ ČAS</sys:String>
+    <sys:String x:Key="library_page_achievements">ÚSPECHY</sys:String>
+    <sys:String x:Key="library_page_store_page">Stránka v obchode</sys:String>
+    <sys:String x:Key="library_page_no_achievements">Táto hra nemá žiadne úspechy.</sys:String>
+    <sys:String x:Key="library_page_locked_achievements">Zamknuté úspechy</sys:String>
+    <sys:String x:Key="library_page_all_achievements">Zobraziť všetky úspechy</sys:String>
+    <sys:String x:Key="library_play">HRAŤ</sys:String>
+    <sys:String x:Key="library_install">INŠTALOVAŤ</sys:String>
+    <sys:String x:Key="library_update">AKTUALIZOVAŤ</sys:String>
+    
+    <!-- ─── LOADING ────────────────────────────────────────────────────── -->
+    <sys:String x:Key="loading_text">Načítavanie</sys:String>
+
+    <!-- ─── WISHLIST ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="wishlist_title_user">{0} - ZOZNAM PRIANÍ</sys:String>
+    <sys:String x:Key="wishlist_items">položiek</sys:String>
+    <sys:String x:Key="wishlist_overall_reviews">CELKOVÉ HODNOTENIA:</sys:String>
+    <sys:String x:Key="wishlist_release_date">DÁTUM VYDANIA:</sys:String>
+    <sys:String x:Key="wishlist_remove">odstrániť</sys:String>
+    <sys:String x:Key="wishlist_pre_order">Predobjednávka</sys:String>
+    <sys:String x:Key="wishlist_add_to_cart">Pridať do košíka</sys:String>
+
+<!-- ─── DATES ─────────────────────────────────────────────────────── -->
+    <sys:String x:Key="date_today">Dnes</sys:String>
+    <sys:String x:Key="date_yesterday">Včera</sys:String>
+    <sys:String x:Key="date_never">Nikdy</sys:String>
+    <sys:String x:Key="date_last_played_today">hrané dnes</sys:String>
+    <sys:String x:Key="date_last_played_yesterday">hrané včera</sys:String>
+    <sys:String x:Key="date_last_played_on">hrané {0}</sys:String>
+
+
+    <sys:String x:Key="date_friend_status_in_game">Hrá hru</sys:String>
+    <sys:String x:Key="date_friend_status_away">Preč</sys:String>
+    <sys:String x:Key="date_friend_status_busy">Zaneprázdnený</sys:String>
+    
+    <sys:String x:Key="date_friend_status_snooze">Odpočíva</sys:String>
+    <sys:String x:Key="date_friend_status_looking_to_trade">Hľadá obchod</sys:String>
+    <sys:String x:Key="date_friend_status_looking_to_play">Hľadá hru</sys:String>
+    
+    <!-- ─── TOOLTIP ──────────────────────────────────────────────────────── -->
+    <sys:String x:Key="tooltip_refresh">Obnoviť knižnicu, zoznam prianí a profil</sys:String>
+
+
+
+
+    
+    
+
+
+    <sys:String x:Key="time_just_now">Práve teraz</sys:String>
+    <sys:String x:Key="time_min_ago">pred {0} min</sys:String>
+    <sys:String x:Key="time_days_ago">pred {0} dňami</sys:String>
+    <sys:String x:Key="status_online">Online</sys:String>
+    <sys:String x:Key="status_ingame">V hre</sys:String>
+    <sys:String x:Key="status_away">Preč</sys:String>
+    <sys:String x:Key="status_busy">Zaneprázdnený</sys:String>
+    <sys:String x:Key="status_offline">Offline</sys:String>
+    <sys:String x:Key="status_snooze">Spí</sys:String>
+    <sys:String x:Key="status_trade">Hľadá výmenu</sys:String>
+    <sys:String x:Key="status_play">Hľadá hráčov</sys:String>
+    <sys:String x:Key="playtime_on_record">celkovo</sys:String>
+    <sys:String x:Key="store_by_tag_label">Pretože hráš {0}</sys:String>
+
+
+
+    <sys:String x:Key="date_format_short">d.M.yyyy</sys:String>
+    <sys:String x:Key="wishlist_added_on">Pridané dňa {0}</sys:String>
+    <sys:String x:Key="account_one_hour_2w">1 hodina za posledné 2 týždne</sys:String>
+    <sys:String x:Key="account_hours_2w">{0} hodín za posledné 2 týždne</sys:String>
+
+
+    <sys:String x:Key="review_very_positive">Veľmi pozitívne</sys:String>
+    <sys:String x:Key="review_positive">Pozitívne</sys:String>
+    <sys:String x:Key="review_mostly_positive">Väčšinou pozitívne</sys:String>
+    <sys:String x:Key="review_mixed">Zmiešané</sys:String>
+    <sys:String x:Key="review_mostly_negative">Väčšinou negatívne</sys:String>
+    <sys:String x:Key="review_negative">Negatívne</sys:String>
+    <sys:String x:Key="review_very_negative">Veľmi negatívne</sys:String>
+    <sys:String x:Key="review_no_reviews">Žiadne hodnotenia</sys:String>
+
+    <sys:String x:Key="store_free_to_play">Zadarmo</sys:String>
+
+    <sys:String x:Key="store_available_now">Dostupné teraz</sys:String>
+    <sys:String x:Key="store_recommended">Odporúčané</sys:String>
+
+
+
+
+
+
+    <!-- ─── PLAYTIME ───────────────────────────────────────────────────── -->
+    <sys:String x:Key="playtime_never">Nikdy nehrané</sys:String>
+    <sys:String x:Key="playtime_mins">min</sys:String>
+    <sys:String x:Key="playtime_hrs">hod</sys:String>
+
+    <!-- ─── MESSAGEBOXES — STEAM STARTUP ────────────────────────────────── -->
+    <sys:String x:Key="msg_steam_not_installed">Steam nie je nainštalovaný na tomto počítači.&#x0a;&#x0a;Rift vyžaduje nainštalovaný Steam.&#x0a;Nainštaluj Steam na https://store.steampowered.com/about/</sys:String>
+    <sys:String x:Key="msg_steam_not_installed_title">Steam nenájdený</sys:String>
+    <sys:String x:Key="msg_welcome">Vitaj v Rifte!&#x0a;&#x0a;Rift potrebuje Steam na získanie tvojej hernej knižnice a úspechov.&#x0a;&#x0a;Steam bude spustený automaticky keď bude potrebný.&#x0a;Klikni OK pre pokračovanie.</sys:String>
+    <sys:String x:Key="msg_welcome_title">Steam je potrebný</sys:String>
+    <sys:String x:Key="msg_steam_not_running">Steam nie je spustený.&#x0a;&#x0a;Rift spustí Steam automaticky.</sys:String>
+    <sys:String x:Key="msg_steam_launching_title">Spúšťanie Steamu</sys:String>
+    <sys:String x:Key="msg_steam_launch_failed">Nepodarilo sa spustiť Steam.&#x0a;&#x0a;Spusti Steam manuálne a skús znova.</sys:String>
+    <sys:String x:Key="msg_steam_launch_failed_title">Spustenie Steamu zlyhalo</sys:String>
+    <sys:String x:Key="msg_steam_connect_failed">Nepodarilo sa pripojiť k Steamu po niekoľkých pokusoch.&#x0a;&#x0a;Možné príčiny:&#x0a;• Steam sa stále aktualizuje — počkaj kým skončí&#x0a;• Nie si prihlásený do Steamu&#x0a;• steam_appid.txt chýba v priečinku aplikácie&#x0a;&#x0a;Vyriešte problém a reštartuj Rift.</sys:String>
+    <sys:String x:Key="msg_steam_connect_failed_title">Pripojenie k Steamu zlyhalo</sys:String>
+
+    <!-- ─── MESSAGEBOXES — GAME ACTIONS ─────────────────────────────────── -->
+    <sys:String x:Key="msg_update_game">Chceš aktualizovať hru {0}?</sys:String>
+    <sys:String x:Key="msg_update_title">Dostupná aktualizácia</sys:String>
+    <sys:String x:Key="msg_install_game">Chceš nainštalovať hru {0}?</sys:String>
+    <sys:String x:Key="msg_install_title">Inštalácia hry</sys:String>
+    <sys:String x:Key="msg_steam_not_found">Steam nie je nainštalovaný na tomto počítači.</sys:String>
+    <sys:String x:Key="msg_steam_not_found_title">Steam nenájdený</sys:String>
+
+
+
+  
+
+</ResourceDictionary>

@@ -1,358 +1,346 @@
-﻿<Window x:Class="Rift_App.Testing.Window_Test"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-        xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-        xmlns:local="clr-namespace:Rift_App.Testing"
-        mc:Ignorable="d"
-        Title="Window_Test"
-        Height="450"
-        Width="800">
+﻿<Window
+    x:Class="Rift_App.Testing.Window_Test"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Rift_App.Testing"
+    xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Window_Test"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
     <Window.Resources>
-            <!-- Nav button style -->
-            <Style x:Key="NavButton"
-                   TargetType="Button"
-                   BasedOn="{StaticResource MaterialDesignFlatButton}">
-                <Setter Property="Foreground"
-                        Value="#c6d4df" />
-                <Setter Property="FontSize"
-                        Value="14" />
-                <Setter Property="Padding"
-                        Value="12,8" />
-                <Setter Property="Height"
-                        Value="48" />
-                <Setter Property="materialDesign:ButtonAssist.CornerRadius"
-                        Value="0" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver"
-                             Value="True">
-                        <Setter Property="Foreground"
-                                Value="White" />
-                        <Setter Property="Background"
-                                Value="#2a475e" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+        <!--  Nav button style  -->
+        <Style
+            x:Key="NavButton"
+            BasedOn="{StaticResource MaterialDesignFlatButton}"
+            TargetType="Button">
+            <Setter Property="Foreground" Value="#c6d4df" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="#2a475e" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-            <!-- Popup link button style -->
-            <Style x:Key="PopupLink"
-                   TargetType="Button"
-                   BasedOn="{StaticResource MaterialDesignFlatButton}">
-                <Setter Property="Foreground"
-                        Value="#c6d4df" />
-                <Setter Property="FontSize"
-                        Value="13" />
-                <Setter Property="HorizontalContentAlignment"
-                        Value="Left" />
-                <Setter Property="Padding"
-                        Value="0,4" />
-                <Setter Property="Height"
-                        Value="Auto" />
-                <Setter Property="MinHeight"
-                        Value="28" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver"
-                             Value="True">
-                        <Setter Property="Foreground"
-                                Value="#66c0f4" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+        <!--  Popup link button style  -->
+        <Style
+            x:Key="PopupLink"
+            BasedOn="{StaticResource MaterialDesignFlatButton}"
+            TargetType="Button">
+            <Setter Property="Foreground" Value="#c6d4df" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Padding" Value="0,4" />
+            <Setter Property="Height" Value="Auto" />
+            <Setter Property="MinHeight" Value="28" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#66c0f4" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-            <!-- Banner button style -->
-            <Style x:Key="BannerButton"
-                   TargetType="Button"
-                   BasedOn="{StaticResource MaterialDesignFlatButton}">
-                <Setter Property="Height"
-                        Value="90" />
-                <Setter Property="Padding"
-                        Value="0" />
-                <Setter Property="BorderThickness"
-                        Value="0" />
-                <Setter Property="Cursor"
-                        Value="Hand" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver"
-                             Value="True">
-                        <Setter Property="Opacity"
-                                Value="0.85" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </Window.Resources>
+        <!--  Banner button style  -->
+        <Style
+            x:Key="BannerButton"
+            BasedOn="{StaticResource MaterialDesignFlatButton}"
+            TargetType="Button">
+            <Setter Property="Height" Value="90" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.85" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
-        <Grid>
-            <!-- ═══════════════ TOP NAV BAR ═══════════════ -->
-            <DockPanel VerticalAlignment="Top"
-                       Height="48"
-                       Background="#171a21"
-                       ZIndex="0">
+    <Grid>
+        <!--  ═══════════════ TOP NAV BAR ═══════════════  -->
+        <DockPanel
+            Height="48"
+            VerticalAlignment="Top"
+            Background="#171a21"
+            ZIndex="0">
 
-                <StackPanel Orientation="Horizontal"
-                            DockPanel.Dock="Left">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
 
-                    <!-- BROWSE BUTTON (the one that opens the popup) -->
-                    <Grid>
-                        <Button x:Name="BrowseBtn"
-                                Style="{StaticResource NavButton}"
-                                Click="BrowseBtn_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Browse"
-                                           VerticalAlignment="Center" />
-                                <materialDesign:PackIcon Kind="ChevronDown"
-                                                         Width="16"
-                                                         Height="16"
-                                                         Margin="4,0,0,0"
-                                                         VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
+                <!--  BROWSE BUTTON (the one that opens the popup)  -->
+                <Grid>
+                    <Button
+                        x:Name="BrowseBtn"
+                        Click="BrowseBtn_Click"
+                        Style="{StaticResource NavButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="Browse" />
+                            <materialDesign:PackIcon
+                                Width="16"
+                                Height="16"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                Kind="ChevronDown" />
+                        </StackPanel>
+                    </Button>
 
-                        <!-- ═══════ THE BIG POPUP ═══════ -->
-                        <Popup x:Name="BrowsePopup"
-                               PlacementTarget="{Binding ElementName=BrowseBtn}"
-                               Placement="Bottom"
-                               StaysOpen="False"
-                               AllowsTransparency="True">
+                    <!--  ═══════ THE BIG POPUP ═══════  -->
+                    <Popup
+                        x:Name="BrowsePopup"
+                        AllowsTransparency="True"
+                        Placement="Bottom"
+                        PlacementTarget="{Binding ElementName=BrowseBtn}"
+                        StaysOpen="False">
 
-                            <Border Background="#2a3f5a"
-                                    BorderBrush="#3d6080"
-                                    BorderThickness="1"
-                                    Width="860"
-                                    Effect="{DynamicResource MaterialDesignShadowDepth4}">
+                        <Border
+                            Width="860"
+                            Background="#2a3f5a"
+                            BorderBrush="#3d6080"
+                            BorderThickness="1"
+                            Effect="{DynamicResource MaterialDesignShadowDepth4}">
 
-                                <Grid Margin="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="220" />
-                                        <!-- Left menu -->
-                                        <ColumnDefinition Width="280" />
-                                        <!-- Banners -->
-                                        <ColumnDefinition Width="*" />
-                                        <!-- Right links -->
-                                    </Grid.ColumnDefinitions>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220" />
+                                    <!--  Left menu  -->
+                                    <ColumnDefinition Width="280" />
+                                    <!--  Banners  -->
+                                    <ColumnDefinition Width="*" />
+                                    <!--  Right links  -->
+                                </Grid.ColumnDefinitions>
 
-                                    <!-- ── LEFT COLUMN: Menu Items ── -->
-                                    <Border Grid.Column="0"
-                                            Background="#1b2838"
-                                            Padding="16,16,16,20">
-                                        <StackPanel>
+                                <!--  ── LEFT COLUMN: Menu Items ──  -->
+                                <Border
+                                    Grid.Column="0"
+                                    Padding="16,16,16,20"
+                                    Background="#1b2838">
+                                    <StackPanel>
 
-                                            <Button Style="{StaticResource PopupLink}"
-                                                    Content="Store Home"
-                                                    Foreground="White"
-                                                    FontSize="14" />
+                                        <Button
+                                            Content="Store Home"
+                                            FontSize="14"
+                                            Foreground="White"
+                                            Style="{StaticResource PopupLink}" />
 
-                                            <Separator Background="#3d6080"
-                                                       Margin="0,8" />
+                                        <Separator Margin="0,8" Background="#3d6080" />
 
-                                            <!-- New Releases -->
-                                            <Button Style="{StaticResource PopupLink}"
-                                                    Margin="0,4,0,0">
-                                                <StackPanel>
-                                                    <TextBlock Text="New Releases"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="13" />
-                                                    <TextBlock Text="Explore new content on Steam"
-                                                               FontSize="11"
-                                                               Foreground="#8ba8be"
-                                                               TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </Button>
-
-                                            <!-- Upcoming Releases -->
-                                            <Button Style="{StaticResource PopupLink}"
-                                                    Margin="0,8,0,0">
-                                                <StackPanel>
-                                                    <TextBlock Text="Upcoming Releases"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="13" />
-                                                    <TextBlock Text="See what's on the release calendar"
-                                                               FontSize="11"
-                                                               Foreground="#8ba8be"
-                                                               TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </Button>
-
-                                            <!-- All Charts & Stats -->
-                                            <Button Style="{StaticResource PopupLink}"
-                                                    Margin="0,8,0,0">
-                                                <StackPanel>
-                                                    <TextBlock Text="All Charts &amp; Stats"
-                                                               FontWeight="SemiBold"
-                                                               FontSize="13" />
-                                                    <TextBlock Text="Explore top titles by week, month, or year"
-                                                               FontSize="11"
-                                                               Foreground="#8ba8be"
-                                                               TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </Button>
-
-                                        </StackPanel>
-                                    </Border>
-
-                                    <!-- ── MIDDLE COLUMN: Banner Buttons ── -->
-                                    <Border Grid.Column="1"
-                                            Padding="0">
-                                        <StackPanel>
-
-                                            <!-- TOP SELLERS banner -->
-                                            <Button Style="{StaticResource BannerButton}">
-                                                <Grid Width="280"
-                                                      Height="90"
-                                                      ClipToBounds="True">
-                                                    <Rectangle Fill="#7b2fe3"
-                                                               RadiusX="0"
-                                                               RadiusY="0" />
-                                                    <!-- Purple gradient overlay -->
-                                                    <Rectangle>
-                                                        <Rectangle.Fill>
-                                                            <LinearGradientBrush StartPoint="0,0"
-                                                                                 EndPoint="1,1">
-                                                                <GradientStop Color="#9b3de8"
-                                                                              Offset="0" />
-                                                                <GradientStop Color="#5a1fad"
-                                                                              Offset="1" />
-                                                            </LinearGradientBrush>
-                                                        </Rectangle.Fill>
-                                                    </Rectangle>
-                                                    <Border HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Background="White"
-                                                            Padding="20,6">
-                                                        <TextBlock Text="TOP SELLERS"
-                                                                   FontWeight="Bold"
-                                                                   FontSize="18"
-                                                                   Foreground="#1b2838"/>
-                                                    </Border>
-                                                </Grid>
-                                            </Button>
-
-                                            <!-- DISCOUNTS & EVENTS banner -->
-                                            <Button Style="{StaticResource BannerButton}">
-                                                <Grid Width="280"
-                                                      Height="90"
-                                                      ClipToBounds="True">
-                                                    <Rectangle>
-                                                        <Rectangle.Fill>
-                                                            <LinearGradientBrush StartPoint="0,0"
-                                                                                 EndPoint="1,1">
-                                                                <GradientStop Color="#0f8a6e"
-                                                                              Offset="0" />
-                                                                <GradientStop Color="#0a5c4a"
-                                                                              Offset="1" />
-                                                            </LinearGradientBrush>
-                                                        </Rectangle.Fill>
-                                                    </Rectangle>
-                                                    <Border HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Background="White"
-                                                            Padding="20,6">
-                                                        <TextBlock Text="DISCOUNTS &amp; EVENTS"
-                                                                   FontWeight="Bold"
-                                                                   FontSize="16"
-                                                                   Foreground="#1b2838" />
-                                                    </Border>
-                                                </Grid>
-                                            </Button>
-
-                                        </StackPanel>
-                                    </Border>
-
-                                    <!-- ── RIGHT COLUMN: Top Destinations + My Account ── -->
-                                    <Border Grid.Column="2"
-                                            Background="#1b2838"
-                                            Padding="24,16,24,20">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <!-- TOP DESTINATIONS -->
-                                            <StackPanel Grid.Column="0">
-                                                <TextBlock Text="TOP DESTINATIONS"
-                                                           FontSize="11"
-                                                           FontWeight="Bold"
-                                                           Foreground="#8ba8be"
-                                                           Margin="0,0,0,10"/>
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="Free to Play" />
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="Demos" />
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="News &amp; Updates" />
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="Points Shop" />
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="Gift Cards" />
+                                        <!--  New Releases  -->
+                                        <Button Margin="0,4,0,0" Style="{StaticResource PopupLink}">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    FontWeight="SemiBold"
+                                                    Text="New Releases" />
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="#8ba8be"
+                                                    Text="Explore new content on Steam"
+                                                    TextWrapping="Wrap" />
                                             </StackPanel>
+                                        </Button>
 
-                                            <!-- MY ACCOUNT -->
-                                            <StackPanel Grid.Column="1">
-                                                <TextBlock Text="MY ACCOUNT"
-                                                           FontSize="11"
-                                                           FontWeight="Bold"
-                                                           Foreground="#8ba8be"
-                                                           Margin="0,0,0,10"/>
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="My Preferences" />
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="My Wishlist" />
-                                                <Button Style="{StaticResource PopupLink}"
-                                                        Content="My Family" />
+                                        <!--  Upcoming Releases  -->
+                                        <Button Margin="0,8,0,0" Style="{StaticResource PopupLink}">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    FontWeight="SemiBold"
+                                                    Text="Upcoming Releases" />
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="#8ba8be"
+                                                    Text="See what's on the release calendar"
+                                                    TextWrapping="Wrap" />
                                             </StackPanel>
+                                        </Button>
 
-                                        </Grid>
-                                    </Border>
+                                        <!--  All Charts & Stats  -->
+                                        <Button Margin="0,8,0,0" Style="{StaticResource PopupLink}">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    FontWeight="SemiBold"
+                                                    Text="All Charts &amp; Stats" />
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="#8ba8be"
+                                                    Text="Explore top titles by week, month, or year"
+                                                    TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </Button>
 
-                                </Grid>
-                            </Border>
-                        </Popup>
-                    </Grid>
+                                    </StackPanel>
+                                </Border>
 
-                    <!-- Other nav buttons (no popup, just placeholders) -->
-                    <Button Style="{StaticResource NavButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Recommendations" />
-                            <materialDesign:PackIcon Kind="ChevronDown"
-                                                     Width="16"
-                                                     Height="16"
-                                                     Margin="4,0,0,0"
-                                                     VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                                <!--  ── MIDDLE COLUMN: Banner Buttons ──  -->
+                                <Border Grid.Column="1" Padding="0">
+                                    <StackPanel>
 
-                    <Button Style="{StaticResource NavButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Categories" />
-                            <materialDesign:PackIcon Kind="ChevronDown"
-                                                     Width="16"
-                                                     Height="16"
-                                                     Margin="4,0,0,0"
-                                                     VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                                        <!--  TOP SELLERS banner  -->
+                                        <Button Style="{StaticResource BannerButton}">
+                                            <Grid
+                                                Width="280"
+                                                Height="90"
+                                                ClipToBounds="True">
+                                                <Rectangle
+                                                    Fill="#7b2fe3"
+                                                    RadiusX="0"
+                                                    RadiusY="0" />
+                                                <!--  Purple gradient overlay  -->
+                                                <Rectangle>
+                                                    <Rectangle.Fill>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Offset="0" Color="#9b3de8" />
+                                                            <GradientStop Offset="1" Color="#5a1fad" />
+                                                        </LinearGradientBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                                <Border
+                                                    Padding="20,6"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Background="White">
+                                                    <TextBlock
+                                                        FontSize="18"
+                                                        FontWeight="Bold"
+                                                        Foreground="#1b2838"
+                                                        Text="TOP SELLERS" />
+                                                </Border>
+                                            </Grid>
+                                        </Button>
 
-                    <Button Style="{StaticResource NavButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Hardware" />
-                            <materialDesign:PackIcon Kind="ChevronDown"
-                                                     Width="16"
-                                                     Height="16"
-                                                     Margin="4,0,0,0"
-                                                     VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                                        <!--  DISCOUNTS & EVENTS banner  -->
+                                        <Button Style="{StaticResource BannerButton}">
+                                            <Grid
+                                                Width="280"
+                                                Height="90"
+                                                ClipToBounds="True">
+                                                <Rectangle>
+                                                    <Rectangle.Fill>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Offset="0" Color="#0f8a6e" />
+                                                            <GradientStop Offset="1" Color="#0a5c4a" />
+                                                        </LinearGradientBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                                <Border
+                                                    Padding="20,6"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Background="White">
+                                                    <TextBlock
+                                                        FontSize="16"
+                                                        FontWeight="Bold"
+                                                        Foreground="#1b2838"
+                                                        Text="DISCOUNTS &amp; EVENTS" />
+                                                </Border>
+                                            </Grid>
+                                        </Button>
 
-                </StackPanel>
-            </DockPanel>
+                                    </StackPanel>
+                                </Border>
 
-            <!-- Page content behind the nav -->
-            <TextBlock Text="Your page content goes here"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="#4a6a85"
-                       FontSize="20" />
-        </Grid>
-    </Window>
+                                <!--  ── RIGHT COLUMN: Top Destinations + My Account ──  -->
+                                <Border
+                                    Grid.Column="2"
+                                    Padding="24,16,24,20"
+                                    Background="#1b2838">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--  TOP DESTINATIONS  -->
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock
+                                                Margin="0,0,0,10"
+                                                FontSize="11"
+                                                FontWeight="Bold"
+                                                Foreground="#8ba8be"
+                                                Text="TOP DESTINATIONS" />
+                                            <Button Content="Free to Play" Style="{StaticResource PopupLink}" />
+                                            <Button Content="Demos" Style="{StaticResource PopupLink}" />
+                                            <Button Content="News &amp; Updates" Style="{StaticResource PopupLink}" />
+                                            <Button Content="Points Shop" Style="{StaticResource PopupLink}" />
+                                            <Button Content="Gift Cards" Style="{StaticResource PopupLink}" />
+                                        </StackPanel>
+
+                                        <!--  MY ACCOUNT  -->
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock
+                                                Margin="0,0,0,10"
+                                                FontSize="11"
+                                                FontWeight="Bold"
+                                                Foreground="#8ba8be"
+                                                Text="MY ACCOUNT" />
+                                            <Button Content="My Preferences" Style="{StaticResource PopupLink}" />
+                                            <Button Content="My Wishlist" Style="{StaticResource PopupLink}" />
+                                            <Button Content="My Family" Style="{StaticResource PopupLink}" />
+                                        </StackPanel>
+
+                                    </Grid>
+                                </Border>
+
+                            </Grid>
+                        </Border>
+                    </Popup>
+                </Grid>
+
+                <!--  Other nav buttons (no popup, just placeholders)  -->
+                <Button Style="{StaticResource NavButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Recommendations" />
+                        <materialDesign:PackIcon
+                            Width="16"
+                            Height="16"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Kind="ChevronDown" />
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource NavButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Categories" />
+                        <materialDesign:PackIcon
+                            Width="16"
+                            Height="16"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Kind="ChevronDown" />
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource NavButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Hardware" />
+                        <materialDesign:PackIcon
+                            Width="16"
+                            Height="16"
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Kind="ChevronDown" />
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+        </DockPanel>
+
+        <!--  Page content behind the nav  -->
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="20"
+            Foreground="#4a6a85"
+            Text="Your page content goes here" />
+    </Grid>
+</Window>

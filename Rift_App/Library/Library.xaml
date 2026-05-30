@@ -61,7 +61,7 @@
                                             FontWeight="SemiBold"
                                             Foreground="#A7BDD1">
 
-                                            <Run Text="All" />
+                                            <Run Text="{DynamicResource library_all}" />
                                             <Run Text="{Binding TotalGames}" />
                                         </TextBlock>
                                     </StackPanel>

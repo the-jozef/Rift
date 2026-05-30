@@ -134,7 +134,7 @@
                                                         <TextBlock
                                                             FontSize="13"
                                                             Foreground="{Binding StatusColor}"
-                                                            Text="{Binding OnlineStatus}" />
+                                                            Text="{Binding OnlineStatusDisplay}" />
                                                     </StackPanel>
                                                 </StackPanel>
                                             </Grid>
@@ -149,7 +149,7 @@
                                                             HorizontalAlignment="Left"
                                                             FontSize="17"
                                                             Foreground="White"
-                                                            Text="Recent Activity" />
+                                                            Text="{DynamicResource account_recent_activity}" />
 
                                                         <TextBlock
                                                             HorizontalAlignment="Right"
@@ -199,7 +199,7 @@
                                                                                 VerticalAlignment="Center"
                                                                                 FontSize="16"
                                                                                 Foreground="White"
-                                                                                Text="Image Error" />
+                                                                                Text="{DynamicResource account_image_error}" />
 
                                                                             <Image RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill">
 
@@ -242,7 +242,8 @@
                                                                                 TextElement.FontSize="13.5"
                                                                                 TextElement.Foreground="#CCCCCC">
 
-                                                                                <TextBlock HorizontalAlignment="Right" Text="{Binding PlaytimeTotalDisplay, StringFormat='{}{0} on record'}" />
+                                                                                <TextBlock HorizontalAlignment="Right" 
+                                                                                           Text="{Binding PlaytimeTotalWithRecord}" />
 
                                                                                 <TextBlock
                                                                                     Margin="0,2,0,2"
@@ -267,7 +268,7 @@
                                                                                 VerticalAlignment="Center"
                                                                                 FontSize="13.8"
                                                                                 Foreground="White"
-                                                                                Text="Achievement Progress" />
+                                                                                Text="{DynamicResource account_achievement_progress}" />
 
                                                                             <TextBlock
                                                                                 Margin="10,0,0,0"
@@ -397,7 +398,7 @@
                                                     FontSize="26"
                                                     FontWeight="Thin"
                                                     Foreground="White"
-                                                    Text="Level" />
+                                                    Text="{DynamicResource account_level}" />
 
                                                 <Viewbox
                                                     Width="30"
@@ -444,7 +445,7 @@
                                                                 <TextBlock
                                                                     FontSize="17"
                                                                     Foreground="White"
-                                                                    Text="Games" />
+                                                                    Text="{DynamicResource nav_games}" />
 
                                                                 <TextBlock
                                                                     Margin="8,-4,0,0"
@@ -469,7 +470,7 @@
                                                                 <TextBlock
                                                                     FontSize="17"
                                                                     Foreground="White"
-                                                                    Text="Wishlist" />
+                                                                    Text="{DynamicResource nav_wishlist}" />
 
                                                                 <TextBlock
                                                                     Margin="8,-4,0,0"
@@ -487,7 +488,7 @@
                                                             Background="Transparent"
                                                             BorderBrush="Transparent"
                                                             Command="{Binding SwitchAccountCommand}"
-                                                            Content="Change Account"
+                                                            Content="{DynamicResource nav_change_account}"
                                                             Cursor="Hand"
                                                             FontSize="17"
                                                             Foreground="White" />
@@ -499,7 +500,7 @@
                                                             Background="Transparent"
                                                             BorderBrush="Transparent"
                                                             Command="{Binding GoToStoreCommand}"
-                                                            Content="Store"
+                                                            Content="{DynamicResource nav_store}"
                                                             Cursor="Hand"
                                                             FontSize="17"
                                                             Foreground="White" />
@@ -509,7 +510,7 @@
                                                             <TextBlock
                                                                 FontSize="17"
                                                                 Foreground="White"
-                                                                Text="Friends" />
+                                                                Text="{DynamicResource nav_friends}" />
 
                                                             <TextBlock
                                                                 Margin="8,-4,0,0"
@@ -523,14 +524,14 @@
                                                             <TextBlock
                                                                 FontSize="13"
                                                                 Foreground="#F4C430"
-                                                                Text="⚠ Friends list is private"
+                                                                Text="{DynamicResource account_friends_private}"
                                                                 TextWrapping="Wrap" />
 
                                                             <TextBlock
                                                                 Margin="0,6,0,0"
                                                                 FontSize="12"
                                                                 Foreground="#A8B8C8"
-                                                                Text="Set your friends list to Public in Steam → Profile → Edit Profile → Privacy Settings."
+                                                                Text="{DynamicResource account_friends_private_hint}"
                                                                 TextWrapping="Wrap" />
                                                         </StackPanel>
 
@@ -593,7 +594,8 @@
 
                                                                                         <TextBlock.Style>
                                                                                             <Style TargetType="TextBlock">
-                                                                                                <Setter Property="Text" Value="{Binding Status}" />
+                                                                                                <Setter Property="Text"
+                                                                                                        Value="{Binding StatusDisplay}" />
                                                                                                 <Setter Property="Foreground" Value="#7A8A9A" />
                                                                                                 <Style.Triggers>
                                                                                                     <DataTrigger Binding="{Binding Status}" Value="In-Game">

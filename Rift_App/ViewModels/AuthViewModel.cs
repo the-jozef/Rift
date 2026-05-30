@@ -145,8 +145,7 @@ namespace Rift_App.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(
-                        $"[AuthVM] Could not delete user folder: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine( $"[AuthVM] Could not delete user folder: {ex.Message}");
                 }
             }
         }
@@ -334,9 +333,9 @@ namespace Rift_App.ViewModels
                 ShowError("Password must be at least 6 characters.");
                 return;
             }
-            if (RegisterPassword.Length > 50)
+            if (RegisterPassword.Length > 40)
             {
-                ShowError("Password cannot be longer than 50 characters.");
+                ShowError("Password cannot be longer than 40 characters.");
                 return;
             }
 
