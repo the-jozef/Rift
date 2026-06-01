@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using Rift_App.Languages;
 using Rift_App.Services;
 using Rift_App.ViewModels;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace Rift_App.Models
 {
-    public class WishlistGameModel
+    public class WishlistGameModel : ObservableObject
     {
         public int AppId { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -43,8 +44,7 @@ namespace Rift_App.Models
                     DateTimeStyles.None,
                     out var date))
                 {
-                    return CapitalizeFirstLetter(
-                        date.ToString("d. MMMM yyyy", LanguageService.Current));              
+                    return CapitalizeFirstLetter(date.ToString(LanguageService.CurrentLanguage == "sk" ? "d.M.yyyy" : "M/d/yyyy", LanguageService.Current));
                 }
                 return ReleaseDateDisplay_Raw;
             }
@@ -140,6 +140,15 @@ namespace Rift_App.Models
                          + s.Substring(i + 1);
             }
             return s;
+        }
+
+        public void NotifyLanguageChanged()
+        {
+            OnPropertyChanged(nameof(ReleaseDateDisplay));
+            OnPropertyChanged(nameof(DateAddedDisplay));
+            OnPropertyChanged(nameof(TranslatedDisplayTags));
+            OnPropertyChanged(nameof(ReviewDescDisplay));
+            OnPropertyChanged(nameof(PriceDisplay));
         }
         // ─── IMAGE VM ─────────────────────────────────────────────────────
 

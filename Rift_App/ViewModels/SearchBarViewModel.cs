@@ -58,7 +58,7 @@ namespace Rift_App.ViewModels
                                            .WaitAsync(linked.Token);
 
                 var minimumDisplayTask = Task.Delay(
-                    TimeSpan.FromSeconds(3), token);
+                    TimeSpan.FromSeconds(1.5), token);
 
                 List<SearchResultModel> results;
                 try

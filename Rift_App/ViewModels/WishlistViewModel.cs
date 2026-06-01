@@ -8,11 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+
 
 namespace Rift_App.ViewModels
 {
@@ -24,12 +26,6 @@ namespace Rift_App.ViewModels
         [ObservableProperty] private bool _isFetching = false;
         [ObservableProperty] private int _totalGames = 0;
         [ObservableProperty] private bool _isEmpty = false;
-
-        [RelayCommand]
-        private void SwitchToSk() => LanguageService.Switch("sk");
-
-        [RelayCommand]
-        private void SwitchToEn() => LanguageService.Switch("en");
 
         private CancellationTokenSource? _syncCts;
 
@@ -43,6 +39,12 @@ namespace Rift_App.ViewModels
 
         public event Action<GameModel>? OnGameSelected;
         public string AvatarUrl => SessionManager.AvatarUrl;
+
+
+        public WishlistViewModel()
+        {
+            LanguageService.LanguageChanged += OnLanguageChanged;
+        }
 
         // ─── LOAD ─────────────────────────────────────────────────────────
 
@@ -128,6 +130,16 @@ namespace Rift_App.ViewModels
             _lastVisibleRefresh = DateTime.UtcNow;
         }
 
+        // ─── LANGUAGE ─────────────────────────────────────────────────────
+        private void OnLanguageChanged()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                foreach (var g in Games)
+                    g.NotifyLanguageChanged();
+            });
+        }
+
         // ─── FETCH MISSING ────────────────────────────────────────────────
 
         private async Task FetchMissingAsync(List<WishlistItemRef> toFetch)
@@ -180,7 +192,12 @@ namespace Rift_App.ViewModels
             }
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var all = Games.Concat(allFetched).ToList();
+                var existingIds = new HashSet<int>(Games.Select(g => g.AppId));
+                var newGames = allFetched
+                    .Where(g => !existingIds.Contains(g.AppId))
+                    .ToList();
+
+                var all = Games.Concat(newGames).ToList();
                 RebuildSorted(all);
             });
         }
@@ -363,9 +380,10 @@ namespace Rift_App.ViewModels
         private void RebuildSorted(IEnumerable<WishlistGameModel> games)
         {
             var sorted = games
-                .OrderBy(GetGroup)
-                .ThenBy(GetPrice)
-                .ToList();
+                        .OrderBy(GetGroup)
+                        .ThenByDescending(GetPrice)
+                        .ThenByDescending(g => g.DateAddedUnix)
+                        .ToList();
 
             Games.Clear();
             foreach (var g in sorted)
@@ -379,23 +397,35 @@ namespace Rift_App.ViewModels
         {
             if (!g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 0;
             if (g.IsDlc && g.IsReleased && g.DiscountPercent > 0) return 1;
-            if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2;
-            if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 3;
-            if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4;
-            return 5;
+             if (!g.IsDlc && !g.IsReleased && g.IsPreOrder) return 2;
+            if (!g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 4;
+            if (g.IsFree) return 3;
+            if (g.IsDlc && g.IsReleased && g.DiscountPercent == 0) return 5;
+            return 6;
         }
 
         private static decimal GetPrice(WishlistGameModel g)
         {
-            if (g.IsFree || g.Price is "Free" or "N/A") return 0;
+            if (g.IsFree) return 0;
+
+            if (string.IsNullOrEmpty(g.Price) || g.Price == "N/A")
+                return decimal.MaxValue;
+
             var cleaned = g.Price
-                .Replace("$", "").Replace("€", "")
+                .Replace("$", "")
+                .Replace("€", "")
+                .Replace("£", "")
+                .Replace("Free To Play", "0")
+                .Replace("Free", "0")
                 .Replace(" ", "")
-                .Replace(",", ".").Trim();
-            return decimal.TryParse(cleaned,
-                System.Globalization.NumberStyles.Any,
-                System.Globalization.CultureInfo.InvariantCulture,
-                out var val) ? val : 0;
+                .Replace(",", ".")
+                .Trim();
+
+            return decimal.TryParse(
+                cleaned,
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out var val) ? val : decimal.MaxValue;
         }
 
         private void InsertSorted(WishlistGameModel game)
@@ -434,6 +464,7 @@ namespace Rift_App.ViewModels
 
                 if (existingGroup > gameGroup) { index = i; break; }
                 if (existingGroup == gameGroup && existingPrice < gamePrice) { index = i; break; }
+                if (existingGroup == gameGroup && existingPrice == gamePrice && Games[i].DateAddedUnix < game.DateAddedUnix) { index = i; break; }
             }
 
             Games.Insert(index, game);

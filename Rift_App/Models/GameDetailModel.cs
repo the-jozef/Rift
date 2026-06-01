@@ -20,6 +20,9 @@ namespace Rift_App.Models
         // Cache timestamp — used to check if detail is still fresh
         public DateTime CachedAt { get; set; } = DateTime.UtcNow;
 
+        [JsonIgnore]
+        public string AchievementsDisplay => string.Format(L.Get("library_page_achievements_title"), AchievementsUnlocked, AchievementsTotal);
+
         // ─── DISPLAY HELPERS ──────────────────────────────────────────────
         public string LastPlayedDisplay
         {

@@ -1,7 +1,6 @@
 ﻿using Rift_App.Loading;
 using Rift_App.Services;
 using Rift_App.ViewModels;
-using System.Diagnostics;
 using System.Windows;
 
 namespace Rift_App
@@ -14,7 +13,7 @@ namespace Rift_App
 
             var lang = LanguageService.LoadLanguage();
             LanguageService.Switch(lang);
-
+            
             // 1. Check Steam installed + running + initialize Steamworks
             bool steamReady = await SteamStartupService.CheckAndStartSteamAsync();
             if (!steamReady) return;  // Shutdown already called inside

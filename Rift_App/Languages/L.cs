@@ -11,7 +11,8 @@ namespace Rift_App.Languages
         {
             try
             {
-                return Application.Current.Resources[key] as string ?? key;
+                var value = Application.Current.Resources[key] as string ?? key;
+                return value;
             }
             catch
             {

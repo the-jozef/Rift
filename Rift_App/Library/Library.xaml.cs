@@ -21,7 +21,6 @@ namespace Rift_App.Library
 
             Loaded += Library_Loaded;
 
-            // Dispose GameDetailPanel viewmodel pri unloade
             Unloaded += (_, _) => GameDetailPanel.ViewModel.Dispose();
         }
 

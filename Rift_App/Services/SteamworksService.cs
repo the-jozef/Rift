@@ -80,16 +80,6 @@ namespace Rift_App.Services
 
         private const int SW_RESTORE = 9;
 
-        public static void FocusSteamWindow()
-        {
-            var process = System.Diagnostics.Process.GetProcessesByName("steam").FirstOrDefault();
-            if (process == null) return;
-            var hwnd = process.MainWindowHandle;
-            if (hwnd == IntPtr.Zero) return;
-            ShowWindow(hwnd, SW_RESTORE);
-            SetForegroundWindow(hwnd);
-        }
-
         public static async Task<bool> LaunchSteamAndWaitAsync()
         {
             _steamWasAlreadyRunning = IsSteamRunning();

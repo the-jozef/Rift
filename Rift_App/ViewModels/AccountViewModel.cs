@@ -287,15 +287,7 @@ namespace Rift_App.ViewModels
                     if (lastPlayed.HasValue)
                     {
                         var diff = (DateTime.UtcNow.Date - lastPlayed.Value.Date).Days;
-                        game.LastPlayedDisplay = diff switch
-                        {
-                            0 => L.Get("date_last_played_today"),
-                            1 => L.Get("date_last_played_yesterday"),
-                            _ => string.Format(
-                                    L.Get("date_last_played_on"),
-                                    CapitalizeMonth(
-                                        lastPlayed.Value.ToString("d MMM", LanguageService.Current)))
-                        };
+                        game.LastPlayedDate = lastPlayed;
                     }
 
                     // ── 3. Achievements ───────────────────────────────────
@@ -333,7 +325,7 @@ namespace Rift_App.ViewModels
                             .OrderByDescending(a => a.UnlockTime)
                             .ToList();
 
-                        game.RecentIcons = recent.Take(5).Select(a => new RecentAchIcon
+                        game.RecentIcons = recent.Take(5).Select(a => new RecentActivityGame.RecentAchIcon
                         {
                             IconUrl = !string.IsNullOrEmpty(a.LocalIconPath)
                                          ? a.LocalIconPath : a.IconUrl,
@@ -448,10 +440,10 @@ namespace Rift_App.ViewModels
             if (!SteamworksService.IsSteamInstalled())
             {
                 MessageBox.Show(
-                    "Steam is not installed on this computer.",
-                    "Steam Not Found",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+           L.Get("msg_steam_not_installed"),
+           L.Get("msg_steam_not_installed_title"),
+           MessageBoxButton.OK,
+           MessageBoxImage.Warning);
                 return;
             }
 
@@ -460,14 +452,6 @@ namespace Rift_App.ViewModels
                 FileName = url,
                 UseShellExecute = true
             });
-        }
-        private static string CapitalizeMonth(string s)
-        {
-            return string.Join(" ",
-                s.Split(' ').Select(word =>
-                    word.Length > 0 && char.IsLetter(word[0])
-                        ? char.ToUpper(word[0]) + word.Substring(1)
-                        : word));
         }
     }
 }

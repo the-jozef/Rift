@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using MaterialDesignThemes.Wpf.Internal;
 using Microsoft.Win32;
 using Rift_App.Authorization;
 using Rift_App.Loading;
@@ -45,16 +46,19 @@ namespace Rift_App.ViewModels
             {
                 _main.Hide();
                 _loading.Hide();
+                _auth.Reinitialize();
                 _auth.ViewModel.ShowAccountSelection();
                 _auth.Show();
             }
             catch { }
         }
+
         public void SwitchToAuth()
         {
             try
             {
                 _main.Hide();
+                _auth.Reinitialize();
                 _auth.ViewModel.ShowAccountSelection();
                 _auth.Show();
             }

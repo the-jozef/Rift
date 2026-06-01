@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Rift_App.Languages;
 using Rift_App.Models;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,7 @@ namespace Rift_App.Services
                 var response = await _http.PostAsync($"{BaseUrl}/api/auth/register", body);
                 return FromJson<AuthResponse>(await response.Content.ReadAsStringAsync());
             }
-            catch { return new AuthResponse { Success = false, Message = "Connection error. Check your internet." }; }
+            catch { return new AuthResponse { Success = false, Message = L.Get("err_connection_error") }; }
         }
 
         public static async Task<AuthResponse?> LoginRiftAsync(string username, string password)
@@ -75,7 +76,7 @@ namespace Rift_App.Services
                 var response = await _http.PostAsync($"{BaseUrl}/api/auth/login", body);
                 return FromJson<AuthResponse>(await response.Content.ReadAsStringAsync());
             }
-            catch { return new AuthResponse { Success = false, Message = "Connection error. Check your internet." }; }
+            catch { return new AuthResponse { Success = false, Message = L.Get("err_connection_error") }; }
         }
 
         public static async Task<AuthResponse?> LoginSteamAsync(string steamId64)
@@ -86,7 +87,7 @@ namespace Rift_App.Services
                 var response = await _http.PostAsync($"{BaseUrl}/api/auth/steam-login", body);
                 return FromJson<AuthResponse>(await response.Content.ReadAsStringAsync());
             }
-            catch { return new AuthResponse { Success = false, Message = "Connection error. Check your internet." }; }
+            catch { return new AuthResponse { Success = false, Message = L.Get("err_connection_error") }; }
         }
 
         // ─── DEVICE  ─────────────────────────────────────────────────────────
@@ -193,13 +194,13 @@ namespace Rift_App.Services
             catch { return null; }
         }
 
-        public static async Task<RecentActivityResponse?> GetRecentActivityAsync(string steamId64)
+        public static async Task<RecentActivityGame.RecentActivityResponse> GetRecentActivityAsync(string steamId64)
         {
             try
             {
                 var response = await GetWithRetryAsync(
                     $"{BaseUrl}/api/steam/player/{steamId64}/recentactivity");
-                return response == null ? null : FromJson<RecentActivityResponse>(response);
+                return response == null ? null : FromJson<RecentActivityGame.RecentActivityResponse>(response);
             }
             catch { return null; }
         }

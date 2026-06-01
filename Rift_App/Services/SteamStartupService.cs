@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rift_App.Languages;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -25,10 +26,9 @@ namespace Rift_App.Services
             if (!SteamworksService.IsSteamInstalled())
             {
                 MessageBox.Show(
-                    "Steam is not installed on this computer.\n\n" +
-                    "Rift requires Steam to be installed to work.\n" +
-                    "Please install Steam from https://store.steampowered.com/about/",
-                    "Steam Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
+    L.Get("msg_steam_not_installed"),
+    L.Get("msg_steam_not_installed_title"),
+    MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
                 return false;
             }
@@ -36,11 +36,9 @@ namespace Rift_App.Services
             if (_firstRun)
             {
                 var result = MessageBox.Show(
-                    "Welcome to Rift!\n\n" +
-                    "Rift requires Steam to collect your game library and achievements.\n\n" +
-                    "Steam will be launched automatically when needed.\n" +
-                    "Click OK to continue.",
-                    "Steam Required", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+    L.Get("msg_welcome"),
+    L.Get("msg_welcome_title"),
+    MessageBoxButton.OKCancel, MessageBoxImage.Information);
 
                 if (result == MessageBoxResult.Cancel)
                 {
@@ -54,15 +52,17 @@ namespace Rift_App.Services
             if (!SteamworksService.IsSteamRunning())
             {
                 MessageBox.Show(
-                    "Steam is not running.\n\nRift will launch Steam automatically.",
-                    "Launching Steam", MessageBoxButton.OK, MessageBoxImage.Information);
+    L.Get("msg_steam_not_running"),
+    L.Get("msg_steam_launching_title"),
+    MessageBoxButton.OK, MessageBoxImage.Information);
 
                 bool launched = await SteamworksService.LaunchSteamAndWaitAsync();
                 if (!launched)
                 {
                     MessageBox.Show(
-                        "Could not launch Steam.\n\nPlease start Steam manually and try again.",
-                        "Steam Launch Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+    L.Get("msg_steam_launch_failed"),
+    L.Get("msg_steam_launch_failed_title"),
+    MessageBoxButton.OK, MessageBoxImage.Warning);
                     Application.Current.Shutdown();
                     return false;
                 }
@@ -79,13 +79,9 @@ namespace Rift_App.Services
             if (!init)
             {
                 MessageBox.Show(
-                    "Could not connect to Steam after several attempts.\n\n" +
-                    "Possible causes:\n" +
-                    "• Steam is still updating — wait for it to finish\n" +
-                    "• You are not logged into Steam\n" +
-                    "• steam_appid.txt is missing from the app folder\n\n" +
-                    "Please resolve the issue and restart Rift.",
-                    "Steam Connection Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+     L.Get("msg_steam_connect_failed"),
+     L.Get("msg_steam_connect_failed_title"),
+     MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
                 return false;
             }

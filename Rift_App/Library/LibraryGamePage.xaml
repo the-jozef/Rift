@@ -222,9 +222,9 @@
                                                     Text="{DynamicResource library_page_last_played}" />
 
                                                 <TextBlock
+                                                    HorizontalAlignment="Center"
                                                     FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                     FontSize="13.2"
-                                                    HorizontalAlignment="Center"
                                                     FontWeight="Medium"
                                                     Foreground="#92969C"
                                                     Opacity="0.7">
@@ -236,13 +236,10 @@
                                                             <Setter Property="Margin" Value="2,3,0,0" />
                                                             <Style.Triggers>
 
-                                                                <DataTrigger Binding="{Binding Detail.LastPlayed}"
-                                                                             Value="{x:Null}">
+                                                                <DataTrigger Binding="{Binding Detail.LastPlayed}" Value="{x:Null}">
 
-                                                                    <Setter Property="Text"
-                                                                            Value="{DynamicResource date_never}" />
-                                                                    <Setter Property="Margin"
-                                                                            Value="3,3,0,0" />
+                                                                    <Setter Property="Text" Value="{DynamicResource date_never}" />
+                                                                    <Setter Property="Margin" Value="3,3,0,0" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -269,8 +266,8 @@
                                                         Text="{DynamicResource library_page_playtime}" />
 
                                                     <TextBlock
-                                                        HorizontalAlignment="Center"
                                                         Margin="2,3,0,0"
+                                                        HorizontalAlignment="Center"
                                                         FontFamily="/Resources/Noto/NotoSans-Regular.ttf#Noto Sans"
                                                         FontSize="13.2"
                                                         FontWeight="Medium"
@@ -293,7 +290,8 @@
                                                 <StackPanel Margin="10,0,0,0" Orientation="Vertical">
 
                                                     <TextBlock
-                                                        HorizontalAlignment="Center"
+                                                        Margin="2,0,0,0"
+                                                        HorizontalAlignment="Left"
                                                         FontFamily="Arial"
                                                         FontSize="14"
                                                         Foreground="#B6BBBF"
@@ -476,7 +474,7 @@
                                                 VerticalAlignment="Center"
                                                 FontSize="15"
                                                 Foreground="#87898C"
-                                                Text="achieved" />
+                                                Text="{DynamicResource library_page_achieved}" />
                                         </StackPanel>
 
                                         <Border
@@ -606,21 +604,14 @@
                                                 <TextBlock
                                                     FontSize="13.3"
                                                     FontWeight="Medium"
-                                                    Foreground="#D4D4D4">
-
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="You've unlocked  {0}/{1}">
-                                                            <Binding Path="Detail.AchievementsUnlocked" />
-                                                            <Binding Path="Detail.AchievementsTotal" />
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
+                                                    Foreground="#D4D4D4"
+                                                    Text="{Binding DetailAchievementsDisplay}" />
 
                                                 <TextBlock
-                                                    Margin="6,0,0,0"
+                                                    Margin="6,-0.7,0,0"
                                                     FontSize="13.4"
                                                     Foreground="#848B91"
-                                                    Text="{Binding Detail.AchievementsPercentDisplay}" />
+                                                    Text="{Binding AchievementsDisplay}" />
                                             </StackPanel>
 
                                             <ProgressBar

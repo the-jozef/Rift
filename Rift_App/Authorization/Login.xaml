@@ -90,7 +90,7 @@
                         <Grid Grid.Row="1" Margin="47,20,0,0">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="133.5" />
+                                <ColumnDefinition Width="128" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="130" />
                             </Grid.ColumnDefinitions>
@@ -102,7 +102,7 @@
                             <Border Grid.Column="2" Style="{StaticResource Rift_Login_Border_Right_Line}" />
                         </Grid>
 
-                        <Grid Grid.Row="2" Margin="91,20,0,0">
+                        <Grid Grid.Row="2" Margin="93,20,0,0">
 
                             <Button Command="{Binding LoginSteamCommand}" Style="{StaticResource Rift_Login_Button_SteamConnection}" />
                         </Grid>

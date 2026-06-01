@@ -44,17 +44,16 @@ namespace Rift_App.Services
             var merged = Application.Current.Resources.MergedDictionaries;
             var old = merged.FirstOrDefault(d =>
                 d.Source?.OriginalString.Contains("Strings.") == true);
-
+ 
             if (old != null) merged.Remove(old);
 
             merged.Add(new ResourceDictionary
             {
-                Source = new Uri($"/Languages/Strings.{lang}.xaml",UriKind.Relative)
+                Source = new Uri($"/Languages/Strings.{lang}.xaml", UriKind.Relative)
             });
 
-            //Save to file
+           
             Save(lang);
-
             LanguageChanged?.Invoke();
         }
 

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Rift_App.Authorization;
+using Rift_App.Languages;
 using Rift_App.Library;
 using Rift_App.Models;
 using Rift_App.Services;
@@ -172,13 +173,14 @@ namespace Rift_App.ViewModels
         [RelayCommand]
         private async Task SwitchLanguageAsync(string lang)
         {
-            //If we are already in this language → ignore command, do nothing
             if (LanguageService.CurrentLanguage == lang) return;
 
-            // Switch language and save
             LanguageService.Switch(lang);
 
-            //Show loading — it will reload all data in the new language
+            _libraryView = null;
+            _wishlistView = null;
+            _accountView = null;
+
             ViewNavigator.Instance?.ShowLoading();
         }
 
@@ -191,8 +193,10 @@ namespace Rift_App.ViewModels
 
                 if (!File.Exists(sourcePath))
                 {
-                    MessageBox.Show("Document was not found.", "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(
+              L.Get("msg_document_not_found"),
+              L.Get("msg_document_not_found_title"),
+              MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -216,8 +220,11 @@ namespace Rift_App.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Document] Open error: {ex.Message}");
-                MessageBox.Show("Document could not be opened.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+
+                MessageBox.Show(
+         L.Get("msg_document_open_failed"),
+         L.Get("msg_document_open_failed_title"),
+         MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -231,8 +238,10 @@ namespace Rift_App.ViewModels
 
                 if (!File.Exists(sourcePath))
                 {
-                    MessageBox.Show("Document was not found.", "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(
+      L.Get("msg_document_not_found"),
+      L.Get("msg_document_not_found_title"),
+      MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -258,8 +267,11 @@ namespace Rift_App.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"[Document] Open error: {ex.Message}");
-                MessageBox.Show("Document could not be opened.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+
+                MessageBox.Show(
+        L.Get("msg_document_open_failed"),
+        L.Get("msg_document_open_failed_title"),
+        MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -283,8 +295,10 @@ namespace Rift_App.ViewModels
         {
             if (!SteamworksService.IsSteamInstalled())
             {
-                MessageBox.Show("Steam is not installed on this computer.",
-                    "Steam Not Found", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(
+     L.Get("msg_steam_not_found"),
+     L.Get("msg_steam_not_found_title"),
+     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             System.Diagnostics.Process.Start(

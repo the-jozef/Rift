@@ -120,20 +120,30 @@
                                                 <ColumnDefinition Width="315" />
                                             </Grid.ColumnDefinitions>
 
-                                            <Border
-                                                Grid.Column="0"
-                                                MinWidth="830"
-                                                MinHeight="375"
-                                                Panel.ZIndex="3"
-                                                CornerRadius="3,0,0,3">
+                                            <Grid Grid.Column="0">
 
-                                                <Border.Background>
-                                                    <ImageBrush
-                                                        ImageSource="{Binding FeaturedMainImage.Bitmap}"
-                                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                                        Stretch="UniformToFill" />
-                                                </Border.Background>
-                                            </Border>
+                                                <TextBlock
+                                                    Margin="0,0,250,50"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    FontSize="15"
+                                                    Foreground="White"
+                                                    Text="{DynamicResource store_loading}" />
+
+                                                <Border
+                                                    MinWidth="830"
+                                                    MinHeight="375"
+                                                    Panel.ZIndex="3"
+                                                    CornerRadius="3,0,0,3">
+
+                                                    <Border.Background>
+                                                        <ImageBrush
+                                                            ImageSource="{Binding FeaturedMainImage.Bitmap}"
+                                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                                            Stretch="UniformToFill" />
+                                                    </Border.Background>
+                                                </Border>
+                                            </Grid>
 
                                             <Grid Grid.Column="1">
                                                 <Border Background="#0B151E" CornerRadius="0,3,3,0">
@@ -220,7 +230,7 @@
                                                                 FontSize="16"
                                                                 TextWrapping="Wrap">
 
-                                                               <Run Text="{Binding CurrentFeaturedGame.StatusTextDisplay, Mode=OneWay}">
+                                                                <Run Text="{Binding CurrentFeaturedGame.StatusTextDisplay, Mode=OneWay}">
                                                                     <Run.Style>
                                                                         <Style TargetType="Run">
                                                                             <Setter Property="Foreground" Value="#4DC44D" />
@@ -236,8 +246,7 @@
                                                         </Grid>
 
                                                         <Grid Grid.Row="3" Margin="15,6,15,0">
-                                                            <ItemsControl VerticalAlignment="Top"
-                                                                          ItemsSource="{Binding CurrentFeaturedGame.TranslatedGenres}">
+                                                            <ItemsControl VerticalAlignment="Top" ItemsSource="{Binding CurrentFeaturedGame.TranslatedGenres}">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <WrapPanel />
@@ -250,10 +259,11 @@
                                                                             Padding="6,2"
                                                                             Background="#394148"
                                                                             CornerRadius="2">
-                                                                            
-                                                                            <TextBlock FontSize="11"
-                                                                                       Foreground="White"
-                                                                                       Text="{Binding}" />
+
+                                                                            <TextBlock
+                                                                                FontSize="11"
+                                                                                Foreground="White"
+                                                                                Text="{Binding}" />
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -296,7 +306,7 @@
                                                                             FontSize="16"
                                                                             FontWeight="SemiBold"
                                                                             Foreground="#a4d007"
-                                                                            Text="{Binding CurrentFeaturedGame.PriceDisplay}"/>
+                                                                            Text="{Binding CurrentFeaturedGame.PriceDisplay}" />
                                                                     </StackPanel>
                                                                 </Border>
                                                             </StackPanel>
@@ -517,96 +527,104 @@
                                                 Text="{DynamicResource store_discounts_free}" />
                                         </Grid>
 
-                                        <ItemsControl
-                                            Grid.Row="1"
-                                            Margin="0,10,0,0"
-                                            ItemsSource="{Binding VisibleDiscounts}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <UniformGrid Columns="4" />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
+                                        <Grid Grid.Row="1">
 
-                                                    <Button
-                                                        Height="Auto"
-                                                        Margin="0,0,8,8"
-                                                        Padding="0"
-                                                        Background="Transparent"
-                                                        BorderBrush="Transparent"
-                                                        Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}">
+                                            <TextBlock
+                                                Margin="465,0,0,50"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom"
+                                                FontSize="15"
+                                                Foreground="White"
+                                                Text="{DynamicResource store_loading}" />
 
-                                                        <StackPanel Orientation="Vertical">
-                                                            <StackPanel.Background>
-                                                                <LinearGradientBrush>
-                                                                    <GradientStop Color="#1C7096" />
-                                                                    <GradientStop Color="#1E739A" />
-                                                                </LinearGradientBrush>
-                                                            </StackPanel.Background>
+                                            <ItemsControl Margin="0,10,0,0" ItemsSource="{Binding VisibleDiscounts}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <UniformGrid Columns="4" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
 
-                                                            <Image
-                                                                Height="101"
-                                                                HorizontalAlignment="Stretch"
-                                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                                                Source="{Binding HeaderImage.Bitmap}"
-                                                                Stretch="UniformToFill" />
+                                                        <Button
+                                                            Height="Auto"
+                                                            Margin="0,0,8,8"
+                                                            Padding="0"
+                                                            Background="Transparent"
+                                                            BorderBrush="Transparent"
+                                                            Command="{Binding DataContext.SelectGameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
 
-                                                            <Grid
-                                                                Height="40"
-                                                                Margin="0,5,4,5"
-                                                                HorizontalAlignment="Right">
+                                                            <StackPanel Orientation="Vertical">
+                                                                <StackPanel.Background>
+                                                                    <LinearGradientBrush>
+                                                                        <GradientStop Color="#1C7096" />
+                                                                        <GradientStop Color="#1E739A" />
+                                                                    </LinearGradientBrush>
+                                                                </StackPanel.Background>
 
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="Auto" />
-                                                                    <ColumnDefinition Width="Auto" />
-                                                                </Grid.ColumnDefinitions>
+                                                                <Image
+                                                                    Height="101"
+                                                                    HorizontalAlignment="Stretch"
+                                                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                                                    Source="{Binding HeaderImage.Bitmap}"
+                                                                    Stretch="UniformToFill" />
 
-                                                                <Border
-                                                                    Grid.Column="0"
-                                                                    Padding="5,0,5,0"
-                                                                    Background="#4C6B22"
-                                                                    CornerRadius="2,0,0,2"
-                                                                    Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                <Grid
+                                                                    Height="40"
+                                                                    Margin="0,5,4,5"
+                                                                    HorizontalAlignment="Right">
 
-                                                                    <TextBlock
-                                                                        VerticalAlignment="Center"
-                                                                        FontSize="22"
-                                                                        FontWeight="Bold"
-                                                                        Foreground="#BEEE11"
-                                                                        Text="{Binding DiscountPercent, StringFormat='-{0}%'}" />
-                                                                </Border>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="Auto" />
+                                                                        <ColumnDefinition Width="Auto" />
+                                                                    </Grid.ColumnDefinitions>
 
-                                                                <Border
-                                                                    Grid.Column="1"
-                                                                    Padding="8,0,8,0"
-                                                                    Background="#173143">
-
-                                                                    <StackPanel Orientation="Vertical">
+                                                                    <Border
+                                                                        Grid.Column="0"
+                                                                        Padding="5,0,5,0"
+                                                                        Background="#4C6B22"
+                                                                        CornerRadius="2,0,0,2"
+                                                                        Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                                                                         <TextBlock
-                                                                            HorizontalAlignment="Right"
-                                                                            FontSize="12"
-                                                                            Foreground="#738895"
-                                                                            Text="{Binding OriginalPrice}"
-                                                                            TextDecorations="Strikethrough"
-                                                                            Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                                                                        <TextBlock
-                                                                            FontSize="16"
-                                                                            FontWeight="SemiBold"
+                                                                            VerticalAlignment="Center"
+                                                                            FontSize="22"
+                                                                            FontWeight="Bold"
                                                                             Foreground="#BEEE11"
-                                                                            Text="{Binding PriceDisplay}" 
-                                                                            TextAlignment="Center" />
-                                                                    </StackPanel>
-                                                                </Border>
-                                                            </Grid>
-                                                        </StackPanel>
-                                                    </Button>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                                                            Text="{Binding DiscountPercent, StringFormat='-{0}%'}" />
+                                                                    </Border>
+
+                                                                    <Border
+                                                                        Grid.Column="1"
+                                                                        Padding="8,0,8,0"
+                                                                        Background="#173143">
+
+                                                                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+
+                                                                            <TextBlock
+                                                                                HorizontalAlignment="Right"
+                                                                                FontSize="12"
+                                                                                Foreground="#738895"
+                                                                                Text="{Binding OriginalPrice}"
+                                                                                TextDecorations="Strikethrough"
+                                                                                Visibility="{Binding HasDiscount, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                                                            <TextBlock
+                                                                                FontSize="16"
+                                                                                FontWeight="SemiBold"
+                                                                                Foreground="#BEEE11"
+                                                                                Text="{Binding PriceDisplay}"
+                                                                                TextAlignment="Center" />
+                                                                        </StackPanel>
+                                                                    </Border>
+                                                                </Grid>
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
 
@@ -763,7 +781,7 @@
                                                                         VerticalAlignment="Center"
                                                                         FontSize="14"
                                                                         Foreground="White"
-                                                                        Text="{Binding PriceDisplay}"  />
+                                                                        Text="{Binding PriceDisplay}" />
                                                                 </Border>
                                                             </Grid>
                                                         </StackPanel>
@@ -926,7 +944,7 @@
                                                                         FontSize="16"
                                                                         FontWeight="SemiBold"
                                                                         Foreground="#a4d007"
-                                                                        Text="{Binding PriceDisplay}"  />
+                                                                        Text="{Binding PriceDisplay}" />
                                                                 </Border>
                                                             </Grid>
 
@@ -944,15 +962,16 @@
                                                                                 Height="18"
                                                                                 Margin="0,5,0,0"
                                                                                 HorizontalAlignment="Left">
-                                                                                
+
                                                                                 <Border
                                                                                     Padding="5,0,5,0"
                                                                                     Background="#3D596F"
                                                                                     CornerRadius="2">
-                                                                                    
-                                                                                    <TextBlock FontSize="12"
-                                                                                               Foreground="#66BEF1"
-                                                                                               Text="{Binding}" />
+
+                                                                                    <TextBlock
+                                                                                        FontSize="12"
+                                                                                        Foreground="#66BEF1"
+                                                                                        Text="{Binding}" />
                                                                                 </Border>
                                                                             </Grid>
                                                                         </DataTemplate>
@@ -1059,11 +1078,12 @@
                                                                                     Foreground="#7C8E9C"
                                                                                     Kind="Microsoft" />
 
-                                                                                <TextBlock Grid.Row="2"
-                                                                                           Margin="3,5,5,0"
-                                                                                           FontSize="11"
-                                                                                           Foreground="#7C8E9C"
-                                                                                           Text="{Binding TranslatedGenresDisplay}" />
+                                                                                <TextBlock
+                                                                                    Grid.Row="2"
+                                                                                    Margin="3,5,5,0"
+                                                                                    FontSize="11"
+                                                                                    Foreground="#7C8E9C"
+                                                                                    Text="{Binding TranslatedGenresDisplay}" />
                                                                             </Grid>
 
                                                                             <Border
@@ -1104,7 +1124,7 @@
                                                                                         FontSize="18"
                                                                                         FontWeight="SemiBold"
                                                                                         Foreground="#BEEE11"
-                                                                                        Text="{Binding PriceDisplay}" >
+                                                                                        Text="{Binding PriceDisplay}">
 
                                                                                         <TextBlock.Style>
                                                                                             <Style TargetType="TextBlock">

@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Rift_App.Authorization;
-using Rift_App.Services;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
+using Rift_App.Authorization;
+using Rift_App.Languages;
 using Rift_App.Loading;
 using Rift_App.Models;
+using Rift_App.Services;
 using Rift_App.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 
 namespace Rift_App.ViewModels
 {
@@ -166,8 +167,8 @@ namespace Rift_App.ViewModels
         {
             ClearErrors();
 
-            if (string.IsNullOrWhiteSpace(Username)) { ShowError("Please enter your username."); return; }
-            if (string.IsNullOrWhiteSpace(Password)) { ShowError("Please enter your password."); return; }
+            if (string.IsNullOrWhiteSpace(Username)) { ShowError(L.Get("err_username_empty")); return; }
+            if (string.IsNullOrWhiteSpace(Password)) { ShowError(L.Get("err_password_empty")); return; }
 
             IsLoading = true;
 
@@ -177,7 +178,7 @@ namespace Rift_App.ViewModels
 
                 if (result == null || !result.Success)
                 {
-                    ShowError(result?.Message ?? "Invalid username or password.");
+                    ShowError(L.Get("err_invalid"));
                     return;
                 }
 
@@ -185,7 +186,7 @@ namespace Rift_App.ViewModels
                 SessionManager.NotifySessionReady();
                 ViewNavigator.Instance?.ShowLoading();
             }
-            catch { ShowError("Could not connect to server. Check your internet."); }
+            catch { ShowError(L.Get("err_could_not_connect")); }
             finally { IsLoading = false; }
         }
 
@@ -204,7 +205,7 @@ namespace Rift_App.ViewModels
 
                 if (string.IsNullOrEmpty(steamId))
                 {
-                    ShowError("Steam login was cancelled. Please try again.");
+                    ShowError(L.Get("err_steam_cancelled"));
                     return;
                 }
 
@@ -213,10 +214,9 @@ namespace Rift_App.ViewModels
                 if (result == null || !result.Success)
                 {
                     MessageBox.Show(
-                        "No Rift account was found for this Steam account.\n\nPlease register first by clicking \"Create Account\".",
-                        "Account Not Found",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+     L.Get("err_account_not_found"),
+     L.Get("err_account_not_found_title"),
+     MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
 
@@ -224,7 +224,7 @@ namespace Rift_App.ViewModels
                 SessionManager.NotifySessionReady();
                 ViewNavigator.Instance?.ShowLoading();
             }
-            catch { ShowError("Could not connect to server. Check your internet."); }
+            catch { ShowError(L.Get("err_could_not_connect")); }
             finally { IsLoading = false; }
         }
 
@@ -237,7 +237,7 @@ namespace Rift_App.ViewModels
 
             IsConnecting = true;
             SteamHasError = false;
-            SteamStatusMessage = "Waiting for Steam login...";
+            SteamStatusMessage = L.Get("steam_connect_waiting");
 
             try
             {
@@ -248,17 +248,17 @@ namespace Rift_App.ViewModels
                 if (string.IsNullOrEmpty(steamId))
                 {
                     SteamHasError = true;
-                    SteamStatusMessage = "Login cancelled. You can try again.";
+                    SteamStatusMessage = "steam_connect_cancelled";
                     return;
                 }
 
-                SteamStatusMessage = "Connected! Loading your profile...";
+                SteamStatusMessage = L.Get("steam_connect_loading");
 
                 var existing = await ApiService.LoginSteamAsync(steamId);
                 if (existing != null && existing.Success)
                 {
                     SteamHasError = true;
-                    SteamStatusMessage = "This Steam account already has a Rift account. Please login.";
+                    SteamStatusMessage = L.Get("steam_connect_already_exists");
                     return;
                 }
 
@@ -291,7 +291,7 @@ namespace Rift_App.ViewModels
             catch
             {
                 SteamHasError = true;
-                SteamStatusMessage = "Something went wrong. Please try again.";
+                SteamStatusMessage = L.Get("steam_connect_error");
             }
             finally { IsConnecting = false; }
         }
@@ -305,37 +305,37 @@ namespace Rift_App.ViewModels
 
             if (string.IsNullOrWhiteSpace(RegisterUsername))
             {
-                ShowError("Please enter a username.");
+                ShowError(L.Get("err_username_empty"));
                 return;
             }
             if (RegisterUsername.Length < 3)
             {
-                ShowError("Username must be at least 3 characters.");
+                ShowError(L.Get("err_username_too_short"));
                 return;
             }
             if (RegisterUsername.Length > 20)
             {
-                ShowError("Username cannot be longer than 20 characters.");
+                ShowError(L.Get("err_username_too_long"));
                 return;
             }
             if (RegisterUsername.Contains(' '))
             {
-                ShowError("Username cannot contain spaces.");
+                ShowError(L.Get("err_username_contains_spaces"));
                 return;
             }
             if (string.IsNullOrWhiteSpace(RegisterPassword))
             {
-                ShowError("Please enter a password.");
+                ShowError(L.Get("err_password_empty"));
                 return;
             }
             if (RegisterPassword.Length < 6)
             {
-                ShowError("Password must be at least 6 characters.");
+                ShowError(L.Get("err_password_too_short"));
                 return;
             }
             if (RegisterPassword.Length > 40)
             {
-                ShowError("Password cannot be longer than 40 characters.");
+                ShowError(L.Get("err_password_too_long"));
                 return;
             }
 
@@ -347,7 +347,7 @@ namespace Rift_App.ViewModels
 
                 if (result == null || !result.Success)
                 {
-                    ShowError(result?.Message ?? "Could not connect to server.");
+                    ShowError(result?.Message ?? L.Get("err_could_not_connect"));
                     return;
                 }
 
@@ -355,7 +355,7 @@ namespace Rift_App.ViewModels
                 SessionManager.NotifySessionReady();
                 ViewNavigator.Instance?.ShowLoading();
             }
-            catch { ShowError("Could not connect to server. Check your internet."); }
+            catch { ShowError(L.Get("err_could_not_connect")); }
             finally { IsLoading = false; }
         }
 

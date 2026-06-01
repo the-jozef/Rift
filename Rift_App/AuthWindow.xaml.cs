@@ -18,18 +18,23 @@ namespace Rift_App
 {
     public partial class AuthWindow : Window
     {
-        public AuthViewModel ViewModel { get; } = new AuthViewModel();
+        public AuthViewModel ViewModel => (AuthViewModel)DataContext;
 
         public AuthWindow()
         {
             InitializeComponent();
-            DataContext = ViewModel;
+            DataContext = new AuthViewModel();
             Closing += (s, e) =>
             {
                 e.Cancel = true;
                 SteamAuthService.Cancel();
                 Hide();
             };
+        }
+
+        public void Reinitialize()
+        {
+            DataContext = new AuthViewModel();
         }
     }
 }

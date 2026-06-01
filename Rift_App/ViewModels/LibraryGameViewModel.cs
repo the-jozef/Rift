@@ -41,7 +41,8 @@ namespace Rift_App.ViewModels
 
         public string CurrentUsername => SessionManager.Username;
         public string CurrentAvatarUrl => SessionManager.AvatarUrl;
-
+        [JsonIgnore]
+        public string AchievementsDisplay => Detail?.AchievementsPercentDisplay ?? "";
         public ObservableCollection<AchievementModel> UnlockedPreview { get; } = new();
         public ObservableCollection<AchievementModel> LockedPreview { get; } = new();
         public ObservableCollection<AchievementDateGroup> RecentActivity { get; } = new();
@@ -53,6 +54,11 @@ namespace Rift_App.ViewModels
         {
             SteamCallbackService.LibraryChanged += OnSteamLibraryChanged;
             SteamCallbackService.AchievementUnlocked += OnAchievementUnlocked;
+            LanguageService.LanguageChanged += () =>
+            {
+                OnPropertyChanged(nameof(AchievementsDisplay));
+                OnPropertyChanged(nameof(DetailAchievementsDisplay));
+            };
         }
         public void Dispose()
         {
@@ -192,8 +198,10 @@ namespace Rift_App.ViewModels
 
             if (NeedsUpdate)
             {
-                var res = MessageBox.Show($"Do you want to update {Game.Name}?",
-                    "Update Available", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var res = MessageBox.Show(
+    string.Format(L.Get("msg_update_game"), Game.Name),
+    L.Get("msg_update_title"),
+    MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
                     OpenSteamUri($"steam://update/{Game.AppId}");
                 return;
@@ -201,8 +209,10 @@ namespace Rift_App.ViewModels
 
             if (!IsInstalled)
             {
-                var res = MessageBox.Show($"Do you want to install {Game.Name}?",
-                    "Install Game", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var res = MessageBox.Show(
+     string.Format(L.Get("msg_install_game"), Game.Name),
+     L.Get("msg_install_title"),
+     MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
                     OpenSteamUri($"steam://install/{Game.AppId}");
                 return;
@@ -338,6 +348,9 @@ namespace Rift_App.ViewModels
 
             foreach (var group in groups)
                 RecentActivity.Add(group);
+
+            OnPropertyChanged(nameof(AchievementsDisplay));
+            OnPropertyChanged(nameof(DetailAchievementsDisplay));
         }
 
         // ─── HELPERS ──────────────────────────────────────────────────────
@@ -350,7 +363,11 @@ namespace Rift_App.ViewModels
                 a.ResetIconImage();
             }
         }
-
+        public string DetailAchievementsDisplay =>
+    string.Format(
+        L.Get("library_page_achievements_title"),
+        Detail?.AchievementsUnlocked ?? 0,
+        Detail?.AchievementsTotal ?? 0);
         private static void OpenSteamUri(string uri)
         {
             try

@@ -23,40 +23,11 @@ namespace Rift_App.StoreGamePage
 
         public GamePage() => InitializeComponent();
 
-        // Called by MainViewModel
+
         public void LoadGame(GameModel game)
         {
             _currentGame = game;
             DataContext = game;
-        }
-
-        private void BuyButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentGame == null) return;
-
-            var result = MessageBox.Show(
-                $"How would you like to open {_currentGame.Name}?",
-                "Open in...", MessageBoxButton.YesNoCancel);
-
-            if (result == MessageBoxResult.Yes) OpenUrl(_currentGame.SteamStoreUrl);
-            else if (result == MessageBoxResult.No) OpenUrl($"steam://store/{_currentGame.AppId}");
-        }
-
-        private void PlayButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentGame != null) OpenUrl($"steam://rungameid/{_currentGame.AppId}");
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Application.Current.MainWindow is MainWindow main)
-                main.ViewModel.ShowStore();
-        }
-
-        private void OpenUrl(string url)
-        {
-            try { Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true }); }
-            catch { }
         }
     }
 }

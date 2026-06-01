@@ -88,7 +88,17 @@
 
                             <Grid Grid.Row="2">
 
-                                <StackPanel Orientation="Vertical">
+                                <TextBlock
+                                    Margin="0,90,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Panel.ZIndex="0"
+                                    FontFamily="Arial"
+                                    FontSize="14"
+                                    Foreground="White"
+                                    Text="{DynamicResource wishlist_loading}" />
+
+                                <StackPanel Panel.ZIndex="1" Orientation="Vertical">
                                     <ItemsControl ItemsSource="{Binding Games}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
@@ -178,9 +188,10 @@
                                                                                 BorderThickness="0.6"
                                                                                 CornerRadius="2">
 
-                                                                                <TextBlock FontSize="12"
-                                                                                           Foreground="#8794A1"
-                                                                                           Text="{Binding}" />
+                                                                                <TextBlock
+                                                                                    FontSize="12"
+                                                                                    Foreground="#8794A1"
+                                                                                    Text="{Binding}" />
                                                                             </Border>
                                                                         </DataTemplate>
                                                                     </ItemsControl.ItemTemplate>
@@ -211,8 +222,7 @@
 
                                                                     <StackPanel Orientation="Vertical" TextElement.FontSize="12.5">
 
-                                                                        <TextBlock Foreground="{Binding ReviewBrush}" 
-                                                                                   Text="{Binding ReviewDescDisplay}" />
+                                                                        <TextBlock Foreground="{Binding ReviewBrush}" Text="{Binding ReviewDescDisplay}" />
 
                                                                         <TextBlock
                                                                             Margin="0,2,0,0"
@@ -263,7 +273,7 @@
 
                                                                 <Grid
                                                                     Grid.Column="0"
-                                                                    Margin="0,1,0,0"
+                                                                    Margin="0,3,0,0"
                                                                     VerticalAlignment="Center">
 
                                                                     <TextBlock
@@ -282,9 +292,9 @@
                                                                         </Border.Background>
 
                                                                         <Button
-                                                                            Width="50"
                                                                             Height="20"
-                                                                            Padding="0"
+                                                                            MinWidth="50"
+                                                                            Padding="3,0,3,0"
                                                                             Background="Transparent"
                                                                             BorderBrush="Transparent"
                                                                             Command="{Binding DataContext.RemoveGameCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
@@ -358,7 +368,7 @@
                                                                             </StackPanel>
 
                                                                             <TextBlock
-                                                                                Margin="8,0,8,0"
+                                                                                Margin="8,0,9,0"
                                                                                 VerticalAlignment="Center"
                                                                                 FontSize="16.5"
                                                                                 FontWeight="SemiBold"
@@ -379,8 +389,8 @@
                                                                                 </Border.Background>
 
                                                                                 <Button
-                                                                                    Width="100"
-                                                                                    Padding="0"
+                                                                                    MinWidth="100"
+                                                                                    Padding="3,0,3,0"
                                                                                     Background="Transparent"
                                                                                     BorderBrush="Transparent"
                                                                                     Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"

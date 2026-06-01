@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Rift_App.Languages;
 using Rift_App.Models;
 using Rift_App.Services;
 using Rift_App.Store;
@@ -72,11 +73,20 @@ namespace Rift_App.ViewModels
 
         //───── BY-TAG HEADER ─────────────────────────────────────────────────────
         [ObservableProperty] private string _byTagLabel = "Because You Play...";
+        private string _currentByTag = "Action";
 
         //───── EVENT ─────────────────────────────────────────────────────
         public event Action<GameModel>? OnGameSelected;
 
         private CancellationTokenSource? _loadCts;
+
+        public StoreViewModel()
+        {
+            LanguageService.LanguageChanged += () =>
+            {
+                UpdateByTagLabel();
+            };
+        }
 
         //───── MAIN LOAD — progressive, visible sections first ─────────────────────────────────────────────────────
         [RelayCommand]
@@ -199,8 +209,9 @@ namespace Rift_App.ViewModels
             try
             {
                 var tag = PickBestTag(genres);
+                _currentByTag = tag;  
+                UpdateByTagLabel();            
                 var cacheKey = StoreGameCacheService.KeyByTag(tag);
-                ByTagLabel = $"Because You Play {tag}";
 
                 var cached = await StoreGameCacheService.LoadSectionAsync(cacheKey);
                 if (cached != null && cached.Count >= 4)
@@ -485,6 +496,12 @@ namespace Rift_App.ViewModels
             });
 
             await Task.WhenAll(tasks);
+        }
+        private void UpdateByTagLabel()
+        {
+            ByTagLabel = string.Format(
+                L.Get("store_by_tag_label"),
+                TagTranslationService.Translate(_currentByTag));
         }
     }
 }
